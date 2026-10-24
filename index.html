@@ -4,274 +4,360 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TipsterHub - Tracking & Storico Fornitori</title>
-  <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-  <script src="[https://cdn.jsdelivr.net/npm/chart.js](https://cdn.jsdelivr.net/npm/chart.js)"></script>
-  <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap)');
-    body { font-family: 'Inter', sans-serif; background-color: #0b1120; color: #f8fafc; }
-    .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
-    .custom-scroll::-webkit-scrollbar-track { background: #1e293b; }
-    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #0b1120;
+      color: #f1f5f9;
+      padding-bottom: 50px;
+    }
+    .header {
+      background-color: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      padding: 12px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-box { display: flex; align-items: center; gap: 10px; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; color: #022c22; font-size: 18px;
+    }
+    .logo-text h1 { font-size: 17px; font-weight: 800; color: #fff; }
+    .logo-text span { font-size: 10px; color: #34d399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .btn-group { display: flex; gap: 8px; }
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 8px 12px;
+      transition: all 0.2s;
+    }
+    .btn-emerald { background-color: #10b981; color: #022c22; font-weight: 700; }
+    .btn-dark { background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
+    .btn-emerald:hover { background-color: #059669; }
+    .btn-dark:hover { background-color: #334155; }
+
+    .container { max-width: 1200px; margin: 16px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 8px; border-bottom: 1px solid #1e293b; padding-bottom: 8px; overflow-x: auto; }
+    .tab-btn { background: transparent; color: #94a3b8; border-bottom: 2px solid transparent; border-radius: 0; padding: 8px 12px; white-space: nowrap; }
+    .tab-btn.active { color: #34d399; border-color: #34d399; font-weight: 700; }
+
+    /* KPI Grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    @media (min-width: 768px) {
+      .kpi-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    .kpi-card {
+      background-color: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 12px 14px;
+      border-radius: 14px;
+    }
+    .kpi-title { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+    .kpi-value { font-size: 20px; font-weight: 800; margin: 4px 0; color: #f8fafc; }
+    .kpi-sub { font-size: 11px; color: #64748b; }
+
+    .card {
+      background-color: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .card-title { font-size: 15px; font-weight: 700; color: #fff; }
+
+    /* Selects & Inputs */
+    select, input, textarea {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    /* Table */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+    th {
+      background-color: #1e293b;
+      color: #94a3b8;
+      padding: 10px 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+    td { padding: 12px; border-bottom: 1px solid #1e293b; }
+    tr:hover { background-color: rgba(30, 41, 59, 0.4); }
+
+    .tag-provider {
+      display: inline-block;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #34d399;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    /* Action buttons in table */
+    .btn-status-group { display: inline-flex; background: #1e293b; border-radius: 6px; padding: 2px; gap: 2px; }
+    .btn-s {
+      border: none;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: transparent;
+      color: #94a3b8;
+    }
+    .btn-s.active-w { background-color: #10b981; color: #022c22; }
+    .btn-s.active-l { background-color: #ef4444; color: #fff; }
+    .btn-s.active-v { background-color: #f59e0b; color: #022c22; }
+    .btn-s.active-p { background-color: #475569; color: #fff; }
+
+    /* Modal */
+    .modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      display: none; align-items: center; justify-content: center;
+      padding: 16px; z-index: 200;
+    }
+    .modal.open { display: flex; }
+    .modal-box {
+      background-color: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      width: 100%; max-width: 500px;
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+
+    .positive { color: #34d399 !important; font-weight: 700; }
+    .negative { color: #f87171 !important; font-weight: 700; }
+    .hidden { display: none; }
   </style>
 </head>
-<body class="min-h-screen pb-12 custom-scroll">
+<body>
 
   <!-- HEADER -->
-  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-emerald-500/20">
-          <i class="fa-solid fa-chart-line"></i>
-        </div>
-        <div>
-          <h1 class="text-lg font-bold tracking-tight text-white leading-tight">TipsterHub</h1>
-          <span class="text-xs text-emerald-400 font-semibold tracking-wider uppercase">Multi-Provider Tracker</span>
-        </div>
+  <header class="header">
+    <div class="logo-box">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">
+        <h1>TipsterHub</h1>
+        <span>Multi-Provider Tracker</span>
       </div>
-
-      <div class="flex items-center gap-2">
-        <button onclick="openJsonModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition">
-          <i class="fa-solid fa-code text-emerald-400"></i>
-          <span>Importa / Backup JSON</span>
-        </button>
-        <button onclick="openManualModal()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition">
-          <i class="fa-solid fa-plus"></i>
-          <span>Nuovo Pronostico</span>
-        </button>
-      </div>
+    </div>
+    <div class="btn-group">
+      <button onclick="openJsonModal()" class="btn-dark">JSON Backup</button>
+      <button onclick="openManualModal()" class="btn-emerald">+ Pronostico</button>
     </div>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
+  <div class="container">
 
-    <!-- NAV TABS -->
-    <div class="flex border-b border-slate-800 gap-2 sm:gap-4 overflow-x-auto pb-2 custom-scroll text-sm font-semibold">
-      <button onclick="switchTab('overview')" id="tab-overview" class="px-4 py-2 text-emerald-400 border-b-2 border-emerald-400 flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-grip"></i> Panoramica Globale
-      </button>
-      <button onclick="switchTab('single')" id="tab-single" class="px-4 py-2 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-user-check"></i> Singolo Fornitore
-      </button>
-      <button onclick="switchTab('leaderboard')" id="tab-leaderboard" class="px-4 py-2 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-trophy"></i> Classifica Fornitori
-      </button>
+    <!-- TABS -->
+    <div class="tabs">
+      <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active">Panoramica</button>
+      <button onclick="switchTab('single')" id="tab-single" class="tab-btn">Singolo Fornitore</button>
+      <button onclick="switchTab('leaderboard')" id="tab-leaderboard" class="tab-btn">Classifica</button>
     </div>
 
-    <!-- SEZIONE 1: PANORAMICA GLOBALE -->
-    <div id="view-overview" class="space-y-6">
-      <!-- STATS KPI -->
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-          <span class="text-xs text-slate-400 font-medium">Bilancio Netto</span>
-          <div id="kpi-profit" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">+0.00 u</div>
-          <span class="text-[11px] text-slate-500">Unità complessive</span>
+    <!-- VISTA 1: PANORAMICA -->
+    <div id="view-overview">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Bilancio Netto</div>
+          <div id="kpi-profit" class="kpi-value positive">+0.00 u</div>
+          <div class="kpi-sub">Unità complessive</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-          <span class="text-xs text-slate-400 font-medium">ROI (Yield)</span>
-          <div id="kpi-roi" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">0.0%</div>
-          <span id="kpi-staked" class="text-[11px] text-slate-500">Investito: 0u</span>
+        <div class="kpi-card">
+          <div class="kpi-title">ROI (Yield)</div>
+          <div id="kpi-roi" class="kpi-value">0.0%</div>
+          <div id="kpi-staked" class="kpi-sub">Investito: 0u</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-          <span class="text-xs text-slate-400 font-medium">Win Rate</span>
-          <div id="kpi-winrate" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">0.0%</div>
-          <span id="kpi-wl" class="text-[11px] text-slate-500">0 Vinte / 0 Chiuse</span>
+        <div class="kpi-card">
+          <div class="kpi-title">Win Rate</div>
+          <div id="kpi-winrate" class="kpi-value">0.0%</div>
+          <div id="kpi-wl" class="kpi-sub">0 Vinte / 0 Chiuse</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-          <span class="text-xs text-slate-400 font-medium">Quota Media</span>
-          <div id="kpi-odds" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">@0.00</div>
-          <span class="text-[11px] text-slate-500">Tutte le selezioni</span>
+        <div class="kpi-card">
+          <div class="kpi-title">Quota Media</div>
+          <div id="kpi-odds" class="kpi-value">@0.00</div>
+          <div class="kpi-sub">Tutte le selezioni</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl col-span-2 md:col-span-1">
-          <span class="text-xs text-slate-400 font-medium">In Attesa</span>
-          <div id="kpi-pending" class="text-xl sm:text-2xl font-black mt-1 text-amber-400">0</div>
-          <span class="text-[11px] text-slate-500">Pronostici aperti</span>
+        <div class="kpi-card">
+          <div class="kpi-title">In Attesa</div>
+          <div id="kpi-pending" class="kpi-value" style="color: #fbbf24;">0</div>
+          <div class="kpi-sub">Pronostici aperti</div>
         </div>
       </div>
 
-      <!-- GRAFICO BANKROLL -->
-      <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
-        <h3 class="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-          <i class="fa-solid fa-chart-area text-emerald-400"></i> Andamento Cumulativo Unità
-        </h3>
-        <div class="h-60 w-full">
+      <div class="card" style="margin-top: 14px; padding: 14px;">
+        <div class="card-title" style="margin-bottom: 10px;">Andamento Bankroll</div>
+        <div style="height: 220px; width: 100%;">
           <canvas id="profitChart"></canvas>
         </div>
       </div>
     </div>
 
-    <!-- SEZIONE 2: SINGOLO FORNITORE -->
-    <div id="view-single" class="hidden space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
-        <div class="flex items-center gap-3">
-          <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
-            <i class="fa-solid fa-address-book text-xl"></i>
-          </div>
-          <div>
-            <label class="text-xs text-slate-400 block font-medium">Seleziona Tipster / Fornitore</label>
-            <select id="single-tipster-select" onchange="renderSingleTipsterView()" class="bg-slate-800 border border-slate-700 text-white text-sm rounded-lg px-3 py-1.5 font-bold focus:ring-1 focus:ring-emerald-400 outline-none mt-1">
-            </select>
-          </div>
-        </div>
-        <div id="single-provider-badge" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Analisi Filtrata
-        </div>
+    <!-- VISTA 2: SINGOLO FORNITORE -->
+    <div id="view-single" class="hidden">
+      <div class="card" style="padding: 14px; margin-bottom: 14px;">
+        <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 6px;">SELEZIONA FORNITORE:</label>
+        <select id="single-tipster-select" onchange="renderSingleTipsterView()" style="width: 100%; max-width: 300px; font-size: 14px; font-weight: bold; padding: 8px;">
+        </select>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
-          <span class="text-xs text-slate-400">Bilancio Tipster</span>
-          <div id="st-profit" class="text-xl font-bold mt-1 text-slate-200">0.00 u</div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Bilancio Tipster</div>
+          <div id="st-profit" class="kpi-value">0.00 u</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
-          <span class="text-xs text-slate-400">ROI Dedicato</span>
-          <div id="st-roi" class="text-xl font-bold mt-1 text-slate-200">0.0%</div>
+        <div class="kpi-card">
+          <div class="kpi-title">ROI Fornitore</div>
+          <div id="st-roi" class="kpi-value">0.0%</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
-          <span class="text-xs text-slate-400">Win Rate Tipster</span>
-          <div id="st-winrate" class="text-xl font-bold mt-1 text-slate-200">0.0%</div>
+        <div class="kpi-card">
+          <div class="kpi-title">Win Rate</div>
+          <div id="st-winrate" class="kpi-value">0.0%</div>
         </div>
-        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
-          <span class="text-xs text-slate-400">Quota Media Giocata</span>
-          <div id="st-odds" class="text-xl font-bold mt-1 text-slate-200">@0.00</div>
+        <div class="kpi-card">
+          <div class="kpi-title">Quota Media</div>
+          <div id="st-odds" class="kpi-value">@0.00</div>
         </div>
       </div>
     </div>
 
-    <!-- SEZIONE 3: CLASSIFICA COMPARATIVA -->
-    <div id="view-leaderboard" class="hidden space-y-4">
-      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
-        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
-          <h3 class="font-bold text-white text-sm flex items-center gap-2">
-            <i class="fa-solid fa-ranking-star text-amber-400"></i> Rendimento Fornitori a Confronto
-          </h3>
-          <span class="text-xs text-slate-400">Ordinati per profitto netto</span>
+    <!-- VISTA 3: CLASSIFICA -->
+    <div id="view-leaderboard" class="hidden">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Classifica Redditività Fornitori</div>
         </div>
-        <div class="overflow-x-auto custom-scroll">
-          <table class="w-full text-left text-xs sm:text-sm">
-            <thead class="bg-slate-800/60 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
+        <div class="table-responsive">
+          <table>
+            <thead>
               <tr>
-                <th class="px-4 py-3">Fornitore</th>
-                <th class="px-4 py-3 text-center">Giocate</th>
-                <th class="px-4 py-3 text-center">W / L / P</th>
-                <th class="px-4 py-3 text-center">Win Rate</th>
-                <th class="px-4 py-3 text-center">Quota Media</th>
-                <th class="px-4 py-3 text-center">ROI %</th>
-                <th class="px-4 py-3 text-right">Profitto Netto</th>
+                <th>Fornitore</th>
+                <th style="text-align: center;">Giocate</th>
+                <th style="text-align: center;">W / L / V</th>
+                <th style="text-align: center;">Win Rate</th>
+                <th style="text-align: center;">Quota Med.</th>
+                <th style="text-align: center;">ROI %</th>
+                <th style="text-align: right;">Profitto Netto</th>
               </tr>
             </thead>
-            <tbody id="leaderboard-tbody" class="divide-y divide-slate-800 text-slate-300">
-            </tbody>
+            <tbody id="leaderboard-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
 
     <!-- TABELLA COMPLESSIVA PRONOSTICI -->
-    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
-      <div class="p-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex items-center gap-2">
-          <h2 class="font-bold text-white text-base">Storico Pronostici</h2>
-          <span id="badge-total-count" class="bg-slate-800 border border-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full font-semibold">0</span>
+    <div class="card">
+      <div class="card-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="card-title">Storico Pronostici</div>
+          <span id="badge-total-count" style="background:#1e293b; color:#34d399; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">0</span>
         </div>
-        <div class="flex items-center gap-2">
-          <select id="filter-status" onchange="renderBetsTable()" class="bg-slate-800 text-xs text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 outline-none">
+        <div style="display: flex; gap: 6px;">
+          <select id="filter-status" onchange="renderBetsTable()">
             <option value="all">Tutti gli stati</option>
             <option value="pending">In Attesa</option>
             <option value="win">Vinti</option>
             <option value="loss">Persi</option>
-            <option value="void">Void/Rimborsati</option>
+            <option value="void">Void</option>
           </select>
-          <select id="filter-tipster" onchange="renderBetsTable()" class="bg-slate-800 text-xs text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 outline-none">
+          <select id="filter-tipster" onchange="renderBetsTable()">
             <option value="all">Tutti i Fornitori</option>
           </select>
         </div>
       </div>
 
-      <div class="overflow-x-auto custom-scroll">
-        <table class="w-full text-left text-xs sm:text-sm">
-          <thead class="bg-slate-800/60 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
+      <div class="table-responsive">
+        <table>
+          <thead>
             <tr>
-              <th class="px-4 py-3">Fornitore</th>
-              <th class="px-4 py-3">Evento & Selezione</th>
-              <th class="px-4 py-3 text-center">Quota</th>
-              <th class="px-4 py-3 text-center">Stake</th>
-              <th class="px-4 py-3 text-center">Esito</th>
-              <th class="px-4 py-3 text-right">Profitto</th>
-              <th class="px-4 py-3 text-center">Azioni</th>
+              <th>Fornitore</th>
+              <th>Incontro & Pronostico</th>
+              <th style="text-align: center;">Quota</th>
+              <th style="text-align: center;">Stake</th>
+              <th style="text-align: center;">Esito</th>
+              <th style="text-align: right;">Profitto</th>
+              <th style="text-align: center;">X</th>
             </tr>
           </thead>
-          <tbody id="bets-tbody" class="divide-y divide-slate-800 text-slate-300">
-          </tbody>
+          <tbody id="bets-tbody"></tbody>
         </table>
       </div>
     </div>
 
-  </main>
+  </div>
 
-  <!-- MODAL: IMPORT / EXPORT JSON -->
-  <div id="modal-json" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-5 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="font-bold text-white text-base flex items-center gap-2">
-          <i class="fa-solid fa-code text-emerald-400"></i> Backup Dati JSON
-        </h3>
-        <button onclick="closeJsonModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+  <!-- MODAL JSON -->
+  <div id="modal-json" class="modal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 15px; font-weight: bold;">Backup / Importa JSON</h3>
+        <button onclick="closeJsonModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
-      <div>
-        <label class="text-xs text-slate-400 block mb-1">Incolla qui il codice JSON fornito da Gemini:</label>
-        <textarea id="json-input" rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-emerald-300 font-mono outline-none focus:border-emerald-400"></textarea>
-      </div>
-      <div class="flex items-center justify-between gap-2 pt-2">
-        <button onclick="exportJson()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-semibold rounded-xl">
-          <i class="fa-solid fa-download mr-1"></i> Copia Dati Attuali
-        </button>
-        <button onclick="importJson()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold rounded-xl shadow-lg shadow-emerald-500/20">
-          <i class="fa-solid fa-check mr-1"></i> Salva & Aggiorna
-        </button>
+      <textarea id="json-input" rows="8" style="width: 100%; font-family: monospace; font-size: 11px; color: #34d399;"></textarea>
+      <div style="display: flex; justify-content: space-between;">
+        <button onclick="exportJson()" class="btn-dark">Copia Negli Appunti</button>
+        <button onclick="importJson()" class="btn-emerald">Salva Dati</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: AGGIUNTA MANUALE -->
-  <div id="modal-manual" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="font-bold text-white text-base">Aggiungi Singolo Pronostico</h3>
-        <button onclick="closeManualModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+  <!-- MODAL MANUALE -->
+  <div id="modal-manual" class="modal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 15px; font-weight: bold;">Aggiungi Pronostico</h3>
+        <button onclick="closeManualModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
-      <form id="form-add-bet" onsubmit="handleManualAdd(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="text-slate-400 block mb-1">Fornitore / Tipster</label>
-          <input type="text" id="m-tipster" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="es. CalcioAI, Stats4Bets, ecc.">
+      <form id="form-add-bet" onsubmit="handleManualAdd(event)" style="display: flex; flex-direction: column; gap: 8px;">
+        <input type="text" id="m-tipster" required placeholder="Fornitore (es. CalcioAI)">
+        <input type="text" id="m-match" required placeholder="Partita (es. Milan - Inter)">
+        <input type="text" id="m-market" required placeholder="Mercato (es. Over 2.5)">
+        <div style="display: flex; gap: 8px;">
+          <input type="number" step="0.01" id="m-odds" required placeholder="Quota (es. 1.85)" style="flex: 1;">
+          <input type="number" step="0.5" id="m-stake" value="1" required placeholder="Stake (es. 1)" style="flex: 1;">
         </div>
-        <div>
-          <label class="text-slate-400 block mb-1">Incontro / Evento</label>
-          <input type="text" id="m-match" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="es. Arsenal vs Chelsea">
-        </div>
-        <div>
-          <label class="text-slate-400 block mb-1">Pronostico / Mercato</label>
-          <input type="text" id="m-market" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="es. 1X2, Over 2.5, Gol">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="text-slate-400 block mb-1">Quota</label>
-            <input type="number" step="0.01" id="m-odds" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="1.85">
-          </div>
-          <div>
-            <label class="text-slate-400 block mb-1">Stake (Unità)</label>
-            <input type="number" step="0.5" id="m-stake" value="1" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400">
-          </div>
-        </div>
-        <button type="submit" class="w-full mt-2 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl transition">
-          Aggiungi al Database
-        </button>
+        <button type="submit" class="btn-emerald" style="margin-top: 6px; padding: 10px;">Aggiungi</button>
       </form>
     </div>
   </div>
 
   <script>
-    // DATI INIZIALI PRECARICATI CON TUTTI I 27 PRONOSTICI DEGLI SCREENSHOT
     const INITIAL_BETS = [
       {"id":1,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Bodo/Glimt vs Valerenga","league":"Eliteserien","market":"1 + Gol","odds":2.0,"stake":1,"status":"pending"},
       {"id":2,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Rangers vs St Johnstone / Arsenal vs Everton","league":"Multiplo","market":"Doppia (1+Over 1.5 / 1+Over 1.5)","odds":2.43,"stake":1,"status":"pending"},
@@ -322,10 +408,10 @@
     function switchTab(tab) {
       ['overview', 'single', 'leaderboard'].forEach(t => {
         document.getElementById(`view-${t}`).classList.add('hidden');
-        document.getElementById(`tab-${t}`).className = 'px-4 py-2 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2 whitespace-nowrap';
+        document.getElementById(`tab-${t}`).classList.remove('active');
       });
       document.getElementById(`view-${tab}`).classList.remove('hidden');
-      document.getElementById(`tab-${tab}`).className = 'px-4 py-2 text-emerald-400 border-b-2 border-emerald-400 flex items-center gap-2 whitespace-nowrap font-bold';
+      document.getElementById(`tab-${tab}`).classList.add('active');
     }
 
     function renderKPIs() {
@@ -333,10 +419,7 @@
       const won = bets.filter(b => b.status === 'win');
       const pending = bets.filter(b => b.status === 'pending');
 
-      let staked = 0;
-      let profit = 0;
-      let totalOdds = 0;
-
+      let staked = 0, profit = 0, totalOdds = 0;
       bets.forEach(b => totalOdds += Number(b.odds));
       settled.forEach(b => {
         const s = Number(b.stake);
@@ -351,7 +434,7 @@
 
       const pElem = document.getElementById('kpi-profit');
       pElem.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(2)} u`;
-      pElem.className = `text-xl sm:text-2xl font-black mt-1 ${profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+      pElem.className = `kpi-value ${profit >= 0 ? 'positive' : 'negative'}`;
 
       document.getElementById('kpi-roi').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`;
       document.getElementById('kpi-staked').textContent = `Investito: ${staked.toFixed(1)}u`;
@@ -363,7 +446,6 @@
 
     function populateTipsterDropdowns() {
       const tipsters = [...new Set(bets.map(b => b.tipster))].sort();
-      
       const filterSelect = document.getElementById('filter-tipster');
       const currentFilter = filterSelect.value;
       filterSelect.innerHTML = '<option value="all">Tutti i Fornitori</option>';
@@ -387,10 +469,7 @@
       const settled = pBets.filter(b => b.status !== 'pending');
       const won = pBets.filter(b => b.status === 'win');
 
-      let staked = 0;
-      let profit = 0;
-      let totalOdds = 0;
-
+      let staked = 0, profit = 0, totalOdds = 0;
       pBets.forEach(b => totalOdds += Number(b.odds));
       settled.forEach(b => {
         const s = Number(b.stake);
@@ -405,7 +484,7 @@
 
       const profEl = document.getElementById('st-profit');
       profEl.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(2)} u`;
-      profEl.className = `text-xl font-bold mt-1 ${profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+      profEl.className = `kpi-value ${profit >= 0 ? 'positive' : 'negative'}`;
 
       document.getElementById('st-roi').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`;
       document.getElementById('st-winrate').textContent = `${winRate.toFixed(1)}%`;
@@ -421,9 +500,7 @@
         const lost = tBets.filter(b => b.status === 'loss');
         const voided = tBets.filter(b => b.status === 'void');
 
-        let staked = 0;
-        let profit = 0;
-        let totalOdds = 0;
+        let staked = 0, profit = 0, totalOdds = 0;
         tBets.forEach(b => totalOdds += Number(b.odds));
         settled.forEach(b => {
           const s = Number(b.stake);
@@ -440,21 +517,18 @@
       });
 
       stats.sort((a, b) => b.profit - a.profit);
-
       const tbody = document.getElementById('leaderboard-tbody');
       tbody.innerHTML = '';
       stats.forEach(s => {
         tbody.innerHTML += `
-          <tr class="hover:bg-slate-800/40">
-            <td class="px-4 py-3 font-bold text-white flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ${s.tipster}
-            </td>
-            <td class="px-4 py-3 text-center text-slate-300 font-semibold">${s.total}</td>
-            <td class="px-4 py-3 text-center text-slate-400">${s.won} / ${s.lost} / ${s.voided}</td>
-            <td class="px-4 py-3 text-center font-bold text-slate-200">${s.winRate.toFixed(1)}%</td>
-            <td class="px-4 py-3 text-center text-slate-300">@${s.avgOdds.toFixed(2)}</td>
-            <td class="px-4 py-3 text-center font-bold ${s.roi >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${s.roi >= 0 ? '+' : ''}${s.roi.toFixed(1)}%</td>
-            <td class="px-4 py-3 text-right font-black ${s.profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${s.profit >= 0 ? '+' : ''}${s.profit.toFixed(2)} u</td>
+          <tr>
+            <td style="font-weight: 700; color: #fff;">${s.tipster}</td>
+            <td style="text-align: center; color: #e2e8f0; font-weight: 600;">${s.total}</td>
+            <td style="text-align: center; color: #94a3b8;">${s.won} / ${s.lost} / ${s.voided}</td>
+            <td style="text-align: center; font-weight: 700;">${s.winRate.toFixed(1)}%</td>
+            <td style="text-align: center;">@${s.avgOdds.toFixed(2)}</td>
+            <td style="text-align: center;" class="${s.roi >= 0 ? 'positive' : 'negative'}">${s.roi >= 0 ? '+' : ''}${s.roi.toFixed(1)}%</td>
+            <td style="text-align: right;" class="${s.profit >= 0 ? 'positive' : 'negative'}">${s.profit >= 0 ? '+' : ''}${s.profit.toFixed(2)} u</td>
           </tr>
         `;
       });
@@ -476,44 +550,40 @@
 
       filtered.forEach(b => {
         let pNet = 0;
-        let pClass = 'text-slate-400';
+        let pClass = '';
         let pText = '-';
 
         if (b.status === 'win') {
           pNet = (b.odds - 1) * b.stake;
-          pClass = 'text-emerald-400 font-bold';
+          pClass = 'positive';
           pText = `+${pNet.toFixed(2)}u`;
         } else if (b.status === 'loss') {
-          pNet = -b.stake;
-          pClass = 'text-rose-400 font-bold';
+          pClass = 'negative';
           pText = `-${b.stake.toFixed(2)}u`;
         } else if (b.status === 'void') {
-          pClass = 'text-amber-400 font-bold';
-          pText = '0.00u (Void)';
+          pText = '0.00u';
         }
 
         tbody.innerHTML += `
-          <tr class="hover:bg-slate-800/30">
-            <td class="px-4 py-3">
-              <span class="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-emerald-400 font-semibold text-xs">${b.tipster}</span>
+          <tr>
+            <td><span class="tag-provider">${b.tipster}</span></td>
+            <td>
+              <div style="font-weight: 700; color: #fff;">${b.match}</div>
+              <div style="font-size: 11px; color: #94a3b8;">${b.market} ${b.league ? '• ' + b.league : ''}</div>
             </td>
-            <td class="px-4 py-3">
-              <div class="font-bold text-white">${b.match}</div>
-              <div class="text-[11px] text-slate-400">${b.market} ${b.league ? '• ' + b.league : ''}</div>
-            </td>
-            <td class="px-4 py-3 text-center font-bold text-slate-200">@${Number(b.odds).toFixed(2)}</td>
-            <td class="px-4 py-3 text-center text-slate-300">${b.stake}u</td>
-            <td class="px-4 py-3 text-center">
-              <div class="inline-flex rounded-lg border border-slate-700 bg-slate-800 p-0.5 gap-0.5">
-                <button onclick="setBetStatus(${b.id}, 'win')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'win' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-emerald-400'}">W</button>
-                <button onclick="setBetStatus(${b.id}, 'loss')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'loss' ? 'bg-rose-500 text-white' : 'text-slate-400 hover:text-rose-400'}">L</button>
-                <button onclick="setBetStatus(${b.id}, 'void')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'void' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-amber-400'}">V</button>
-                <button onclick="setBetStatus(${b.id}, 'pending')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'pending' ? 'bg-slate-600 text-white' : 'text-slate-400 hover:text-white'}">P</button>
+            <td style="text-align: center; font-weight: 700;">@${Number(b.odds).toFixed(2)}</td>
+            <td style="text-align: center; color: #94a3b8;">${b.stake}u</td>
+            <td style="text-align: center;">
+              <div class="btn-status-group">
+                <button onclick="setBetStatus(${b.id}, 'win')" class="btn-s ${b.status === 'win' ? 'active-w' : ''}">W</button>
+                <button onclick="setBetStatus(${b.id}, 'loss')" class="btn-s ${b.status === 'loss' ? 'active-l' : ''}">L</button>
+                <button onclick="setBetStatus(${b.id}, 'void')" class="btn-s ${b.status === 'void' ? 'active-v' : ''}">V</button>
+                <button onclick="setBetStatus(${b.id}, 'pending')" class="btn-s ${b.status === 'pending' ? 'active-p' : ''}">P</button>
               </div>
             </td>
-            <td class="px-4 py-3 text-right ${pClass}">${pText}</td>
-            <td class="px-4 py-3 text-center">
-              <button onclick="deleteBet(${b.id})" class="text-slate-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash-can"></i></button>
+            <td style="text-align: right;" class="${pClass}">${pText}</td>
+            <td style="text-align: center;">
+              <button onclick="deleteBet(${b.id})" style="background: none; border: none; color: #64748b; font-size: 12px; cursor: pointer;">✕</button>
             </td>
           </tr>
         `;
@@ -529,7 +599,7 @@
     }
 
     function deleteBet(id) {
-      if (confirm('Vuoi davvero rimuovere questo pronostico?')) {
+      if (confirm('Rimuovere questo pronostico?')) {
         bets = bets.filter(b => b.id !== id);
         saveBets();
       }
@@ -558,13 +628,13 @@
       
       let running = 0;
       const dataPoints = [0];
-      const labels = ['Inizio'];
+      const labels = ['0'];
 
       settled.forEach((b, i) => {
         if (b.status === 'win') running += (b.odds - 1) * b.stake;
         else if (b.status === 'loss') running -= b.stake;
         dataPoints.push(running);
-        labels.push(`#${i + 1}`);
+        labels.push(`${i + 1}`);
       });
 
       if (profitChart) profitChart.destroy();
@@ -573,22 +643,21 @@
         data: {
           labels,
           datasets: [{
-            label: 'Unità Nette (u)',
             data: dataPoints,
             borderColor: '#10b981',
             backgroundColor: 'rgba(16, 185, 129, 0.1)',
             borderWidth: 2,
             fill: true,
             tension: 0.3,
-            pointRadius: 3
+            pointRadius: 2
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-            y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
+            y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } }
           },
           plugins: { legend: { display: false } }
         }
@@ -597,16 +666,16 @@
 
     function openJsonModal() {
       document.getElementById('json-input').value = JSON.stringify(bets, null, 2);
-      document.getElementById('modal-json').classList.remove('hidden');
+      document.getElementById('modal-json').classList.add('open');
     }
-    function closeJsonModal() { document.getElementById('modal-json').classList.add('hidden'); }
+    function closeJsonModal() { document.getElementById('modal-json').classList.remove('open'); }
 
-    function openManualModal() { document.getElementById('modal-manual').classList.remove('hidden'); }
-    function closeManualModal() { document.getElementById('modal-manual').classList.add('hidden'); }
+    function openManualModal() { document.getElementById('modal-manual').classList.add('open'); }
+    function closeManualModal() { document.getElementById('modal-manual').classList.remove('open'); }
 
     function exportJson() {
       navigator.clipboard.writeText(JSON.stringify(bets, null, 2));
-      alert('Dati JSON copiati negli appunti!');
+      alert('Copiato negli appunti!');
     }
 
     function importJson() {
@@ -616,14 +685,13 @@
           bets = parsed;
           saveBets();
           closeJsonModal();
-          alert('Database aggiornato con successo!');
-        } else alert('Il formato JSON non è un elenco valido.');
+          alert('Database aggiornato!');
+        } else alert('Formato non valido');
       } catch (err) {
-        alert('Errore nel parsing JSON: ' + err.message);
+        alert('Errore JSON: ' + err.message);
       }
     }
 
-    // AVVIO
     updateApp();
   </script>
 </body>
