@@ -56,10 +56,37 @@
 
     .container { max-width: 1200px; margin: 16px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 16px; }
 
-    .tabs { display: flex; gap: 8px; border-bottom: 1px solid #1e293b; padding-bottom: 8px; overflow-x: auto; }
-    .tab-btn { background: transparent; color: #94a3b8; border-bottom: 2px solid transparent; border-radius: 0; padding: 8px 12px; white-space: nowrap; }
-    .tab-btn.active { color: #34d399; border-color: #34d399; font-weight: 700; }
+    /* Barra filtro fornitore principale */
+    .filter-bar {
+      background-color: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 12px 14px;
+      border-radius: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .filter-bar-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .filter-bar select {
+      background-color: #1e293b;
+      border: 1px solid #34d399;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
 
+    /* KPI Grid */
     .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     @media (min-width: 768px) {
       .kpi-grid { grid-template-columns: repeat(5, 1fr); }
@@ -157,7 +184,6 @@
 
     .positive { color: #34d399 !important; font-weight: 700; }
     .negative { color: #f87171 !important; font-weight: 700; }
-    .hidden { display: none; }
   </style>
 </head>
 <body>
@@ -180,121 +206,90 @@
 
   <div class="container">
 
-    <!-- TABS -->
-    <div class="tabs">
-      <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active">Panoramica</button>
-      <button onclick="switchTab('single')" id="tab-single" class="tab-btn">Singolo Fornitore</button>
-      <button onclick="switchTab('leaderboard')" id="tab-leaderboard" class="tab-btn">Classifica</button>
+    <!-- SELETTORE FORNITORE CENTRALE -->
+    <div class="filter-bar">
+      <div class="filter-bar-label">
+        <span>VISUALIZZA STATISTICHE DI:</span>
+      </div>
+      <select id="main-tipster-filter" onchange="updateApp()">
+        <option value="all">🌍 Tutti i Fornitori (Globale)</option>
+      </select>
     </div>
 
-    <!-- VISTA 1: PANORAMICA -->
-    <div id="view-overview">
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-title">Bilancio Netto</div>
-          <div id="kpi-profit" class="kpi-value positive">+0.00 u</div>
-          <div class="kpi-sub">Unità complessive</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">ROI (Yield)</div>
-          <div id="kpi-roi" class="kpi-value">0.0%</div>
-          <div id="kpi-staked" class="kpi-sub">Investito: 0u</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Win Rate</div>
-          <div id="kpi-winrate" class="kpi-value">0.0%</div>
-          <div id="kpi-wl" class="kpi-sub">0 Vinte / 0 Chiuse</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Quota Media</div>
-          <div id="kpi-odds" class="kpi-value">@0.00</div>
-          <div class="kpi-sub">Tutte le selezioni</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">In Attesa</div>
-          <div id="kpi-pending" class="kpi-value" style="color: #fbbf24;">0</div>
-          <div class="kpi-sub">Pronostici aperti</div>
-        </div>
+    <!-- STATISTICHE DINAMICHE -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title" id="lbl-profit">Bilancio Netto</div>
+        <div id="kpi-profit" class="kpi-value positive">+0.00 u</div>
+        <div id="kpi-profit-sub" class="kpi-sub">Unità guadagnate/perse</div>
       </div>
-
-      <div class="card" style="margin-top: 14px; padding: 14px;">
-        <div class="card-title" style="margin-bottom: 10px;">Andamento Bankroll</div>
-        <div style="height: 220px; width: 100%;">
-          <canvas id="profitChart"></canvas>
-        </div>
+      <div class="kpi-card">
+        <div class="kpi-title">ROI (Yield)</div>
+        <div id="kpi-roi" class="kpi-value">0.0%</div>
+        <div id="kpi-staked" class="kpi-sub">Investito: 0u</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Win Rate</div>
+        <div id="kpi-winrate" class="kpi-value">0.0%</div>
+        <div id="kpi-wl" class="kpi-sub">0 Vinte / 0 Chiuse</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Quota Media</div>
+        <div id="kpi-odds" class="kpi-value">@0.00</div>
+        <div id="kpi-odds-sub" class="kpi-sub">Selezioni filtrate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">In Attesa</div>
+        <div id="kpi-pending" class="kpi-value" style="color: #fbbf24;">0</div>
+        <div class="kpi-sub">Pronostici aperti</div>
       </div>
     </div>
 
-    <!-- VISTA 2: SINGOLO FORNITORE -->
-    <div id="view-single" class="hidden">
-      <div class="card" style="padding: 14px; margin-bottom: 14px;">
-        <label style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 6px;">SELEZIONA FORNITORE:</label>
-        <select id="single-tipster-select" onchange="renderSingleTipsterView()" style="width: 100%; max-width: 300px; font-size: 14px; font-weight: bold; padding: 8px;">
-        </select>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-title">Bilancio Tipster</div>
-          <div id="st-profit" class="kpi-value">0.00 u</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">ROI Fornitore</div>
-          <div id="st-roi" class="kpi-value">0.0%</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Win Rate</div>
-          <div id="st-winrate" class="kpi-value">0.0%</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-title">Quota Media</div>
-          <div id="st-odds" class="kpi-value">@0.00</div>
-        </div>
+    <!-- GRAFICO BANKROLL (SI ADATTA AL FORNITORE SELEZIONATO) -->
+    <div class="card" style="padding: 14px;">
+      <div class="card-title" id="chart-title" style="margin-bottom: 10px;">Andamento Bankroll Globale</div>
+      <div style="height: 220px; width: 100%;">
+        <canvas id="profitChart"></canvas>
       </div>
     </div>
 
-    <!-- VISTA 3: CLASSIFICA -->
-    <div id="view-leaderboard" class="hidden">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Classifica Redditività Fornitori</div>
-        </div>
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Fornitore</th>
-                <th style="text-align: center;">Giocate</th>
-                <th style="text-align: center;">W / L / V</th>
-                <th style="text-align: center;">Win Rate</th>
-                <th style="text-align: center;">Quota Med.</th>
-                <th style="text-align: center;">ROI %</th>
-                <th style="text-align: right;">Profitto Netto</th>
-              </tr>
-            </thead>
-            <tbody id="leaderboard-tbody"></tbody>
-          </table>
-        </div>
+    <!-- TABELLA COMPARATIVA FORNITORI -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Classifica Redditività di Tutti i Fornitori</div>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Fornitore</th>
+              <th style="text-align: center;">Giocate</th>
+              <th style="text-align: center;">W / L / V</th>
+              <th style="text-align: center;">Win Rate</th>
+              <th style="text-align: center;">Quota Med.</th>
+              <th style="text-align: center;">ROI %</th>
+              <th style="text-align: right;">Profitto Netto</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-tbody"></tbody>
+        </table>
       </div>
     </div>
 
-    <!-- TABELLA COMPLESSIVA PRONOSTICI -->
+    <!-- TABELLA STORICO PRONOSTICI -->
     <div class="card">
       <div class="card-header">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <div class="card-title">Storico Pronostici</div>
+          <div class="card-title">Elenco Pronostici</div>
           <span id="badge-total-count" style="background:#1e293b; color:#34d399; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">0</span>
         </div>
-        <div style="display: flex; gap: 6px;">
+        <div>
           <select id="filter-status" onchange="renderBetsTable()">
             <option value="all">Tutti gli stati</option>
             <option value="pending">In Attesa</option>
             <option value="win">Vinti</option>
             <option value="loss">Persi</option>
             <option value="void">Void</option>
-          </select>
-          <select id="filter-tipster" onchange="renderBetsTable()">
-            <option value="all">Tutti i Fornitori</option>
           </select>
         </div>
       </div>
@@ -326,7 +321,7 @@
         <h3 style="font-size: 15px; font-weight: bold; color: #60a5fa;">Incolla Risposta AI</h3>
         <button onclick="closeAiModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
-      <p style="font-size: 11px; color: #94a3b8;">Incolla direttamente il testo della risposta con i risultati inviati da Gemini:</p>
+      <p style="font-size: 11px; color: #94a3b8;">Incolla direttamente il testo con i risultati inviati in chat da Gemini:</p>
       <textarea id="ai-input" rows="8" placeholder="es.&#10;Bodo/Glimt: Vinto&#10;Lazio: Perso" style="width: 100%; font-size: 12px;"></textarea>
       <div style="display: flex; justify-content: flex-end; gap: 8px;">
         <button onclick="closeAiModal()" class="btn-dark">Annulla</button>
@@ -358,9 +353,9 @@
         <button onclick="closeManualModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
       <form id="form-add-bet" onsubmit="handleManualAdd(event)" style="display: flex; flex-direction: column; gap: 8px;">
-        <input type="text" id="m-tipster" required placeholder="Fornitore (es. CalcioAI)">
-        <input type="text" id="m-match" required placeholder="Partita (es. Milan - Inter)">
-        <input type="text" id="m-market" required placeholder="Mercato (es. Over 2.5)">
+        <input type="text" id="m-tipster" required placeholder="Fornitore (es. CalcioAI, Zcode, ecc.)">
+        <input type="text" id="m-match" required placeholder="Partita / Incontro">
+        <input type="text" id="m-market" required placeholder="Pronostico (es. 1X2, Over 2.5, GG)">
         <div style="display: flex; gap: 8px;">
           <input type="number" step="0.01" id="m-odds" required placeholder="Quota (es. 1.85)" style="flex: 1;">
           <input type="number" step="0.5" id="m-stake" value="1" required placeholder="Stake (es. 1)" style="flex: 1;">
@@ -371,42 +366,7 @@
   </div>
 
   <script>
-    const INITIAL_BETS = [
-      {"id":1792862623789,"tipster":"BetMines PreMatch","match":"Aris vs Atromitos","market":"1","odds":1.65,"stake":1,"status":"pending"},
-      {"id":1792862597510,"tipster":"BetMines PreMatch","match":"Jaiba Brava vs CA La Paz","market":"GG","odds":1.44,"stake":1,"status":"pending"},
-      {"id":1792862557414,"tipster":"BetMines PreMatch","match":"Mineros de Zacatecas vs Universidad Guadalajara","market":"GG","odds":1.5,"stake":1,"status":"pending"},
-      {"id":1792862520611,"tipster":"BetMines PreMatch","match":"Lens vs Paris FC","market":"GG","odds":1.53,"stake":1,"status":"pending"},
-      {"id":1792857650290,"tipster":"ZCODE","match":"Sport Huancayo vs Alianza Atlético","market":"1","odds":1.52,"stake":1,"status":"pending"},
-      {"id":1,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Bodo/Glimt vs Valerenga","league":"Eliteserien","market":"1 + Gol","odds":2.0,"stake":1,"status":"pending"},
-      {"id":2,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Rangers vs St Johnstone / Arsenal vs Everton","league":"Multiplo","market":"Doppia (1+Over 1.5 / 1+Over 1.5)","odds":2.43,"stake":1,"status":"pending"},
-      {"id":3,"tipster":"TennisAI","date":"2026-10-24 14:15","match":"S. Lamens vs E. Jacquemot","league":"ITF W100","market":"1 (Lamens)","odds":1.87,"stake":1,"status":"pending"},
-      {"id":4,"tipster":"TennisAI","date":"2026-10-24 14:15","match":"Lamens vs Jacquemot / Baez vs Perricard","league":"Multiplo Tennis","market":"Doppia (1 / 1)","odds":4.45,"stake":1,"status":"pending"},
-      {"id":5,"tipster":"BetMines","date":"2026-10-24 21:00","match":"Farnham vs Braintree / Atl. Madrid vs Dep. La Coruña","league":"Multiplo Calcio","market":"Raddoppio (Over 2.5 / 1)","odds":1.91,"stake":1,"status":"pending"},
-      {"id":6,"tipster":"Stats4Bets","date":"2026-10-24 20:45","match":"Lazio vs Parma","league":"Serie A","market":"1","odds":1.46,"stake":1,"status":"pending"},
-      {"id":7,"tipster":"Stats4Bets","date":"2026-10-24 18:30","match":"Borussia Dortmund vs Eintracht Frankfurt","league":"Bundesliga","market":"1","odds":1.52,"stake":1,"status":"pending"},
-      {"id":8,"tipster":"Stats4Bets","date":"2026-10-24 16:00","match":"Rangers vs St. Johnstone / Rapid vs Lustenau / Atl. Madrid vs La Coruña","league":"Multiplo Calcio","market":"Tripla (1 / 1 / 1)","odds":1.92,"stake":1,"status":"pending"},
-      {"id":9,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Colonia vs Schalke 04","league":"2. Bundesliga","market":"Under 3.5 gol","odds":1.53,"stake":1,"status":"pending"},
-      {"id":10,"tipster":"Pronostici1","date":"2026-10-24 16:00","match":"Arsenal vs Everton","league":"Premier League","market":"Entrambe segnano: No","odds":1.73,"stake":1,"status":"pending"},
-      {"id":11,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Atletico Madrid vs Deportivo La Coruña","league":"La Liga","market":"Under 3.5 gol","odds":1.55,"stake":1,"status":"pending"},
-      {"id":12,"tipster":"Pronostici1","date":"2026-10-24 18:00","match":"Cagliari vs Bologna","league":"Serie A","market":"Under 2.5 gol","odds":1.65,"stake":1,"status":"pending"},
-      {"id":13,"tipster":"Pronostici1","date":"2026-10-24 16:00","match":"Coventry City vs Fulham","league":"Championship","market":"Over 2.5 gol","odds":1.7,"stake":1,"status":"pending"},
-      {"id":14,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Augsburg vs Union Berlin","league":"Bundesliga","market":"Doppia Chance: Union Berlino o Pareggio","odds":1.91,"stake":1,"status":"pending"},
-      {"id":15,"tipster":"Pronostici1","date":"2026-10-24 19:00","match":"Gil Vicente vs Porto","league":"Liga Portugal","market":"Handicap Asiatico: Gil Vicente +1.5","odds":1.55,"stake":1,"status":"pending"},
-      {"id":16,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Internacional vs Botafogo","league":"Brasileirão","market":"Doppia Chance: Botafogo o Pareggio","odds":1.78,"stake":1,"status":"pending"},
-      {"id":17,"tipster":"Pronostici1","date":"2026-10-24 20:00","match":"Westerlo vs SK Beveren","league":"Belgio","market":"Westerlo vince","odds":1.95,"stake":1,"status":"pending"},
-      {"id":18,"tipster":"Pronostici1","date":"2026-10-24 20:45","match":"Lazio vs Parma","league":"Serie A","market":"Over 2.5 gol","odds":1.8,"stake":1,"status":"pending"},
-      {"id":19,"tipster":"Pronostici1","date":"2026-10-24 17:00","match":"Lens vs Paris FC","league":"Ligue 1","market":"Over 2.5 gol","odds":1.62,"stake":1,"status":"pending"},
-      {"id":20,"tipster":"Pronostici1","date":"2026-10-24 20:45","match":"Napoli vs AS Roma","league":"Serie A","market":"Over 2.5 gol","odds":1.83,"stake":1,"status":"pending"},
-      {"id":21,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Palmeiras vs Bragantino","league":"Brasileirão","market":"Entrambe segnano: No","odds":1.95,"stake":1,"status":"pending"},
-      {"id":22,"tipster":"Pronostici1","date":"2026-10-24 19:30","match":"La Louvière vs Zulte Waregem","league":"Belgio","market":"Over 2.5 gol","odds":1.85,"stake":1,"status":"pending"},
-      {"id":23,"tipster":"Pronostici1","date":"2026-10-24 18:30","match":"Racing Santander vs Espanyol","league":"Segunda","market":"Doppia Chance: Espanyol o Pareggio","odds":1.53,"stake":1,"status":"pending"},
-      {"id":24,"tipster":"Pronostici1","date":"2026-10-24 16:15","match":"Rayo Vallecano vs Elche CF","league":"La Liga","market":"Entrambe segnano: Sì","odds":1.78,"stake":1,"status":"pending"},
-      {"id":25,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Leipzig vs Elversberg","league":"DFB Pokal","market":"Elversberg +1.5 Handicap","odds":1.78,"stake":1,"status":"pending"},
-      {"id":26,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Paderborn vs Amburgo","league":"2. Bundesliga","market":"Doppia Chance: Amburgo o Pareggio","odds":1.63,"stake":1,"status":"pending"},
-      {"id":27,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Vitoria vs Athletico Paranaense","league":"Brasileirão","market":"Entrambe segnano: Sì","odds":1.7,"stake":1,"status":"pending"}
-    ];
-
-    let bets = JSON.parse(localStorage.getItem('tipster_bets_v2')) || INITIAL_BETS;
+    let bets = JSON.parse(localStorage.getItem('tipster_bets_v2')) || [];
     let profitChart = null;
 
     function saveBets() {
@@ -414,31 +374,45 @@
       updateApp();
     }
 
-    function updateApp() {
-      renderBetsTable();
-      renderKPIs();
-      populateTipsterDropdowns();
-      renderSingleTipsterView();
-      renderLeaderboard();
-      renderChart();
+    function populateTipsterFilter() {
+      const tipsters = [...new Set(bets.map(b => b.tipster))].sort();
+      const filterSelect = document.getElementById('main-tipster-filter');
+      const currentSelected = filterSelect.value;
+      
+      filterSelect.innerHTML = '<option value="all">🌍 Tutti i Fornitori (Globale)</option>';
+      tipsters.forEach(t => {
+        filterSelect.innerHTML += `<option value="${t}" ${t === currentSelected ? 'selected' : ''}>👤 ${t}</option>`;
+      });
     }
 
-    function switchTab(tab) {
-      ['overview', 'single', 'leaderboard'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.add('hidden');
-        document.getElementById(`tab-${t}`).classList.remove('active');
-      });
-      document.getElementById(`view-${tab}`).classList.remove('hidden');
-      document.getElementById(`tab-${tab}`).classList.add('active');
+    function getSelectedBets() {
+      const selectedTipster = document.getElementById('main-tipster-filter').value;
+      if (selectedTipster === 'all') return bets;
+      return bets.filter(b => b.tipster === selectedTipster);
+    }
+
+    function updateApp() {
+      populateTipsterFilter();
+      renderKPIs();
+      renderChart();
+      renderLeaderboard();
+      renderBetsTable();
     }
 
     function renderKPIs() {
-      const settled = bets.filter(b => b.status !== 'pending');
-      const won = bets.filter(b => b.status === 'win');
-      const pending = bets.filter(b => b.status === 'pending');
+      const currentBets = getSelectedBets();
+      const selectedTipster = document.getElementById('main-tipster-filter').value;
+      
+      document.getElementById('chart-title').textContent = selectedTipster === 'all' 
+        ? "Andamento Bankroll Globale" 
+        : `Andamento Bankroll: ${selectedTipster}`;
+
+      const settled = currentBets.filter(b => b.status !== 'pending');
+      const won = currentBets.filter(b => b.status === 'win');
+      const pending = currentBets.filter(b => b.status === 'pending');
 
       let staked = 0, profit = 0, totalOdds = 0;
-      bets.forEach(b => totalOdds += Number(b.odds));
+      currentBets.forEach(b => totalOdds += Number(b.odds));
       settled.forEach(b => {
         const s = Number(b.stake);
         staked += s;
@@ -448,7 +422,7 @@
 
       const roi = staked > 0 ? (profit / staked) * 100 : 0;
       const winRate = settled.length > 0 ? (won.length / settled.length) * 100 : 0;
-      const avgOdds = bets.length > 0 ? totalOdds / bets.length : 0;
+      const avgOdds = currentBets.length > 0 ? totalOdds / currentBets.length : 0;
 
       const pElem = document.getElementById('kpi-profit');
       pElem.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(2)} u`;
@@ -462,51 +436,47 @@
       document.getElementById('kpi-pending').textContent = pending.length;
     }
 
-    function populateTipsterDropdowns() {
-      const tipsters = [...new Set(bets.map(b => b.tipster))].sort();
-      const filterSelect = document.getElementById('filter-tipster');
-      const currentFilter = filterSelect.value;
-      filterSelect.innerHTML = '<option value="all">Tutti i Fornitori</option>';
-      tipsters.forEach(t => {
-        filterSelect.innerHTML += `<option value="${t}" ${t === currentFilter ? 'selected' : ''}>${t}</option>`;
+    function renderChart() {
+      const ctx = document.getElementById('profitChart').getContext('2d');
+      const currentBets = getSelectedBets();
+      const settled = currentBets.filter(b => b.status !== 'pending');
+      
+      let running = 0;
+      const dataPoints = [0];
+      const labels = ['0'];
+
+      settled.forEach((b, i) => {
+        if (b.status === 'win') running += (b.odds - 1) * b.stake;
+        else if (b.status === 'loss') running -= b.stake;
+        dataPoints.push(running);
+        labels.push(`${i + 1}`);
       });
 
-      const singleSelect = document.getElementById('single-tipster-select');
-      const currentSingle = singleSelect.value;
-      singleSelect.innerHTML = '';
-      tipsters.forEach(t => {
-        singleSelect.innerHTML += `<option value="${t}" ${t === currentSingle ? 'selected' : ''}>${t}</option>`;
+      if (profitChart) profitChart.destroy();
+      profitChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            data: dataPoints,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
+            y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } }
+          },
+          plugins: { legend: { display: false } }
+        }
       });
-    }
-
-    function renderSingleTipsterView() {
-      const tipster = document.getElementById('single-tipster-select').value;
-      if (!tipster) return;
-
-      const pBets = bets.filter(b => b.tipster === tipster);
-      const settled = pBets.filter(b => b.status !== 'pending');
-      const won = pBets.filter(b => b.status === 'win');
-
-      let staked = 0, profit = 0, totalOdds = 0;
-      pBets.forEach(b => totalOdds += Number(b.odds));
-      settled.forEach(b => {
-        const s = Number(b.stake);
-        staked += s;
-        if (b.status === 'win') profit += (b.odds - 1) * s;
-        else if (b.status === 'loss') profit -= s;
-      });
-
-      const roi = staked > 0 ? (profit / staked) * 100 : 0;
-      const winRate = settled.length > 0 ? (won.length / settled.length) * 100 : 0;
-      const avgOdds = pBets.length > 0 ? totalOdds / pBets.length : 0;
-
-      const profEl = document.getElementById('st-profit');
-      profEl.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(2)} u`;
-      profEl.className = `kpi-value ${profit >= 0 ? 'positive' : 'negative'}`;
-
-      document.getElementById('st-roi').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`;
-      document.getElementById('st-winrate').textContent = `${winRate.toFixed(1)}%`;
-      document.getElementById('st-odds').textContent = `@${avgOdds.toFixed(2)}`;
     }
 
     function renderLeaderboard() {
@@ -539,8 +509,8 @@
       tbody.innerHTML = '';
       stats.forEach(s => {
         tbody.innerHTML += `
-          <tr>
-            <td style="font-weight: 700; color: #fff;">${s.tipster}</td>
+          <tr onclick="document.getElementById('main-tipster-filter').value='${s.tipster}'; updateApp();" style="cursor: pointer;">
+            <td style="font-weight: 700; color: #fff;">👤 ${s.tipster}</td>
             <td style="text-align: center; color: #e2e8f0; font-weight: 600;">${s.total}</td>
             <td style="text-align: center; color: #94a3b8;">${s.won} / ${s.lost} / ${s.voided}</td>
             <td style="text-align: center; font-weight: 700;">${s.winRate.toFixed(1)}%</td>
@@ -554,12 +524,10 @@
 
     function renderBetsTable() {
       const statusFilter = document.getElementById('filter-status').value;
-      const tipsterFilter = document.getElementById('filter-tipster').value;
+      const currentBets = getSelectedBets();
 
-      const filtered = bets.filter(b => {
-        const matchStatus = statusFilter === 'all' || b.status === statusFilter;
-        const matchTipster = tipsterFilter === 'all' || b.tipster === tipsterFilter;
-        return matchStatus && matchTipster;
+      const filtered = currentBets.filter(b => {
+        return statusFilter === 'all' || b.status === statusFilter;
       });
 
       document.getElementById('badge-total-count').textContent = filtered.length;
@@ -640,7 +608,6 @@
       e.target.reset();
     }
 
-    // NUOVO PARSER: LEGGE IL TESTO COPIATO DALLA CHAT
     function parseAiResults() {
       const text = document.getElementById('ai-input').value;
       if (!text.trim()) return;
@@ -675,52 +642,10 @@
       if (updatedCount > 0) {
         saveBets();
         closeAiModal();
-        alert(`Aggiornati ${updatedCount} pronostici in base alla risposta AI!`);
+        alert(`Aggiornati ${updatedCount} pronostici!`);
       } else {
-        alert("Non sono riuscito a collegare le partite. Verifica che il testo contenga i nomi corretti.");
+        alert("Nessuna corrispondenza trovata.");
       }
-    }
-
-    function renderChart() {
-      const ctx = document.getElementById('profitChart').getContext('2d');
-      const settled = bets.filter(b => b.status !== 'pending');
-      
-      let running = 0;
-      const dataPoints = [0];
-      const labels = ['0'];
-
-      settled.forEach((b, i) => {
-        if (b.status === 'win') running += (b.odds - 1) * b.stake;
-        else if (b.status === 'loss') running -= b.stake;
-        dataPoints.push(running);
-        labels.push(`${i + 1}`);
-      });
-
-      if (profitChart) profitChart.destroy();
-      profitChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [{
-            data: dataPoints,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.3,
-            pointRadius: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
-            y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } }
-          },
-          plugins: { legend: { display: false } }
-        }
-      });
     }
 
     function openAiModal() { document.getElementById('modal-ai').classList.add('open'); }
