@@ -1,1679 +1,630 @@
-
-```html
 <!DOCTYPE html>
-<html lang="it" class="dark">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tipster Pro Tracker - Storico & Analisi Fornitori</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js for bankroll & performance curves -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- FontAwesome 6 Pro Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              400: '#34d399',
-              500: '#10b981',
-              600: '#059669',
-            },
-            surface: {
-              900: '#0b0f17',
-              850: '#0f172a',
-              800: '#151f32',
-              700: '#1e293b',
-              600: '#334155'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
+  <title>TipsterHub - Tracking & Storico Fornitori</title>
+  <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+  <script src="[https://cdn.jsdelivr.net/npm/chart.js](https://cdn.jsdelivr.net/npm/chart.js)"></script>
+  <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
   <style>
-    body {
-      background-color: #0b0f17;
-      color: #e2e8f0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    @import url('[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap)');
+    body { font-family: 'Inter', sans-serif; background-color: #0b1120; color: #f8fafc; }
+    .custom-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #1e293b; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-slate-900">
+<body class="min-h-screen pb-12 custom-scroll">
 
-  <!-- TOP NAVBAR -->
-  <header class="border-b border-surface-700/80 bg-surface-850/90 backdrop-blur sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      
-      <!-- Brand & Title -->
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchView('overview')">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-white font-black text-lg">
-          <i class="fa-solid fa-chart-line-up"></i>
+  <!-- HEADER -->
+  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-chart-line"></i>
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
-            TipsterHub <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono tracking-widest font-semibold uppercase">Tracker</span>
-          </h1>
-          <p class="text-[11px] text-gray-400 hidden sm:block">Audit Reale e Storico Fornitori di Pronostici</p>
+          <h1 class="text-lg font-bold tracking-tight text-white leading-tight">TipsterHub</h1>
+          <span class="text-xs text-emerald-400 font-semibold tracking-wider uppercase">Multi-Provider Tracker</span>
         </div>
       </div>
 
-      <!-- Header Center Navigation (Tabs) -->
-      <nav class="hidden md:flex items-center space-x-1 bg-surface-900/80 p-1 rounded-xl border border-surface-700/60">
-        <button id="navTabOverview" onclick="switchView('overview')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all text-white bg-surface-700 shadow-sm flex items-center gap-1.5">
-          <i class="fa-solid fa-gauge text-emerald-400"></i> Panoramica Globale
+      <div class="flex items-center gap-2">
+        <button onclick="openJsonModal()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-code text-emerald-400"></i>
+          <span>Importa / Backup JSON</span>
         </button>
-        <button id="navTabTipsters" onclick="switchView('tipsters')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all text-gray-400 hover:text-white flex items-center gap-1.5">
-          <i class="fa-solid fa-users text-blue-400"></i> Storico Singolo Fornitore
+        <button onclick="openManualModal()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition">
+          <i class="fa-solid fa-plus"></i>
+          <span>Nuovo Pronostico</span>
         </button>
-        <button id="navTabCompare" onclick="switchView('compare')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all text-gray-400 hover:text-white flex items-center gap-1.5">
-          <i class="fa-solid fa-trophy text-amber-400"></i> Confronto Leaderboard
-        </button>
-      </nav>
-
-      <!-- Action Buttons -->
-      <div class="flex items-center space-x-2">
-        <button onclick="openModal('addModal')" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm shadow-md shadow-emerald-500/20 transition-all active:scale-95">
-          <i class="fa-solid fa-plus-circle text-sm"></i>
-          <span>Carica Pronostico</span>
-        </button>
-
-        <!-- Backup Data Menu -->
-        <div class="relative group">
-          <button class="p-2 sm:px-3 sm:py-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-gray-300 text-xs font-medium transition-colors border border-surface-700 flex items-center gap-1.5">
-            <i class="fa-solid fa-database text-teal-400"></i>
-            <span class="hidden sm:inline">Dati</span>
-            <i class="fa-solid fa-chevron-down text-[10px] text-gray-400"></i>
-          </button>
-          <div class="absolute right-0 mt-2 w-52 bg-surface-850 border border-surface-700 rounded-xl shadow-2xl p-1.5 hidden group-hover:block z-50">
-            <button onclick="exportJSON()" class="w-full text-left px-3 py-2 text-xs text-gray-300 hover:text-white hover:bg-surface-700 rounded-lg flex items-center gap-2">
-              <i class="fa-solid fa-file-export text-emerald-400"></i> Esporta Backup (JSON)
-            </button>
-            <label class="w-full text-left px-3 py-2 text-xs text-gray-300 hover:text-white hover:bg-surface-700 rounded-lg flex items-center gap-2 cursor-pointer">
-              <i class="fa-solid fa-file-import text-blue-400"></i> Ripristina Dati (JSON)
-              <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importJSON(event)">
-            </label>
-            <button onclick="exportCSV()" class="w-full text-left px-3 py-2 text-xs text-gray-300 hover:text-white hover:bg-surface-700 rounded-lg flex items-center gap-2">
-              <i class="fa-solid fa-file-csv text-amber-400"></i> Esporta Excel / CSV
-            </button>
-            <hr class="border-surface-700 my-1">
-            <button onclick="resetDataConfirm()" class="w-full text-left px-3 py-2 text-xs text-rose-400 hover:bg-rose-500/10 rounded-lg flex items-center gap-2">
-              <i class="fa-solid fa-trash-can"></i> Svuota Archivio
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
-
-    <!-- Mobile Subnav Bar -->
-    <div class="flex md:hidden border-t border-surface-700/60 px-3 py-2 bg-surface-900/60 overflow-x-auto gap-2 text-xs font-semibold">
-      <button onclick="switchView('overview')" id="mNavTabOverview" class="px-3 py-1 rounded-lg bg-surface-700 text-white whitespace-nowrap">Panoramica</button>
-      <button onclick="switchView('tipsters')" id="mNavTabTipsters" class="px-3 py-1 rounded-lg text-gray-400 whitespace-nowrap">Singolo Fornitore</button>
-      <button onclick="switchView('compare')" id="mNavTabCompare" class="px-3 py-1 rounded-lg text-gray-400 whitespace-nowrap">Classifica Fornitori</button>
     </div>
   </header>
 
-  <!-- MAIN WRAPPER -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
 
-    <!-- ================= VIEW 1: PANORAMICA GLOBALE ================= -->
-    <section id="viewOverview" class="space-y-6">
-      
-      <!-- KPI Stats Grid -->
-      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-        <!-- Bilancio Netto -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-sm relative overflow-hidden flex flex-col justify-between">
-          <div class="flex items-center justify-between text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">
-            <span>Bilancio Totale</span>
-            <i class="fa-solid fa-wallet text-emerald-400"></i>
-          </div>
-          <div>
-            <div id="statTotalProfit" class="text-2xl font-black font-mono text-emerald-400">+0.00 u</div>
-            <p id="statTotalProfitEuro" class="text-[11px] text-gray-400 mt-0.5">Calcolato su stake giocato</p>
-          </div>
-          <div class="absolute -right-6 -bottom-6 w-20 h-20 bg-emerald-500/10 rounded-full blur-xl pointer-events-none"></div>
+    <!-- NAV TABS -->
+    <div class="flex border-b border-slate-800 gap-2 sm:gap-4 overflow-x-auto pb-2 custom-scroll text-sm font-semibold">
+      <button onclick="switchTab('overview')" id="tab-overview" class="px-4 py-2 text-emerald-400 border-b-2 border-emerald-400 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-grip"></i> Panoramica Globale
+      </button>
+      <button onclick="switchTab('single')" id="tab-single" class="px-4 py-2 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-user-check"></i> Singolo Fornitore
+      </button>
+      <button onclick="switchTab('leaderboard')" id="tab-leaderboard" class="px-4 py-2 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-trophy"></i> Classifica Fornitori
+      </button>
+    </div>
+
+    <!-- SEZIONE 1: PANORAMICA GLOBALE -->
+    <div id="view-overview" class="space-y-6">
+      <!-- STATS KPI -->
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+          <span class="text-xs text-slate-400 font-medium">Bilancio Netto</span>
+          <div id="kpi-profit" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">+0.00 u</div>
+          <span class="text-[11px] text-slate-500">Unità complessive</span>
         </div>
-
-        <!-- Yield / ROI -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">
-            <span>ROI Globale</span>
-            <i class="fa-solid fa-percent text-blue-400"></i>
-          </div>
-          <div>
-            <div id="statTotalROI" class="text-2xl font-black font-mono text-blue-400">0.0%</div>
-            <p id="statTotalInvested" class="text-[11px] text-gray-400 mt-0.5">Stake Investito: 0.0u</p>
-          </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+          <span class="text-xs text-slate-400 font-medium">ROI (Yield)</span>
+          <div id="kpi-roi" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">0.0%</div>
+          <span id="kpi-staked" class="text-[11px] text-slate-500">Investito: 0u</span>
         </div>
-
-        <!-- Strike Rate -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">
-            <span>Win Rate</span>
-            <i class="fa-solid fa-bullseye text-amber-400"></i>
-          </div>
-          <div>
-            <div id="statTotalStrikeRate" class="text-2xl font-black font-mono text-amber-400">0.0%</div>
-            <p id="statTotalBetsRatio" class="text-[11px] text-gray-400 mt-0.5">0 Vinte / 0 Chiuse</p>
-          </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+          <span class="text-xs text-slate-400 font-medium">Win Rate</span>
+          <div id="kpi-winrate" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">0.0%</div>
+          <span id="kpi-wl" class="text-[11px] text-slate-500">0 Vinte / 0 Chiuse</span>
         </div>
-
-        <!-- Quota Media -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">
-            <span>Quota Media</span>
-            <i class="fa-solid fa-calculator text-purple-400"></i>
-          </div>
-          <div>
-            <div id="statTotalAvgOdds" class="text-2xl font-black font-mono text-purple-300">@1.00</div>
-            <p id="statTotalAvgWonOdds" class="text-[11px] text-gray-400 mt-0.5">Vinte: @1.00</p>
-          </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+          <span class="text-xs text-slate-400 font-medium">Quota Media</span>
+          <div id="kpi-odds" class="text-xl sm:text-2xl font-black mt-1 text-slate-200">@0.00</div>
+          <span class="text-[11px] text-slate-500">Tutte le selezioni</span>
         </div>
-
-        <!-- Pronostici in Attesa (Pending) -->
-        <div class="col-span-2 md:col-span-4 lg:col-span-1 bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">
-            <span>In Attesa</span>
-            <span class="flex h-2.5 w-2.5 relative">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-            </span>
-          </div>
-          <div class="flex items-baseline justify-between">
-            <div id="statTotalPending" class="text-2xl font-black font-mono text-amber-400">0</div>
-            <span class="text-xs text-gray-400">giocate aperte</span>
-          </div>
-          <button onclick="filterTableByStatus('pending')" class="text-left text-[11px] text-amber-400 hover:underline mt-2">
-            Mostra solo aperte &rarr;
-          </button>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl col-span-2 md:col-span-1">
+          <span class="text-xs text-slate-400 font-medium">In Attesa</span>
+          <div id="kpi-pending" class="text-xl sm:text-2xl font-black mt-1 text-amber-400">0</div>
+          <span class="text-[11px] text-slate-500">Pronostici aperti</span>
         </div>
       </div>
 
-      <!-- Global Chart & Mini Tipster Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Global Chart (2 Cols) -->
-        <div class="lg:col-span-2 bg-surface-850 p-4 sm:p-5 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col">
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-chart-area text-emerald-400"></i> Rendimento Bankroll Complessivo
-              </h2>
-              <p class="text-xs text-gray-400">Progressione temporale del profitto cumulativo in Unità (u)</p>
-            </div>
-            <span class="text-xs font-mono px-2.5 py-1 bg-surface-800 rounded-lg text-gray-300 border border-surface-700" id="globalChartPoints">
-              0 giocate
-            </span>
-          </div>
-          <div class="relative w-full h-64 sm:h-72">
-            <canvas id="overviewChart"></canvas>
-          </div>
-        </div>
-
-        <!-- Top Tipsters Quick View (1 Col) -->
-        <div class="bg-surface-850 p-4 sm:p-5 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col">
-          <div class="flex items-center justify-between mb-3">
-            <h2 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-award text-amber-400"></i> Migliori Fornitori
-            </h2>
-            <button onclick="switchView('compare')" class="text-xs text-emerald-400 hover:underline font-semibold">Tutti &rarr;</button>
-          </div>
-          <div id="overviewMiniTipsters" class="space-y-2 overflow-y-auto max-h-64 sm:max-h-72 pr-1">
-            <!-- Dynamic Mini Tipster Cards -->
-          </div>
+      <!-- GRAFICO BANKROLL -->
+      <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+        <h3 class="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-chart-area text-emerald-400"></i> Andamento Cumulativo Unità
+        </h3>
+        <div class="h-60 w-full">
+          <canvas id="profitChart"></canvas>
         </div>
       </div>
+    </div>
 
-    </section>
-
-    <!-- ================= VIEW 2: STORICO DEDICATO SINGOLO FORNITORE ================= -->
-    <section id="viewTipsters" class="space-y-6 hidden">
-      
-      <!-- Tipster Switcher Bar -->
-      <div class="bg-surface-850 p-4 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center space-x-3 w-full sm:w-auto">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-xl shadow-md">
-            <i class="fa-solid fa-user-tie"></i>
+    <!-- SEZIONE 2: SINGOLO FORNITORE -->
+    <div id="view-single" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/80 p-4 rounded-2xl border border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl">
+            <i class="fa-solid fa-address-book text-xl"></i>
           </div>
           <div>
-            <span class="text-xs text-gray-400 font-medium">Visualizzazione Storico Fornitore</span>
-            <div class="flex items-center gap-2">
-              <select id="selectedTipsterDropdown" onchange="onTipsterSelected(this.value)" class="bg-surface-800 border border-surface-600 rounded-xl px-3 py-1.5 text-sm sm:text-base font-bold text-white focus:outline-none focus:border-emerald-500">
-                <!-- Dynamic Tipster Names -->
-              </select>
-            </div>
+            <label class="text-xs text-slate-400 block font-medium">Seleziona Tipster / Fornitore</label>
+            <select id="single-tipster-select" onchange="renderSingleTipsterView()" class="bg-slate-800 border border-slate-700 text-white text-sm rounded-lg px-3 py-1.5 font-bold focus:ring-1 focus:ring-emerald-400 outline-none mt-1">
+            </select>
           </div>
         </div>
-
-        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <button onclick="quickFilterTipsterOnly()" class="px-3 py-1.5 rounded-xl bg-surface-800 hover:bg-surface-700 text-xs text-gray-300 font-medium border border-surface-700">
-            <i class="fa-solid fa-filter mr-1"></i> Filtra tabella in basso
-          </button>
+        <div id="single-provider-badge" class="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Analisi Filtrata
         </div>
       </div>
 
-      <!-- Specific Tipster KPI Bar -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <!-- Tipster Profit -->
-        <div class="bg-surface-850 p-3.5 rounded-2xl border border-surface-700/80">
-          <span class="text-[10px] text-gray-400 uppercase font-bold">Bilancio Netto</span>
-          <div id="tipsterStatProfit" class="text-xl font-black font-mono mt-1 text-emerald-400">+0.00u</div>
-          <span class="text-[10px] text-gray-500" id="tipsterStatTotalStaked">Investiti: 0u</span>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400">Bilancio Tipster</span>
+          <div id="st-profit" class="text-xl font-bold mt-1 text-slate-200">0.00 u</div>
         </div>
-
-        <!-- Tipster ROI -->
-        <div class="bg-surface-850 p-3.5 rounded-2xl border border-surface-700/80">
-          <span class="text-[10px] text-gray-400 uppercase font-bold">Yield (ROI)</span>
-          <div id="tipsterStatROI" class="text-xl font-black font-mono mt-1 text-blue-400">0.0%</div>
-          <span class="text-[10px] text-gray-500">Rendimento %</span>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400">ROI Dedicato</span>
+          <div id="st-roi" class="text-xl font-bold mt-1 text-slate-200">0.0%</div>
         </div>
-
-        <!-- Tipster Strike -->
-        <div class="bg-surface-850 p-3.5 rounded-2xl border border-surface-700/80">
-          <span class="text-[10px] text-gray-400 uppercase font-bold">Strike Rate</span>
-          <div id="tipsterStatStrike" class="text-xl font-black font-mono mt-1 text-amber-400">0.0%</div>
-          <span class="text-[10px] text-gray-500" id="tipsterStatWinLossRatio">0W / 0L</span>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400">Win Rate Tipster</span>
+          <div id="st-winrate" class="text-xl font-bold mt-1 text-slate-200">0.0%</div>
         </div>
-
-        <!-- Tipster Avg Odds -->
-        <div class="bg-surface-850 p-3.5 rounded-2xl border border-surface-700/80">
-          <span class="text-[10px] text-gray-400 uppercase font-bold">Quota Media</span>
-          <div id="tipsterStatOdds" class="text-xl font-black font-mono mt-1 text-purple-300">@1.00</div>
-          <span class="text-[10px] text-gray-500" id="tipsterStatWonOdds">Vinte: @1.00</span>
-        </div>
-
-        <!-- Tipster Total Bets -->
-        <div class="bg-surface-850 p-3.5 rounded-2xl border border-surface-700/80">
-          <span class="text-[10px] text-gray-400 uppercase font-bold">Totale Pronostici</span>
-          <div id="tipsterStatTotalBets" class="text-xl font-black font-mono mt-1 text-white">0</div>
-          <span class="text-[10px] text-gray-500" id="tipsterStatVoidBets">0 Void</span>
-        </div>
-
-        <!-- Tipster Pending -->
-        <div class="bg-surface-850 p-3.5 rounded-2xl border border-surface-700/80">
-          <span class="text-[10px] text-gray-400 uppercase font-bold">In Corso / Attesa</span>
-          <div id="tipsterStatPending" class="text-xl font-black font-mono mt-1 text-amber-400">0</div>
-          <span class="text-[10px] text-gray-500">Da verificare</span>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-xl">
+          <span class="text-xs text-slate-400">Quota Media Giocata</span>
+          <div id="st-odds" class="text-xl font-bold mt-1 text-slate-200">@0.00</div>
         </div>
       </div>
+    </div>
 
-      <!-- Tipster Dedicated Chart -->
-      <div class="bg-surface-850 p-4 sm:p-5 rounded-2xl border border-surface-700/80 shadow-sm flex flex-col">
-        <div class="flex items-center justify-between mb-3">
-          <div>
-            <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-blue-400"></i> Andamento Storico di <span id="tipsterChartNameBadge" class="text-emerald-400 font-mono">Tipster</span>
-            </h3>
-            <p class="text-xs text-gray-400">Curva di guadagno o perdita cronologica cumulativa</p>
-          </div>
+    <!-- SEZIONE 3: CLASSIFICA COMPARATIVA -->
+    <div id="view-leaderboard" class="hidden space-y-4">
+      <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+            <i class="fa-solid fa-ranking-star text-amber-400"></i> Rendimento Fornitori a Confronto
+          </h3>
+          <span class="text-xs text-slate-400">Ordinati per profitto netto</span>
         </div>
-        <div class="relative w-full h-64">
-          <canvas id="tipsterDedicatedChart"></canvas>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ================= VIEW 3: CONFRONTO TABELLA & LEADERBOARD ================= -->
-    <section id="viewCompare" class="space-y-6 hidden">
-      
-      <!-- Comparative Cards of Top Honors -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <!-- Top ROI -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/20 to-surface-850">
-          <div class="flex items-center justify-between text-xs text-emerald-400 font-bold uppercase mb-1">
-            <span>Miglior ROI / Yield</span>
-            <i class="fa-solid fa-crown text-amber-400 text-sm"></i>
-          </div>
-          <div class="text-lg font-bold text-white truncate" id="topRoiTipsterName">-</div>
-          <p class="text-xs text-emerald-400 font-mono font-bold mt-1" id="topRoiValue">+0.0%</p>
-        </div>
-
-        <!-- Top Profit -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-blue-500/30 bg-gradient-to-br from-blue-950/20 to-surface-850">
-          <div class="flex items-center justify-between text-xs text-blue-400 font-bold uppercase mb-1">
-            <span>Maggior Guadagno Netto</span>
-            <i class="fa-solid fa-sack-dollar text-emerald-400 text-sm"></i>
-          </div>
-          <div class="text-lg font-bold text-white truncate" id="topProfitTipsterName">-</div>
-          <p class="text-xs text-emerald-400 font-mono font-bold mt-1" id="topProfitValue">+0.00u</p>
-        </div>
-
-        <!-- Top Win Rate -->
-        <div class="bg-surface-850 p-4 rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-950/20 to-surface-850">
-          <div class="flex items-center justify-between text-xs text-amber-400 font-bold uppercase mb-1">
-            <span>Più Preciso (Win Rate)</span>
-            <i class="fa-solid fa-bullseye text-amber-400 text-sm"></i>
-          </div>
-          <div class="text-lg font-bold text-white truncate" id="topStrikeTipsterName">-</div>
-          <p class="text-xs text-amber-400 font-mono font-bold mt-1" id="topStrikeValue">0.0%</p>
-        </div>
-      </div>
-
-      <!-- Comparative Table -->
-      <div class="bg-surface-850 rounded-2xl border border-surface-700/80 overflow-hidden shadow-sm">
-        <div class="p-4 border-b border-surface-700 flex items-center justify-between">
-          <div>
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-list-ol text-amber-400"></i> Tabella Comparativa Fornitori
-            </h2>
-            <p class="text-xs text-gray-400">Classifica ordinata per profitto netto</p>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-gray-300">
-            <thead class="bg-surface-900/60 uppercase font-semibold text-[11px] text-gray-400 border-b border-surface-700">
+        <div class="overflow-x-auto custom-scroll">
+          <table class="w-full text-left text-xs sm:text-sm">
+            <thead class="bg-slate-800/60 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
               <tr>
-                <th class="py-3 px-4 text-center">Pos.</th>
-                <th class="py-3 px-4">Nome Fornitore</th>
-                <th class="py-3 px-4 text-center">Giocate Totali</th>
-                <th class="py-3 px-4 text-center">Vinte / Perse / Void</th>
-                <th class="py-3 px-4 text-center">Strike Rate</th>
-                <th class="py-3 px-4 text-center">Quota Media</th>
-                <th class="py-3 px-4 text-center">Yield (ROI)</th>
-                <th class="py-3 px-4 text-right">Bilancio Netto</th>
-                <th class="py-3 px-4 text-center">Azioni</th>
+                <th class="px-4 py-3">Fornitore</th>
+                <th class="px-4 py-3 text-center">Giocate</th>
+                <th class="px-4 py-3 text-center">W / L / P</th>
+                <th class="px-4 py-3 text-center">Win Rate</th>
+                <th class="px-4 py-3 text-center">Quota Media</th>
+                <th class="px-4 py-3 text-center">ROI %</th>
+                <th class="px-4 py-3 text-right">Profitto Netto</th>
               </tr>
             </thead>
-            <tbody id="compareTableBody" class="divide-y divide-surface-700/60 font-mono">
-              <!-- Dynamically populated rows -->
+            <tbody id="leaderboard-tbody" class="divide-y divide-slate-800 text-slate-300">
             </tbody>
           </table>
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- ================= UNIVERSAL BETS / PICKS LOG TABLE ================= -->
-    <section class="bg-surface-850 rounded-2xl border border-surface-700/80 overflow-hidden shadow-sm">
-      
-      <!-- Filter Bar -->
-      <div class="p-4 border-b border-surface-700 bg-surface-900/40 flex flex-col md:flex-row gap-3 items-center justify-between">
-        
-        <div class="w-full md:w-auto flex flex-wrap items-center gap-2">
-          <!-- Tipster Filter -->
-          <div class="flex items-center gap-1">
-            <span class="text-xs text-gray-400 hidden sm:inline"><i class="fa-solid fa-user-tag text-teal-400"></i></span>
-            <select id="tableFilterTipster" onchange="renderFilteredBetsTable()" class="bg-surface-800 border border-surface-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-              <option value="ALL">Tutti i Fornitori</option>
-            </select>
-          </div>
-
-          <!-- Status Filter -->
-          <select id="tableFilterStatus" onchange="renderFilteredBetsTable()" class="bg-surface-800 border border-surface-700 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-            <option value="ALL">Tutti gli Esiti</option>
-            <option value="pending">⏳ In Attesa</option>
-            <option value="won">✅ Vinti</option>
-            <option value="lost">❌ Persi</option>
-            <option value="void">⚪ Void / Rimborsati</option>
-          </select>
-
-          <!-- Search Bar -->
-          <div class="relative flex-1 sm:w-60">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-xs"></i>
-            <input type="text" id="tableSearchInput" oninput="renderFilteredBetsTable()" placeholder="Cerca partita, mercato o tipster..." class="w-full bg-surface-800 border border-surface-700 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500">
-          </div>
+    <!-- TABELLA COMPLESSIVA PRONOSTICI -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden">
+      <div class="p-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <h2 class="font-bold text-white text-base">Storico Pronostici</h2>
+          <span id="badge-total-count" class="bg-slate-800 border border-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded-full font-semibold">0</span>
         </div>
-
-        <div class="w-full md:w-auto flex items-center justify-end gap-2 text-xs text-gray-400">
-          <span id="filteredResultsCounter" class="font-mono">0 pronostici visualizzati</span>
+        <div class="flex items-center gap-2">
+          <select id="filter-status" onchange="renderBetsTable()" class="bg-slate-800 text-xs text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 outline-none">
+            <option value="all">Tutti gli stati</option>
+            <option value="pending">In Attesa</option>
+            <option value="win">Vinti</option>
+            <option value="loss">Persi</option>
+            <option value="void">Void/Rimborsati</option>
+          </select>
+          <select id="filter-tipster" onchange="renderBetsTable()" class="bg-slate-800 text-xs text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 outline-none">
+            <option value="all">Tutti i Fornitori</option>
+          </select>
         </div>
       </div>
 
-      <!-- Scommesse Table -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-gray-300">
-          <thead class="bg-surface-900/70 uppercase font-semibold text-[11px] text-gray-400 border-b border-surface-700">
+      <div class="overflow-x-auto custom-scroll">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-slate-800/60 text-slate-400 uppercase text-[11px] font-semibold tracking-wider">
             <tr>
-              <th class="py-3 px-4">Data / Ora</th>
-              <th class="py-3 px-4">Fornitore</th>
-              <th class="py-3 px-4">Evento / Partita</th>
-              <th class="py-3 px-4">Mercato / Pronostico</th>
-              <th class="py-3 px-4 text-center">Quota</th>
-              <th class="py-3 px-4 text-center">Stake</th>
-              <th class="py-3 px-4 text-center">Aggiornamento Esito Rapido</th>
-              <th class="py-3 px-4 text-right">P/L (u)</th>
-              <th class="py-3 px-4 text-center">Azioni</th>
+              <th class="px-4 py-3">Fornitore</th>
+              <th class="px-4 py-3">Evento & Selezione</th>
+              <th class="px-4 py-3 text-center">Quota</th>
+              <th class="px-4 py-3 text-center">Stake</th>
+              <th class="px-4 py-3 text-center">Esito</th>
+              <th class="px-4 py-3 text-right">Profitto</th>
+              <th class="px-4 py-3 text-center">Azioni</th>
             </tr>
           </thead>
-          <tbody id="betsTableBody" class="divide-y divide-surface-700/50 font-mono">
-            <!-- Dynamic Rows -->
+          <tbody id="bets-tbody" class="divide-y divide-slate-800 text-slate-300">
           </tbody>
         </table>
       </div>
-
-      <!-- Empty State -->
-      <div id="noDataPlaceholder" class="hidden text-center py-12 px-4">
-        <div class="w-12 h-12 rounded-full bg-surface-800 text-gray-500 flex items-center justify-center mx-auto mb-3">
-          <i class="fa-solid fa-receipt text-lg"></i>
-        </div>
-        <p class="text-sm text-gray-300 font-medium">Nessun pronostico corrisponde ai filtri</p>
-        <p class="text-xs text-gray-500 mt-1">Carica uno screenshot o aggiungi un pronostico manualmente per iniziare.</p>
-      </div>
-    </section>
+    </div>
 
   </main>
 
-  <!-- ================= MODAL: CARICA / AGGIUNGI PRONOSTICO (CON OCR GEMINI) ================= -->
-  <div id="addModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-surface-850 border border-surface-700 w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-      
-      <!-- Modal Header -->
-      <div class="px-5 py-4 border-b border-surface-700 flex items-center justify-between bg-surface-900/60">
-        <h3 class="font-bold text-white text-sm sm:text-base flex items-center gap-2">
-          <i class="fa-solid fa-cloud-arrow-up text-emerald-400"></i> Nuovo Pronostico
+  <!-- MODAL: IMPORT / EXPORT JSON -->
+  <div id="modal-json" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-code text-emerald-400"></i> Backup Dati JSON
         </h3>
-        <button onclick="closeModal('addModal')" class="text-gray-400 hover:text-white p-1">
-          <i class="fa-solid fa-xmark text-lg"></i>
+        <button onclick="closeJsonModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div>
+        <label class="text-xs text-slate-400 block mb-1">Incolla qui il codice JSON fornito da Gemini:</label>
+        <textarea id="json-input" rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-emerald-300 font-mono outline-none focus:border-emerald-400"></textarea>
+      </div>
+      <div class="flex items-center justify-between gap-2 pt-2">
+        <button onclick="exportJson()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-semibold rounded-xl">
+          <i class="fa-solid fa-download mr-1"></i> Copia Dati Attuali
+        </button>
+        <button onclick="importJson()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold rounded-xl shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-check mr-1"></i> Salva & Aggiorna
         </button>
       </div>
+    </div>
+  </div>
 
-      <div class="p-5 overflow-y-auto space-y-4">
-
-        <!-- AI Screenshot Upload Zone -->
-        <div class="border-2 border-dashed border-surface-600 hover:border-emerald-500 rounded-xl p-4 text-center transition-colors bg-surface-900/40 relative">
-          <div class="flex flex-col items-center justify-center cursor-pointer" onclick="document.getElementById('fileInputScreenshot').click()">
-            <div class="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-2 shadow">
-              <i class="fa-solid fa-camera text-base"></i>
-            </div>
-            <p class="text-xs font-semibold text-white">Carica Screenshot o Foto Pronostico</p>
-            <p class="text-[11px] text-gray-400 mt-0.5">Gemini Vision ricaverà in automatico match, quota, mercato e fornitore!</p>
-          </div>
-          <input type="file" id="fileInputScreenshot" accept="image/*" class="hidden" onchange="onImageSelected(event)">
-
-          <!-- Analysis Loading Spinner -->
-          <div id="aiAnalyzingSpinner" class="hidden mt-3 p-3 bg-purple-950/40 border border-purple-500/30 rounded-xl text-center">
-            <div class="inline-flex items-center gap-2 text-xs text-purple-300 font-medium">
-              <svg class="animate-spin h-4 w-4 text-purple-400" viewBox="0 0 24 24" fill="none">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-              </svg>
-              <span>Gemini AI sta analizzando l'immagine...</span>
-            </div>
-          </div>
-
-          <!-- Preview -->
-          <div id="modalImagePreviewBox" class="hidden mt-3 relative inline-block">
-            <img id="modalImagePreview" class="h-28 rounded-lg border border-surface-700 object-contain bg-black/40">
-            <button onclick="clearModalImage()" class="absolute -top-2 -right-2 bg-rose-600 hover:bg-rose-700 text-white rounded-full p-1 text-[10px] w-5 h-5 flex items-center justify-center shadow">
-              <i class="fa-solid fa-times"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="relative flex py-1 items-center">
-          <div class="flex-grow border-t border-surface-700"></div>
-          <span class="flex-shrink mx-3 text-[11px] text-gray-500 font-semibold uppercase">Dettagli Pronostico</span>
-          <div class="flex-grow border-t border-surface-700"></div>
-        </div>
-
-        <!-- Bet Details Form -->
-        <form id="betCreateForm" onsubmit="submitBetForm(event)" class="space-y-3">
-          <input type="hidden" id="formBetId" value="">
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <!-- Tipster Name with Auto-Suggest Datalist -->
-            <div>
-              <label class="block text-[11px] font-medium text-gray-400 mb-1">Fornitore / Tipster *</label>
-              <input type="text" id="formTipster" list="tipsterDatalistSuggestions" required placeholder="es. Bomber VIP, Telegram Pro" class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-              <datalist id="tipsterDatalistSuggestions"></datalist>
-            </div>
-
-            <!-- Date and Time -->
-            <div>
-              <label class="block text-[11px] font-medium text-gray-400 mb-1">Data e Ora Evento *</label>
-              <input type="datetime-local" id="formDateTime" required class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
-            </div>
-          </div>
-
-          <!-- Match / Event -->
-          <div>
-            <label class="block text-[11px] font-medium text-gray-400 mb-1">Partita / Evento (Squadre) *</label>
-            <input type="text" id="formEvent" required placeholder="es. Real Madrid vs Manchester City" class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <!-- League -->
-            <div class="sm:col-span-1">
-              <label class="block text-[11px] font-medium text-gray-400 mb-1">Campionato</label>
-              <input type="text" id="formLeague" placeholder="es. Serie A, Premier, NBA" class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-            </div>
-
-            <!-- Market / Pick -->
-            <div class="sm:col-span-2">
-              <label class="block text-[11px] font-medium text-gray-400 mb-1">Mercato / Pronostico *</label>
-              <input type="text" id="formMarket" required placeholder="es. Over 2.5, Gol, 1X2, Handicap" class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-3 gap-3">
-            <!-- Odds -->
-            <div>
-              <label class="block text-[11px] font-medium text-gray-400 mb-1">Quota *</label>
-              <input type="number" step="0.01" min="1.01" id="formOdds" required placeholder="es. 1.85" class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
-            </div>
-
-            <!-- Stake -->
-            <div>
-              <label class="block text-[11px] font-medium text-gray-400 mb-1">Stake (Unità) *</label>
-              <input type="number" step="0.25" min="0.1" max="100" id="formStake" value="1.0" required class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
-            </div>
-
-            <!-- Status -->
-            <div>
-              <label class="block text-[11px] font-medium text-gray-400 mb-1">Esito</label>
-              <select id="formStatus" class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                <option value="pending">⏳ In Attesa</option>
-                <option value="won">✅ Vinto</option>
-                <option value="lost">❌ Perso</option>
-                <option value="void">⚪ Void / Rimborso</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Notes -->
-          <div>
-            <label class="block text-[11px] font-medium text-gray-400 mb-1">Note (Opzionale)</label>
-            <input type="text" id="formNotes" placeholder="es. Singola da Telegram, Quota di apertura" class="w-full bg-surface-800 border border-surface-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-          </div>
-
-          <!-- Form Buttons -->
-          <div class="pt-3 flex items-center justify-end gap-2 border-t border-surface-700">
-            <button type="button" onclick="closeModal('addModal')" class="px-4 py-2 rounded-xl bg-surface-800 hover:bg-surface-700 text-gray-300 text-xs font-semibold">Annulla</button>
-            <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-md">Salva Pronostico</button>
-          </div>
-        </form>
-
+  <!-- MODAL: AGGIUNTA MANUALE -->
+  <div id="modal-manual" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base">Aggiungi Singolo Pronostico</h3>
+        <button onclick="closeManualModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
+      <form id="form-add-bet" onsubmit="handleManualAdd(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="text-slate-400 block mb-1">Fornitore / Tipster</label>
+          <input type="text" id="m-tipster" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="es. CalcioAI, Stats4Bets, ecc.">
+        </div>
+        <div>
+          <label class="text-slate-400 block mb-1">Incontro / Evento</label>
+          <input type="text" id="m-match" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="es. Arsenal vs Chelsea">
+        </div>
+        <div>
+          <label class="text-slate-400 block mb-1">Pronostico / Mercato</label>
+          <input type="text" id="m-market" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="es. 1X2, Over 2.5, Gol">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-400 block mb-1">Quota</label>
+            <input type="number" step="0.01" id="m-odds" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400" placeholder="1.85">
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Stake (Unità)</label>
+            <input type="number" step="0.5" id="m-stake" value="1" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white outline-none focus:border-emerald-400">
+          </div>
+        </div>
+        <button type="submit" class="w-full mt-2 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl transition">
+          Aggiungi al Database
+        </button>
+      </form>
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
-  <div id="appToast" class="fixed bottom-5 right-5 z-50 transform transition-all duration-300 translate-y-24 opacity-0 pointer-events-none">
-    <div id="appToastContent" class="flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold border">
-      <i id="appToastIcon" class="fa-solid fa-circle-check"></i>
-      <span id="appToastMsg">Messaggio</span>
-    </div>
-  </div>
-
-  <!-- JAVASCRIPT APPLICATION LOGIC -->
   <script>
-    // --- DATABASE & PERSISTENCE ---
-    const DB_KEY = 'tipster_pro_tracker_db_2026';
-    let bets = [];
-    let currentActiveView = 'overview'; // 'overview', 'tipsters', 'compare'
-    let currentSelectedTipster = '';
-    let globalOverviewChart = null;
-    let tipsterSoloChart = null;
+    // DATI INIZIALI PRECARICATI CON TUTTI I 27 PRONOSTICI DEGLI SCREENSHOT
+    const INITIAL_BETS = [
+      {"id":1,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Bodo/Glimt vs Valerenga","league":"Eliteserien","market":"1 + Gol","odds":2.0,"stake":1,"status":"pending"},
+      {"id":2,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Rangers vs St Johnstone / Arsenal vs Everton","league":"Multiplo","market":"Doppia (1+Over 1.5 / 1+Over 1.5)","odds":2.43,"stake":1,"status":"pending"},
+      {"id":3,"tipster":"TennisAI","date":"2026-10-24 14:15","match":"S. Lamens vs E. Jacquemot","league":"ITF W100","market":"1 (Lamens)","odds":1.87,"stake":1,"status":"pending"},
+      {"id":4,"tipster":"TennisAI","date":"2026-10-24 14:15","match":"Lamens vs Jacquemot / Baez vs Perricard","league":"Multiplo Tennis","market":"Doppia (1 / 1)","odds":4.45,"stake":1,"status":"pending"},
+      {"id":5,"tipster":"BetMines","date":"2026-10-24 21:00","match":"Farnham vs Braintree / Atl. Madrid vs Dep. La Coruña","league":"Multiplo Calcio","market":"Raddoppio (Over 2.5 / 1)","odds":1.91,"stake":1,"status":"pending"},
+      {"id":6,"tipster":"Stats4Bets","date":"2026-10-24 20:45","match":"Lazio vs Parma","league":"Serie A","market":"1","odds":1.46,"stake":1,"status":"pending"},
+      {"id":7,"tipster":"Stats4Bets","date":"2026-10-24 18:30","match":"Borussia Dortmund vs Eintracht Frankfurt","league":"Bundesliga","market":"1","odds":1.52,"stake":1,"status":"pending"},
+      {"id":8,"tipster":"Stats4Bets","date":"2026-10-24 16:00","match":"Rangers vs St. Johnstone / Rapid vs Lustenau / Atl. Madrid vs La Coruña","league":"Multiplo Calcio","market":"Tripla (1 / 1 / 1)","odds":1.92,"stake":1,"status":"pending"},
+      {"id":9,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Colonia vs Schalke 04","league":"2. Bundesliga","market":"Under 3.5 gol","odds":1.53,"stake":1,"status":"pending"},
+      {"id":10,"tipster":"Pronostici1","date":"2026-10-24 16:00","match":"Arsenal vs Everton","league":"Premier League","market":"Entrambe segnano: No","odds":1.73,"stake":1,"status":"pending"},
+      {"id":11,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Atletico Madrid vs Deportivo La Coruña","league":"La Liga","market":"Under 3.5 gol","odds":1.55,"stake":1,"status":"pending"},
+      {"id":12,"tipster":"Pronostici1","date":"2026-10-24 18:00","match":"Cagliari vs Bologna","league":"Serie A","market":"Under 2.5 gol","odds":1.65,"stake":1,"status":"pending"},
+      {"id":13,"tipster":"Pronostici1","date":"2026-10-24 16:00","match":"Coventry City vs Fulham","league":"Championship","market":"Over 2.5 gol","odds":1.7,"stake":1,"status":"pending"},
+      {"id":14,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Augsburg vs Union Berlin","league":"Bundesliga","market":"Doppia Chance: Union Berlino o Pareggio","odds":1.91,"stake":1,"status":"pending"},
+      {"id":15,"tipster":"Pronostici1","date":"2026-10-24 19:00","match":"Gil Vicente vs Porto","league":"Liga Portugal","market":"Handicap Asiatico: Gil Vicente +1.5","odds":1.55,"stake":1,"status":"pending"},
+      {"id":16,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Internacional vs Botafogo","league":"Brasileirão","market":"Doppia Chance: Botafogo o Pareggio","odds":1.78,"stake":1,"status":"pending"},
+      {"id":17,"tipster":"Pronostici1","date":"2026-10-24 20:00","match":"Westerlo vs SK Beveren","league":"Belgio","market":"Westerlo vince","odds":1.95,"stake":1,"status":"pending"},
+      {"id":18,"tipster":"Pronostici1","date":"2026-10-24 20:45","match":"Lazio vs Parma","league":"Serie A","market":"Over 2.5 gol","odds":1.8,"stake":1,"status":"pending"},
+      {"id":19,"tipster":"Pronostici1","date":"2026-10-24 17:00","match":"Lens vs Paris FC","league":"Ligue 1","market":"Over 2.5 gol","odds":1.62,"stake":1,"status":"pending"},
+      {"id":20,"tipster":"Pronostici1","date":"2026-10-24 20:45","match":"Napoli vs AS Roma","league":"Serie A","market":"Over 2.5 gol","odds":1.83,"stake":1,"status":"pending"},
+      {"id":21,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Palmeiras vs Bragantino","league":"Brasileirão","market":"Entrambe segnano: No","odds":1.95,"stake":1,"status":"pending"},
+      {"id":22,"tipster":"Pronostici1","date":"2026-10-24 19:30","match":"La Louvière vs Zulte Waregem","league":"Belgio","market":"Over 2.5 gol","odds":1.85,"stake":1,"status":"pending"},
+      {"id":23,"tipster":"Pronostici1","date":"2026-10-24 18:30","match":"Racing Santander vs Espanyol","league":"Segunda","market":"Doppia Chance: Espanyol o Pareggio","odds":1.53,"stake":1,"status":"pending"},
+      {"id":24,"tipster":"Pronostici1","date":"2026-10-24 16:15","match":"Rayo Vallecano vs Elche CF","league":"La Liga","market":"Entrambe segnano: Sì","odds":1.78,"stake":1,"status":"pending"},
+      {"id":25,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Leipzig vs Elversberg","league":"DFB Pokal","market":"Elversberg +1.5 Handicap","odds":1.78,"stake":1,"status":"pending"},
+      {"id":26,"tipster":"Pronostici1","date":"2026-10-24 15:30","match":"Paderborn vs Amburgo","league":"2. Bundesliga","market":"Doppia Chance: Amburgo o Pareggio","odds":1.63,"stake":1,"status":"pending"},
+      {"id":27,"tipster":"Pronostici1","date":"2026-10-24 21:00","match":"Vitoria vs Athletico Paranaense","league":"Brasileirão","market":"Entrambe segnano: Sì","odds":1.7,"stake":1,"status":"pending"}
+    ];
 
-    // Default Seed Data
-    function initDatabase() {
-      const stored = localStorage.getItem(DB_KEY);
-      if (stored) {
-        try {
-          bets = JSON.parse(stored);
-        } catch (e) {
-          bets = [];
-        }
-      } else {
-        // Initial Realistic Sample Data
-        bets = [
-          {
-            id: 'b_1',
-            tipster: 'Il Mago del Gol',
-            datetime: '2026-10-21T20:45',
-            event: 'Juventus vs Milan',
-            league: 'Serie A',
-            market: 'Over 2.5 Gol',
-            odds: 1.95,
-            stake: 1.0,
-            status: 'won',
-            notes: 'Canale Telegram VIP'
-          },
-          {
-            id: 'b_2',
-            tipster: 'Premier Tipster UK',
-            datetime: '2026-10-22T16:00',
-            event: 'Arsenal vs Chelsea',
-            league: 'Premier League',
-            market: '1 Fisso',
-            odds: 1.82,
-            stake: 1.5,
-            status: 'won',
-            notes: 'Singola del weekend'
-          },
-          {
-            id: 'b_3',
-            tipster: 'Il Mago del Gol',
-            datetime: '2026-10-22T21:00',
-            event: 'Real Madrid vs Barcellona',
-            league: 'La Liga',
-            market: 'Goal + Over 2.5',
-            odds: 1.88,
-            stake: 1.0,
-            status: 'won',
-            notes: 'El Clasico'
-          },
-          {
-            id: 'b_4',
-            tipster: 'Basket Pro Picks',
-            datetime: '2026-10-23T01:30',
-            event: 'Boston Celtics vs NY Knicks',
-            league: 'NBA',
-            market: 'Boston -5.5 Handicap',
-            odds: 1.90,
-            stake: 1.0,
-            status: 'lost',
-            notes: 'Persa nel 4° quarto'
-          },
-          {
-            id: 'b_5',
-            tipster: 'Premier Tipster UK',
-            datetime: '2026-10-23T18:30',
-            event: 'Liverpool vs Everton',
-            league: 'Premier League',
-            market: '1 + Over 1.5',
-            odds: 1.65,
-            stake: 2.0,
-            status: 'won',
-            notes: 'Derby'
-          },
-          {
-            id: 'b_6',
-            tipster: 'Il Mago del Gol',
-            datetime: '2026-10-24T18:00',
-            event: 'Napoli vs Roma',
-            league: 'Serie A',
-            market: 'Gol Entrambe (BTTS)',
-            odds: 1.75,
-            stake: 1.0,
-            status: 'pending',
-            notes: 'Partita di oggi'
-          },
-          {
-            id: 'b_7',
-            tipster: 'Basket Pro Picks',
-            datetime: '2026-10-24T20:00',
-            event: 'LA Lakers vs Golden State',
-            league: 'NBA',
-            market: 'Over 228.5 Punti',
-            odds: 1.92,
-            stake: 1.0,
-            status: 'pending',
-            notes: 'Notte NBA'
-          }
-        ];
-        saveDatabase();
-      }
+    let bets = JSON.parse(localStorage.getItem('tipster_bets_v2')) || INITIAL_BETS;
+    let profitChart = null;
+
+    function saveBets() {
+      localStorage.setItem('tipster_bets_v2', JSON.stringify(bets));
+      updateApp();
     }
 
-    function saveDatabase() {
-      localStorage.setItem(DB_KEY, JSON.stringify(bets));
-      refreshAllViews();
-    }
-
-    // --- APPLICATION STARTUP ---
-    window.onload = function() {
-      initDatabase();
-      initCharts();
-      setFormDefaultDateTime();
-      refreshAllViews();
-    };
-
-    function setFormDefaultDateTime() {
-      const now = new Date();
-      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-      document.getElementById('formDateTime').value = now.toISOString().slice(0, 16);
-    }
-
-    // --- VIEW SWITCHING ---
-    function switchView(viewName) {
-      currentActiveView = viewName;
-
-      // Update Desktop tabs
-      ['Overview', 'Tipsters', 'Compare'].forEach(tab => {
-        const btn = document.getElementById('navTab' + tab);
-        if (tab.toLowerCase() === viewName) {
-          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all text-white bg-surface-700 shadow-sm flex items-center gap-1.5";
-        } else {
-          btn.className = "px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all text-gray-400 hover:text-white flex items-center gap-1.5";
-        }
-      });
-
-      // Update Mobile tabs
-      ['Overview', 'Tipsters', 'Compare'].forEach(tab => {
-        const mBtn = document.getElementById('mNavTab' + tab);
-        if (tab.toLowerCase() === viewName) {
-          mBtn.className = "px-3 py-1 rounded-lg bg-surface-700 text-white whitespace-nowrap";
-        } else {
-          mBtn.className = "px-3 py-1 rounded-lg text-gray-400 whitespace-nowrap";
-        }
-      });
-
-      // Show/Hide Sections
-      document.getElementById('viewOverview').classList.toggle('hidden', viewName !== 'overview');
-      document.getElementById('viewTipsters').classList.toggle('hidden', viewName !== 'tipsters');
-      document.getElementById('viewCompare').classList.toggle('hidden', viewName !== 'compare');
-
-      if (viewName === 'overview') {
-        renderGlobalOverview();
-      } else if (viewName === 'tipsters') {
-        renderTipsterProfile();
-      } else if (viewName === 'compare') {
-        renderCompareLeaderboard();
-      }
-
-      renderFilteredBetsTable();
-    }
-
-    // --- CHART CREATION & RENDERING ---
-    function initCharts() {
-      // 1. Overview Global Chart
-      const ctxGlobal = document.getElementById('overviewChart').getContext('2d');
-      globalOverviewChart = new Chart(ctxGlobal, {
-        type: 'line',
-        data: {
-          labels: [],
-          datasets: [{
-            label: 'Bilancio Globale (u)',
-            data: [],
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.08)',
-            borderWidth: 2.5,
-            fill: true,
-            tension: 0.35,
-            pointBackgroundColor: '#10b981',
-            pointRadius: 4,
-            pointHoverRadius: 6
-          }]
-        },
-        options: getChartDefaultOptions()
-      });
-
-      // 2. Tipster Specific Chart
-      const ctxTipster = document.getElementById('tipsterDedicatedChart').getContext('2d');
-      tipsterSoloChart = new Chart(ctxTipster, {
-        type: 'line',
-        data: {
-          labels: [],
-          datasets: [{
-            label: 'Bilancio Fornitore (u)',
-            data: [],
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59, 130, 246, 0.08)',
-            borderWidth: 2.5,
-            fill: true,
-            tension: 0.35,
-            pointBackgroundColor: '#3b82f6',
-            pointRadius: 4,
-            pointHoverRadius: 6
-          }]
-        },
-        options: getChartDefaultOptions()
-      });
-    }
-
-    function getChartDefaultOptions() {
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#0f172a',
-            borderColor: '#334155',
-            borderWidth: 1,
-            titleFont: { family: 'monospace', size: 12 },
-            bodyFont: { family: 'monospace', size: 12 },
-            callbacks: {
-              label: function(context) {
-                return ` Profitto: ${context.parsed.y >= 0 ? '+' : ''}${context.parsed.y.toFixed(2)}u`;
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: '#1e293b', drawBorder: false },
-            ticks: { color: '#94a3b8', font: { size: 10 } }
-          },
-          y: {
-            grid: { color: '#1e293b', drawBorder: false },
-            ticks: {
-              color: '#94a3b8',
-              font: { size: 11, family: 'monospace' },
-              callback: function(v) { return (v >= 0 ? '+' : '') + v + 'u'; }
-            }
-          }
-        }
-      };
-    }
-
-    // --- REFRESH VIEWS ---
-    function refreshAllViews() {
+    function updateApp() {
+      renderBetsTable();
+      renderKPIs();
       populateTipsterDropdowns();
-      renderGlobalOverview();
-      renderTipsterProfile();
-      renderCompareLeaderboard();
-      renderFilteredBetsTable();
+      renderSingleTipsterView();
+      renderLeaderboard();
+      renderChart();
     }
 
-    function getUniqueTipsters() {
-      return [...new Set(bets.map(b => (b.tipster || '').trim()).filter(Boolean))].sort();
+    function switchTab(tab) {
+      ['overview', 'single', 'leaderboard'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).className = 'px-4 py-2 text-slate-400 hover:text-slate-200 border-b-2 border-transparent flex items-center gap-2 whitespace-nowrap';
+      });
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      document.getElementById(`tab-${tab}`).className = 'px-4 py-2 text-emerald-400 border-b-2 border-emerald-400 flex items-center gap-2 whitespace-nowrap font-bold';
+    }
+
+    function renderKPIs() {
+      const settled = bets.filter(b => b.status !== 'pending');
+      const won = bets.filter(b => b.status === 'win');
+      const pending = bets.filter(b => b.status === 'pending');
+
+      let staked = 0;
+      let profit = 0;
+      let totalOdds = 0;
+
+      bets.forEach(b => totalOdds += Number(b.odds));
+      settled.forEach(b => {
+        const s = Number(b.stake);
+        staked += s;
+        if (b.status === 'win') profit += (b.odds - 1) * s;
+        else if (b.status === 'loss') profit -= s;
+      });
+
+      const roi = staked > 0 ? (profit / staked) * 100 : 0;
+      const winRate = settled.length > 0 ? (won.length / settled.length) * 100 : 0;
+      const avgOdds = bets.length > 0 ? totalOdds / bets.length : 0;
+
+      const pElem = document.getElementById('kpi-profit');
+      pElem.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(2)} u`;
+      pElem.className = `text-xl sm:text-2xl font-black mt-1 ${profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      document.getElementById('kpi-roi').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`;
+      document.getElementById('kpi-staked').textContent = `Investito: ${staked.toFixed(1)}u`;
+      document.getElementById('kpi-winrate').textContent = `${winRate.toFixed(1)}%`;
+      document.getElementById('kpi-wl').textContent = `${won.length} Vinte / ${settled.length} Chiuse`;
+      document.getElementById('kpi-odds').textContent = `@${avgOdds.toFixed(2)}`;
+      document.getElementById('kpi-pending').textContent = pending.length;
     }
 
     function populateTipsterDropdowns() {
-      const tipsters = getUniqueTipsters();
+      const tipsters = [...new Set(bets.map(b => b.tipster))].sort();
+      
+      const filterSelect = document.getElementById('filter-tipster');
+      const currentFilter = filterSelect.value;
+      filterSelect.innerHTML = '<option value="all">Tutti i Fornitori</option>';
+      tipsters.forEach(t => {
+        filterSelect.innerHTML += `<option value="${t}" ${t === currentFilter ? 'selected' : ''}>${t}</option>`;
+      });
 
-      // Suggestions datalist in Modal
-      const datalist = document.getElementById('tipsterDatalistSuggestions');
-      datalist.innerHTML = tipsters.map(t => `<option value="${escapeHTML(t)}">`).join('');
-
-      // Filter select above general table
-      const filterSelect = document.getElementById('tableFilterTipster');
-      const curTableFilter = filterSelect.value;
-      filterSelect.innerHTML = '<option value="ALL">Tutti i Fornitori</option>' + 
-        tipsters.map(t => `<option value="${escapeHTML(t)}" ${t === curTableFilter ? 'selected' : ''}>${escapeHTML(t)}</option>`).join('');
-
-      // Tipster profile selector
-      const soloSelect = document.getElementById('selectedTipsterDropdown');
-      if (tipsters.length > 0) {
-        if (!currentSelectedTipster || !tipsters.includes(currentSelectedTipster)) {
-          currentSelectedTipster = tipsters[0];
-        }
-        soloSelect.innerHTML = tipsters.map(t => 
-          `<option value="${escapeHTML(t)}" ${t === currentSelectedTipster ? 'selected' : ''}>${escapeHTML(t)}</option>`
-        ).join('');
-      } else {
-        currentSelectedTipster = '';
-        soloSelect.innerHTML = '<option value="">Nessun fornitore registrato</option>';
-      }
+      const singleSelect = document.getElementById('single-tipster-select');
+      const currentSingle = singleSelect.value;
+      singleSelect.innerHTML = '';
+      tipsters.forEach(t => {
+        singleSelect.innerHTML += `<option value="${t}" ${t === currentSingle ? 'selected' : ''}>${t}</option>`;
+      });
     }
 
-    // --- VIEW 1: GLOBAL OVERVIEW LOGIC ---
-    function renderGlobalOverview() {
-      const stats = calculateMetrics(bets);
+    function renderSingleTipsterView() {
+      const tipster = document.getElementById('single-tipster-select').value;
+      if (!tipster) return;
 
-      // DOM Updates
-      const profitEl = document.getElementById('statTotalProfit');
-      profitEl.textContent = `${stats.netProfit >= 0 ? '+' : ''}${stats.netProfit.toFixed(2)} u`;
-      profitEl.className = `text-2xl font-black font-mono ${stats.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-500'}`;
+      const pBets = bets.filter(b => b.tipster === tipster);
+      const settled = pBets.filter(b => b.status !== 'pending');
+      const won = pBets.filter(b => b.status === 'win');
 
-      const roiEl = document.getElementById('statTotalROI');
-      roiEl.textContent = `${stats.roi >= 0 ? '+' : ''}${stats.roi.toFixed(1)}%`;
-      roiEl.className = `text-2xl font-black font-mono ${stats.roi >= 0 ? 'text-blue-400' : 'text-rose-400'}`;
+      let staked = 0;
+      let profit = 0;
+      let totalOdds = 0;
 
-      document.getElementById('statTotalInvested').textContent = `Stake Investito: ${stats.stakedTotal.toFixed(1)}u`;
-      document.getElementById('statTotalStrikeRate').textContent = `${stats.strikeRate.toFixed(1)}%`;
-      document.getElementById('statTotalBetsRatio').textContent = `${stats.wonCount} Vinte / ${stats.settledCount} Chiuse`;
-      document.getElementById('statTotalAvgOdds').textContent = `@${stats.avgOdds.toFixed(2)}`;
-      document.getElementById('statTotalAvgWonOdds').textContent = stats.wonCount > 0 ? `Vinte: @${stats.avgWonOdds.toFixed(2)}` : 'Vinte: -';
-      document.getElementById('statTotalPending').textContent = stats.pendingCount;
+      pBets.forEach(b => totalOdds += Number(b.odds));
+      settled.forEach(b => {
+        const s = Number(b.stake);
+        staked += s;
+        if (b.status === 'win') profit += (b.odds - 1) * s;
+        else if (b.status === 'loss') profit -= s;
+      });
 
-      // Update Chart
-      updateLineChart(globalOverviewChart, bets, 'overview');
+      const roi = staked > 0 ? (profit / staked) * 100 : 0;
+      const winRate = settled.length > 0 ? (won.length / settled.length) * 100 : 0;
+      const avgOdds = pBets.length > 0 ? totalOdds / pBets.length : 0;
 
-      // Update Mini Tipsters List in Overview
-      renderOverviewMiniTipsters();
+      const profEl = document.getElementById('st-profit');
+      profEl.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(2)} u`;
+      profEl.className = `text-xl font-bold mt-1 ${profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      document.getElementById('st-roi').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`;
+      document.getElementById('st-winrate').textContent = `${winRate.toFixed(1)}%`;
+      document.getElementById('st-odds').textContent = `@${avgOdds.toFixed(2)}`;
     }
 
-    function renderOverviewMiniTipsters() {
-      const container = document.getElementById('overviewMiniTipsters');
-      const tipsters = getUniqueTipsters();
-
-      if (tipsters.length === 0) {
-        container.innerHTML = '<div class="text-center py-6 text-xs text-gray-500">Nessun fornitore presente.</div>';
-        return;
-      }
-
-      const summaries = tipsters.map(t => {
+    function renderLeaderboard() {
+      const tipsters = [...new Set(bets.map(b => b.tipster))];
+      const stats = tipsters.map(t => {
         const tBets = bets.filter(b => b.tipster === t);
-        const m = calculateMetrics(tBets);
-        return { name: t, ...m };
-      }).sort((a, b) => b.netProfit - a.netProfit);
-
-      container.innerHTML = summaries.slice(0, 5).map((t, idx) => `
-        <div onclick="selectAndGoToTipster('${escapeHTML(t.name)}')" class="p-2.5 rounded-xl bg-surface-800/80 hover:bg-surface-700/80 border border-surface-700/60 flex items-center justify-between cursor-pointer transition-colors">
-          <div class="flex items-center space-x-2.5 truncate">
-            <span class="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${
-              idx === 0 ? 'bg-amber-400 text-slate-900' : 'bg-surface-700 text-gray-300'
-            }">${idx + 1}</span>
-            <div class="truncate">
-              <p class="text-xs font-bold text-white truncate">${escapeHTML(t.name)}</p>
-              <p class="text-[10px] text-gray-400">${t.settledCount} giocate | WR: <span class="text-gray-200">${t.strikeRate.toFixed(0)}%</span></p>
-            </div>
-          </div>
-          <div class="text-right">
-            <p class="text-xs font-bold font-mono ${t.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
-              ${t.netProfit >= 0 ? '+' : ''}${t.netProfit.toFixed(2)}u
-            </p>
-            <p class="text-[10px] text-gray-400 font-mono">ROI: ${t.roi.toFixed(1)}%</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // --- VIEW 2: DEDICATED TIPSTER PROFILE LOGIC ---
-    function onTipsterSelected(tipsterName) {
-      currentSelectedTipster = tipsterName;
-      renderTipsterProfile();
-    }
-
-    function selectAndGoToTipster(tipsterName) {
-      currentSelectedTipster = tipsterName;
-      const select = document.getElementById('selectedTipsterDropdown');
-      if (select) select.value = tipsterName;
-      switchView('tipsters');
-    }
-
-    function renderTipsterProfile() {
-      if (!currentSelectedTipster) return;
-
-      const tipsterBets = bets.filter(b => b.tipster === currentSelectedTipster);
-      const m = calculateMetrics(tipsterBets);
-
-      document.getElementById('tipsterChartNameBadge').textContent = currentSelectedTipster;
-
-      // Stats
-      const profitEl = document.getElementById('tipsterStatProfit');
-      profitEl.textContent = `${m.netProfit >= 0 ? '+' : ''}${m.netProfit.toFixed(2)}u`;
-      profitEl.className = `text-xl font-black font-mono mt-1 ${m.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
-      document.getElementById('tipsterStatTotalStaked').textContent = `Investiti: ${m.stakedTotal.toFixed(1)}u`;
-
-      const roiEl = document.getElementById('tipsterStatROI');
-      roiEl.textContent = `${m.roi >= 0 ? '+' : ''}${m.roi.toFixed(1)}%`;
-      roiEl.className = `text-xl font-black font-mono mt-1 ${m.roi >= 0 ? 'text-blue-400' : 'text-rose-400'}`;
-
-      document.getElementById('tipsterStatStrike').textContent = `${m.strikeRate.toFixed(1)}%`;
-      document.getElementById('tipsterStatWinLossRatio').textContent = `${m.wonCount}W / ${m.lostCount}L`;
-
-      document.getElementById('tipsterStatOdds').textContent = `@${m.avgOdds.toFixed(2)}`;
-      document.getElementById('tipsterStatWonOdds').textContent = m.wonCount > 0 ? `Vinte: @${m.avgWonOdds.toFixed(2)}` : 'Vinte: -';
-
-      document.getElementById('tipsterStatTotalBets').textContent = tipsterBets.length;
-      document.getElementById('tipsterStatVoidBets').textContent = `${m.voidCount} Void`;
-      document.getElementById('tipsterStatPending').textContent = m.pendingCount;
-
-      // Update Tipster Chart
-      updateLineChart(tipsterSoloChart, tipsterBets, 'solo');
-    }
-
-    function quickFilterTipsterOnly() {
-      if (!currentSelectedTipster) return;
-      document.getElementById('tableFilterTipster').value = currentSelectedTipster;
-      renderFilteredBetsTable();
-      showToast(`Tabella filtrata per "${currentSelectedTipster}"`, 'info');
-    }
-
-    // --- VIEW 3: COMPARE & LEADERBOARD LOGIC ---
-    function renderCompareLeaderboard() {
-      const tipsters = getUniqueTipsters();
-      const tbody = document.getElementById('compareTableBody');
-
-      if (tipsters.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-8 text-gray-500">Nessun fornitore registrato.</td></tr>';
-        document.getElementById('topRoiTipsterName').textContent = '-';
-        document.getElementById('topProfitTipsterName').textContent = '-';
-        document.getElementById('topStrikeTipsterName').textContent = '-';
-        return;
-      }
-
-      const list = tipsters.map(name => {
-        const tBets = bets.filter(b => b.tipster === name);
-        const m = calculateMetrics(tBets);
-        return { name, ...m };
-      });
-
-      // Best Honours
-      const bestProfit = [...list].sort((a,b) => b.netProfit - a.netProfit)[0];
-      const bestRoi = [...list].filter(x => x.settledCount >= 2).sort((a,b) => b.roi - a.roi)[0] || list[0];
-      const bestStrike = [...list].filter(x => x.settledCount >= 2).sort((a,b) => b.strikeRate - a.strikeRate)[0] || list[0];
-
-      document.getElementById('topProfitTipsterName').textContent = bestProfit.name;
-      document.getElementById('topProfitValue').textContent = `${bestProfit.netProfit >= 0 ? '+' : ''}${bestProfit.netProfit.toFixed(2)}u`;
-
-      document.getElementById('topRoiTipsterName').textContent = bestRoi.name;
-      document.getElementById('topRoiValue').textContent = `${bestRoi.roi >= 0 ? '+' : ''}${bestRoi.roi.toFixed(1)}%`;
-
-      document.getElementById('topStrikeTipsterName').textContent = bestStrike.name;
-      document.getElementById('topStrikeValue').textContent = `${bestStrike.strikeRate.toFixed(1)}%`;
-
-      // Sort by net profit descending
-      list.sort((a, b) => b.netProfit - a.netProfit);
-
-      tbody.innerHTML = list.map((item, index) => {
-        const profitClass = item.netProfit >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
-        const roiClass = item.roi >= 0 ? 'text-blue-400' : 'text-rose-400';
-
-        return `
-          <tr class="hover:bg-surface-800/40 transition-colors">
-            <td class="py-3 px-4 text-center font-bold">
-              <span class="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${
-                index === 0 ? 'bg-amber-400 text-slate-900 font-black' :
-                index === 1 ? 'bg-slate-300 text-slate-900 font-bold' :
-                index === 2 ? 'bg-amber-700 text-white font-bold' : 'bg-surface-700 text-gray-300'
-              }">
-                ${index + 1}
-              </span>
-            </td>
-            <td class="py-3 px-4 font-sans font-semibold text-white">
-              <div class="flex items-center gap-2">
-                <span>${escapeHTML(item.name)}</span>
-                ${item.name === bestRoi.name ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono">TOP ROI</span>' : ''}
-              </div>
-            </td>
-            <td class="py-3 px-4 text-center text-gray-300">${item.totalCount}</td>
-            <td class="py-3 px-4 text-center text-gray-400">
-              <span class="text-emerald-400">${item.wonCount}W</span> / 
-              <span class="text-rose-400">${item.lostCount}L</span> / 
-              <span class="text-gray-400">${item.voidCount}V</span>
-            </td>
-            <td class="py-3 px-4 text-center font-bold ${item.strikeRate >= 50 ? 'text-amber-400' : 'text-gray-300'}">
-              ${item.strikeRate.toFixed(1)}%
-            </td>
-            <td class="py-3 px-4 text-center text-purple-300 font-mono">
-              @${item.avgOdds.toFixed(2)}
-            </td>
-            <td class="py-3 px-4 text-center font-bold ${roiClass}">
-              ${item.roi >= 0 ? '+' : ''}${item.roi.toFixed(1)}%
-            </td>
-            <td class="py-3 px-4 text-right ${profitClass}">
-              ${item.netProfit >= 0 ? '+' : ''}${item.netProfit.toFixed(2)}u
-            </td>
-            <td class="py-3 px-4 text-center">
-              <button onclick="selectAndGoToTipster('${escapeHTML(item.name)}')" class="px-2.5 py-1 rounded-lg bg-surface-700 hover:bg-surface-600 text-white text-[11px] font-semibold transition-colors">
-                <i class="fa-solid fa-chart-simple mr-1"></i> Storico
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // --- FORMULA RECALCULATION HELPER ---
-    function calculateMetrics(dataset) {
-      let netProfit = 0;
-      let stakedTotal = 0;
-      let settledCount = 0;
-      let wonCount = 0;
-      let lostCount = 0;
-      let voidCount = 0;
-      let pendingCount = 0;
-      let sumOdds = 0;
-      let sumWonOdds = 0;
-
-      dataset.forEach(b => {
-        const stake = parseFloat(b.stake) || 1.0;
-        const odds = parseFloat(b.odds) || 1.0;
-        sumOdds += odds;
-
-        if (b.status === 'pending') {
-          pendingCount++;
-        } else {
-          settledCount++;
-          stakedTotal += stake;
-
-          if (b.status === 'won') {
-            wonCount++;
-            netProfit += (odds - 1) * stake;
-            sumWonOdds += odds;
-          } else if (b.status === 'lost') {
-            lostCount++;
-            netProfit -= stake;
-          } else if (b.status === 'void') {
-            voidCount++;
-          }
-        }
-      });
-
-      const roi = stakedTotal > 0 ? (netProfit / stakedTotal) * 100 : 0;
-      const strikeRate = settledCount > 0 ? (wonCount / settledCount) * 100 : 0;
-      const avgOdds = dataset.length > 0 ? (sumOdds / dataset.length) : 0;
-      const avgWonOdds = wonCount > 0 ? (sumWonOdds / wonCount) : 0;
-
-      return {
-        totalCount: dataset.length,
-        settledCount,
-        wonCount,
-        lostCount,
-        voidCount,
-        pendingCount,
-        stakedTotal,
-        netProfit,
-        roi,
-        strikeRate,
-        avgOdds,
-        avgWonOdds
-      };
-    }
-
-    // --- CHART UPDATE HELPER ---
-    function updateLineChart(chartInstance, dataset, mode) {
-      if (!chartInstance) return;
-
-      const settled = dataset
-        .filter(b => b.status !== 'pending')
-        .sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
-
-      let cumulative = 0;
-      const labels = ['Start'];
-      const data = [0];
-
-      settled.forEach((b, idx) => {
-        const s = parseFloat(b.stake) || 1;
-        const o = parseFloat(b.odds) || 1;
-        if (b.status === 'won') {
-          cumulative += (o - 1) * s;
-        } else if (b.status === 'lost') {
-          cumulative -= s;
-        }
-        labels.push(`#${idx + 1} (${b.datetime ? b.datetime.slice(5, 10) : ''})`);
-        data.push(parseFloat(cumulative.toFixed(2)));
-      });
-
-      chartInstance.data.labels = labels;
-      chartInstance.data.datasets[0].data = data;
-
-      const isPositive = cumulative >= 0;
-      const mainColor = mode === 'overview' 
-        ? (isPositive ? '#10b981' : '#f43f5e')
-        : (isPositive ? '#3b82f6' : '#f43f5e');
-
-      chartInstance.data.datasets[0].borderColor = mainColor;
-      chartInstance.data.datasets[0].backgroundColor = isPositive 
-        ? (mode === 'overview' ? 'rgba(16, 185, 129, 0.08)' : 'rgba(59, 130, 246, 0.08)')
-        : 'rgba(244, 63, 94, 0.08)';
-      chartInstance.data.datasets[0].pointBackgroundColor = mainColor;
-
-      chartInstance.update();
-
-      if (mode === 'overview') {
-        document.getElementById('globalChartPoints').textContent = `${settled.length} giocate definite`;
-      }
-    }
-
-    // --- UNIVERSAL TABLE RENDERING ---
-    function renderFilteredBetsTable() {
-      const tipsterFilter = document.getElementById('tableFilterTipster').value;
-      const statusFilter = document.getElementById('tableFilterStatus').value;
-      const query = document.getElementById('tableSearchInput').value.toLowerCase().trim();
-
-      const filtered = bets.filter(b => {
-        const matchTipster = (tipsterFilter === 'ALL' || b.tipster === tipsterFilter);
-        const matchStatus = (statusFilter === 'ALL' || b.status === statusFilter);
-        const matchQuery = !query ||
-          (b.event && b.event.toLowerCase().includes(query)) ||
-          (b.market && b.market.toLowerCase().includes(query)) ||
-          (b.tipster && b.tipster.toLowerCase().includes(query)) ||
-          (b.league && b.league.toLowerCase().includes(query));
-
-        return matchTipster && matchStatus && matchQuery;
-      });
-
-      // Sort by date descending
-      filtered.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
-
-      const tbody = document.getElementById('betsTableBody');
-      const placeholder = document.getElementById('noDataPlaceholder');
-      document.getElementById('filteredResultsCounter').textContent = `${filtered.length} di ${bets.length} pronostici`;
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = '';
-        placeholder.classList.remove('hidden');
-        return;
-      }
-
-      placeholder.classList.add('hidden');
-
-      tbody.innerHTML = filtered.map(bet => {
-        const stake = parseFloat(bet.stake) || 1.0;
-        const odds = parseFloat(bet.odds) || 1.0;
-        let profitText = '-';
-        let profitClass = 'text-gray-500';
-
-        if (bet.status === 'won') {
-          const val = (odds - 1) * stake;
-          profitText = `+${val.toFixed(2)}u`;
-          profitClass = 'text-emerald-400 font-bold';
-        } else if (bet.status === 'lost') {
-          profitText = `-${stake.toFixed(2)}u`;
-          profitClass = 'text-rose-400 font-bold';
-        } else if (bet.status === 'void') {
-          profitText = '0.00u';
-          profitClass = 'text-gray-400';
-        }
-
-        const dateObj = new Date(bet.datetime);
-        const dateFormatted = !isNaN(dateObj)
-          ? dateObj.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' }) + ' ' + dateObj.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
-          : bet.datetime;
-
-        return `
-          <tr class="hover:bg-surface-800/40 transition-colors">
-            <!-- Date -->
-            <td class="py-3 px-4 text-gray-400 whitespace-nowrap text-[11px]">
-              ${dateFormatted}
-            </td>
-
-            <!-- Tipster Badge -->
-            <td class="py-3 px-4 whitespace-nowrap">
-              <button onclick="selectAndGoToTipster('${escapeHTML(bet.tipster)}')" class="inline-flex items-center px-2 py-0.5 rounded-lg text-[11px] font-medium bg-surface-800 text-teal-300 hover:bg-surface-700 border border-surface-700">
-                <i class="fa-solid fa-user-tie text-[9px] mr-1.5 text-teal-400"></i>
-                ${escapeHTML(bet.tipster)}
-              </button>
-            </td>
-
-            <!-- Match / Event -->
-            <td class="py-3 px-4 font-sans">
-              <div class="font-bold text-white text-xs">${escapeHTML(bet.event)}</div>
-              ${bet.league ? `<div class="text-[10px] text-gray-400 flex items-center gap-1 mt-0.5"><i class="fa-regular fa-futbol text-[9px]"></i> ${escapeHTML(bet.league)}</div>` : ''}
-            </td>
-
-            <!-- Market / Pick -->
-            <td class="py-3 px-4 font-sans">
-              <span class="text-xs font-semibold text-amber-200 bg-amber-500/10 px-2 py-1 rounded-md border border-amber-500/20 inline-block">
-                ${escapeHTML(bet.market)}
-              </span>
-              ${bet.notes ? `<p class="text-[10px] text-gray-400 italic mt-0.5">${escapeHTML(bet.notes)}</p>` : ''}
-            </td>
-
-            <!-- Odds -->
-            <td class="py-3 px-4 text-center font-bold text-white text-xs">
-              @${odds.toFixed(2)}
-            </td>
-
-            <!-- Stake -->
-            <td class="py-3 px-4 text-center text-gray-300 text-xs">
-              ${stake.toFixed(1)}u
-            </td>
-
-            <!-- 1-Click Status Quick Toggles -->
-            <td class="py-3 px-4 text-center whitespace-nowrap">
-              <div class="inline-flex items-center rounded-xl bg-surface-900 p-1 border border-surface-700 shadow-inner">
-                <button title="Segna Vinta" onclick="setQuickBetStatus('${bet.id}', 'won')" class="px-2 py-1 rounded-lg text-xs font-bold transition-all ${bet.status === 'won' ? 'bg-emerald-500 text-slate-950 shadow-md' : 'text-gray-400 hover:text-emerald-400'}">
-                  <i class="fa-solid fa-check"></i>
-                </button>
-                <button title="Segna Persa" onclick="setQuickBetStatus('${bet.id}', 'lost')" class="px-2 py-1 rounded-lg text-xs font-bold transition-all ${bet.status === 'lost' ? 'bg-rose-500 text-white shadow-md' : 'text-gray-400 hover:text-rose-400'}">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-                <button title="Segna Void/Rimborso" onclick="setQuickBetStatus('${bet.id}', 'void')" class="px-2 py-1 rounded-lg text-xs font-bold transition-all ${bet.status === 'void' ? 'bg-gray-600 text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}">
-                  <i class="fa-solid fa-rotate-left"></i>
-                </button>
-                <button title="In Attesa" onclick="setQuickBetStatus('${bet.id}', 'pending')" class="px-2 py-1 rounded-lg text-xs font-bold transition-all ${bet.status === 'pending' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-gray-400 hover:text-amber-400'}">
-                  <i class="fa-regular fa-clock"></i>
-                </button>
-              </div>
-            </td>
-
-            <!-- Net P/L -->
-            <td class="py-3 px-4 text-right text-xs whitespace-nowrap ${profitClass}">
-              ${profitText}
-            </td>
-
-            <!-- Actions (Edit/Delete) -->
-            <td class="py-3 px-4 text-center whitespace-nowrap">
-              <div class="flex items-center justify-center space-x-1">
-                <button onclick="editBet('${bet.id}')" title="Modifica" class="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-surface-700 transition-colors">
-                  <i class="fa-solid fa-pen"></i>
-                </button>
-                <button onclick="deleteBet('${bet.id}')" title="Elimina" class="p-1.5 rounded-lg text-gray-400 hover:text-rose-400 hover:bg-surface-700 transition-colors">
-                  <i class="fa-solid fa-trash-can"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function filterTableByStatus(status) {
-      document.getElementById('tableFilterStatus').value = status;
-      renderFilteredBetsTable();
-    }
-
-    // --- BET CRUD OPERATIONS ---
-    function setQuickBetStatus(betId, newStatus) {
-      const idx = bets.findIndex(b => b.id === betId);
-      if (idx !== -1) {
-        bets[idx].status = newStatus;
-        saveDatabase();
-        showToast(`Esito aggiornato: ${newStatus.toUpperCase()}`, 'info');
-      }
-    }
-
-    function submitBetForm(e) {
-      e.preventDefault();
-      const id = document.getElementById('formBetId').value;
-      const tipster = document.getElementById('formTipster').value.trim();
-      const datetime = document.getElementById('formDateTime').value;
-      const eventName = document.getElementById('formEvent').value.trim();
-      const league = document.getElementById('formLeague').value.trim();
-      const market = document.getElementById('formMarket').value.trim();
-      const odds = parseFloat(document.getElementById('formOdds').value);
-      const stake = parseFloat(document.getElementById('formStake').value) || 1.0;
-      const status = document.getElementById('formStatus').value;
-      const notes = document.getElementById('formNotes').value.trim();
-
-      if (!tipster || !eventName || !market || isNaN(odds)) {
-        showToast('Compila tutti i campi obbligatori!', 'error');
-        return;
-      }
-
-      if (id) {
-        // Edit existing
-        const idx = bets.findIndex(b => b.id === id);
-        if (idx !== -1) {
-          bets[idx] = { ...bets[idx], tipster, datetime, event: eventName, league, market, odds, stake, status, notes };
-          showToast('Pronostico modificato con successo!');
-        }
-      } else {
-        // Add new
-        const newBet = {
-          id: 'b_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-          tipster,
-          datetime,
-          event: eventName,
-          league,
-          market,
-          odds,
-          stake,
-          status,
-          notes
-        };
-        bets.unshift(newBet);
-        showToast('Pronostico aggiunto allo storico!');
-      }
-
-      saveDatabase();
-      closeModal('addModal');
-      resetBetForm();
-    }
-
-    function editBet(betId) {
-      const b = bets.find(x => x.id === betId);
-      if (!b) return;
-
-      document.getElementById('formBetId').value = b.id;
-      document.getElementById('formTipster').value = b.tipster;
-      document.getElementById('formDateTime').value = b.datetime;
-      document.getElementById('formEvent').value = b.event;
-      document.getElementById('formLeague').value = b.league || '';
-      document.getElementById('formMarket').value = b.market;
-      document.getElementById('formOdds').value = b.odds;
-      document.getElementById('formStake').value = b.stake;
-      document.getElementById('formStatus').value = b.status;
-      document.getElementById('formNotes').value = b.notes || '';
-
-      openModal('addModal');
-    }
-
-    function deleteBet(betId) {
-      if (confirm('Sei sicuro di voler eliminare questa giocata dallo storico?')) {
-        bets = bets.filter(b => b.id !== betId);
-        saveDatabase();
-        showToast('Pronostico rimosso dallo storico', 'info');
-      }
-    }
-
-    function resetBetForm() {
-      document.getElementById('betCreateForm').reset();
-      document.getElementById('formBetId').value = '';
-      clearModalImage();
-      setFormDefaultDateTime();
-    }
-
-    // --- GEMINI MULTIMODAL OCR (SCREENSHOT READING) ---
-    async function onImageSelected(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = async function(evt) {
-        const base64Data = evt.target.result.split(',')[1];
-        const previewImg = document.getElementById('modalImagePreview');
-        previewImg.src = evt.target.result;
-        document.getElementById('modalImagePreviewBox').classList.remove('hidden');
-
-        // Extract with Gemini AI Vision
-        await extractBetFromImageAI(base64Data, file.type || 'image/png');
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function clearModalImage() {
-      document.getElementById('fileInputScreenshot').value = '';
-      document.getElementById('modalImagePreview').src = '';
-      document.getElementById('modalImagePreviewBox').classList.add('hidden');
-    }
-
-    async function extractBetFromImageAI(base64Data, mimeType) {
-      const spinner = document.getElementById('aiAnalyzingSpinner');
-      spinner.classList.remove('hidden');
-
-      const systemPrompt = `Sei un assistente specializzato nell'analisi di schedine e pronostici sportivi.
-Analizza l'immagine ed estrai le informazioni in formato JSON con questo schema:
-{
-  "tipster": "Nome del canale Telegram, fornitore o autore se visibile, altrimenti vuoto",
-  "event": "Squadra Casa vs Squadra Trasferta",
-  "league": "Nome competizione o lega es. Serie A, Premier League, NBA",
-  "datetime": "Data e ora in formato ISO YYYY-MM-DDTHH:MM (se l'anno manca usa 2026)",
-  "market": "Mercato e giocata es. Over 2.5, Gol, 1X2, Handicap -3.5",
-  "odds": 1.85,
-  "stake": 1.0,
-  "notes": "eventuali note o quote di apertura"
-}
-Restituisci ESCLUSIVAMENTE il JSON valido senza testo aggiuntivo.`;
-
-      const payload = {
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: "Estrai tutti i dati di questo pronostico sportivo dallo screenshot." },
-              {
-                inlineData: {
-                  mimeType: mimeType,
-                  data: base64Data
-                }
-              }
-            ]
-          }
-        ],
-        systemInstruction: {
-          parts: [{ text: systemPrompt }]
-        },
-        generationConfig: {
-          responseMimeType: "application/json"
-        }
-      };
-
-      try {
-        const apiKey = ""; // Provided at runtime
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-        const res = await fetchWithRetry(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+        const settled = tBets.filter(b => b.status !== 'pending');
+        const won = tBets.filter(b => b.status === 'win');
+        const lost = tBets.filter(b => b.status === 'loss');
+        const voided = tBets.filter(b => b.status === 'void');
+
+        let staked = 0;
+        let profit = 0;
+        let totalOdds = 0;
+        tBets.forEach(b => totalOdds += Number(b.odds));
+        settled.forEach(b => {
+          const s = Number(b.stake);
+          staked += s;
+          if (b.status === 'win') profit += (b.odds - 1) * s;
+          else if (b.status === 'loss') profit -= s;
         });
 
-        const data = await res.json();
-        const jsonText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const roi = staked > 0 ? (profit / staked) * 100 : 0;
+        const winRate = settled.length > 0 ? (won.length / settled.length) * 100 : 0;
+        const avgOdds = tBets.length > 0 ? totalOdds / tBets.length : 0;
 
-        if (jsonText) {
-          const parsed = JSON.parse(jsonText);
-          if (parsed.tipster && !document.getElementById('formTipster').value) {
-            document.getElementById('formTipster').value = parsed.tipster;
-          }
-          if (parsed.event) document.getElementById('formEvent').value = parsed.event;
-          if (parsed.league) document.getElementById('formLeague').value = parsed.league;
-          if (parsed.market) document.getElementById('formMarket').value = parsed.market;
-          if (parsed.odds) document.getElementById('formOdds').value = parsed.odds;
-          if (parsed.stake) document.getElementById('formStake').value = parsed.stake;
-          if (parsed.datetime) document.getElementById('formDateTime').value = parsed.datetime.slice(0, 16);
-          if (parsed.notes) document.getElementById('formNotes').value = parsed.notes;
+        return { tipster: t, total: tBets.length, won: won.length, lost: lost.length, voided: voided.length, winRate, avgOdds, roi, profit };
+      });
 
-          showToast('Dati estratti dallo screenshot con successo!', 'success');
-        } else {
-          showToast('Nessun dato chiaro estratto. Compila manualmente.', 'error');
+      stats.sort((a, b) => b.profit - a.profit);
+
+      const tbody = document.getElementById('leaderboard-tbody');
+      tbody.innerHTML = '';
+      stats.forEach(s => {
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-800/40">
+            <td class="px-4 py-3 font-bold text-white flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ${s.tipster}
+            </td>
+            <td class="px-4 py-3 text-center text-slate-300 font-semibold">${s.total}</td>
+            <td class="px-4 py-3 text-center text-slate-400">${s.won} / ${s.lost} / ${s.voided}</td>
+            <td class="px-4 py-3 text-center font-bold text-slate-200">${s.winRate.toFixed(1)}%</td>
+            <td class="px-4 py-3 text-center text-slate-300">@${s.avgOdds.toFixed(2)}</td>
+            <td class="px-4 py-3 text-center font-bold ${s.roi >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${s.roi >= 0 ? '+' : ''}${s.roi.toFixed(1)}%</td>
+            <td class="px-4 py-3 text-right font-black ${s.profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${s.profit >= 0 ? '+' : ''}${s.profit.toFixed(2)} u</td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderBetsTable() {
+      const statusFilter = document.getElementById('filter-status').value;
+      const tipsterFilter = document.getElementById('filter-tipster').value;
+
+      const filtered = bets.filter(b => {
+        const matchStatus = statusFilter === 'all' || b.status === statusFilter;
+        const matchTipster = tipsterFilter === 'all' || b.tipster === tipsterFilter;
+        return matchStatus && matchTipster;
+      });
+
+      document.getElementById('badge-total-count').textContent = filtered.length;
+      const tbody = document.getElementById('bets-tbody');
+      tbody.innerHTML = '';
+
+      filtered.forEach(b => {
+        let pNet = 0;
+        let pClass = 'text-slate-400';
+        let pText = '-';
+
+        if (b.status === 'win') {
+          pNet = (b.odds - 1) * b.stake;
+          pClass = 'text-emerald-400 font-bold';
+          pText = `+${pNet.toFixed(2)}u`;
+        } else if (b.status === 'loss') {
+          pNet = -b.stake;
+          pClass = 'text-rose-400 font-bold';
+          pText = `-${b.stake.toFixed(2)}u`;
+        } else if (b.status === 'void') {
+          pClass = 'text-amber-400 font-bold';
+          pText = '0.00u (Void)';
         }
-      } catch (err) {
-        console.error('Gemini Vision OCR Error:', err);
-        showToast('Errore durante la lettura automatica dello screenshot', 'error');
-      } finally {
-        spinner.classList.add('hidden');
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-800/30">
+            <td class="px-4 py-3">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 border border-slate-700 text-emerald-400 font-semibold text-xs">${b.tipster}</span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="font-bold text-white">${b.match}</div>
+              <div class="text-[11px] text-slate-400">${b.market} ${b.league ? '• ' + b.league : ''}</div>
+            </td>
+            <td class="px-4 py-3 text-center font-bold text-slate-200">@${Number(b.odds).toFixed(2)}</td>
+            <td class="px-4 py-3 text-center text-slate-300">${b.stake}u</td>
+            <td class="px-4 py-3 text-center">
+              <div class="inline-flex rounded-lg border border-slate-700 bg-slate-800 p-0.5 gap-0.5">
+                <button onclick="setBetStatus(${b.id}, 'win')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'win' ? 'bg-emerald-500 text-slate-950' : 'text-slate-400 hover:text-emerald-400'}">W</button>
+                <button onclick="setBetStatus(${b.id}, 'loss')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'loss' ? 'bg-rose-500 text-white' : 'text-slate-400 hover:text-rose-400'}">L</button>
+                <button onclick="setBetStatus(${b.id}, 'void')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'void' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-amber-400'}">V</button>
+                <button onclick="setBetStatus(${b.id}, 'pending')" class="px-2 py-0.5 rounded text-[11px] font-bold ${b.status === 'pending' ? 'bg-slate-600 text-white' : 'text-slate-400 hover:text-white'}">P</button>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-right ${pClass}">${pText}</td>
+            <td class="px-4 py-3 text-center">
+              <button onclick="deleteBet(${b.id})" class="text-slate-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash-can"></i></button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function setBetStatus(id, status) {
+      const idx = bets.findIndex(b => b.id === id);
+      if (idx !== -1) {
+        bets[idx].status = status;
+        saveBets();
       }
     }
 
-    // --- EXPONENTIAL BACKOFF FETCH ---
-    async function fetchWithRetry(url, options, maxRetries = 3) {
-      let delay = 1000;
-      for (let i = 0; i < maxRetries; i++) {
-        try {
-          const res = await fetch(url, options);
-          if (res.ok) return res;
-          if (res.status === 429) {
-            await new Promise(r => setTimeout(r, delay));
-            delay *= 2;
-            continue;
-          }
-          return res;
-        } catch (e) {
-          if (i === maxRetries - 1) throw e;
-          await new Promise(r => setTimeout(r, delay));
-          delay *= 2;
-        }
+    function deleteBet(id) {
+      if (confirm('Vuoi davvero rimuovere questo pronostico?')) {
+        bets = bets.filter(b => b.id !== id);
+        saveBets();
       }
-      return fetch(url, options);
     }
 
-    // --- EXPORT & IMPORT ---
-    function exportJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bets, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `tipster_tracker_backup_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-      showToast('Backup JSON scaricato!');
-    }
-
-    function importJSON(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        try {
-          const imported = JSON.parse(evt.target.result);
-          if (Array.isArray(imported)) {
-            bets = imported;
-            saveDatabase();
-            showToast('Dati ripristinati correttamente!');
-          }
-        } catch (err) {
-          showToast('File JSON non valido!', 'error');
-        }
+    function handleManualAdd(e) {
+      e.preventDefault();
+      const newBet = {
+        id: Date.now(),
+        tipster: document.getElementById('m-tipster').value.trim(),
+        match: document.getElementById('m-match').value.trim(),
+        market: document.getElementById('m-market').value.trim(),
+        odds: parseFloat(document.getElementById('m-odds').value),
+        stake: parseFloat(document.getElementById('m-stake').value) || 1,
+        status: 'pending'
       };
-      reader.readAsText(file);
+      bets.unshift(newBet);
+      saveBets();
+      closeManualModal();
+      e.target.reset();
     }
 
-    function exportCSV() {
-      if (bets.length === 0) {
-        showToast('Nessun dato da esportare', 'error');
-        return;
+    function renderChart() {
+      const ctx = document.getElementById('profitChart').getContext('2d');
+      const settled = bets.filter(b => b.status !== 'pending');
+      
+      let running = 0;
+      const dataPoints = [0];
+      const labels = ['Inizio'];
+
+      settled.forEach((b, i) => {
+        if (b.status === 'win') running += (b.odds - 1) * b.stake;
+        else if (b.status === 'loss') running -= b.stake;
+        dataPoints.push(running);
+        labels.push(`#${i + 1}`);
+      });
+
+      if (profitChart) profitChart.destroy();
+      profitChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Unità Nette (u)',
+            data: dataPoints,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function openJsonModal() {
+      document.getElementById('json-input').value = JSON.stringify(bets, null, 2);
+      document.getElementById('modal-json').classList.remove('hidden');
+    }
+    function closeJsonModal() { document.getElementById('modal-json').classList.add('hidden'); }
+
+    function openManualModal() { document.getElementById('modal-manual').classList.remove('hidden'); }
+    function closeManualModal() { document.getElementById('modal-manual').classList.add('hidden'); }
+
+    function exportJson() {
+      navigator.clipboard.writeText(JSON.stringify(bets, null, 2));
+      alert('Dati JSON copiati negli appunti!');
+    }
+
+    function importJson() {
+      try {
+        const parsed = JSON.parse(document.getElementById('json-input').value);
+        if (Array.isArray(parsed)) {
+          bets = parsed;
+          saveBets();
+          closeJsonModal();
+          alert('Database aggiornato con successo!');
+        } else alert('Il formato JSON non è un elenco valido.');
+      } catch (err) {
+        alert('Errore nel parsing JSON: ' + err.message);
       }
-      const headers = ['ID', 'Data/Ora', 'Fornitore', 'Evento', 'Lega', 'Mercato', 'Quota', 'Stake', 'Esito', 'Note'];
-      const rows = bets.map(b => [
-        `"${b.id}"`,
-        `"${b.datetime}"`,
-        `"${(b.tipster || '').replace(/"/g, '""')}"`,
-        `"${(b.event || '').replace(/"/g, '""')}"`,
-        `"${(b.league || '').replace(/"/g, '""')}"`,
-        `"${(b.market || '').replace(/"/g, '""')}"`,
-        b.odds,
-        b.stake,
-        `"${b.status}"`,
-        `"${(b.notes || '').replace(/"/g, '""')}"`
-      ]);
-
-      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', `tipster_storico_${new Date().toISOString().slice(0,10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      showToast('File CSV esportato con successo!');
     }
 
-    function resetDataConfirm() {
-      if (confirm('ATTENZIONE: Stai per eliminare tutto lo storico delle scommesse salvato. Questa operazione non può essere annullata. Confermi?')) {
-        bets = [];
-        saveDatabase();
-        showToast('Archivio svuotato con successo', 'info');
-      }
-    }
-
-    // --- MODAL & TOAST HELPERS ---
-    function openModal(modalId) {
-      document.getElementById(modalId).classList.remove('hidden');
-    }
-
-    function closeModal(modalId) {
-      document.getElementById(modalId).classList.add('hidden');
-      if (modalId === 'addModal') resetBetForm();
-    }
-
-    function showToast(msg, type = 'success') {
-      const toast = document.getElementById('appToast');
-      const inner = document.getElementById('appToastContent');
-      const text = document.getElementById('appToastMsg');
-      const icon = document.getElementById('appToastIcon');
-
-      text.textContent = msg;
-
-      if (type === 'success') {
-        inner.className = 'flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold bg-surface-850 border border-emerald-500/50 text-emerald-400';
-        icon.className = 'fa-solid fa-circle-check text-emerald-400 text-sm';
-      } else if (type === 'error') {
-        inner.className = 'flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold bg-surface-850 border border-rose-500/50 text-rose-400';
-        icon.className = 'fa-solid fa-circle-exclamation text-rose-400 text-sm';
-      } else {
-        inner.className = 'flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold bg-surface-850 border border-blue-500/50 text-blue-400';
-        icon.className = 'fa-solid fa-circle-info text-blue-400 text-sm';
-      }
-
-      toast.classList.remove('translate-y-24', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      setTimeout(() => {
-        toast.classList.add('translate-y-24', 'opacity-0');
-        toast.classList.remove('translate-y-0', 'opacity-100');
-      }, 3000);
-    }
-
-    function escapeHTML(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
+    // AVVIO
+    updateApp();
   </script>
 </body>
 </html>
-```
