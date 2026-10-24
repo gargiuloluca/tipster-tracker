@@ -37,7 +37,7 @@
     .logo-text h1 { font-size: 17px; font-weight: 800; color: #fff; }
     .logo-text span { font-size: 10px; color: #34d399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .btn-group { display: flex; gap: 8px; }
+    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
     button {
       border: none;
       cursor: pointer;
@@ -49,17 +49,17 @@
     }
     .btn-emerald { background-color: #10b981; color: #022c22; font-weight: 700; }
     .btn-dark { background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
+    .btn-ai { background-color: #3b82f6; color: #ffffff; font-weight: 700; }
     .btn-emerald:hover { background-color: #059669; }
     .btn-dark:hover { background-color: #334155; }
+    .btn-ai:hover { background-color: #2563eb; }
 
     .container { max-width: 1200px; margin: 16px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 16px; }
 
-    /* Tabs */
     .tabs { display: flex; gap: 8px; border-bottom: 1px solid #1e293b; padding-bottom: 8px; overflow-x: auto; }
     .tab-btn { background: transparent; color: #94a3b8; border-bottom: 2px solid transparent; border-radius: 0; padding: 8px 12px; white-space: nowrap; }
     .tab-btn.active { color: #34d399; border-color: #34d399; font-weight: 700; }
 
-    /* KPI Grid */
     .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     @media (min-width: 768px) {
       .kpi-grid { grid-template-columns: repeat(5, 1fr); }
@@ -91,7 +91,6 @@
     }
     .card-title { font-size: 15px; font-weight: 700; color: #fff; }
 
-    /* Selects & Inputs */
     select, input, textarea {
       background-color: #1e293b;
       border: 1px solid #334155;
@@ -102,7 +101,6 @@
       outline: none;
     }
 
-    /* Table */
     .table-responsive { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
     th {
@@ -127,7 +125,6 @@
       font-size: 11px;
     }
 
-    /* Action buttons in table */
     .btn-status-group { display: inline-flex; background: #1e293b; border-radius: 6px; padding: 2px; gap: 2px; }
     .btn-s {
       border: none;
@@ -143,7 +140,6 @@
     .btn-s.active-v { background-color: #f59e0b; color: #022c22; }
     .btn-s.active-p { background-color: #475569; color: #fff; }
 
-    /* Modal */
     .modal {
       position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       display: none; align-items: center; justify-content: center;
@@ -176,7 +172,8 @@
       </div>
     </div>
     <div class="btn-group">
-      <button onclick="openJsonModal()" class="btn-dark">JSON Backup</button>
+      <button onclick="openAiModal()" class="btn-ai">Incolla Risposta AI</button>
+      <button onclick="openJsonModal()" class="btn-dark">JSON</button>
       <button onclick="openManualModal()" class="btn-emerald">+ Pronostico</button>
     </div>
   </header>
@@ -322,11 +319,27 @@
 
   </div>
 
+  <!-- MODAL INCOLLA RISPOSTA AI -->
+  <div id="modal-ai" class="modal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="font-size: 15px; font-weight: bold; color: #60a5fa;">Incolla Risposta AI</h3>
+        <button onclick="closeAiModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
+      </div>
+      <p style="font-size: 11px; color: #94a3b8;">Incolla direttamente il testo della risposta con i risultati inviati da Gemini:</p>
+      <textarea id="ai-input" rows="8" placeholder="es.&#10;Bodo/Glimt: Vinto&#10;Lazio: Perso" style="width: 100%; font-size: 12px;"></textarea>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button onclick="closeAiModal()" class="btn-dark">Annulla</button>
+        <button onclick="parseAiResults()" class="btn-ai">Applica Esiti</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL JSON -->
   <div id="modal-json" class="modal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 15px; font-weight: bold;">Backup / Importa JSON</h3>
+        <h3 style="font-size: 15px; font-weight: bold;">Backup / Modifica JSON</h3>
         <button onclick="closeJsonModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
       <textarea id="json-input" rows="8" style="width: 100%; font-family: monospace; font-size: 11px; color: #34d399;"></textarea>
@@ -359,6 +372,11 @@
 
   <script>
     const INITIAL_BETS = [
+      {"id":1792862623789,"tipster":"BetMines PreMatch","match":"Aris vs Atromitos","market":"1","odds":1.65,"stake":1,"status":"pending"},
+      {"id":1792862597510,"tipster":"BetMines PreMatch","match":"Jaiba Brava vs CA La Paz","market":"GG","odds":1.44,"stake":1,"status":"pending"},
+      {"id":1792862557414,"tipster":"BetMines PreMatch","match":"Mineros de Zacatecas vs Universidad Guadalajara","market":"GG","odds":1.5,"stake":1,"status":"pending"},
+      {"id":1792862520611,"tipster":"BetMines PreMatch","match":"Lens vs Paris FC","market":"GG","odds":1.53,"stake":1,"status":"pending"},
+      {"id":1792857650290,"tipster":"ZCODE","match":"Sport Huancayo vs Alianza Atlético","market":"1","odds":1.52,"stake":1,"status":"pending"},
       {"id":1,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Bodo/Glimt vs Valerenga","league":"Eliteserien","market":"1 + Gol","odds":2.0,"stake":1,"status":"pending"},
       {"id":2,"tipster":"CalcioAI","date":"2026-10-24 16:00","match":"Rangers vs St Johnstone / Arsenal vs Everton","league":"Multiplo","market":"Doppia (1+Over 1.5 / 1+Over 1.5)","odds":2.43,"stake":1,"status":"pending"},
       {"id":3,"tipster":"TennisAI","date":"2026-10-24 14:15","match":"S. Lamens vs E. Jacquemot","league":"ITF W100","market":"1 (Lamens)","odds":1.87,"stake":1,"status":"pending"},
@@ -622,6 +640,47 @@
       e.target.reset();
     }
 
+    // NUOVO PARSER: LEGGE IL TESTO COPIATO DALLA CHAT
+    function parseAiResults() {
+      const text = document.getElementById('ai-input').value;
+      if (!text.trim()) return;
+
+      const lines = text.split('\n');
+      let updatedCount = 0;
+
+      lines.forEach(line => {
+        const lower = line.toLowerCase();
+        let targetStatus = null;
+
+        if (lower.includes('vinto') || lower.includes('vinta') || lower.includes('win')) {
+          targetStatus = 'win';
+        } else if (lower.includes('perso') || lower.includes('persa') || lower.includes('loss')) {
+          targetStatus = 'loss';
+        } else if (lower.includes('void') || lower.includes('rimbors')) {
+          targetStatus = 'void';
+        }
+
+        if (targetStatus) {
+          bets.forEach(bet => {
+            const matchKeywords = bet.match.toLowerCase().split(/[\s\/\-]+/).filter(w => w.length > 3);
+            const found = matchKeywords.some(keyword => lower.includes(keyword));
+            if (found) {
+              bet.status = targetStatus;
+              updatedCount++;
+            }
+          });
+        }
+      });
+
+      if (updatedCount > 0) {
+        saveBets();
+        closeAiModal();
+        alert(`Aggiornati ${updatedCount} pronostici in base alla risposta AI!`);
+      } else {
+        alert("Non sono riuscito a collegare le partite. Verifica che il testo contenga i nomi corretti.");
+      }
+    }
+
     function renderChart() {
       const ctx = document.getElementById('profitChart').getContext('2d');
       const settled = bets.filter(b => b.status !== 'pending');
@@ -663,6 +722,9 @@
         }
       });
     }
+
+    function openAiModal() { document.getElementById('modal-ai').classList.add('open'); }
+    function closeAiModal() { document.getElementById('modal-ai').classList.remove('open'); }
 
     function openJsonModal() {
       document.getElementById('json-input').value = JSON.stringify(bets, null, 2);
