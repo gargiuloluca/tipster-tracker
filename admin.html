@@ -58,6 +58,9 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3">
+                <button type="button" onclick="deepForceSearch()" class="text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition">
+                    <i data-lucide="scan-search" class="w-4 h-4"></i> Ricerca Forzata Dati
+                </button>
                 <a href="index.html" target="_blank" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3.5 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
                     <i data-lucide="external-link" class="w-4 h-4"></i> Vetrina Pubblica AtmBet
                 </a>
@@ -73,9 +76,14 @@
                 <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i>
                 <span id="status-text">Database connesso: conteggi ricalcolati in tempo reale sulla vista attiva.</span>
             </span>
-            <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded border border-slate-700 transition">
-                Ricarica Pagina
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="deepForceSearch()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded transition">
+                    Scansione Forzata Totale
+                </button>
+                <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded border border-slate-700 transition">
+                    Ricarica Pagina
+                </button>
+            </div>
         </div>
 
         <!-- Dashboard Statistiche DINAMICHE -->
@@ -250,7 +258,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE INTELLIGENTE -->
+    <!-- SCRIPT GESTIONALE CON SCANSIONE FORZATA TOTALE -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -310,6 +318,87 @@
             renderDashboard();
         }
 
+        // SCANSIONE FORZATA TOTALE IN TUTTA LA MEMORIA DEL BROWSER
+        function deepForceSearch() {
+            let foundRaw = [];
+            let inspectedKeys = [];
+
+            // 1. Scansiona LocalStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                inspectedKeys.push(k);
+                try {
+                    const val = JSON.parse(localStorage.getItem(k));
+                    if (Array.isArray(val)) {
+                        foundRaw.push(...val);
+                    } else if (val && typeof val === 'object') {
+                        for (let prop in val) {
+                            if (Array.isArray(val[prop])) foundRaw.push(...val[prop]);
+                        }
+                    }
+                } catch(e) {}
+            }
+
+            // 2. Scansiona SessionStorage
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const k = sessionStorage.key(i);
+                inspectedKeys.push('session:' + k);
+                try {
+                    const val = JSON.parse(sessionStorage.getItem(k));
+                    if (Array.isArray(val)) foundRaw.push(...val);
+                } catch(e) {}
+            }
+
+            // Filtra solo oggetti che contengono informazioni di scommessa
+            const validBets = foundRaw.filter(item => 
+                item && (item.match_name || item.match || item.teams || item.prediction || item.pick || item.odds)
+            );
+
+            if (validBets.length === 0) {
+                alert(`Scansione completata su ${inspectedKeys.length} chiavi (${inspectedKeys.join(', ')}).\nNessun altro dato grezzo recuperabile trovato in questo browser.`);
+                return;
+            }
+
+            // Carica le giocate correnti e unisci senza duplicare
+            const currentBets = loadAllBets();
+            const existingKeys = new Set(currentBets.map(b => (b.match_name || '').toLowerCase() + '_' + parseFloat(b.odds || 0).toFixed(2)));
+
+            let addedCount = 0;
+            validBets.forEach((b, idx) => {
+                const match = b.match_name || b.match || b.teams || 'Evento';
+                const odd = parseFloat(b.odds || b.odd || b.quota || 1.80).toFixed(2);
+                const uniqueId = match.toLowerCase() + '_' + odd;
+
+                if (!existingKeys.has(uniqueId)) {
+                    existingKeys.add(uniqueId);
+                    let cleanStake = parseFloat(b.stake || b.units || 1.0);
+                    if (cleanStake > 10) cleanStake = 1.0;
+
+                    currentBets.push({
+                        id: b.id || ('forced_' + idx + '_' + Date.now()),
+                        event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
+                        match_name: match,
+                        league: b.league || b.competition || 'Generale',
+                        market: b.market || b.type || 'Mercato',
+                        prediction: b.prediction || b.pick || b.selection || '-',
+                        original_tipster: b.original_tipster || b.tipster || b.source || 'Recuperato',
+                        odds: parseFloat(odd),
+                        stake: cleanStake,
+                        status: b.status || b.result || 'pending',
+                        is_published: b.is_published !== undefined ? b.is_published : true
+                    });
+                    addedCount++;
+                }
+            });
+
+            if (addedCount > 0) {
+                persistBets(currentBets);
+                alert(`ECCEZIONALE! Scansione forzata completata:\nRecuperati e aggiunti ${addedCount} pronostici che erano dispersi in memoria!`);
+            } else {
+                alert(`Scansione forzata completata:\nTutte le ${validBets.length} scommesse trovate nei registri sono già presenti nel tabellone.`);
+            }
+        }
+
         function saveBet(e) {
             e.preventDefault();
             const bets = loadAllBets();
@@ -337,7 +426,6 @@
             resetDate();
         }
 
-        // PARSER CON SUPPORTO AD ESITI (VINTA, PERSA, VOID, IN CORSO)
         function parseAIText() {
             const text = document.getElementById('ai-input').value.trim();
             if (!text) {
@@ -388,7 +476,6 @@
                 return;
             }
 
-            // Parser nuovo pronostico singolo
             const matchRegex = /([A-Za-z0-9\s]+)\s*(?:-|vs|v)\s*([A-Za-z0-9\s]+)/i;
             const matchFound = text.match(matchRegex);
             if (matchFound) {
@@ -451,7 +538,6 @@
         function renderDashboard() {
             const allBets = loadAllBets();
 
-            // Menu a tendina fornitori unici
             const tipsters = [...new Set(allBets.map(b => b.original_tipster).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
             if (select.options.length <= 1) {
@@ -479,7 +565,6 @@
                 filtered = filtered.filter(b => (b.original_tipster || '').toLowerCase() === currentTipsterFilter.toLowerCase());
             }
 
-            // CALCOLO STATISTICHE DINAMICHE
             const total = filtered.length;
             const atmbetCount = filtered.filter(b => b.is_published === true).length;
 
