@@ -163,10 +163,12 @@
 
                 <div>
                     <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Fornitore / Tipster</label>
-                    <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Stats4Bets" 
+                    <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Freak Elite VIP" 
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                     <datalist id="tipsters-list">
                         <option value="Stats4Bets">
+                        <option value="Freak Elite VIP">
+                        <option value="Zcode System VIP">
                         <option value="BetMines">
                         <option value="CalcioAI">
                         <option value="Pronostici1">
@@ -175,13 +177,13 @@
 
                 <div>
                     <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Mercato</label>
-                    <input type="text" id="market" required placeholder="Es. 1X2, Under/Over" 
+                    <input type="text" id="market" required placeholder="Es. 1X2, Multipla" 
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
                 <div>
                     <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Pronostico Esatto</label>
-                    <input type="text" id="prediction" required placeholder="Es. Segno 1" 
+                    <input type="text" id="prediction" required placeholder="Es. 1 + Over 2.5" 
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
@@ -246,10 +248,10 @@
             </div>
         </div>
 
-        <!-- TABELLA PRONOSTICI (SCROLL ORIZZONTALE FLUIDO) -->
+        <!-- TABELLA PRONOSTICI (TESTI COMPLETI SENZA TRUNCATE) -->
         <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                <table class="w-full text-left text-xs text-slate-300">
                     <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
                         <tr>
                             <th class="py-2.5 px-3">Data</th>
@@ -271,7 +273,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE CON AZIONI TOUCH RAPIDE -->
+    <!-- SCRIPT GESTIONALE CON GESTIONE MULTIPLE E TESTI COMPLETI -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -359,13 +361,13 @@
                     if (Array.isArray(importedBets) && importedBets.length > 0) {
                         const replaceAll = confirm(
                             `Trovati ${importedBets.length} pronostici nel file.\n\n` +
-                            `Premi OK per SOSTITUIRE e AGGIORNARE l'archivio con i dati puliti (consigliato).\n` +
+                            `Premi OK per SOSTITUIRE l'archivio (consigliato).\n` +
                             `Premi ANNULLA per aggiungere solo nuove partite.`
                         );
 
                         if (replaceAll) {
                             persistBets(importedBets);
-                            alert(`Archivio aggiornato con successo! Tutte le ${importedBets.length} giocate sono state corrette.`);
+                            alert(`Archivio aggiornato con successo!`);
                         } else {
                             const currentBets = loadAllBets();
                             const existingMap = new Set(currentBets.map(b => (b.match_name || '').toLowerCase() + '_' + parseFloat(b.odds || 0).toFixed(2)));
@@ -381,13 +383,13 @@
                             });
 
                             persistBets(currentBets);
-                            alert(`Importazione completata: aggiunte ${added} nuove giocate.`);
+                            alert(`Importate ${added} nuove giocate.`);
                         }
                     } else {
-                        alert("Il file caricato non contiene un elenco valido di pronostici.");
+                        alert("File JSON non valido.");
                     }
                 } catch (err) {
-                    alert("Errore durante la lettura del file JSON: " + err.message);
+                    alert("Errore lettura file: " + err.message);
                 }
             };
             reader.readAsText(file);
@@ -396,38 +398,20 @@
 
         function deepForceSearch() {
             let foundRaw = [];
-            let inspectedKeys = [];
-
             for (let i = 0; i < localStorage.length; i++) {
                 const k = localStorage.key(i);
-                inspectedKeys.push(k);
                 try {
                     const val = JSON.parse(localStorage.getItem(k));
-                    if (Array.isArray(val)) {
-                        foundRaw.push(...val);
-                    } else if (val && typeof val === 'object') {
-                        for (let prop in val) {
-                            if (Array.isArray(val[prop])) foundRaw.push(...val[prop]);
-                        }
-                    }
-                } catch(e) {}
-            }
-
-            for (let i = 0; i < sessionStorage.length; i++) {
-                const k = sessionStorage.key(i);
-                inspectedKeys.push('session:' + k);
-                try {
-                    const val = JSON.parse(sessionStorage.getItem(k));
                     if (Array.isArray(val)) foundRaw.push(...val);
                 } catch(e) {}
             }
 
             const validBets = foundRaw.filter(item => 
-                item && (item.match_name || item.match || item.teams || item.prediction || item.pick || item.odds)
+                item && (item.match_name || item.match || item.prediction || item.odds)
             );
 
             if (validBets.length === 0) {
-                alert(`Scansione completata su ${inspectedKeys.length} chiavi.\nNessun altro dato grezzo recuperabile trovato.`);
+                alert("Nessun altro dato trovato in memoria.");
                 return;
             }
 
@@ -436,27 +420,24 @@
 
             let addedCount = 0;
             validBets.forEach((b, idx) => {
-                const match = b.match_name || b.match || b.teams || 'Evento';
-                const odd = parseFloat(b.odds || b.odd || b.quota || 1.80).toFixed(2);
+                const match = b.match_name || b.match || 'Evento';
+                const odd = parseFloat(b.odds || 1.80).toFixed(2);
                 const uniqueId = match.toLowerCase() + '_' + odd;
 
                 if (!existingKeys.has(uniqueId)) {
                     existingKeys.add(uniqueId);
-                    let cleanStake = parseFloat(b.stake || b.units || 1.0);
-                    if (cleanStake > 10) cleanStake = 1.0;
-
                     currentBets.push({
                         id: b.id || ('forced_' + idx + '_' + Date.now()),
-                        event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
+                        event_date: b.event_date || new Date().toISOString().slice(0, 16).replace('T', ' '),
                         match_name: match,
-                        league: b.league || b.competition || 'Generale',
-                        market: b.market || b.type || 'Mercato',
-                        prediction: b.prediction || b.pick || b.selection || '-',
-                        original_tipster: b.original_tipster || b.tipster || b.source || 'Recuperato',
+                        league: b.league || 'Generale',
+                        market: b.market || 'Mercato',
+                        prediction: b.prediction || '-',
+                        original_tipster: b.original_tipster || 'Recuperato',
                         odds: parseFloat(odd),
-                        stake: cleanStake,
-                        status: b.status || b.result || 'pending',
-                        is_published: b.is_published !== undefined ? b.is_published : true
+                        stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
+                        status: b.status || 'pending',
+                        is_published: true
                     });
                     addedCount++;
                 }
@@ -464,9 +445,9 @@
 
             if (addedCount > 0) {
                 persistBets(currentBets);
-                alert(`Scansione completata: aggiunti ${addedCount} pronostici.`);
+                alert(`Aggiunti ${addedCount} pronostici.`);
             } else {
-                alert(`Tutte le scommesse trovate sono già presenti.`);
+                alert(`Tutte le scommesse sono già presenti.`);
             }
         }
 
@@ -518,16 +499,7 @@
                     const targetStatus = isWon ? 'won' : (isLost ? 'lost' : (isVoid ? 'void' : 'pending'));
                     bets.forEach(b => {
                         const mName = b.match_name.toLowerCase();
-                        const teams = mName.split(/[-–vs\/]/i).map(t => t.trim()).filter(Boolean);
-                        let matchFound = false;
-                        if (teams.length >= 2) {
-                            if (line.toLowerCase().includes(teams[0]) && line.toLowerCase().includes(teams[1])) {
-                                matchFound = true;
-                            }
-                        } else if (line.toLowerCase().includes(mName)) {
-                            matchFound = true;
-                        }
-                        if (matchFound) {
+                        if (line.toLowerCase().includes(mName)) {
                             b.status = targetStatus;
                             updatedCount++;
                         }
@@ -551,7 +523,7 @@
                         const matchPart = parts[1];
                         const predPart = parts[2];
                         const oddsPart = parseFloat(parts[3].replace(',', '.')) || 1.80;
-                        const tipsterPart = parts[4] || 'Stats4Bets';
+                        const tipsterPart = parts[4] || 'Freak Elite VIP';
                         const leaguePart = parts[5] || 'Generale';
 
                         bets.unshift({
@@ -560,7 +532,7 @@
                             match_name: matchPart,
                             league: leaguePart,
                             original_tipster: tipsterPart,
-                            market: '1X2 / Mercato',
+                            market: matchPart.includes('/') ? 'Multipla' : '1X2 / Mercato',
                             prediction: predPart,
                             odds: oddsPart,
                             stake: 1.0,
@@ -574,27 +546,14 @@
 
             if (addedCount > 0) {
                 persistBets(bets);
-                alert(`Inseriti con successo ${addedCount} nuovi pronostici in blocco!`);
+                alert(`Inseriti ${addedCount} nuovi pronostici in blocco!`);
                 document.getElementById('ai-input').value = '';
-                return;
             }
-
-            const matchRegex = /([A-Za-z0-9\s]+)\s*(?:-|vs|v)\s*([A-Za-z0-9\s]+)/i;
-            const matchFound = text.match(matchRegex);
-            if (matchFound) {
-                document.getElementById('match_name').value = `${matchFound[1].trim()} - ${matchFound[2].trim()}`;
-            }
-            const oddsRegex = /(?:@|quota\s*|odd\s*|Q\s*)(\d+[\.,]\d{2})/i;
-            const oddsFound = text.match(oddsRegex);
-            if (oddsFound) {
-                document.getElementById('odds').value = parseFloat(oddsFound[1].replace(',', '.'));
-            }
-            alert("Dati analizzati e compilati nel form.");
         }
 
         function updateStatus(id, newStatus) {
             const bets = loadAllBets();
-            const b = bets.find(x => x.id === id);
+            const b = bets.find(x => String(x.id) === String(id));
             if (b) {
                 b.status = newStatus;
                 persistBets(bets);
@@ -603,7 +562,7 @@
 
         function togglePublish(id) {
             const bets = loadAllBets();
-            const b = bets.find(x => x.id === id);
+            const b = bets.find(x => String(x.id) === String(id));
             if (b) {
                 b.is_published = !b.is_published;
                 persistBets(bets);
@@ -613,7 +572,7 @@
         function deleteBet(id) {
             if (confirm('Eliminare questo pronostico?')) {
                 let bets = loadAllBets();
-                bets = bets.filter(x => x.id !== id);
+                bets = bets.filter(x => String(x.id) !== String(id));
                 persistBets(bets);
             }
         }
@@ -635,6 +594,19 @@
             currentTipsterFilter = tipsterValue;
             renderDashboard();
         }
+
+        window.toggleAdminSubmatches = function(betId) {
+            const box = document.getElementById('admin-submatches-' + betId);
+            const btn = document.getElementById('admin-btn-' + betId);
+            if (!box) return;
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                if (btn) btn.innerText = 'Chiudi Match ▲';
+            } else {
+                box.classList.add('hidden');
+                if (btn) btn.innerText = 'Dettagli Match ▼';
+            }
+        };
 
         function renderDashboard() {
             const allBets = loadAllBets();
@@ -718,8 +690,8 @@
 
                 if (bet.status === 'pending') {
                     statusControlHtml = `
-                        <div class="flex items-center gap-1.5">
-                            <span class="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 whitespace-nowrap">IN CORSO</span>
+                        <div class="flex items-center gap-1.5 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>
                             <button type="button" onclick="updateStatus('${bet.id}', 'won')" title="Segna come Vinta" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 font-black text-xs border border-emerald-500/40 transition active:scale-95 flex items-center gap-1 shadow-sm">
                                 <span>✓</span> V
                             </button>
@@ -745,7 +717,7 @@
                     }
 
                     statusControlHtml = `
-                        <div class="flex items-center gap-1.5">
+                        <div class="flex items-center gap-1.5 whitespace-nowrap">
                             ${badge}
                             <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1 py-0.5 text-[10px] sm:text-[11px] text-slate-400 focus:outline-none">
                                 <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
@@ -757,26 +729,50 @@
                     `;
                 }
 
+                // Gestione spacchettamento multiple per la tabella
+                let submatchesHtml = '';
+                let toggleBtnHtml = '';
+                if (bet.match_name.includes('/')) {
+                    const subList = bet.match_name.split('/').map(s => s.trim()).filter(Boolean);
+                    toggleBtnHtml = `
+                        <button type="button" id="admin-btn-${bet.id}" onclick="toggleAdminSubmatches('${bet.id}')" class="text-[9px] font-bold text-emerald-400 hover:text-emerald-300 py-0.5 px-1.5 rounded bg-emerald-500/10 border border-emerald-500/20 transition mt-1 block">
+                            Dettagli Match ▼
+                        </button>
+                    `;
+                    submatchesHtml = `
+                        <div id="admin-submatches-${bet.id}" class="hidden space-y-1 mt-1.5 p-1.5 bg-slate-950 rounded border border-slate-800">
+                            ${subList.map((m, idx) => `
+                                <div class="text-[10px] text-slate-300 flex items-center justify-between gap-2 border-b border-slate-800/60 pb-0.5 last:border-none">
+                                    <span class="font-semibold">${idx+1}. ${m}</span>
+                                    <span class="text-[8px] text-emerald-400 font-mono">Evento ${idx+1}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
                 tr.className = rowClass;
 
                 tr.innerHTML = `
                     <td class="py-2.5 px-3 text-slate-400 whitespace-nowrap font-mono text-[10px] sm:text-[11px]">${bet.event_date}</td>
-                    <td class="py-2.5 px-3 font-bold text-white max-w-[150px] truncate">
-                        ${bet.match_name}
-                        <div class="text-[9px] text-slate-500 font-normal truncate">${bet.league}</div>
+                    <td class="py-2.5 px-3 font-bold text-white min-w-[200px]">
+                        <div class="leading-snug break-words">${bet.match_name}</div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league}</div>
+                        ${toggleBtnHtml}
+                        ${submatchesHtml}
                     </td>
-                    <td class="py-2.5 px-3">
-                        <div class="font-bold text-emerald-400 text-xs">${bet.prediction}</div>
-                        <div class="text-[9px] text-slate-400 font-normal truncate max-w-[120px]">${bet.market}</div>
+                    <td class="py-2.5 px-3 min-w-[150px]">
+                        <div class="font-bold text-emerald-400 text-xs break-words">${bet.prediction}</div>
+                        <div class="text-[9px] text-slate-400 font-normal">${bet.market}</div>
                     </td>
-                    <td class="py-2.5 px-3">
+                    <td class="py-2.5 px-3 whitespace-nowrap">
                         <span class="font-bold text-white font-mono">${parseFloat(bet.odds).toFixed(2)}</span>
                         <span class="text-slate-500 text-[10px] font-mono">(${bet.stake.toFixed(1)}u)</span>
                     </td>
-                    <td class="py-2.5 px-3">
+                    <td class="py-2.5 px-3 whitespace-nowrap">
                         <span class="bg-slate-800 border border-slate-700 px-1.5 py-0.5 rounded text-[10px] text-slate-300 font-medium">${bet.original_tipster}</span>
                     </td>
-                    <td class="py-2.5 px-3 text-center">
+                    <td class="py-2.5 px-3 text-center whitespace-nowrap">
                         <button type="button" onclick="togglePublish('${bet.id}')" class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
                             ${bet.is_published ? '★ Vetrina' : 'Interno'}
                         </button>
@@ -784,7 +780,7 @@
                     <td class="py-2.5 px-3">
                         ${statusControlHtml}
                     </td>
-                    <td class="py-2.5 px-3 text-right">
+                    <td class="py-2.5 px-3 text-right whitespace-nowrap">
                         <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         </button>
