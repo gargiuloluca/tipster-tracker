@@ -60,11 +60,13 @@
     <nav class="border-b border-atm-border/80 bg-atm-bg/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3.5">
-                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-11 w-auto drop-shadow-[0_0_12px_rgba(34,197,94,0.4)]">
-                <div>
-                    <span class="text-2xl font-black tracking-wider text-white">ATM<span class="text-atm-green">BET</span></span>
-                    <span class="hidden sm:inline-block ml-2 text-[10px] font-mono tracking-widest uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">Analytics Club</span>
-                </div>
+                <a href="index.html" class="flex items-center gap-3">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-11 w-auto drop-shadow-[0_0_12px_rgba(34,197,94,0.4)]">
+                    <div>
+                        <span class="text-2xl font-black tracking-wider text-white">ATM<span class="text-atm-green">BET</span></span>
+                        <span class="hidden sm:inline-block ml-2 text-[10px] font-mono tracking-widest uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">Analytics Club</span>
+                    </div>
+                </a>
             </div>
 
             <div class="flex items-center space-x-3 sm:space-x-5">
@@ -73,15 +75,28 @@
                 <a href="#piani" id="nav-piani" class="nav-item hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani & Prezzi</a>
                 <a href="#faq" id="nav-faq" class="nav-item hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
 
-                <span id="nav-trial-active" class="hidden text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1.5">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Prova Attiva (7gg)
-                </span>
+                <!-- Stato UTENTE OSPITE (NON LOGGATO) -->
+                <div id="nav-guest-actions" class="flex items-center gap-2">
+                    <a href="auth.html" class="text-xs text-slate-300 hover:text-white font-bold px-3 py-2 rounded-xl transition">
+                        Accedi
+                    </a>
+                    <a href="auth.html" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl font-extrabold transition shadow-lg shadow-emerald-500/20 flex items-center gap-1.5">
+                        <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Registrati VIP
+                    </a>
+                </div>
 
-                <a href="#trial-hero-box" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl font-extrabold transition shadow-lg shadow-emerald-500/20 flex items-center gap-1.5">
-                    <i data-lucide="zap" class="w-3.5 h-3.5"></i> Prova Gratis
-                </a>
+                <!-- Stato UTENTE LOGGATO -->
+                <div id="nav-logged-actions" class="hidden flex items-center gap-2">
+                    <a href="dashboard.html" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3.5 py-2 rounded-xl font-bold flex items-center gap-1.5 transition">
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> Area VIP
+                    </a>
+                    <button type="button" onclick="logoutFromHome()" title="Esci" class="text-slate-500 hover:text-rose-400 p-2 transition">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
 
-                <a href="admin.html" title="Accesso Riservato Gestore" class="text-slate-500 hover:text-slate-300 p-2 transition">
+                <!-- Lucchetto per Console Admin Master -->
+                <a href="admin.html" title="Accesso Riservato Gestore" class="text-slate-600 hover:text-slate-400 p-1.5 transition ml-1">
                     <i data-lucide="lock" class="w-4 h-4"></i>
                 </a>
             </div>
@@ -106,46 +121,47 @@
                 Applichiamo modelli quantitativi per individuare anomalie di quota sui principali campionati mondiali. Selezioni mirate, money management calibrato e disciplina statistica.
             </p>
 
-            <!-- Newsletter Box / 7 Days Free Trial -->
+            <!-- Box Invito alla Registrazione Gratuita -->
             <div id="trial-hero-box" class="max-w-lg mx-auto bg-slate-900/90 border border-emerald-500/40 p-6 sm:p-7 rounded-3xl shadow-2xl backdrop-blur-xl relative">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1">
-                        <i data-lucide="flame" class="w-3.5 h-3.5"></i> Offerta di Lancio
+                        <i data-lucide="flame" class="w-3.5 h-3.5"></i> Offerta di Benvenuto
                     </span>
                     <span class="text-[11px] font-mono text-slate-400">Nessuna Carta Richiesta</span>
                 </div>
-                <h3 class="text-lg font-bold text-white mb-2 text-left">Attiva 7 Giorni di Accesso VIP Gratuito</h3>
+                <h3 class="text-lg font-bold text-white mb-2 text-left">7 Giorni di Accesso VIP + 5 Crediti Omaggio</h3>
                 <p class="text-xs text-slate-400 text-left mb-4">
-                    Ricevi in tempo reale tutte le selezioni del giorno con quote di valore e analisi di bankroll direttamente sul portale.
+                    Crea un account gratuito per sbloccare all'istante tutte le quote, i mercati e le selezioni del giorno nel tuo cruscotto personale.
                 </p>
 
-                <form id="trial-form" onsubmit="activateTrial(event)" class="space-y-3">
-                    <div class="flex flex-col sm:flex-row gap-2">
-                        <input type="email" id="user-email" required placeholder="Inserisci la tua email migliore..." 
-                            class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 font-medium">
-                        <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm px-6 py-3 rounded-xl transition duration-150 flex items-center justify-center gap-2">
-                            <span>Sblocca Subito</span>
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500 pt-1">
-                        <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Zero Spam</span>
-                        <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Accesso Istantaneo</span>
-                        <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Disiscrizione in 1 Clic</span>
-                    </div>
-                </form>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <a href="auth.html" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-6 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
+                        <span>Crea Account Gratuito</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+                <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500 pt-3">
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Zero Costi Nascosti</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Accesso Istantaneo</span>
+                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Cruscotto Dedicato</span>
+                </div>
             </div>
 
-            <!-- Box di conferma quando il Trial è già attivo -->
+            <!-- Box di conferma quando l'utente è loggato -->
             <div id="trial-active-notice" class="hidden max-w-lg mx-auto bg-emerald-500/10 border border-emerald-500/30 p-5 rounded-2xl">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
-                        <i data-lucide="unlock" class="w-6 h-6"></i>
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 text-left">
+                        <div class="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
+                            <i data-lucide="user-check" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-white">Sei connesso al tuo Account VIP</h4>
+                            <p class="text-xs text-slate-400">I tuoi crediti e le tue selezioni sbloccate sono pronte nel cruscotto.</p>
+                        </div>
                     </div>
-                    <div class="text-left">
-                        <h4 class="text-sm font-bold text-white">Pass VIP Attivo per 7 Giorni</h4>
-                        <p class="text-xs text-slate-400">Tutti i pronostici e le quote del giorno sono ora sbloccati nella sezione palinsesto sottostante.</p>
-                    </div>
+                    <a href="dashboard.html" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-4 py-2 rounded-xl transition whitespace-nowrap">
+                        Apri Dashboard
+                    </a>
                 </div>
             </div>
 
@@ -245,7 +261,7 @@
                 <h2 class="text-2xl font-black text-white flex items-center gap-2">
                     <i data-lucide="activity" class="text-emerald-400 w-6 h-6"></i> Palinsesto Ufficiale AtmBet
                 </h2>
-                <p class="text-xs text-slate-400 mt-1">Selezioni ordinate per data. I match in corso sono riservati ai membri con prova attiva o piano VIP.</p>
+                <p class="text-xs text-slate-400 mt-1">Selezioni ordinate per data. I match in corso sono riservati ai membri con account VIP attivo.</p>
             </div>
 
             <div class="flex items-center gap-2">
@@ -256,7 +272,7 @@
         </div>
 
         <div id="bets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Popolato dinamicamente -->
+            <!-- Popolato dinamicamente da JavaScript -->
         </div>
     </main>
 
@@ -284,7 +300,7 @@
                         <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Analisi quote e stake inclusi</li>
                     </ul>
                 </div>
-                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
                     Scegli Crediti
                 </a>
             </div>
@@ -303,12 +319,12 @@
                         <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Disdici quando vuoi in 1 clic</li>
                     </ul>
                 </div>
-                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
                     Attiva Settimana
                 </a>
             </div>
 
-            <!-- OPZIONE 3: Mensile (Consigliato) -->
+            <!-- OPZIONE 3: Mensile -->
             <div class="bg-slate-900/90 border-2 border-emerald-500 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl shadow-emerald-500/10">
                 <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-0.5 rounded-full">
                     Più Popolare
@@ -326,7 +342,7 @@
                         <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Supporto analitico diretto</li>
                     </ul>
                 </div>
-                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black text-center transition">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black text-center transition">
                     Inizia con il Mensile
                 </a>
             </div>
@@ -345,7 +361,7 @@
                         <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Archivio storico completo esportabile</li>
                     </ul>
                 </div>
-                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
                     Abbonamento Annuale
                 </a>
             </div>
@@ -365,14 +381,14 @@
             <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
                 <h4 class="font-bold text-white text-base mb-2">Come funziona la prova gratuita di 7 giorni?</h4>
                 <p class="text-slate-400 leading-relaxed">
-                    Basta inserire la tua email nel box in cima alla pagina. Il sistema sbloccherà immediatamente tutti i pronostici e le quote riservate per 7 giorni esatti. Non ti chiediamo alcuna carta di credito o metodo di pagamento: la prova è al 100% libera e senza impegno.
+                    Basta creare un account gratuito premendo il tasto "Registrati VIP". Il sistema sbloccherà immediatamente tutti i pronostici e le quote riservate per 7 giorni esatti, assegnandoti anche 5 crediti omaggio. Non ti chiediamo alcuna carta di credito o metodo di pagamento: la prova è al 100% libera e senza vincoli.
                 </p>
             </div>
 
             <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
                 <h4 class="font-bold text-white text-base mb-2">Cosa succede al termine dei 7 giorni di prova gratuita?</h4>
                 <p class="text-slate-400 leading-relaxed">
-                    Allo scadere della settimana i nuovi pronostici torneranno ad apparire con il lucchetto protetto. Sarai tu a decidere in totale autonomia se acquistare un pacchetto di crediti a consumo (es. 10 selezioni) oppure attivare l'abbonamento VIP (settimanale, mensile o annuale). Nessun rinnovo nascosto e nessun addebito automatico.
+                    Allo scadere della settimana i nuovi pronostici torneranno ad apparire con il lucchetto protetto. Sarai tu a decidere in totale autonomia se utilizzare i tuoi crediti a consumo oppure attivare l'abbonamento VIP (settimanale, mensile o annuale). Nessun rinnovo nascosto e nessun addebito automatico.
                 </p>
             </div>
 
@@ -414,14 +430,45 @@
         </div>
     </footer>
 
-    <!-- LOGICA FRONTEND & SCROLL SPY JAVASCRIPT -->
+    <!-- LOGICA FRONTEND JAVASCRIPT -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
-        const TRIAL_KEY = 'atmbet_trial_session';
-        const LEADS_KEY = 'atmbet_newsletter_leads';
+        const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
 
         let activeFeedFilter = 'all';
+
+        function checkUserSession() {
+            const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
+            const guestActions = document.getElementById('nav-guest-actions');
+            const loggedActions = document.getElementById('nav-logged-actions');
+            const heroBox = document.getElementById('trial-hero-box');
+            const activeNotice = document.getElementById('trial-active-notice');
+
+            if (rawSession) {
+                try {
+                    const user = JSON.parse(rawSession);
+                    if (user && user.email) {
+                        guestActions.classList.add('hidden');
+                        loggedActions.classList.remove('hidden');
+                        if (heroBox) heroBox.classList.add('hidden');
+                        if (activeNotice) activeNotice.classList.remove('hidden');
+                        return user;
+                    }
+                } catch(e) {}
+            }
+
+            guestActions.classList.remove('hidden');
+            loggedActions.classList.add('hidden');
+            if (heroBox) heroBox.classList.remove('hidden');
+            if (activeNotice) activeNotice.classList.add('hidden');
+            return null;
+        }
+
+        function logoutFromHome() {
+            localStorage.removeItem(CURRENT_SESSION_KEY);
+            location.reload();
+        }
 
         function getStoredBets() {
             let bets = [];
@@ -470,57 +517,6 @@
             });
         }
 
-        function isTrialActive() {
-            const trial = localStorage.getItem(TRIAL_KEY);
-            if (!trial) return false;
-            try {
-                const data = JSON.parse(trial);
-                return new Date(data.expiry) > new Date();
-            } catch(e) {
-                return false;
-            }
-        }
-
-        function activateTrial(e) {
-            e.preventDefault();
-            const email = document.getElementById('user-email').value.trim();
-            if (!email) return;
-
-            const expiryDate = new Date();
-            expiryDate.setDate(expiryDate.getDate() + 7);
-
-            localStorage.setItem(TRIAL_KEY, JSON.stringify({ email: email, expiry: expiryDate.toISOString() }));
-
-            let leads = [];
-            try {
-                leads = JSON.parse(localStorage.getItem(LEADS_KEY)) || [];
-            } catch(err) {}
-            if (!leads.some(l => l.email === email)) {
-                leads.push({ email: email, registered_at: new Date().toISOString() });
-                localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
-            }
-
-            updateTrialUI();
-            renderFeed();
-        }
-
-        function updateTrialUI() {
-            const active = isTrialActive();
-            const heroBox = document.getElementById('trial-hero-box');
-            const activeNotice = document.getElementById('trial-active-notice');
-            const navBadge = document.getElementById('nav-trial-active');
-
-            if (active) {
-                if (heroBox) heroBox.classList.add('hidden');
-                if (activeNotice) activeNotice.classList.remove('hidden');
-                if (navBadge) navBadge.classList.remove('hidden');
-            } else {
-                if (heroBox) heroBox.classList.remove('hidden');
-                if (activeNotice) activeNotice.classList.add('hidden');
-                if (navBadge) navBadge.classList.add('hidden');
-            }
-        }
-
         function filterFeed(filterType, element) {
             activeFeedFilter = filterType;
 
@@ -563,7 +559,7 @@
         function renderFeed() {
             const container = document.getElementById('bets-container');
             const bets = getStoredBets();
-            const activeTrial = isTrialActive();
+            const loggedUser = checkUserSession();
 
             updatePublicStats(bets);
             container.innerHTML = '';
@@ -578,7 +574,8 @@
             }
 
             filtered.forEach(bet => {
-                const isLocked = !activeTrial && bet.status === 'pending';
+                // Se l'utente non è loggato, i match in attesa sono riservati
+                const isLocked = !loggedUser && bet.status === 'pending';
 
                 const card = document.createElement('div');
                 card.className = "bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition shadow-lg";
@@ -605,8 +602,8 @@
                             ${isLocked ? `
                                 <div class="flex items-center justify-between py-1">
                                     <span class="text-sm font-bold text-slate-600 blur-sm select-none">Pronostico Riservato</span>
-                                    <a href="#trial-hero-box" class="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg flex items-center gap-1 font-bold hover:bg-emerald-500/20 transition">
-                                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> Sblocca con Trial
+                                    <a href="auth.html" class="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg flex items-center gap-1 font-bold hover:bg-emerald-500/20 transition">
+                                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> Accedi / Registrati
                                     </a>
                                 </div>
                             ` : `
@@ -638,7 +635,6 @@
             lucide.createIcons();
         }
 
-        // SCROLL SPY DINAMICO PER LA NAVBAR SUPERIORE
         function initScrollSpy() {
             const sections = document.querySelectorAll('.page-section');
             const navLinks = {
@@ -672,7 +668,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            updateTrialUI();
+            checkUserSession();
             renderFeed();
             initScrollSpy();
             lucide.createIcons();
