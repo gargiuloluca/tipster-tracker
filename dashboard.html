@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AtmBet | Portale Utente VIP & Simulatore Rendimento</title>
     <link rel="icon" type="image/png" href="logo.png">
     
@@ -47,28 +47,29 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
+        * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black">
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
     <!-- Navbar Utente Loggato -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
                 <a href="index.html">
-                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-10 w-auto">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
                 </a>
                 <div>
-                    <span class="text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
-                    <span class="ml-2 text-[10px] font-mono tracking-widest uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">VIP Investor Hub</span>
+                    <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
+                    <span class="ml-1 text-[9px] font-mono tracking-wider uppercase bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20 font-bold">VIP</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-3 sm:gap-4">
+            <div class="flex items-center gap-2 sm:gap-4">
                 <a href="index.html" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">
-                    Vetrina Pubblica
+                    Vetrina
                 </a>
-                <button type="button" onclick="logout()" class="text-xs bg-slate-900 hover:bg-slate-800 text-rose-400 border border-slate-800 hover:border-rose-500/30 px-3.5 py-2 rounded-xl font-bold flex items-center gap-1.5 transition">
+                <button type="button" onclick="logout()" class="text-xs bg-slate-900 hover:bg-slate-800 text-rose-400 border border-slate-800 hover:border-rose-500/30 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1 transition">
                     <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Esci
                 </button>
             </div>
@@ -76,223 +77,218 @@
     </nav>
 
     <!-- Main Dashboard Area -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8 flex-1 w-full">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8 flex-1 w-full">
 
-        <!-- Welcome & Status Banner -->
-        <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 p-6 sm:p-8 rounded-3xl relative overflow-hidden shadow-xl">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <!-- Welcome & Status Banner Mobile Responsive -->
+        <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative z-10">
                 
                 <div>
                     <div class="flex items-center gap-2 mb-1">
-                        <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold">Cruscotto Rendimento & Portafoglio</span>
-                        <span id="badge-portfolio-status" class="text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">IN ATTIVO</span>
+                        <span class="text-[10px] sm:text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold">Cruscotto Investitore</span>
+                        <span id="badge-portfolio-status" class="text-[9px] sm:text-[10px] font-mono uppercase font-black px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">IN ATTIVO</span>
                     </div>
-                    <h1 class="text-2xl sm:text-3xl font-black text-white">Bentornato, <span id="user-display-name">Investitore</span></h1>
-                    <p class="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-2">
-                        <span class="flex items-center gap-1"><i data-lucide="mail" class="w-3.5 h-3.5 text-slate-500"></i> <span id="user-display-email">...</span></span>
-                        <span class="text-slate-600 hidden sm:inline">|</span>
-                        <span>Membro dal: <span id="user-created-date" class="font-mono text-slate-300">...</span></span>
+                    <h1 class="text-xl sm:text-3xl font-black text-white">Bentornato, <span id="user-display-name">Investitore</span></h1>
+                    <p class="text-[11px] sm:text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5">
+                        <span id="user-display-email">...</span>
+                        <span class="text-slate-600">|</span>
+                        <span>Dal: <span id="user-created-date" class="font-mono text-slate-300">...</span></span>
                     </p>
                 </div>
 
                 <!-- Stato Abbonamento & Crediti -->
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="bg-slate-950/80 border border-slate-800 px-4 py-3 rounded-2xl flex items-center gap-3">
-                        <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl">
-                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <div class="bg-slate-950/80 border border-slate-800 px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2.5 flex-1 sm:flex-initial">
+                        <div class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg">
+                            <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                         </div>
                         <div>
-                            <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Stato Abbonamento</div>
-                            <div id="badge-vip-status" class="text-xs font-black text-emerald-400">7 Giorni Rimanenti</div>
+                            <div class="text-[9px] font-mono uppercase text-slate-500">Abbonamento</div>
+                            <div id="badge-vip-status" class="text-xs font-black text-emerald-400">Attivo</div>
                         </div>
                     </div>
 
-                    <div class="bg-slate-950/80 border border-slate-800 px-4 py-3 rounded-2xl flex items-center gap-3">
-                        <div class="p-2 bg-amber-500/10 text-amber-400 rounded-xl">
-                            <i data-lucide="coins" class="w-5 h-5"></i>
+                    <div class="bg-slate-950/80 border border-slate-800 px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2.5 flex-1 sm:flex-initial">
+                        <div class="p-1.5 bg-amber-500/10 text-amber-400 rounded-lg">
+                            <i data-lucide="coins" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                         </div>
                         <div>
-                            <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Crediti Disponibili</div>
+                            <div class="text-[9px] font-mono uppercase text-slate-500">Crediti</div>
                             <div id="badge-credits-count" class="text-xs font-mono font-black text-white">5 Crediti</div>
                         </div>
                     </div>
 
-                    <a href="index.html#piani" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-3 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/10">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i> Ricarica
+                    <a href="index.html#piani" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-3.5 py-2.5 rounded-xl transition flex items-center justify-center gap-1 w-full sm:w-auto shadow-lg shadow-emerald-500/10">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Ricarica
                     </a>
                 </div>
 
             </div>
         </div>
 
-        <!-- NUOVA SEZIONE: SIMULATORE TEMPORALE CON CALENDARIO (DA IERI 24 OTTOBRE IN POI) -->
-        <section class="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-5 shadow-xl relative overflow-hidden">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <!-- SIMULATORE TEMPORALE MOBILE -->
+        <section class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
                     <div class="flex items-center gap-2 mb-1">
                         <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
                             <i data-lucide="calendar-clock" class="w-4 h-4"></i>
                         </span>
-                        <h2 class="text-lg font-black text-white">Simulatore di Rendimento nel Tempo</h2>
+                        <h2 class="text-sm sm:text-base font-black text-white">Simulatore di Rendimento nel Tempo</h2>
                     </div>
-                    <p class="text-xs text-slate-400">Seleziona una data di partenza per simulare il profitto effettivo ottenuto seguendo i pronostici da quel giorno in poi.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Simula il guadagno effettivo partendo da una data specifica.</p>
                 </div>
 
-                <!-- Selettore Calendario & Preset Rapidi -->
                 <div class="flex flex-wrap items-center gap-2">
-                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl">
-                        <span class="text-[11px] text-slate-400 font-semibold">Dal giorno:</span>
+                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Dal:</span>
                         <input type="date" id="sim-start-date" min="2026-10-24" value="2026-10-24" onchange="applySimulationDate(this.value)"
                             class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
                     </div>
 
-                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl">
-                        <button type="button" onclick="setSimPreset('2026-10-24', this)" id="preset-24" class="sim-btn sim-pill-active px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Da Ieri (24 Ott)</button>
-                        <button type="button" onclick="setSimPreset('2026-10-25', this)" id="preset-25" class="sim-btn px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Oggi (25 Ott)</button>
-                        <button type="button" onclick="setSimPreset('all', this)" id="preset-all" class="sim-btn px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Tutto lo Storico</button>
+                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
+                        <button type="button" onclick="setSimPreset('2026-10-24', this)" id="preset-24" class="sim-btn sim-pill-active px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Da Ieri (24 Ott)</button>
+                        <button type="button" onclick="setSimPreset('2026-10-25', this)" id="preset-25" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi (25 Ott)</button>
+                        <button type="button" onclick="setSimPreset('all', this)" id="preset-all" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Risultati Simulazione Periodo Selezionato -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Profitto Periodo</span>
-                    <div id="sim-profit-units" class="text-2xl font-mono font-black text-emerald-400">+0.00u</div>
-                    <div id="sim-profit-fiat" class="text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+            <!-- Griglia Metriche Simulazione -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
+                    <div id="sim-profit-units" class="text-xl sm:text-2xl font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
+                    <div id="sim-profit-fiat" class="text-[11px] font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Yield / ROI Periodo</span>
-                    <div id="sim-roi" class="text-2xl font-mono font-black text-white">0.0%</div>
-                    <span class="text-[10px] text-slate-500">Rendimento su giocate chiuse</span>
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Yield / ROI</span>
+                    <div id="sim-roi" class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">0.0%</div>
+                    <span class="text-[9px] text-slate-500">Giocate chiuse</span>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Win Rate Periodo</span>
-                    <div id="sim-winrate" class="text-2xl font-mono font-black text-amber-400">0.0%</div>
-                    <span class="text-[10px] text-slate-500">Accuratezza esiti</span>
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
+                    <div id="sim-winrate" class="text-xl sm:text-2xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
+                    <span class="text-[9px] text-slate-500">Accuratezza esiti</span>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Operazioni Chiuse</span>
-                    <div id="sim-resolved-count" class="text-2xl font-mono font-black text-slate-200">0</div>
-                    <div class="text-[10px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Chiuse</span>
+                    <div id="sim-resolved-count" class="text-xl sm:text-2xl font-mono font-black text-slate-200 mt-0.5">0</div>
+                    <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
                 </div>
             </div>
         </section>
 
-        <!-- SEZIONE RENDICONTO FINANZIARIO GENERALE -->
+        <!-- RENDICONTO FINANZIARIO GENERALE -->
         <section class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
-                    <h2 class="text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="pie-chart" class="w-5 h-5 text-emerald-400"></i> Rendiconto Globale Portafoglio
+                    <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="pie-chart" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Rendiconto Globale
                     </h2>
-                    <p class="text-xs text-slate-400">Statistiche aggregate calcolate sulle selezioni sbloccate e chiuse dal tuo profilo.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Statistiche aggregate su tutte le selezioni chiuse.</p>
                 </div>
 
-                <!-- PULSANTI RAPIDI VALORE UNITA' -->
-                <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 p-1.5 rounded-2xl shadow">
-                    <span class="text-[11px] text-slate-400 font-bold px-2 flex items-center gap-1">
-                        <i data-lucide="calculator" class="w-3.5 h-3.5 text-emerald-400"></i> 1u =
-                    </span>
-                    <button type="button" onclick="setUnitValue(5, this)" class="unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">5€</button>
-                    <button type="button" onclick="setUnitValue(10, this)" class="unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">10€</button>
-                    <button type="button" onclick="setUnitValue(20, this)" class="unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">20€</button>
-                    <button type="button" onclick="setUnitValue(50, this)" id="default-unit-btn" class="unit-btn unit-pill-active px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">50€</button>
-                    <button type="button" onclick="setUnitValue(100, this)" class="unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">100€</button>
+                <!-- Convertitore Valore Unità Touch -->
+                <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
+                    <span class="text-[10px] text-slate-400 font-bold px-1.5 hidden sm:inline">1u =</span>
+                    <button type="button" onclick="setUnitValue(5, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">5€</button>
+                    <button type="button" onclick="setUnitValue(10, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">10€</button>
+                    <button type="button" onclick="setUnitValue(20, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">20€</button>
+                    <button type="button" onclick="setUnitValue(50, this)" id="default-unit-btn" class="unit-btn unit-pill-active flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">50€</button>
+                    <button type="button" onclick="setUnitValue(100, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">100€</button>
                 </div>
             </div>
 
-            <!-- Grid 4 Card Metriche Personali Globali -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                
-                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
                         <span>PROFITTO NETTO</span>
-                        <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i>
+                        <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-400"></i>
                     </div>
                     <div>
-                        <div id="user-stat-profit" class="text-2xl sm:text-3xl font-mono font-black text-emerald-400">+0.00u</div>
-                        <div id="user-stat-fiat" class="text-xs font-mono font-bold text-emerald-400 mt-1">≈ +0.00 €</div>
+                        <div id="user-stat-profit" class="text-xl sm:text-3xl font-mono font-black text-emerald-400">+0.00u</div>
+                        <div id="user-stat-fiat" class="text-[11px] sm:text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
                     </div>
-                    <div class="text-[10px] text-slate-500 mt-2">Guadagno netto effettivo</div>
+                    <div class="text-[9px] text-slate-500 mt-1">Guadagno netto totale</div>
                 </div>
 
-                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                        <span>YIELD / ROI REALE</span>
-                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                        <span>YIELD / ROI</span>
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
                     </div>
-                    <div id="user-stat-roi" class="text-2xl sm:text-3xl font-mono font-black text-white">0.0%</div>
-                    <div class="text-[10px] text-slate-500 mt-2">Rendimento sul capitale giocato</div>
+                    <div id="user-stat-roi" class="text-xl sm:text-3xl font-mono font-black text-white">0.0%</div>
+                    <div class="text-[9px] text-slate-500 mt-1">Sul capitale giocato</div>
                 </div>
 
-                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                        <span>WIN RATE ACCURATEZZA</span>
-                        <i data-lucide="target" class="w-4 h-4 text-amber-400"></i>
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                        <span>WIN RATE</span>
+                        <i data-lucide="target" class="w-3.5 h-3.5 text-amber-400"></i>
                     </div>
-                    <div id="user-stat-winrate" class="text-2xl sm:text-3xl font-mono font-black text-amber-400">0.0%</div>
-                    <div class="text-[10px] text-slate-500 mt-2">Rapporto vinte vs concluse</div>
+                    <div id="user-stat-winrate" class="text-xl sm:text-3xl font-mono font-black text-amber-400">0.0%</div>
+                    <div class="text-[9px] text-slate-500 mt-1">Rapporto vinte/chiuse</div>
                 </div>
 
-                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                        <span>OPERAZIONI CONCLUSE</span>
-                        <i data-lucide="check-circle-2" class="w-4 h-4 text-slate-400"></i>
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                        <span>OPERAZIONI</span>
+                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-slate-400"></i>
                     </div>
-                    <div id="user-stat-resolved" class="text-2xl sm:text-3xl font-mono font-black text-slate-200">0</div>
-                    <div class="text-[10px] text-slate-500 mt-2"><span id="user-stat-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="user-stat-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                    <div id="user-stat-resolved" class="text-xl sm:text-3xl font-mono font-black text-slate-200">0</div>
+                    <div class="text-[9px] text-slate-500 mt-1"><span id="user-stat-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="user-stat-lost-count" class="text-rose-400 font-bold">0P</span></div>
                 </div>
-
             </div>
         </section>
 
-        <!-- SEZIONE 2: SELEZIONI ATTIVE DEL GIORNO -->
-        <section class="space-y-4 pt-4 border-t border-slate-800/80">
+        <!-- SELEZIONI ATTIVE IN CORSO -->
+        <section class="space-y-3 pt-2 border-t border-slate-800/80">
             <div>
-                <h2 class="text-xl font-black text-white flex items-center gap-2">
-                    <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> Selezioni VIP Attive (In Corso)
+                <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                    <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni VIP Attive
                 </h2>
-                <p class="text-xs text-slate-400">Tutti i match in programma con quote di valore atteso sbloccate o sbloccabili con 1 credito.</p>
+                <p class="text-[11px] sm:text-xs text-slate-400">Match in programma con quote di valore atteso sbloccate.</p>
             </div>
 
-            <div id="user-pending-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div id="user-pending-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
                 <!-- Popolato da JS -->
             </div>
         </section>
 
-        <!-- SEZIONE 3: REGISTRO STORICO -->
-        <section class="space-y-4 pt-4 border-t border-slate-800/80">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <!-- STORICO DELLE GIOCATE CONCLUSE -->
+        <section class="space-y-3 pt-2 border-t border-slate-800/80">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
-                    <h2 class="text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="history" class="w-5 h-5 text-emerald-400"></i> Storico Completo Giocate Ricevute
+                    <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Storico Giocate Ricevute
                     </h2>
-                    <p class="text-xs text-slate-400">Dettaglio puntuale di ogni esito con bilancio di profitto/perdita (P/L) calcolato.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L).</p>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="filterHistory('all', this)" id="btn-hist-all" class="text-xs px-3 py-1.5 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
-                    <button type="button" onclick="filterHistory('won', this)" id="btn-hist-won" class="text-xs px-3 py-1.5 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
-                    <button type="button" onclick="filterHistory('lost', this)" id="btn-hist-lost" class="text-xs px-3 py-1.5 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
+                <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800">
+                    <button type="button" onclick="filterHistory('all', this)" id="btn-hist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
+                    <button type="button" onclick="filterHistory('won', this)" id="btn-hist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
+                    <button type="button" onclick="filterHistory('lost', this)" id="btn-hist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
                 </div>
             </div>
 
+            <!-- Tabella Storico con Scroll Orizzontale Ottimizzato -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
+                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
                             <tr>
-                                <th class="py-3 px-4">Data</th>
-                                <th class="py-3 px-4">Partita / Evento</th>
-                                <th class="py-3 px-4">Pronostico</th>
-                                <th class="py-3 px-4">Quota</th>
-                                <th class="py-3 px-4">Stake</th>
-                                <th class="py-3 px-4 text-center">Esito</th>
-                                <th class="py-3 px-4 text-right">P/L Netto</th>
+                                <th class="py-2.5 px-3">Data</th>
+                                <th class="py-2.5 px-3">Partita</th>
+                                <th class="py-2.5 px-3">Pronostico</th>
+                                <th class="py-2.5 px-3">Quota</th>
+                                <th class="py-2.5 px-3">Stake</th>
+                                <th class="py-2.5 px-3 text-center">Esito</th>
+                                <th class="py-2.5 px-3 text-right">P/L Netto</th>
                             </tr>
                         </thead>
                         <tbody id="user-history-tbody" class="divide-y divide-slate-800/60 font-medium">
@@ -306,11 +302,11 @@
     </main>
 
     <!-- Footer -->
-    <footer class="py-8 text-center text-xs text-slate-600 border-t border-slate-900 mt-12">
-        AtmBet &copy; 2026. Cruscotto Rendimento & Portafoglio Utente Certificato.
+    <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900 mt-8">
+        AtmBet &copy; 2026. Cruscotto Rendimento Certificato.
     </footer>
 
-    <!-- LOGICA DASHBOARD CON SIMULATORE TEMPORALE & CONVERTITORE A PULSANTI -->
+    <!-- LOGICA DASHBOARD -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -320,8 +316,8 @@
         let currentUser = null;
         let currentHistoryFilter = 'all';
         let latestNetProfitUnits = 0;
-        let currentMultiplier = 50; // Default a 50€
-        let currentSimStartDate = '2026-10-24'; // Default da ieri 24 Ottobre
+        let currentMultiplier = 50; 
+        let currentSimStartDate = '2026-10-24'; 
         let simNetProfitUnits = 0;
 
         function checkAuth() {
@@ -401,15 +397,12 @@
             }
         }
 
-        // CAMBIO VALORE UNITA' (€)
         function setUnitValue(val, btnElement) {
             currentMultiplier = parseFloat(val);
             document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('unit-pill-active'));
-            if (btnElement) {
-                btnElement.classList.add('unit-pill-active');
-            }
+            if (btnElement) btnElement.classList.add('unit-pill-active');
             updateMonetaryCalculations();
-            calculateSimulationPerformance(); // Aggiorna anche la simulazione in euro
+            calculateSimulationPerformance();
         }
 
         function updateMonetaryCalculations() {
@@ -418,15 +411,10 @@
             
             if (fiatEl) {
                 fiatEl.innerText = `≈ ${fiatAmount >= 0 ? '+' : ''}${fiatAmount.toFixed(2)} €`;
-                if (fiatAmount >= 0) {
-                    fiatEl.className = "text-xs font-mono font-bold text-emerald-400 mt-1";
-                } else {
-                    fiatEl.className = "text-xs font-mono font-bold text-rose-400 mt-1";
-                }
+                fiatEl.className = `text-[11px] sm:text-xs font-mono font-bold ${fiatAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
             }
         }
 
-        // GESTIONE SIMULATORE TEMPORALE (CALENDARIO & PRESET)
         function applySimulationDate(dateStr) {
             currentSimStartDate = dateStr;
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
@@ -439,7 +427,7 @@
             if (btnElement) btnElement.classList.add('sim-pill-active');
 
             if (presetType === 'all') {
-                currentSimStartDate = '2020-01-01'; // Data antecedente per comprendere tutto
+                currentSimStartDate = '2020-01-01';
                 dateInput.value = '2026-10-24';
             } else {
                 currentSimStartDate = presetType;
@@ -456,7 +444,6 @@
             const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
             const unlocked = currentUser.unlocked_bets || [];
 
-            // Filtro data: solo le partite con data >= data simulazione selezionata
             const simBets = bets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
@@ -488,14 +475,13 @@
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
             const fiatSimAmount = netProfit * currentMultiplier;
 
-            // Aggiorna KPI Simulazione
             const profitEl = document.getElementById('sim-profit-units');
             profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
-            profitEl.className = `text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            profitEl.className = `text-xl sm:text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
 
             const fiatEl = document.getElementById('sim-profit-fiat');
             fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
-            fiatEl.className = `text-xs font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            fiatEl.className = `text-[11px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
 
             document.getElementById('sim-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
             document.getElementById('sim-winrate').innerText = winRate + '%';
@@ -507,10 +493,10 @@
         function filterHistory(filterType, element) {
             currentHistoryFilter = filterType;
             document.querySelectorAll('#btn-hist-all, #btn-hist-won, #btn-hist-lost').forEach(btn => {
-                btn.className = "text-xs px-3 py-1.5 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
+                btn.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
             });
             if (element) {
-                element.className = "text-xs px-3 py-1.5 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
+                element.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
             }
             renderHistoryTable();
         }
@@ -531,7 +517,7 @@
             const vipBadge = document.getElementById('badge-vip-status');
             if (isVipActive) {
                 const diffDays = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
-                vipBadge.innerText = `Attivo (${diffDays > 0 ? diffDays + 'gg rimanenti' : 'Abbonamento VIP'})`;
+                vipBadge.innerText = `Attivo (${diffDays > 0 ? diffDays + 'gg' : 'VIP'})`;
                 vipBadge.className = "text-xs font-black text-emerald-400";
             } else {
                 vipBadge.innerText = "Scaduto / Free";
@@ -577,7 +563,7 @@
 
             const profitEl = document.getElementById('user-stat-profit');
             profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
-            profitEl.className = `text-2xl sm:text-3xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            profitEl.className = `text-xl sm:text-3xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
 
             document.getElementById('user-stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
             document.getElementById('user-stat-winrate').innerText = winRate + '%';
@@ -588,10 +574,10 @@
             const statusBadge = document.getElementById('badge-portfolio-status');
             if (netProfit >= 0) {
                 statusBadge.innerText = "IN ATTIVO";
-                statusBadge.className = "text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+                statusBadge.className = "text-[9px] sm:text-[10px] font-mono uppercase font-black px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
             } else {
                 statusBadge.innerText = "IN RECUPERO";
-                statusBadge.className = "text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30";
+                statusBadge.className = "text-[9px] sm:text-[10px] font-mono uppercase font-black px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30";
             }
 
             updateMonetaryCalculations();
@@ -605,7 +591,7 @@
             const pendingBets = bets.filter(b => b.status === 'pending');
 
             if (pendingBets.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-10 text-slate-500 font-medium">Nessuna giocata in corso al momento. Le nuove selezioni del giorno appariranno qui.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 font-medium text-xs">Nessuna giocata in corso al momento.</div>`;
                 return;
             }
 
@@ -614,45 +600,45 @@
                 const canSee = isVipActive || isManuallyUnlocked;
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition shadow-lg";
+                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-slate-700 transition shadow-lg";
 
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[11px] font-medium">${bet.league}</span>
-                            <span class="text-[11px] text-slate-500 font-mono">${bet.event_date}</span>
+                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] font-medium truncate max-w-[150px]">${bet.league}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
                         </div>
-                        <h3 class="text-base font-bold text-white mb-3">${bet.match_name}</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-white mb-2.5 leading-snug">${bet.match_name}</h3>
 
-                        <div class="bg-slate-950/80 rounded-xl p-3.5 border border-slate-800/80 mb-3">
-                            <div class="text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">Dettaglio Selezione VIP:</div>
+                        <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
+                            <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Selezione VIP:</div>
                             ${canSee ? `
-                                <div class="text-sm font-bold text-emerald-400 flex items-center justify-between">
+                                <div class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center justify-between">
                                     <span>${bet.prediction}</span>
-                                    <span class="text-xs text-slate-400 font-normal">Mercato: ${bet.market}</span>
+                                    <span class="text-[11px] text-slate-400 font-normal truncate max-w-[120px]">${bet.market}</span>
                                 </div>
                             ` : `
-                                <div class="flex items-center justify-between py-1">
+                                <div class="flex items-center justify-between py-0.5">
                                     <span class="text-xs text-slate-500">Contenuto Riservato</span>
-                                    <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-lg font-bold flex items-center gap-1 transition">
-                                        <i data-lucide="unlock" class="w-3.5 h-3.5"></i> Sblocca (1 Credito)
+                                    <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
+                                        <i data-lucide="unlock" class="w-3 h-3"></i> Sblocca (1c)
                                     </button>
                                 </div>
                             `}
                         </div>
                     </div>
 
-                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
+                    <div class="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
                         <div>
-                            <span class="text-slate-500">Quota:</span>
+                            <span class="text-slate-500 text-[10px]">Quota:</span>
                             <span class="text-white font-mono font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>
                         </div>
                         <div>
-                            <span class="text-slate-500">Stake:</span>
+                            <span class="text-slate-500 text-[10px]">Stake:</span>
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-black tracking-wider uppercase text-[10px] bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">AtmBet Verified</span>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">AtmBet</span>
                         </div>
                     </div>
                 `;
@@ -673,7 +659,7 @@
             if (currentHistoryFilter === 'lost') completed = completed.filter(b => b.status === 'lost');
 
             if (completed.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-500 font-medium">Nessuna giocata nello storico per questo filtro.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna giocata nello storico per questo filtro.</td></tr>`;
                 return;
             }
 
@@ -686,23 +672,23 @@
                 tr.className = isWon ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" : "bg-rose-500/[0.02] hover:bg-rose-500/[0.05] transition";
 
                 tr.innerHTML = `
-                    <td class="py-3.5 px-4 text-slate-400 font-mono text-[11px] whitespace-nowrap">${bet.event_date}</td>
-                    <td class="py-3.5 px-4 font-bold text-white">
+                    <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
+                    <td class="py-2.5 px-3 font-bold text-white max-w-[140px] truncate">
                         ${bet.match_name}
-                        <div class="text-[10px] text-slate-500 font-normal">${bet.league}</div>
+                        <div class="text-[9px] text-slate-500 font-normal truncate">${bet.league}</div>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-300 font-medium">
+                    <td class="py-2.5 px-3 text-slate-300 font-medium">
                         ${bet.prediction}
-                        <div class="text-[10px] text-slate-500">${bet.market}</div>
+                        <div class="text-[9px] text-slate-500 truncate max-w-[120px]">${bet.market}</div>
                     </td>
-                    <td class="py-3.5 px-4 font-mono font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</td>
-                    <td class="py-3.5 px-4 font-mono text-slate-400">${bet.stake.toFixed(1)}u</td>
-                    <td class="py-3.5 px-4 text-center">
+                    <td class="py-2.5 px-3 font-mono font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-400">${bet.stake.toFixed(1)}u</td>
+                    <td class="py-2.5 px-3 text-center">
                         ${isWon 
-                            ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
-                            : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
+                            ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
+                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
                     </td>
-                    <td class="py-3.5 px-4 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
+                    <td class="py-2.5 px-3 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
                         ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
                     </td>
                 `;
