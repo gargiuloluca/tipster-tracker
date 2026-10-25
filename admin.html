@@ -113,7 +113,7 @@
             </div>
         </div>
 
-        <!-- BOX 1: AI PARSER & AGGIORNAMENTO/INSERIMENTO IN BLOCCO -->
+        <!-- BOX 1: AI PARSER & GESTIONE IN BLOCCO -->
         <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-sm font-bold text-white flex items-center gap-2">
@@ -223,7 +223,6 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
-                <!-- Selettore Valore Unità (€) per l'Admin -->
                 <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-lg">
                     <span class="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
                         <i data-lucide="calculator" class="w-3.5 h-3.5 text-emerald-400"></i> Valore Unità:
@@ -237,7 +236,6 @@
                     </select>
                 </div>
 
-                <!-- Selettore Singolo Fornitore -->
                 <div class="flex items-center gap-2">
                     <span class="text-xs text-slate-400 font-semibold">Fornitore:</span>
                     <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
@@ -272,7 +270,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE CON PARSER AGGIORNATO -->
+    <!-- SCRIPT GESTIONALE CON GESTIONE IMPORTAZIONE AVANZATA -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -349,6 +347,7 @@
             dlAnchor.remove();
         }
 
+        // IMPORTAZIONE POTENZIATA CON SOSTITUZIONE COMPLETA
         function importBackupJSON(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -358,34 +357,31 @@
                 try {
                     const importedBets = JSON.parse(e.target.result);
                     if (Array.isArray(importedBets) && importedBets.length > 0) {
-                        if (confirm(`Trovati ${importedBets.length} pronostici nel file. Vuoi importarli e unirli al database corrente?`)) {
+                        const replaceAll = confirm(
+                            `Trovati ${importedBets.length} pronostici nel file.\n\n` +
+                            `Premi OK per SOSTITUIRE e AGGIORNARE l'archivio con i dati puliti (consigliato).\n` +
+                            `Premi ANNULLA per aggiungere solo nuove partite.`
+                        );
+
+                        if (replaceAll) {
+                            persistBets(importedBets);
+                            alert(`Archivio aggiornato con successo! Tutte le ${importedBets.length} giocate sono state corrette.`);
+                        } else {
                             const currentBets = loadAllBets();
                             const existingMap = new Set(currentBets.map(b => (b.match_name || '').toLowerCase() + '_' + parseFloat(b.odds || 0).toFixed(2)));
-
                             let added = 0;
+
                             importedBets.forEach((b, idx) => {
                                 const key = (b.match_name || b.match || '').toLowerCase() + '_' + parseFloat(b.odds || b.odd || 0).toFixed(2);
                                 if (!existingMap.has(key)) {
                                     existingMap.add(key);
-                                    currentBets.push({
-                                        id: b.id || ('imp_' + idx + '_' + Date.now()),
-                                        event_date: b.event_date || b.date || new Date().toISOString().slice(0, 16).replace('T', ' '),
-                                        match_name: b.match_name || b.match || 'Evento',
-                                        league: b.league || 'Generale',
-                                        market: b.market || 'Mercato',
-                                        prediction: b.prediction || b.pick || '-',
-                                        original_tipster: b.original_tipster || b.tipster || 'Importato',
-                                        odds: parseFloat(b.odds || b.odd || 1.80),
-                                        stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
-                                        status: b.status || 'pending',
-                                        is_published: b.is_published !== undefined ? b.is_published : true
-                                    });
+                                    currentBets.push(b);
                                     added++;
                                 }
                             });
 
                             persistBets(currentBets);
-                            alert(`Importazione completata con successo! Aggiunte ${added} nuove giocate.`);
+                            alert(`Importazione completata: aggiunte ${added} nuove giocate.`);
                         }
                     } else {
                         alert("Il file caricato non contiene un elenco valido di pronostici.");
@@ -501,7 +497,6 @@
             resetDate();
         }
 
-        // PARSER POTENZIATO: INSERIMENTO MULTIPLO IN BLOCCO CON PIPE (|) + AGGIORNAMENTO ESITI
         function parseAIText() {
             const text = document.getElementById('ai-input').value.trim();
             if (!text) {
@@ -512,7 +507,6 @@
             const bets = loadAllBets();
             const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
 
-            // 1. CONTROLLO AGGIORNAMENTO ESITI
             let updatedCount = 0;
             lines.forEach(line => {
                 let isWon = /esito:\s*vinta|vinta|won|win/i.test(line);
@@ -548,8 +542,6 @@
                 return;
             }
 
-            // 2. CONTROLLO INSERIMENTO MULTIPLO IN BLOCCO CON SEPARATORE PIPE (|)
-            // FORMATO: DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO
             let addedCount = 0;
             lines.forEach((line, idx) => {
                 if (line.includes('|')) {
@@ -587,7 +579,6 @@
                 return;
             }
 
-            // Fallback compilazione singola nel form
             const matchRegex = /([A-Za-z0-9\s]+)\s*(?:-|vs|v)\s*([A-Za-z0-9\s]+)/i;
             const matchFound = text.match(matchRegex);
             if (matchFound) {
