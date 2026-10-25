@@ -2,12 +2,11 @@
 <html lang="it" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AtmBet | Investimento Sportivo Quantitativo Basato sui Dati</title>
     <meta name="description" content="Protocollo di investimento sportivo ad alto valore atteso (+EV). Selezioni verificate, money management scientifico e rendimenti costanti nel tempo.">
     <link rel="icon" type="image/png" href="logo.png">
     
-    <!-- Google Fonts & Tailwind -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -41,16 +40,14 @@
 
     <style>
         .hero-glow {
-            background: radial-gradient(circle 500px at 50% -10%, rgba(34, 197, 94, 0.18), transparent 70%);
+            background: radial-gradient(circle 400px at 50% -10%, rgba(34, 197, 94, 0.18), transparent 70%);
         }
         .stat-card-glow {
-            box-shadow: 0 0 25px rgba(34, 197, 94, 0.08);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.06);
         }
         .nav-link-active {
             color: #22c55e !important;
             font-weight: 800 !important;
-            border-bottom: 2px solid #22c55e;
-            padding-bottom: 4px;
         }
         .unit-pill-active {
             background-color: #22c55e !important;
@@ -64,63 +61,63 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
+        /* Mobile tap highlight reset */
+        * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black">
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- Top Navigation Bar -->
+    <!-- Top Navigation Bar Ottimizzata Mobile -->
     <nav class="border-b border-atm-border/80 bg-atm-bg/95 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3.5">
-                <a href="index.html" class="flex items-center gap-3">
-                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-11 w-auto drop-shadow-[0_0_12px_rgba(34,197,94,0.4)]">
-                    <div>
-                        <span class="text-2xl font-black tracking-wider text-white">ATM<span class="text-atm-green">BET</span></span>
-                        <span class="hidden sm:inline-block ml-2 text-[10px] font-mono tracking-widest uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">Analytics Club</span>
-                    </div>
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <a href="index.html" class="flex items-center gap-2">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-11 w-auto drop-shadow-[0_0_12px_rgba(34,197,94,0.4)]">
+                    <span class="text-xl sm:text-2xl font-black tracking-wider text-white">ATM<span class="text-atm-green">BET</span></span>
                 </a>
             </div>
 
-            <div class="flex items-center space-x-3 sm:space-x-5">
-                <a href="#metodo" id="nav-metodo" class="nav-item hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Il Metodo</a>
-                <a href="#palinsesto" id="nav-palinsesto" class="nav-item hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Palinsesto Live</a>
-                <a href="#piani" id="nav-piani" class="nav-item hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani & Prezzi</a>
-                <a href="#faq" id="nav-faq" class="nav-item hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <a href="#metodo" class="hidden lg:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Il Metodo</a>
+                <a href="#palinsesto" class="hidden lg:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Palinsesto</a>
+                <a href="#piani" class="hidden lg:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani</a>
 
                 <!-- Stato UTENTE OSPITE -->
-                <div id="nav-guest-actions" class="flex items-center gap-2">
-                    <a href="auth.html" class="text-xs text-slate-300 hover:text-white font-bold px-3 py-2 rounded-xl transition">
+                <div id="nav-guest-actions" class="flex items-center gap-1.5 sm:gap-2">
+                    <a href="auth.html" class="text-[11px] sm:text-xs text-slate-300 hover:text-white font-bold px-2 sm:px-3 py-1.5 rounded-lg transition">
                         Accedi
                     </a>
-                    <a href="auth.html" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl font-extrabold transition shadow-lg shadow-emerald-500/20 flex items-center gap-1.5">
-                        <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Registrati VIP
+                    <a href="auth.html" class="text-[11px] sm:text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2.5 sm:px-4 py-1.5 rounded-xl font-extrabold transition shadow-lg shadow-emerald-500/20 flex items-center gap-1">
+                        <i data-lucide="user-plus" class="w-3 sm:w-3.5 h-3 sm:h-3.5"></i>
+                        <span>Registrati VIP</span>
                     </a>
                 </div>
 
                 <!-- Stato UTENTE LOGGATO -->
-                <div id="nav-logged-actions" class="hidden flex items-center gap-2">
-                    <a href="dashboard.html" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3.5 py-2 rounded-xl font-bold flex items-center gap-1.5 transition">
-                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i> Area VIP
+                <div id="nav-logged-actions" class="hidden flex items-center gap-1.5 sm:gap-2">
+                    <a href="dashboard.html" class="text-[11px] sm:text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1 transition">
+                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+                        <span>Area VIP</span>
                     </a>
-                    <button type="button" onclick="logoutFromHome()" title="Esci" class="text-slate-500 hover:text-rose-400 p-2 transition">
+                    <button type="button" onclick="logoutFromHome()" title="Esci" class="text-slate-500 hover:text-rose-400 p-1.5 transition">
                         <i data-lucide="log-out" class="w-4 h-4"></i>
                     </button>
                 </div>
 
-                <a href="admin.html" title="Accesso Riservato Gestore" class="text-slate-600 hover:text-slate-400 p-1.5 transition ml-1">
-                    <i data-lucide="lock" class="w-4 h-4"></i>
+                <a href="admin.html" title="Accesso Riservato Gestore" class="text-slate-600 hover:text-slate-400 p-1 transition ml-0.5">
+                    <i data-lucide="lock" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="relative pt-16 pb-20 px-4 hero-glow text-center overflow-hidden">
-        <div class="max-w-4xl mx-auto space-y-6">
+    <!-- Hero Section Mobile Responsive -->
+    <header class="relative pt-10 sm:pt-16 pb-12 sm:pb-16 px-4 hero-glow text-center overflow-hidden">
+        <div class="max-w-4xl mx-auto space-y-4 sm:space-y-6">
             
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-700/80 text-xs text-slate-300 font-medium">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-700/80 text-[11px] sm:text-xs text-slate-300 font-medium">
                 <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Archivio Storico Verificato & Aggiornato Giornalmente
+                Archivio Verificato & Aggiornato Giornalmente
             </div>
 
             <h1 class="text-3xl sm:text-6xl font-black text-white tracking-tight leading-tight">
@@ -128,50 +125,45 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-500">Investi nei Dati.</span>
             </h1>
 
-            <p class="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                Applichiamo modelli quantitativi per individuare anomalie di quota sui principali campionati mondiali. Selezioni mirate, money management calibrato e disciplina statistica.
+            <p class="text-xs sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed px-2">
+                Modelli quantitativi per scovare anomalie di quota nei campionati mondiali. Money management scientifico e disciplina statistica costante.
             </p>
 
             <!-- Box Invito alla Registrazione Gratuita -->
-            <div id="trial-hero-box" class="max-w-lg mx-auto bg-slate-900/90 border border-emerald-500/40 p-6 sm:p-7 rounded-3xl shadow-2xl backdrop-blur-xl relative">
+            <div id="trial-hero-box" class="max-w-lg mx-auto bg-slate-900/90 border border-emerald-500/40 p-5 sm:p-7 rounded-2xl sm:rounded-3xl shadow-2xl backdrop-blur-xl relative">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1">
-                        <i data-lucide="flame" class="w-3.5 h-3.5"></i> Offerta di Benvenuto
+                    <span class="text-[10px] sm:text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1">
+                        <i data-lucide="flame" class="w-3.5 h-3.5"></i> Offerta Benvenuto
                     </span>
-                    <span class="text-[11px] font-mono text-slate-400">Nessuna Carta Richiesta</span>
+                    <span class="text-[10px] sm:text-[11px] font-mono text-slate-400">Zero Carte Richieste</span>
                 </div>
-                <h3 class="text-lg font-bold text-white mb-2 text-left">7 Giorni di Accesso VIP + 5 Crediti Omaggio</h3>
-                <p class="text-xs text-slate-400 text-left mb-4">
-                    Crea un account gratuito per sbloccare all'istante tutte le quote, i mercati e le selezioni del giorno nel tuo cruscotto personale.
+                <h3 class="text-base sm:text-lg font-bold text-white mb-1.5 text-left">7 Giorni VIP + 5 Crediti Omaggio</h3>
+                <p class="text-xs text-slate-400 text-left mb-4 leading-relaxed">
+                    Registrati gratis per sbloccare all'istante tutte le quote, i mercati e le selezioni del giorno nel tuo cruscotto personale.
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-2">
-                    <a href="auth.html" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-6 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
+                <div class="flex flex-col gap-2">
+                    <a href="auth.html" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
                         <span>Crea Account Gratuito</span>
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
                 </div>
-                <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500 pt-3">
-                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Zero Costi Nascosti</span>
-                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Accesso Istantaneo</span>
-                    <span class="flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Cruscotto Dedicato</span>
-                </div>
             </div>
 
-            <!-- Box di conferma quando l'utente è loggato -->
-            <div id="trial-active-notice" class="hidden max-w-lg mx-auto bg-emerald-500/10 border border-emerald-500/30 p-5 rounded-2xl">
-                <div class="flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3 text-left">
+            <!-- Avviso quando connesso -->
+            <div id="trial-active-notice" class="hidden max-w-lg mx-auto bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl">
+                <div class="flex items-center justify-between gap-3 text-left">
+                    <div class="flex items-center gap-2.5">
                         <div class="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl">
-                            <i data-lucide="user-check" class="w-6 h-6"></i>
+                            <i data-lucide="user-check" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="text-sm font-bold text-white">Sei connesso al tuo Account VIP</h4>
-                            <p class="text-xs text-slate-400">I tuoi crediti e le tue selezioni sbloccate sono pronte nel cruscotto.</p>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Connesso ad Account VIP</h4>
+                            <p class="text-[11px] text-slate-400">Crediti e selezioni attive pronte nel cruscotto.</p>
                         </div>
                     </div>
-                    <a href="dashboard.html" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-4 py-2 rounded-xl transition whitespace-nowrap">
-                        Apri Dashboard
+                    <a href="dashboard.html" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3.5 py-2 rounded-xl transition whitespace-nowrap">
+                        Dashboard
                     </a>
                 </div>
             </div>
@@ -179,276 +171,271 @@
         </div>
     </header>
 
-    <!-- Global Verified Metrics Dashboard con Simulatore Temporale -->
-    <section class="max-w-7xl mx-auto px-4 pb-16 w-full space-y-6">
+    <!-- Global Verified Metrics Dashboard con Simulatore Temporale Fluido -->
+    <section class="max-w-7xl mx-auto px-3 sm:px-4 pb-12 w-full space-y-4">
         
-        <!-- SEZIONE SIMULATORE TEMPORALE PUBBLICO (CALENDARIO DAL 24 OTTOBRE IN POI) -->
-        <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-5 shadow-2xl relative overflow-hidden">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <!-- SEZIONE SIMULATORE TEMPORALE MOBILE-FRIENDLY -->
+        <div class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
                 <div>
                     <div class="flex items-center gap-2 mb-1">
                         <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
                             <i data-lucide="calendar-clock" class="w-4 h-4"></i>
                         </span>
-                        <h3 class="text-lg font-black text-white">Simulatore di Rendimento nel Tempo</h3>
+                        <h3 class="text-sm sm:text-base font-black text-white">Simulatore di Rendimento</h3>
                     </div>
-                    <p class="text-xs text-slate-400">Simula quanto avresti guadagnato seguendo il protocollo AtmBet a partire da una data specifica.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Verifica i guadagni simulando la partenza da una data specifica.</p>
                 </div>
 
+                <!-- Input Data & Filtri Rapidi Adattivi -->
                 <div class="flex flex-wrap items-center gap-2">
-                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl">
-                        <span class="text-[11px] text-slate-400 font-semibold">Dal giorno:</span>
+                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Dal:</span>
                         <input type="date" id="public-sim-start-date" min="2026-10-24" value="2026-10-24" onchange="applyPublicSimDate(this.value)"
                             class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
                     </div>
 
-                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl">
-                        <button type="button" onclick="setPublicSimPreset('2026-10-24', this)" id="pub-preset-24" class="pub-sim-btn sim-pill-active px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Da Ieri (24 Ott)</button>
-                        <button type="button" onclick="setPublicSimPreset('2026-10-25', this)" id="pub-preset-25" class="pub-sim-btn px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Oggi (25 Ott)</button>
-                        <button type="button" onclick="setPublicSimPreset('all', this)" id="pub-preset-all" class="pub-sim-btn px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Tutto lo Storico</button>
+                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
+                        <button type="button" onclick="setPublicSimPreset('2026-10-24', this)" id="pub-preset-24" class="pub-sim-btn sim-pill-active px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Da Ieri (24 Ott)</button>
+                        <button type="button" onclick="setPublicSimPreset('2026-10-25', this)" id="pub-preset-25" class="pub-sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi (25 Ott)</button>
+                        <button type="button" onclick="setPublicSimPreset('all', this)" id="pub-preset-all" class="pub-sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Risultati Simulazione Periodo -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Profitto Periodo</span>
-                    <div id="pub-sim-profit-units" class="text-2xl font-mono font-black text-emerald-400">+0.00u</div>
-                    <div id="pub-sim-profit-fiat" class="text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+            <!-- Griglia Metriche Simulazione Responsive -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col justify-between">
+                    <span class="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
+                    <div id="pub-sim-profit-units" class="text-xl sm:text-2xl font-mono font-black text-emerald-400 mt-1">+0.00u</div>
+                    <div id="pub-sim-profit-fiat" class="text-[11px] sm:text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Yield / ROI Periodo</span>
-                    <div id="pub-sim-roi" class="text-2xl font-mono font-black text-white">0.0%</div>
-                    <span class="text-[10px] text-slate-500">Rendimento sul periodo</span>
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col justify-between">
+                    <span class="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider block">Yield / ROI</span>
+                    <div id="pub-sim-roi" class="text-xl sm:text-2xl font-mono font-black text-white mt-1">0.0%</div>
+                    <span class="text-[9px] sm:text-[10px] text-slate-500 mt-0.5">Su capitale giocato</span>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Win Rate Periodo</span>
-                    <div id="pub-sim-winrate" class="text-2xl font-mono font-black text-amber-400">0.0%</div>
-                    <span class="text-[10px] text-slate-500">Accuratezza esiti</span>
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col justify-between">
+                    <span class="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
+                    <div id="pub-sim-winrate" class="text-xl sm:text-2xl font-mono font-black text-amber-400 mt-1">0.0%</div>
+                    <span class="text-[9px] sm:text-[10px] text-slate-500 mt-0.5">Accuratezza esiti</span>
                 </div>
 
-                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
-                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Pronostici Chiusi</span>
-                    <div id="pub-sim-resolved-count" class="text-2xl font-mono font-black text-slate-200">0</div>
-                    <div class="text-[10px] text-slate-500 mt-0.5"><span id="pub-sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="pub-sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl flex flex-col justify-between">
+                    <span class="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider block">Operazioni Chiuse</span>
+                    <div id="pub-sim-resolved-count" class="text-xl sm:text-2xl font-mono font-black text-slate-200 mt-1">0</div>
+                    <div class="text-[9px] sm:text-[10px] text-slate-500 mt-0.5"><span id="pub-sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="pub-sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- Selettore Valore Unità a Pulsanti Rapidi -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800 p-4 rounded-2xl">
-            <span class="text-xs text-slate-400 flex items-center gap-2">
-                <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i> Imposta il valore monetario della tua singola unità:
+        <!-- Selettore Valore Unità Compatto per Smartphone -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-900/60 border border-slate-800 p-3 sm:p-4 rounded-2xl">
+            <span class="text-[11px] sm:text-xs text-slate-400 flex items-center gap-1.5">
+                <i data-lucide="calculator" class="w-3.5 h-3.5 text-emerald-400"></i> Valore monetario di 1 unità:
             </span>
-            <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 p-1.5 rounded-2xl shadow">
-                <span class="text-[11px] text-slate-400 font-bold px-2">1u =</span>
-                <button type="button" onclick="setPublicUnitValue(5, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">5€</button>
-                <button type="button" onclick="setPublicUnitValue(10, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">10€</button>
-                <button type="button" onclick="setPublicUnitValue(20, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">20€</button>
-                <button type="button" onclick="setPublicUnitValue(50, this)" id="pub-default-unit-btn" class="pub-unit-btn unit-pill-active px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">50€</button>
-                <button type="button" onclick="setPublicUnitValue(100, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">100€</button>
+            <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
+                <span class="text-[10px] text-slate-500 font-bold px-1.5 hidden sm:inline">1u =</span>
+                <button type="button" onclick="setPublicUnitValue(5, this)" class="pub-unit-btn flex-1 sm:flex-initial px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">5€</button>
+                <button type="button" onclick="setPublicUnitValue(10, this)" class="pub-unit-btn flex-1 sm:flex-initial px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">10€</button>
+                <button type="button" onclick="setPublicUnitValue(20, this)" class="pub-unit-btn flex-1 sm:flex-initial px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">20€</button>
+                <button type="button" onclick="setPublicUnitValue(50, this)" id="pub-default-unit-btn" class="pub-unit-btn unit-pill-active flex-1 sm:flex-initial px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">50€</button>
+                <button type="button" onclick="setPublicUnitValue(100, this)" class="pub-unit-btn flex-1 sm:flex-initial px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">100€</button>
             </div>
         </div>
 
         <!-- Metriche Storiche Globali -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
             
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
-                <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                    <span>YIELD / ROI GLOBALE</span>
-                    <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+            <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                    <span>YIELD / ROI</span>
+                    <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
                 </div>
-                <div id="stat-roi" class="text-2xl sm:text-4xl font-mono font-black text-emerald-400 my-1">0.0%</div>
-                <div class="text-[11px] text-slate-500">Rendimento su capitale investito</div>
+                <div id="stat-roi" class="text-xl sm:text-4xl font-mono font-black text-emerald-400 my-0.5">0.0%</div>
+                <div class="text-[9px] sm:text-[11px] text-slate-500">Sul capitale investito</div>
             </div>
 
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
-                <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                    <span>WIN RATE (CHIUSI)</span>
-                    <i data-lucide="target" class="w-4 h-4 text-white"></i>
+            <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                    <span>WIN RATE</span>
+                    <i data-lucide="target" class="w-3.5 h-3.5 text-white"></i>
                 </div>
-                <div id="stat-winrate" class="text-2xl sm:text-4xl font-mono font-black text-white my-1">0.0%</div>
-                <div class="text-[11px] text-slate-500">Percentuale selezioni vinte</div>
+                <div id="stat-winrate" class="text-xl sm:text-4xl font-mono font-black text-white my-0.5">0.0%</div>
+                <div class="text-[9px] sm:text-[11px] text-slate-500">Percentuale vincenti</div>
             </div>
 
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
-                <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                    <span>PROFITTO NETTO TOTALE</span>
-                    <i data-lucide="wallet" class="w-4 h-4 text-amber-400"></i>
+            <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                    <span>PROFITTO NETTO</span>
+                    <i data-lucide="wallet" class="w-3.5 h-3.5 text-amber-400"></i>
                 </div>
                 <div>
-                    <div id="stat-profit" class="text-2xl sm:text-3xl font-mono font-black text-amber-400">0.00u</div>
-                    <div id="public-stat-fiat" class="text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+                    <div id="stat-profit" class="text-xl sm:text-3xl font-mono font-black text-amber-400">0.00u</div>
+                    <div id="public-stat-fiat" class="text-[10px] sm:text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
                 </div>
-                <div class="text-[11px] text-slate-500">Guadagno netto cumulativo</div>
+                <div class="text-[9px] sm:text-[11px] text-slate-500">Guadagno cumulativo</div>
             </div>
 
-            <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
-                <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                    <span>PRONOSTICI CHIUSI</span>
-                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+            <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
+                <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                    <span>GIOCATE CHIUSE</span>
+                    <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
                 </div>
-                <div id="stat-resolved-count" class="text-2xl sm:text-4xl font-mono font-black text-slate-200 my-1">0</div>
-                <div class="text-[11px] text-slate-500">Giocate verificate in archivio</div>
+                <div id="stat-resolved-count" class="text-xl sm:text-4xl font-mono font-black text-slate-200 my-0.5">0</div>
+                <div class="text-[9px] sm:text-[11px] text-slate-500">Verificate in archivio</div>
             </div>
 
         </div>
     </section>
 
     <!-- SEZIONE 1: IL METODO -->
-    <section id="metodo" class="page-section max-w-7xl mx-auto px-4 py-24 border-t border-slate-800/80 w-full scroll-mt-28">
-        <div class="text-center max-w-3xl mx-auto mb-16">
+    <section id="metodo" class="page-section max-w-7xl mx-auto px-4 py-16 sm:py-24 border-t border-slate-800/80 w-full scroll-mt-20">
+        <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
             <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2 font-bold">Protocollo Operativo</span>
-            <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Perché il Nostro Metodo Funziona nel Lungo Termine</h2>
-            <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed">
-                Non crediamo alla fortuna o alle "soffiate". Il betting professionistico si basa sulla legge dei grandi numeri e sul vantaggio matematico sul banco (Expected Value positivo).
+            <h2 class="text-2xl sm:text-5xl font-black text-white tracking-tight">Perché Funziona nel Lungo Termine</h2>
+            <p class="text-slate-400 text-xs sm:text-base mt-2 sm:mt-4 leading-relaxed">
+                Nessuna giocata casuale. Il betting quantitativo sfrutta il vantaggio matematico sul banco (Expected Value positivo).
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <div class="bg-slate-900/70 border border-slate-800 p-8 rounded-3xl relative group hover:border-emerald-500/50 transition duration-300 shadow-xl">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xl mb-6 border border-emerald-500/20 group-hover:scale-110 transition duration-300">
-                    <i data-lucide="cpu" class="w-7 h-7"></i>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8">
+            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-lg mb-4 border border-emerald-500/20">
+                    <i data-lucide="cpu" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-3">1. Algoritmi & Value Bet</h3>
+                <h3 class="text-base sm:text-xl font-bold text-white mb-2">1. Algoritmi & Value Bet</h3>
                 <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    I nostri sistemi scansionano continuamente i palinsesti internazionali, calcolando la probabilità reale di ciascun esito e operando esclusivamente su quote sottostimate dai bookmaker.
+                    Scansione continua dei palinsesti per operare esclusivamente su quote matematicamente sottostimate dai bookmaker.
                 </p>
             </div>
 
-            <div class="bg-slate-900/70 border border-slate-800 p-8 rounded-3xl relative group hover:border-emerald-500/50 transition duration-300 shadow-xl">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xl mb-6 border border-emerald-500/20 group-hover:scale-110 transition duration-300">
-                    <i data-lucide="shield-check" class="w-7 h-7"></i>
+            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-lg mb-4 border border-emerald-500/20">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-3">2. Gestione Rigorosa dello Stake</h3>
+                <h3 class="text-base sm:text-xl font-bold text-white mb-2">2. Gestione Rigorosa Stake</h3>
                 <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    Protezione del capitale al primo posto: ogni giocata utilizza uno stake calibrato (di norma 1 unità), azzerando il rischio di rovina ed eliminando qualsiasi impulso emotivo.
+                    Protezione assoluta del bankroll: puntate fisse calibrate (1 unità), azzerando l'impatto emotivo e il rischio rovina.
                 </p>
             </div>
 
-            <div class="bg-slate-900/70 border border-slate-800 p-8 rounded-3xl relative group hover:border-emerald-500/50 transition duration-300 shadow-xl">
-                <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xl mb-6 border border-emerald-500/20 group-hover:scale-110 transition duration-300">
-                    <i data-lucide="bar-chart-3" class="w-7 h-7"></i>
+            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-lg">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-lg mb-4 border border-emerald-500/20">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
                 </div>
-                <h3 class="text-xl font-bold text-white mb-3">3. Tracciamento 100% Trasparente</h3>
+                <h3 class="text-base sm:text-xl font-bold text-white mb-2">3. Trasparenza Certificata</h3>
                 <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    Ogni singolo pronostico viene archiviato, sia esso vincente o perdente. I dati di ROI, Win Rate e profitto che vedi sono reali, non manipolabili e verificabili da chiunque.
+                    Ogni singolo esito (vinto o perso) viene archiviato e calcolato alla luce del sole. Nessun dato nascosto.
                 </p>
             </div>
-
         </div>
     </section>
 
     <!-- SEZIONE 2: PALINSESTO LIVE -->
-    <main id="palinsesto" class="page-section max-w-7xl mx-auto px-4 py-24 flex-1 w-full border-t border-slate-800/80 scroll-mt-28">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <main id="palinsesto" class="page-section max-w-7xl mx-auto px-4 py-16 sm:py-24 flex-1 w-full border-t border-slate-800/80 scroll-mt-20">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
             <div>
-                <h2 class="text-3xl font-black text-white flex items-center gap-3">
-                    <i data-lucide="activity" class="text-emerald-400 w-7 h-7"></i> Palinsesto Ufficiale AtmBet
+                <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-2">
+                    <i data-lucide="activity" class="text-emerald-400 w-5 h-5 sm:w-7 sm:h-7"></i> Palinsesto Ufficiale
                 </h2>
-                <p class="text-xs sm:text-sm text-slate-400 mt-2">Selezioni ordinate per data. I match in corso sono riservati ai membri con account VIP attivo.</p>
+                <p class="text-[11px] sm:text-sm text-slate-400 mt-1">I match in corso sono riservati ai membri con account VIP attivo.</p>
             </div>
 
-            <div class="flex items-center gap-2">
-                <button type="button" onclick="filterFeed('all', this)" id="btn-feed-all" class="text-xs px-4 py-2.5 rounded-xl border transition font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutti</button>
-                <button type="button" onclick="filterFeed('pending', this)" id="btn-feed-pending" class="text-xs px-4 py-2.5 rounded-xl border transition font-bold bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700">In Corso</button>
-                <button type="button" onclick="filterFeed('completed', this)" id="btn-feed-completed" class="text-xs px-4 py-2.5 rounded-xl border transition font-bold bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700">Storico Concluso</button>
+            <!-- Filtro Palinsesto Touch -->
+            <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800">
+                <button type="button" onclick="filterFeed('all', this)" id="btn-feed-all" class="text-xs px-3 py-1.5 rounded-lg border transition font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutti</button>
+                <button type="button" onclick="filterFeed('pending', this)" id="btn-feed-pending" class="text-xs px-3 py-1.5 rounded-lg border transition font-bold bg-slate-900 text-slate-300 border-slate-800">In Corso</button>
+                <button type="button" onclick="filterFeed('completed', this)" id="btn-feed-completed" class="text-xs px-3 py-1.5 rounded-lg border transition font-bold bg-slate-900 text-slate-300 border-slate-800">Chiusi</button>
             </div>
         </div>
 
-        <div id="bets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <!-- Popolato dinamicamente da JavaScript -->
+        <div id="bets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
+            <!-- Popolato da JS -->
         </div>
     </main>
 
     <!-- SEZIONE 3: PIANI & PREZZI -->
-    <section id="piani" class="page-section max-w-7xl mx-auto px-4 py-24 border-t border-slate-800/80 w-full scroll-mt-28">
-        <div class="text-center max-w-3xl mx-auto mb-16">
+    <section id="piani" class="page-section max-w-7xl mx-auto px-4 py-16 sm:py-24 border-t border-slate-800/80 w-full scroll-mt-20">
+        <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-16">
             <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2 font-bold">Accesso & Pricing</span>
-            <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Scegli la Modalità Adatta al Tuo Bankroll</h2>
-            <p class="text-slate-400 text-sm sm:text-base mt-4 leading-relaxed">
-                Al termine dei 7 giorni di prova gratuita, puoi continuare scegliendo pacchetti di crediti a consumo oppure un abbonamento all-inclusive con accesso continuo.
+            <h2 class="text-2xl sm:text-5xl font-black text-white tracking-tight">Scegli il Piano per la Tua Cassa</h2>
+            <p class="text-slate-400 text-xs sm:text-base mt-2 sm:mt-4 leading-relaxed">
+                Al termine della prova gratuita di 7 giorni, scegli la formula più comoda per te.
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             
-            <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition shadow-xl">
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
                 <div>
-                    <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-2">A Consumo</div>
-                    <h3 class="text-2xl font-black text-white mb-2">Pack 10 Crediti</h3>
-                    <p class="text-xs text-slate-400 mb-5 leading-relaxed">Ideale per chi gioca sporadicamente o vuole sbloccare solo i singoli match del weekend.</p>
-                    <div class="text-3xl font-mono font-black text-white mb-6">19€ <span class="text-xs text-slate-500 font-sans font-normal">una tantum</span></div>
+                    <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-1.5">A Consumo</div>
+                    <h3 class="text-lg sm:text-xl font-black text-white mb-1.5">Pack 10 Crediti</h3>
+                    <p class="text-xs text-slate-400 mb-4">Sblocca solo le partite che preferisci senza vincoli temporali.</p>
+                    <div class="text-2xl sm:text-3xl font-mono font-black text-white mb-5">19€ <span class="text-xs text-slate-500 font-sans font-normal">una tantum</span></div>
                     
-                    <ul class="space-y-3 text-xs text-slate-300 mb-6">
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> 10 Selezioni VIP sbloccabili</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Nessuna scadenza dei crediti</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Analisi quote e stake inclusi</li>
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> 10 Selezioni sbloccabili</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Nessuna scadenza</li>
                     </ul>
                 </div>
-                <a href="auth.html" class="w-full py-3 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-xs font-bold text-center transition block">
                     Scegli Crediti
                 </a>
             </div>
 
-            <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition shadow-xl">
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
                 <div>
-                    <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-2">Flessibile</div>
-                    <h3 class="text-2xl font-black text-white mb-2">VIP Settimanale</h3>
-                    <p class="text-xs text-slate-400 mb-5 leading-relaxed">Accesso totale per 7 giorni. Perfetto per seguire un intero turno infrasettimanale + weekend.</p>
-                    <div class="text-3xl font-mono font-black text-white mb-6">14€ <span class="text-xs text-slate-500 font-sans font-normal">/ settimana</span></div>
+                    <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-1.5">Flessibile</div>
+                    <h3 class="text-lg sm:text-xl font-black text-white mb-1.5">VIP Settimanale</h3>
+                    <p class="text-xs text-slate-400 mb-4">Accesso totale per 7 giorni. Perfetto per un turno completo.</p>
+                    <div class="text-2xl sm:text-3xl font-mono font-black text-white mb-5">14€ <span class="text-xs text-slate-500 font-sans font-normal">/ settimana</span></div>
                     
-                    <ul class="space-y-3 text-xs text-slate-300 mb-6">
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Pronostici illimitati per 7gg</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Aggiornamenti live in tempo reale</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Disdici quando vuoi in 1 clic</li>
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Pronostici illimitati</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Disdici in 1 clic</li>
                     </ul>
                 </div>
-                <a href="auth.html" class="w-full py-3 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-xs font-bold text-center transition block">
                     Attiva Settimana
                 </a>
             </div>
 
-            <div class="bg-slate-900/90 border-2 border-emerald-500 rounded-3xl p-7 flex flex-col justify-between relative shadow-2xl shadow-emerald-500/10">
-                <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-full">
-                    Più Popolare
+            <div class="bg-slate-900/90 border-2 border-emerald-500 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl">
+                <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-0.5 rounded-full whitespace-nowrap">
+                    Consigliato
                 </span>
                 <div>
-                    <div class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest mb-2">Consigliato</div>
-                    <h3 class="text-2xl font-black text-white mb-2">VIP Mensile</h3>
-                    <p class="text-xs text-slate-400 mb-5 leading-relaxed">La scelta naturale per chi investe con metodo e vuole massimizzare il rendimento del bankroll.</p>
-                    <div class="text-3xl font-mono font-black text-emerald-400 mb-6">39€ <span class="text-xs text-slate-500 font-sans font-normal">/ mese</span></div>
+                    <div class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest mb-1.5">Miglior Resa</div>
+                    <h3 class="text-lg sm:text-xl font-black text-white mb-1.5">VIP Mensile</h3>
+                    <p class="text-xs text-slate-400 mb-4">La scelta per chi investe con metodo su base continuativa.</p>
+                    <div class="text-2xl sm:text-3xl font-mono font-black text-emerald-400 mb-5">39€ <span class="text-xs text-slate-500 font-sans font-normal">/ mese</span></div>
                     
-                    <ul class="space-y-3 text-xs text-slate-200 mb-6">
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Tutte le selezioni quotidiane +EV</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Tabella Money Management dedicata</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Notifiche pronostici prioritarie</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Supporto analitico diretto</li>
+                    <ul class="space-y-2.5 text-xs text-slate-200 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Tutte le selezioni +EV</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Money Management dedicato</li>
                     </ul>
                 </div>
-                <a href="auth.html" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black text-center transition shadow-lg shadow-emerald-500/20">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black text-center transition block shadow-lg shadow-emerald-500/20">
                     Inizia con il Mensile
                 </a>
             </div>
 
-            <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition shadow-xl">
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between">
                 <div>
-                    <div class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest mb-2">Miglior Valore</div>
-                    <h3 class="text-2xl font-black text-white mb-2">VIP Annuale</h3>
-                    <p class="text-xs text-slate-400 mb-5 leading-relaxed">365 giorni di palinsesto quantitativo al costo più basso per chi fa investimento continuativo.</p>
-                    <div class="text-3xl font-mono font-black text-white mb-6">299€ <span class="text-xs text-slate-500 font-sans font-normal">/ anno</span></div>
+                    <div class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest mb-1.5">Miglior Valore</div>
+                    <h3 class="text-lg sm:text-xl font-black text-white mb-1.5">VIP Annuale</h3>
+                    <p class="text-xs text-slate-400 mb-4">365 giorni di palinsesto continuo al massimo risparmio.</p>
+                    <div class="text-2xl sm:text-3xl font-mono font-black text-white mb-5">299€ <span class="text-xs text-slate-500 font-sans font-normal">/ anno</span></div>
                     
-                    <ul class="space-y-3 text-xs text-slate-300 mb-6">
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Risparmi oltre il 35% sul mensile</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Accesso anticipato a nuove strategie</li>
-                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Archivio storico completo esportabile</li>
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Risparmi oltre il 35%</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Accesso prioritario</li>
                     </ul>
                 </div>
-                <a href="auth.html" class="w-full py-3 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                <a href="auth.html" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-xs font-bold text-center transition block">
                     Abbonamento Annuale
                 </a>
             </div>
@@ -456,64 +443,38 @@
         </div>
     </section>
 
-    <!-- SEZIONE 4: FAQ -->
-    <section id="faq" class="page-section max-w-5xl mx-auto px-4 py-24 border-t border-slate-800/80 w-full scroll-mt-28">
-        <div class="text-center mb-16">
-            <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2 font-bold">Domande Frequenti</span>
-            <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Tutto Quello che Devi Sapere</h2>
+    <!-- FAQ -->
+    <section id="faq" class="page-section max-w-5xl mx-auto px-4 py-16 sm:py-24 border-t border-slate-800/80 w-full scroll-mt-20">
+        <div class="text-center mb-10">
+            <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-1 font-bold">FAQ</span>
+            <h2 class="text-2xl sm:text-4xl font-black text-white">Domande Frequenti</h2>
         </div>
 
-        <div class="space-y-5 text-xs sm:text-sm">
-            
-            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-7 rounded-2xl shadow-md">
-                <h4 class="font-bold text-white text-base sm:text-lg mb-2">Come funziona la prova gratuita di 7 giorni?</h4>
-                <p class="text-slate-400 leading-relaxed">
-                    Basta creare un account gratuito premendo il tasto "Registrati VIP". Il sistema sbloccherà immediatamente tutti i pronostici e le quote riservate per 7 giorni esatti, assegnandoti anche 5 crediti omaggio. Non ti chiediamo alcuna carta di credito o metodo di pagamento: la prova è al 100% libera e senza vincoli.
+        <div class="space-y-3.5 text-xs sm:text-sm">
+            <div class="bg-slate-900/70 border border-slate-800 p-4 sm:p-6 rounded-2xl">
+                <h4 class="font-bold text-white text-sm sm:text-base mb-1.5">Come funziona la prova gratuita di 7 giorni?</h4>
+                <p class="text-slate-400 leading-relaxed text-[11px] sm:text-xs">
+                    Creando un account gratuito ricevi 7 giorni di accesso illimitato alle selezioni del giorno e 5 crediti omaggio. Non ti viene richiesta alcuna carta di credito.
                 </p>
             </div>
 
-            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-7 rounded-2xl shadow-md">
-                <h4 class="font-bold text-white text-base sm:text-lg mb-2">Cosa succede al termine dei 7 giorni di prova gratuita?</h4>
-                <p class="text-slate-400 leading-relaxed">
-                    Allo scadere della settimana i nuovi pronostici torneranno ad apparire con il lucchetto protetto. Sarai tu a decidere in totale autonomia se utilizzare i tuoi crediti a consumo oppure attivare l'abbonamento VIP (settimanale, mensile o annuale). Nessun rinnovo nascosto e nessun addebito automatico.
+            <div class="bg-slate-900/70 border border-slate-800 p-4 sm:p-6 rounded-2xl">
+                <h4 class="font-bold text-white text-sm sm:text-base mb-1.5">Di che budget (Bankroll) ho bisogno?</h4>
+                <p class="text-slate-400 leading-relaxed text-[11px] sm:text-xs">
+                    Consigliamo di suddividere la propria cassa in 100 unità (1u = 1% del capitale). Con 500€ totali, ogni unità corrisponderà a 5€, garantendo sicurezza psicologica e matematica.
                 </p>
             </div>
-
-            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-7 rounded-2xl shadow-md">
-                <h4 class="font-bold text-white text-base sm:text-lg mb-2">Qual è la differenza tra i pacchetti di crediti e l'abbonamento VIP?</h4>
-                <p class="text-slate-400 leading-relaxed">
-                    I **crediti a consumo** non hanno scadenza: puoi acquistare 10 crediti e utilizzarli nel corso di settimane o mesi, sbloccando solo le giocate che preferisci. L'**abbonamento VIP** (settimanale, mensile o annuale) offre invece l'accesso illimitato a tutte le selezioni del palinsesto ed è consigliato a chi desidera replicare l'intero portafoglio di investimento sportivo con continuità.
-                </p>
-            </div>
-
-            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-7 rounded-2xl shadow-md">
-                <h4 class="font-bold text-white text-base sm:text-lg mb-2">Di quale cassa (Bankroll) ho bisogno per iniziare?</h4>
-                <p class="text-slate-400 leading-relaxed">
-                    Consigliamo di suddividere la propria cassa in 100 unità (1u = 1% del capitale totale). Ad esempio, con un budget di 500€, ogni unità corrisponde a 5€. Con questo metodo le serie negative fisiologiche non intaccano la serenità e la stabilità del tuo percorso di investimento.
-                </p>
-            </div>
-
-            <div class="bg-slate-900/70 border border-slate-800 p-6 sm:p-7 rounded-2xl shadow-md">
-                <h4 class="font-bold text-white text-base sm:text-lg mb-2">Come vengono calcolate le statistiche (ROI, Win Rate e Profitto)?</h4>
-                <p class="text-slate-400 leading-relaxed">
-                    Tutti i dati visibili nella dashboard superiore sono calcolati in tempo reale esclusivamente sui **pronostici già chiusi e verificati**. Le partite ancora in corso non alterano le percentuali fino al triplice fischio, garantendo la massima trasparenza e veridicità storica.
-                </p>
-            </div>
-
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 bg-slate-950 py-12 text-center text-xs text-slate-500">
-        <div class="max-w-7xl mx-auto px-4 space-y-4">
+    <footer class="border-t border-slate-800 bg-slate-950 py-8 sm:py-10 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
             <div class="flex items-center justify-center space-x-2">
-                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-6 w-auto opacity-70">
+                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-5 w-auto opacity-70">
                 <span class="font-black text-slate-300">ATM<span class="text-emerald-500">BET</span></span>
             </div>
             <p>&copy; 2026 AtmBet Club. Tutti i diritti riservati.</p>
-            <p class="text-[11px] text-slate-600 max-w-xl mx-auto leading-relaxed">
-                L'investimento sportivo comporta rischio economico. Le statistiche passate non sono garanzia di rendimenti futuri. Il gioco è riservato ai maggiori di 18 anni. Gioca con moderazione.
-            </p>
         </div>
     </footer>
 
@@ -525,8 +486,8 @@
 
         let activeFeedFilter = 'all';
         let publicNetProfitUnits = 0;
-        let publicMultiplier = 50; // Default 50€ come da dashboard
-        let publicSimStartDate = '2026-10-24'; // Default da ieri 24 Ottobre
+        let publicMultiplier = 50; 
+        let publicSimStartDate = '2026-10-24'; 
 
         function checkUserSession() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -607,7 +568,6 @@
             });
         }
 
-        // CAMBIO VALORE UNITA' (€) TRAMITE PULSANTI
         function setPublicUnitValue(val, btnElement) {
             publicMultiplier = parseFloat(val);
             document.querySelectorAll('.pub-unit-btn').forEach(b => b.classList.remove('unit-pill-active'));
@@ -622,15 +582,10 @@
             
             if (fiatEl) {
                 fiatEl.innerText = `≈ ${fiatAmount >= 0 ? '+' : ''}${fiatAmount.toFixed(2)} €`;
-                if (fiatAmount >= 0) {
-                    fiatEl.className = "text-xs font-mono font-bold text-emerald-400 mt-0.5";
-                } else {
-                    fiatEl.className = "text-xs font-mono font-bold text-rose-400 mt-0.5";
-                }
+                fiatEl.className = `text-[10px] sm:text-xs font-mono font-bold ${fiatAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
             }
         }
 
-        // SIMULATORE TEMPORALE PUBBLICO (CALENDARIO & PRESET)
         function applyPublicSimDate(dateStr) {
             publicSimStartDate = dateStr;
             document.querySelectorAll('.pub-sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
@@ -686,13 +641,13 @@
             const profitEl = document.getElementById('pub-sim-profit-units');
             if (profitEl) {
                 profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
-                profitEl.className = `text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+                profitEl.className = `text-xl sm:text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1`;
             }
 
             const fiatEl = document.getElementById('pub-sim-profit-fiat');
             if (fiatEl) {
                 fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
-                fiatEl.className = `text-xs font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+                fiatEl.className = `text-[11px] sm:text-xs font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
             }
 
             const roiEl = document.getElementById('pub-sim-roi');
@@ -715,10 +670,10 @@
             activeFeedFilter = filterType;
 
             document.querySelectorAll('#btn-feed-all, #btn-feed-pending, #btn-feed-completed').forEach(btn => {
-                btn.className = "text-xs px-4 py-2.5 rounded-xl border transition font-bold bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700";
+                btn.className = "text-xs px-3 py-1.5 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
             });
             if (element) {
-                element.className = "text-xs px-4 py-2.5 rounded-xl border transition font-bold bg-emerald-500 text-slate-950 border-emerald-500";
+                element.className = "text-xs px-3 py-1.5 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
             }
 
             renderFeed();
@@ -767,7 +722,7 @@
             if (activeFeedFilter === 'completed') filtered = bets.filter(b => b.status !== 'pending');
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-medium">Nessun pronostico per il filtro selezionato.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 font-medium text-xs">Nessun pronostico disponibile per questo filtro.</div>`;
                 return;
             }
 
@@ -775,54 +730,54 @@
                 const isLocked = !loggedUser && bet.status === 'pending';
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition shadow-lg";
+                card.className = "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-slate-700 transition shadow-lg";
 
-                let statusBadge = '<span class="text-[10px] px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 font-bold border border-slate-700 uppercase tracking-wider">In Corso</span>';
-                if (bet.status === 'won') statusBadge = '<span class="text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-black border border-emerald-500/30 uppercase tracking-wider">Vinta</span>';
-                if (bet.status === 'lost') statusBadge = '<span class="text-[10px] px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-400 font-black border border-rose-500/30 uppercase tracking-wider">Persa</span>';
-                if (bet.status === 'void') statusBadge = '<span class="text-[10px] px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30 uppercase tracking-wider">Void</span>';
+                let statusBadge = '<span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold border border-slate-700 uppercase tracking-wider">In Corso</span>';
+                if (bet.status === 'won') statusBadge = '<span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-black border border-emerald-500/30 uppercase tracking-wider">Vinta</span>';
+                if (bet.status === 'lost') statusBadge = '<span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-black border border-rose-500/30 uppercase tracking-wider">Persa</span>';
+                if (bet.status === 'void') statusBadge = '<span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold border border-amber-500/30 uppercase tracking-wider">Void</span>';
 
                 card.innerHTML = `
                     <div>
-                        <div class="flex items-center justify-between text-xs text-slate-400 mb-2.5">
-                            <span class="font-medium bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[11px]">${bet.league}</span>
-                            <div class="flex items-center gap-2">
-                                <span class="text-[11px] text-slate-500 font-mono">${bet.event_date}</span>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                            <span class="font-medium bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] truncate max-w-[150px]">${bet.league}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
                                 ${statusBadge}
                             </div>
                         </div>
 
-                        <h3 class="text-base font-bold text-white mb-3">${bet.match_name}</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-white mb-2.5 leading-snug">${bet.match_name}</h3>
                         
-                        <div class="bg-slate-950/80 rounded-xl p-3.5 border border-slate-800/80 mb-3.5">
-                            <div class="text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-1">Selezione Ufficiale:</div>
+                        <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
+                            <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Selezione:</div>
                             ${isLocked ? `
-                                <div class="flex items-center justify-between py-1">
-                                    <span class="text-sm font-bold text-slate-600 blur-sm select-none">Pronostico Riservato</span>
-                                    <a href="auth.html" class="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg flex items-center gap-1 font-bold hover:bg-emerald-500/20 transition">
-                                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> Accedi / Registrati
+                                <div class="flex items-center justify-between py-0.5">
+                                    <span class="text-xs font-bold text-slate-600 blur-sm select-none">Pronostico Riservato</span>
+                                    <a href="auth.html" class="text-[11px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg flex items-center gap-1 font-bold">
+                                        <i data-lucide="lock" class="w-3 h-3"></i> Accedi
                                     </a>
                                 </div>
                             ` : `
-                                <div class="text-sm font-bold text-emerald-400 flex items-center justify-between">
+                                <div class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center justify-between">
                                     <span>${bet.prediction}</span>
-                                    <span class="text-xs text-slate-400 font-normal">Mercato: ${bet.market}</span>
+                                    <span class="text-[11px] text-slate-400 font-normal truncate max-w-[120px]">${bet.market}</span>
                                 </div>
                             `}
                         </div>
                     </div>
 
-                    <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
+                    <div class="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
                         <div>
-                            <span class="text-slate-500">Quota:</span>
+                            <span class="text-slate-500 text-[10px]">Quota:</span>
                             <span class="text-white font-mono font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>
                         </div>
                         <div>
-                            <span class="text-slate-500">Stake Consigliato:</span>
+                            <span class="text-slate-500 text-[10px]">Stake:</span>
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-black tracking-wider uppercase text-[10px] bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">AtmBet</span>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">AtmBet</span>
                         </div>
                     </div>
                 `;
@@ -832,42 +787,9 @@
             lucide.createIcons();
         }
 
-        function initScrollSpy() {
-            const sections = document.querySelectorAll('.page-section');
-            const navLinks = {
-                'metodo': document.getElementById('nav-metodo'),
-                'palinsesto': document.getElementById('nav-palinsesto'),
-                'piani': document.getElementById('nav-piani'),
-                'faq': document.getElementById('nav-faq')
-            };
-
-            const observerOptions = {
-                root: null,
-                rootMargin: '-25% 0px -55% 0px',
-                threshold: 0
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        Object.keys(navLinks).forEach(k => {
-                            if (navLinks[k]) navLinks[k].classList.remove('nav-link-active');
-                        });
-                        if (navLinks[id]) {
-                            navLinks[id].classList.add('nav-link-active');
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(sec => observer.observe(sec));
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             checkUserSession();
             renderFeed();
-            initScrollSpy();
             lucide.createIcons();
         });
     </script>
