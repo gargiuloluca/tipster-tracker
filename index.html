@@ -58,7 +58,7 @@
             Selezioni matematiche ad alto valore atteso verificate e tracciate. Niente improvvisazione: solo metodo, rendimento costante e gestione rigorosa dello stake.
         </p>
 
-        <!-- Newsletter / 7-Day Trial Box -->
+        <!-- Newsletter / 7-Day Trial Box con Raccolta Lead -->
         <div id="trial-box" class="mt-8 max-w-xl mx-auto bg-gradient-to-b from-atm-card to-slate-900 border border-atm-green/30 p-6 rounded-2xl shadow-xl relative overflow-hidden">
             <div class="absolute -right-8 -top-8 w-24 h-24 bg-atm-green/10 rounded-full blur-2xl"></div>
             <span class="inline-block bg-atm-green text-black font-extrabold text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full mb-3">
@@ -129,6 +129,7 @@
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
         const TRIAL_KEY = 'atmbet_trial_session';
+        const LEADS_KEY = 'atmbet_newsletter_leads';
 
         let activeFeedFilter = 'all';
 
@@ -152,7 +153,7 @@
                 }
             }
 
-            return bets.map(b => {
+            const cleanBets = bets.map(b => {
                 let cleanStake = parseFloat(b.stake || b.units || 1.0);
                 if (cleanStake > 10) cleanStake = 1.0;
 
@@ -169,6 +170,15 @@
                     is_published: b.is_published !== undefined ? b.is_published : true
                 };
             }).filter(b => b.is_published === true);
+
+            // Ordinamento intelligente: prima i match aperti ("pending"), poi per data decrescente
+            return cleanBets.sort((a, b) => {
+                if (a.status === 'pending' && b.status !== 'pending') return -1;
+                if (a.status !== 'pending' && b.status === 'pending') return 1;
+                const dateA = new Date(a.event_date.replace(' ', 'T')).getTime() || 0;
+                const dateB = new Date(b.event_date.replace(' ', 'T')).getTime() || 0;
+                return dateB - dateA;
+            });
         }
 
         function isTrialActive() {
@@ -184,11 +194,25 @@
 
         function activateTrial(e) {
             e.preventDefault();
-            const email = document.getElementById('user-email').value;
+            const email = document.getElementById('user-email').value.trim();
+            if (!email) return;
+
             const expiryDate = new Date();
             expiryDate.setDate(expiryDate.getDate() + 7);
 
+            // Salva sessione attiva
             localStorage.setItem(TRIAL_KEY, JSON.stringify({ email: email, expiry: expiryDate.toISOString() }));
+
+            // MIGLIORIA C: Salva anche nella lista contatti/lead locale
+            let leads = [];
+            try {
+                leads = JSON.parse(localStorage.getItem(LEADS_KEY)) || [];
+            } catch(e) {}
+            if (!leads.some(l => l.email === email)) {
+                leads.push({ email: email, registered_at: new Date().toISOString() });
+                localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+            }
+
             updateTrialUI();
             renderFeed();
         }
@@ -251,9 +275,7 @@
             const bets = getStoredBets();
             const activeTrial = isTrialActive();
 
-            // Calcola sempre le statistiche reali su tutti i pronostici AtmBet
             updatePublicStats(bets);
-
             container.innerHTML = '';
 
             let filtered = bets;
