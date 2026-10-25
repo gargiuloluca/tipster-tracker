@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtmBet | Area Riservata Clienti</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- Google Fonts & Tailwind -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#070a10',
+                            card: '#0e1522',
+                            border: '#1e293b',
+                            gold: '#fbbf24'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col justify-between font-sans antialiased selection:bg-emerald-500 selection:text-black">
+
+    <!-- Top Simple Bar -->
+    <nav class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-9 w-auto">
+                <span class="text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
+            </a>
+            <a href="index.html" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Torna alla Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Auth Container -->
+    <main class="flex-1 flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-slate-900/90 border border-slate-800 p-8 rounded-3xl shadow-2xl backdrop-blur-xl relative">
+            
+            <div class="text-center mb-6">
+                <div class="inline-flex p-3 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 mb-3">
+                    <i data-lucide="shield-check" class="w-7 h-7"></i>
+                </div>
+                <h1 id="auth-title" class="text-2xl font-black text-white">Accedi ad AtmBet</h1>
+                <p id="auth-subtitle" class="text-xs text-slate-400 mt-1">Inserisci le tue credenziali per accedere al pannello VIP.</p>
+            </div>
+
+            <!-- Toggle Switch Login / Registrazione -->
+            <div class="flex p-1 bg-slate-950 border border-slate-800 rounded-xl mb-6">
+                <button type="button" onclick="setMode('login')" id="tab-login" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950">
+                    Accedi
+                </button>
+                <button type="button" onclick="setMode('register')" id="tab-register" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
+                    Crea Account
+                </button>
+            </div>
+
+            <!-- Form Unico -->
+            <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
+                <div id="name-field" class="hidden">
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nome o Nickname</label>
+                    <input type="text" id="user-name" placeholder="Es. Marco Rossi"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Email</label>
+                    <input type="email" id="user-email" required placeholder="tua@email.com"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-[11px] font-semibold text-slate-400">Password</label>
+                        <a href="javascript:alert('In questa fase di test, puoi reimpostare le credenziali rieseguendo la registrazione con la stessa email o creandone una nuova.');" class="text-[10px] text-emerald-400 hover:underline">Password dimenticata?</a>
+                    </div>
+                    <input type="password" id="user-pass" required placeholder="Minimo 6 caratteri" minlength="6"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <!-- Alert Messaggi -->
+                <div id="auth-msg" class="hidden p-3 rounded-xl text-xs font-medium"></div>
+
+                <button type="submit" id="submit-btn" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-xl text-xs transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10">
+                    <span id="btn-text">Entra nel Pannello</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </form>
+
+            <!-- Benefit Box Registrazione -->
+            <div id="register-perks" class="hidden mt-6 pt-5 border-t border-slate-800/80 text-[11px] text-slate-400 space-y-2">
+                <span class="font-bold text-slate-300 block mb-1">Cosa include l'iscrizione gratuita:</span>
+                <div class="flex items-center gap-2 text-emerald-400">
+                    <i data-lucide="gift" class="w-4 h-4"></i> 7 Giorni di Accesso VIP Illimitato
+                </div>
+                <div class="flex items-center gap-2 text-amber-400">
+                    <i data-lucide="coins" class="w-4 h-4"></i> 5 Crediti Selezioni Omaggio inclusi
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900">
+        AtmBet &copy; 2026. Area Utenti Protetta.
+    </footer>
+
+    <script>
+        let currentMode = 'login';
+        const USERS_DB_KEY = 'atmbet_users_accounts';
+        const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
+
+        function setMode(mode) {
+            currentMode = mode;
+            const tabLogin = document.getElementById('tab-login');
+            const tabRegister = document.getElementById('tab-register');
+            const nameField = document.getElementById('name-field');
+            const perks = document.getElementById('register-perks');
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const btnText = document.getElementById('btn-text');
+            const msg = document.getElementById('auth-msg');
+
+            msg.classList.add('hidden');
+
+            if (mode === 'login') {
+                tabLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950";
+                tabRegister.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+                nameField.classList.add('hidden');
+                perks.classList.add('hidden');
+                title.innerText = "Accedi ad AtmBet";
+                subtitle.innerText = "Inserisci le tue credenziali per accedere al pannello VIP.";
+                btnText.innerText = "Entra nel Pannello";
+            } else {
+                tabRegister.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950";
+                tabLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+                nameField.classList.remove('hidden');
+                perks.classList.remove('hidden');
+                title.innerText = "Crea Account Gratuito";
+                subtitle.innerText = "Registrati ora per attivare la prova di 7 giorni + 5 crediti omaggio.";
+                btnText.innerText = "Crea Account & Attiva VIP";
+            }
+            lucide.createIcons();
+        }
+
+        function handleAuth(e) {
+            e.preventDefault();
+            const email = document.getElementById('user-email').value.trim().toLowerCase();
+            const pass = document.getElementById('user-pass').value;
+            const name = document.getElementById('user-name').value.trim() || 'Utente';
+            const msg = document.getElementById('auth-msg');
+
+            let users = [];
+            try {
+                users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
+            } catch(err) { users = []; }
+
+            if (currentMode === 'register') {
+                const exists = users.find(u => u.email === email);
+                if (exists) {
+                    msg.className = "p-3 rounded-xl text-xs font-medium bg-rose-500/10 border border-rose-500/30 text-rose-400 block";
+                    msg.innerText = "Questa email è già registrata. Effettua il login.";
+                    return;
+                }
+
+                const trialExpiry = new Date();
+                trialExpiry.setDate(trialExpiry.getDate() + 7);
+
+                const newUser = {
+                    id: 'usr_' + Date.now(),
+                    name: name,
+                    email: email,
+                    password: pass, // In Supabase sarà criptata con Hash bcrypt
+                    credits: 5,     // 5 Crediti omaggio di benvenuto
+                    plan: 'trial',  // 'trial', 'vip_week', 'vip_month', 'vip_year', 'free'
+                    trial_expiry: trialExpiry.toISOString(),
+                    created_at: new Date().toISOString(),
+                    unlocked_bets: []
+                };
+
+                users.push(newUser);
+                localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(newUser));
+
+                msg.className = "p-3 rounded-xl text-xs font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 block";
+                msg.innerText = "Account creato con successo! Accesso in corso...";
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+
+            } else {
+                // Login
+                const user = users.find(u => u.email === email && u.password === pass);
+                if (!user) {
+                    msg.className = "p-3 rounded-xl text-xs font-medium bg-rose-500/10 border border-rose-500/30 text-rose-400 block";
+                    msg.innerText = "Email o password non corretti. Riprova.";
+                    return;
+                }
+
+                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(user));
+                msg.className = "p-3 rounded-xl text-xs font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 block";
+                msg.innerText = "Accesso autorizzato. Reindirizzamento...";
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 800);
+            }
+        }
+
+        // Se l'utente è già loggato, reindirizza alla dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            const active = localStorage.getItem(CURRENT_SESSION_KEY);
+            if (active) {
+                window.location.href = 'dashboard.html';
+            }
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
