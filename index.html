@@ -50,6 +50,8 @@
     .btn-emerald { background-color: #10b981; color: #022c22; font-weight: 700; }
     .btn-dark { background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
     .btn-ai { background-color: #3b82f6; color: #ffffff; font-weight: 700; }
+    .btn-atm { background-color: #8b5cf6; color: #ffffff; font-weight: 700; border: 1px solid #a78bfa; }
+    .btn-atm.active { background-color: #6d28d9; border-color: #c4b5fd; box-shadow: 0 0 10px rgba(139, 92, 246, 0.5); }
     .btn-emerald:hover { background-color: #059669; }
     .btn-dark:hover { background-color: #334155; }
     .btn-ai:hover { background-color: #2563eb; }
@@ -67,21 +69,24 @@
       align-items: center;
       gap: 10px;
     }
+    .filter-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
     .filter-bar-label {
       font-size: 12px;
       font-weight: 700;
       color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
     .filter-bar select {
       background-color: #1e293b;
       border: 1px solid #34d399;
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 8px;
     }
 
@@ -149,6 +154,11 @@
       font-weight: 700;
       font-size: 11px;
     }
+    .tag-provider.tag-atm {
+      background: #3b0764;
+      border-color: #8b5cf6;
+      color: #c4b5fd;
+    }
 
     .btn-status-group { display: inline-flex; background: #1e293b; border-radius: 6px; padding: 2px; gap: 2px; }
     .btn-s {
@@ -191,8 +201,8 @@
     <div class="logo-box">
       <div class="logo-icon">⚡</div>
       <div class="logo-text">
-        <h1>TipsterHub</h1>
-        <span>Multi-Provider Tracker</span>
+        <h1 id="brand-title">TipsterHub</h1>
+        <span id="brand-sub">Multi-Provider Tracker</span>
       </div>
     </div>
     <div class="btn-group">
@@ -204,20 +214,25 @@
 
   <div class="container">
 
+    <!-- SELETTORE / SWITCH ATMBET -->
     <div class="filter-bar">
-      <div class="filter-bar-label">
-        <span>VISUALIZZA STATISTICHE DI:</span>
+      <div class="filter-bar-left">
+        <button id="btn-toggle-atm" onclick="toggleAtmMode()" class="btn-atm">
+          ⚡ Storico Generale (AtmBet)
+        </button>
+        <span class="filter-bar-label" id="filter-label">OPPURE FORNITORE:</span>
+        <select id="main-tipster-filter" onchange="onTipsterSelectChange()">
+          <option value="all">🌍 Tutti i Fornitori</option>
+        </select>
       </div>
-      <select id="main-tipster-filter" onchange="updateApp()">
-        <option value="all">🌍 Tutti i Fornitori (Globale)</option>
-      </select>
     </div>
 
+    <!-- STATISTICHE DINAMICHE -->
     <div class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-title">Bilancio Netto</div>
         <div id="kpi-profit" class="kpi-value positive">+0.00 u</div>
-        <div class="kpi-sub">Unità guadagnate/perse</div>
+        <div class="kpi-sub">Unità complessive</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">ROI (Yield)</div>
@@ -241,14 +256,16 @@
       </div>
     </div>
 
+    <!-- GRAFICO -->
     <div class="card" style="padding: 14px;">
-      <div class="card-title" id="chart-title" style="margin-bottom: 10px;">Andamento Bankroll Globale</div>
+      <div class="card-title" id="chart-title" style="margin-bottom: 10px;">Andamento Bankroll</div>
       <div style="height: 220px; width: 100%;">
         <canvas id="profitChart"></canvas>
       </div>
     </div>
 
-    <div class="card">
+    <!-- CLASSIFICA (visibile solo se non in modalità AtmBet singola) -->
+    <div class="card" id="card-leaderboard">
       <div class="card-header">
         <div class="card-title">Classifica Redditività Fornitori</div>
       </div>
@@ -270,10 +287,11 @@
       </div>
     </div>
 
+    <!-- TABELLA PRONOSTICI -->
     <div class="card">
       <div class="card-header">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <div class="card-title">Elenco Pronostici</div>
+          <div class="card-title" id="table-title">Elenco Pronostici</div>
           <span id="badge-total-count" style="background:#1e293b; color:#34d399; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">0</span>
         </div>
         <div>
@@ -314,7 +332,7 @@
         <h3 style="font-size: 15px; font-weight: bold; color: #60a5fa;">Incolla Risposta AI</h3>
         <button onclick="closeAiModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
-      <p style="font-size: 11px; color: #94a3b8;">Incolla qui il messaggio con i nuovi pronostici o con gli esiti finali (Vinto/Perso):</p>
+      <p style="font-size: 11px; color: #94a3b8;">Incolla qui i nuovi pronostici o gli esiti finali:</p>
       <textarea id="ai-input" rows="8" placeholder="Incolla il testo qui..." style="width: 100%; font-size: 12px;"></textarea>
       <div style="display: flex; justify-content: flex-end; gap: 8px;">
         <button onclick="closeAiModal()" class="btn-dark">Annulla</button>
@@ -346,7 +364,7 @@
         <button onclick="closeManualModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
       <form id="form-add-bet" onsubmit="handleManualAdd(event)" style="display: flex; flex-direction: column; gap: 8px;">
-        <input type="text" id="m-tipster" required placeholder="Fornitore">
+        <input type="text" id="m-tipster" required placeholder="Fornitore (es. CalcioAI, Stats4Bets)">
         <input type="text" id="m-match" required placeholder="Partita">
         <input type="text" id="m-market" required placeholder="Pronostico">
         <div style="display: flex; gap: 8px;">
@@ -360,10 +378,43 @@
 
   <script>
     let bets = JSON.parse(localStorage.getItem('tipster_bets_v2')) || [];
+    let isAtmMode = false;
     let profitChart = null;
 
     function saveBets() {
       localStorage.setItem('tipster_bets_v2', JSON.stringify(bets));
+      updateApp();
+    }
+
+    function toggleAtmMode() {
+      isAtmMode = !isAtmMode;
+      const btn = document.getElementById('btn-toggle-atm');
+      const select = document.getElementById('main-tipster-filter');
+      const cardLb = document.getElementById('card-leaderboard');
+
+      if (isAtmMode) {
+        btn.classList.add('active');
+        btn.textContent = '✓ Storico AtmBet Attivo (Clicca per uscire)';
+        select.value = 'all';
+        select.disabled = true;
+        cardLb.style.display = 'none';
+      } else {
+        btn.classList.remove('active');
+        btn.textContent = '⚡ Storico Generale (AtmBet)';
+        select.disabled = false;
+        cardLb.style.display = 'block';
+      }
+      updateApp();
+    }
+
+    function onTipsterSelectChange() {
+      if (isAtmMode) {
+        isAtmMode = false;
+        const btn = document.getElementById('btn-toggle-atm');
+        btn.classList.remove('active');
+        btn.textContent = '⚡ Storico Generale (AtmBet)';
+        document.getElementById('card-leaderboard').style.display = 'block';
+      }
       updateApp();
     }
 
@@ -372,23 +423,24 @@
       const filterSelect = document.getElementById('main-tipster-filter');
       const currentSelected = filterSelect.value;
       
-      filterSelect.innerHTML = '<option value="all">🌍 Tutti i Fornitori (Globale)</option>';
+      filterSelect.innerHTML = '<option value="all">🌍 Tutti i Fornitori</option>';
       tipsters.forEach(t => {
         filterSelect.innerHTML += `<option value="${t}" ${t === currentSelected ? 'selected' : ''}>👤 ${t}</option>`;
       });
     }
 
     function getSelectedBets() {
-      const selectedTipster = document.getElementById('main-tipster-filter').value;
-      if (selectedTipster === 'all') return bets;
-      return bets.filter(b => b.tipster === selectedTipster);
+      if (isAtmMode) return bets;
+      const selected = document.getElementById('main-tipster-filter').value;
+      if (selected === 'all') return bets;
+      return bets.filter(b => b.tipster === selected);
     }
 
     function updateApp() {
       populateTipsterFilter();
       renderKPIs();
       renderChart();
-      renderLeaderboard();
+      if (!isAtmMode) renderLeaderboard();
       renderBetsTable();
     }
 
@@ -396,9 +448,15 @@
       const currentBets = getSelectedBets();
       const selectedTipster = document.getElementById('main-tipster-filter').value;
       
-      document.getElementById('chart-title').textContent = selectedTipster === 'all' 
-        ? "Andamento Bankroll Globale" 
-        : `Andamento Bankroll: ${selectedTipster}`;
+      if (isAtmMode) {
+        document.getElementById('chart-title').textContent = "Andamento Bankroll: AtmBet (Storico Generale)";
+        document.getElementById('table-title').textContent = "Pronostici AtmBet";
+      } else {
+        document.getElementById('chart-title').textContent = selectedTipster === 'all' 
+          ? "Andamento Bankroll Globale" 
+          : `Andamento Bankroll: ${selectedTipster}`;
+        document.getElementById('table-title').textContent = "Elenco Pronostici";
+      }
 
       const settled = currentBets.filter(b => b.status !== 'pending');
       const won = currentBets.filter(b => b.status === 'win');
@@ -452,8 +510,8 @@
           labels,
           datasets: [{
             data: dataPoints,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderColor: isAtmMode ? '#8b5cf6' : '#10b981',
+            backgroundColor: isAtmMode ? 'rgba(139, 92, 246, 0.15)' : 'rgba(16, 185, 129, 0.1)',
             borderWidth: 2,
             fill: true,
             tension: 0.3,
@@ -502,7 +560,7 @@
       tbody.innerHTML = '';
       stats.forEach(s => {
         tbody.innerHTML += `
-          <tr onclick="document.getElementById('main-tipster-filter').value='${s.tipster}'; updateApp();" style="cursor: pointer;">
+          <tr onclick="document.getElementById('main-tipster-filter').value='${s.tipster}'; onTipsterSelectChange();" style="cursor: pointer;">
             <td style="font-weight: 700; color: #fff;">👤 ${s.tipster}</td>
             <td style="text-align: center; color: #e2e8f0; font-weight: 600;">${s.total}</td>
             <td style="text-align: center; color: #94a3b8;">${s.won} / ${s.lost} / ${s.voided}</td>
@@ -543,9 +601,12 @@
           pText = '0.00u';
         }
 
+        const displayedTipster = isAtmMode ? 'AtmBet' : b.tipster;
+        const tagClass = isAtmMode ? 'tag-provider tag-atm' : 'tag-provider';
+
         tbody.innerHTML += `
           <tr>
-            <td><span class="tag-provider">${b.tipster}</span></td>
+            <td><span class="${tagClass}">${displayedTipster}</span></td>
             <td>
               <div style="font-weight: 700; color: #fff;">${b.match}</div>
               <div style="font-size: 11px; color: #94a3b8;">${b.market} ${b.league ? '• ' + b.league : ''}</div>
@@ -601,12 +662,10 @@
       e.target.reset();
     }
 
-    // ELABORATORE UNIFICATO SMART
     function processAiInput() {
       const input = document.getElementById('ai-input').value.trim();
       if (!input) return;
 
-      // 1. Prova a verificare se contiene un frammento JSON di nuovi pronostici
       const jsonStart = input.indexOf('[');
       const jsonEnd = input.lastIndexOf(']');
       if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
@@ -633,7 +692,6 @@
         } catch(e) {}
       }
 
-      // 2. Se non è JSON, prova a leggere i formati testuali riga per riga
       const lines = input.split('\n');
       let updatedStatus = 0;
       let addedLines = 0;
@@ -643,7 +701,6 @@
         if (!text) return;
         const lower = text.toLowerCase();
 
-        // Controllo se è un aggiornamento esiti (Vinto/Perso)
         let targetStatus = null;
         if (lower.includes('vinto') || lower.includes('vinta') || lower.includes('win')) targetStatus = 'win';
         else if (lower.includes('perso') || lower.includes('persa') || lower.includes('loss')) targetStatus = 'loss';
@@ -657,9 +714,7 @@
               updatedStatus++;
             }
           });
-        } 
-        // Controllo se è una riga con un nuovo pronostico (es. Fornitore | Partita | Quota)
-        else if (text.includes('|') || text.includes('@')) {
+        } else if (text.includes('|') || text.includes('@')) {
           const parts = text.split('|').map(p => p.trim());
           if (parts.length >= 3) {
             const tipster = parts[0];
