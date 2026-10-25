@@ -245,13 +245,13 @@
             </div>
         </section>
 
-        <!-- SELEZIONI ATTIVE IN CORSO (CLICCABILI) -->
+        <!-- SELEZIONI ATTIVE IN CORSO -->
         <section class="space-y-3 pt-2 border-t border-slate-800/80">
             <div>
                 <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                     <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni VIP Attive
                 </h2>
-                <p class="text-[11px] sm:text-xs text-slate-400">Tocca una giocata per aprire la scheda dettagliata a schermo intero.</p>
+                <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio completo dei match singoli e delle multiple.</p>
             </div>
 
             <div id="user-pending-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
@@ -266,7 +266,7 @@
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                         <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Storico Giocate Ricevute
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Tocca una riga per aprire la scheda a schermo intero.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L).</p>
                 </div>
 
                 <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800">
@@ -276,10 +276,10 @@
                 </div>
             </div>
 
-            <!-- Tabella Storico con Scroll Orizzontale Ottimizzato -->
+            <!-- Tabella Storico con Testo a Capo Pulito -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                    <table class="w-full text-left text-xs text-slate-300">
                         <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
                             <tr>
                                 <th class="py-2.5 px-3">Data</th>
@@ -306,57 +306,6 @@
         AtmBet &copy; 2026. Cruscotto Rendimento Certificato.
     </footer>
 
-    <!-- MODAL DETTAGLIO PRONOSTICO -->
-    <div id="bet-detail-modal" class="fixed inset-0 z-[999] bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
-            
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div class="flex items-center gap-2">
-                    <span id="modal-badge-status" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">...</span>
-                    <span id="modal-league" class="text-xs text-slate-400 font-medium bg-slate-950 px-2 py-0.5 rounded border border-slate-800">...</span>
-                </div>
-                <button type="button" onclick="closeBetModal()" class="text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800/80 hover:bg-slate-800 transition">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <div>
-                <div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-1">
-                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500"></i>
-                    <span id="modal-date">...</span>
-                </div>
-                <h3 id="modal-match-title" class="text-lg sm:text-xl font-black text-white leading-snug">...</h3>
-            </div>
-
-            <div id="modal-submatches-box" class="space-y-2"></div>
-
-            <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 space-y-1.5">
-                <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Pronostico & Mercato:</div>
-                <div id="modal-prediction-content" class="text-emerald-400 font-bold text-sm sm:text-base">...</div>
-                <div id="modal-market-content" class="text-xs text-slate-400">...</div>
-            </div>
-
-            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-center">
-                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-                    <span class="text-[10px] text-slate-500 block">Quota</span>
-                    <span id="modal-odds" class="text-sm sm:text-base font-mono font-bold text-white">...</span>
-                </div>
-                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-                    <span class="text-[10px] text-slate-500 block">Stake</span>
-                    <span id="modal-stake" class="text-sm sm:text-base font-mono font-bold text-white">...</span>
-                </div>
-                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-                    <span class="text-[10px] text-slate-500 block">Canale</span>
-                    <span id="modal-tipster" class="text-[11px] font-medium text-slate-300 block truncate">AtmBet</span>
-                </div>
-            </div>
-
-            <button type="button" onclick="closeBetModal()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
-                Chiudi Scheda
-            </button>
-        </div>
-    </div>
-
     <!-- LOGICA DASHBOARD -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
@@ -370,7 +319,6 @@
         let currentMultiplier = 50; 
         let currentSimStartDate = '2026-10-24'; 
         let simNetProfitUnits = 0;
-        let currentDashboardBets = [];
 
         function checkAuth() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -491,7 +439,7 @@
         }
 
         function calculateSimulationPerformance() {
-            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
+            const bets = getStoredBets();
             const now = new Date();
             const trialEnd = new Date(currentUser.trial_expiry || 0);
             const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
@@ -554,89 +502,18 @@
             renderHistoryTable();
         }
 
-        // APERTURA MODAL SICURA
-        window.openBetModal = function(betId) {
-            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
-            const bet = bets.find(b => String(b.id) === String(betId));
-            if (!bet) return;
-
-            const now = new Date();
-            const trialEnd = new Date(currentUser.trial_expiry || 0);
-            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
-            const unlocked = (currentUser.unlocked_bets || []).map(String);
-            const canSee = isVipActive || unlocked.includes(String(bet.id));
-
-            document.getElementById('modal-league').innerText = bet.league;
-            document.getElementById('modal-date').innerText = bet.event_date;
-            document.getElementById('modal-match-title').innerText = bet.match_name;
-
-            const badgeStatusEl = document.getElementById('modal-badge-status');
-            if (bet.status === 'won') {
-                badgeStatusEl.innerText = "VINTA";
-                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-            } else if (bet.status === 'lost') {
-                badgeStatusEl.innerText = "PERSA";
-                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30";
-            } else if (bet.status === 'void') {
-                badgeStatusEl.innerText = "VOID";
-                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30";
+        window.toggleDashboardParlay = function(betId) {
+            const box = document.getElementById('dash-submatches-' + betId);
+            const btn = document.getElementById('dash-btn-toggle-' + betId);
+            if (!box) return;
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                if (btn) btn.innerHTML = 'Nascondi Match ▲';
             } else {
-                badgeStatusEl.innerText = "IN CORSO";
-                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700";
+                box.classList.add('hidden');
+                if (btn) btn.innerHTML = 'Mostra Match Multipla ▼';
             }
-
-            const subBox = document.getElementById('modal-submatches-box');
-            subBox.innerHTML = '';
-            if (bet.match_name.includes('/')) {
-                const subMatches = bet.match_name.split('/').map(m => m.trim()).filter(Boolean);
-                let html = '<div class="text-[10px] uppercase font-mono tracking-wider text-slate-500 mt-2 mb-1">Partite della Multipla:</div>';
-                subMatches.forEach((sm, i) => {
-                    html += `
-                        <div class="bg-slate-950 px-3 py-2 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
-                            <span class="font-bold text-slate-200">${i+1}. ${sm}</span>
-                            <span class="text-[10px] text-emerald-400 font-mono">Evento ${i+1}</span>
-                        </div>
-                    `;
-                });
-                subBox.innerHTML = html;
-            }
-
-            const predEl = document.getElementById('modal-prediction-content');
-            const marketEl = document.getElementById('modal-market-content');
-            const oddsEl = document.getElementById('modal-odds');
-
-            if (canSee) {
-                predEl.innerText = bet.prediction;
-                marketEl.innerText = "Mercato di riferimento: " + bet.market;
-                oddsEl.innerText = parseFloat(bet.odds).toFixed(2);
-            } else {
-                predEl.innerHTML = `<span class="blur-sm select-none text-slate-500">Pronostico Riservato</span> <button type="button" onclick="unlockWithCredit('${bet.id}'); closeBetModal();" class="ml-2 text-xs bg-amber-500/10 border border-amber-500/30 text-amber-400 px-2 py-0.5 rounded font-bold">Sblocca (1c)</button>`;
-                marketEl.innerText = "Sblocca con credito per visualizzare selezione e mercato";
-                oddsEl.innerHTML = `<span class="blur-sm select-none text-slate-600">1.85</span>`;
-            }
-
-            document.getElementById('modal-stake').innerText = bet.stake.toFixed(1) + 'u';
-            document.getElementById('modal-tipster').innerText = bet.original_tipster;
-
-            const modal = document.getElementById('bet-detail-modal');
-            modal.style.display = 'flex';
-            modal.classList.remove('hidden');
-            lucide.createIcons();
         };
-
-        window.closeBetModal = function() {
-            const modal = document.getElementById('bet-detail-modal');
-            modal.style.display = 'none';
-            modal.classList.add('hidden');
-        };
-
-        document.getElementById('bet-detail-modal').addEventListener('click', function(e) {
-            if (e.target === this) closeBetModal();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeBetModal();
-        });
 
         function initDashboard() {
             currentUser = checkAuth();
@@ -668,10 +545,10 @@
         }
 
         function calculatePortfolioPerformance(isVipActive) {
-            currentDashboardBets = getStoredBets();
+            const bets = getStoredBets();
             const unlocked = (currentUser.unlocked_bets || []).map(String);
 
-            const myCompletedBets = currentDashboardBets.filter(b => {
+            const myCompletedBets = bets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
                 return isVipActive || unlocked.includes(String(b.id));
@@ -722,7 +599,7 @@
 
         function renderPendingBets(isVipActive) {
             const container = document.getElementById('user-pending-container');
-            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
+            const bets = getStoredBets();
             container.innerHTML = '';
 
             const pendingBets = bets.filter(b => b.status === 'pending');
@@ -737,33 +614,50 @@
                 const canSee = isVipActive || unlocked.includes(String(bet.id));
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-emerald-500/50 transition shadow-lg cursor-pointer group active:scale-[0.99]";
-                card.onclick = function() {
-                    openBetModal(bet.id);
-                };
+                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-lg transition";
+
+                let submatchesHtml = '';
+                let toggleBtnHtml = '';
+                if (bet.match_name.includes('/')) {
+                    const subList = bet.match_name.split('/').map(s => s.trim()).filter(Boolean);
+                    toggleBtnHtml = `
+                        <button type="button" id="dash-btn-toggle-${bet.id}" onclick="toggleDashboardParlay('${bet.id}')" class="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 py-1 px-2 rounded bg-emerald-500/10 border border-emerald-500/20 transition mt-2">
+                            Mostra Match Multipla (${subList.length}) ▼
+                        </button>
+                    `;
+                    submatchesHtml = `
+                        <div id="dash-submatches-${bet.id}" class="hidden space-y-1.5 mt-2 pt-2 border-t border-slate-800/80">
+                            ${subList.map((m, idx) => `
+                                <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 flex items-center justify-between text-[11px]">
+                                    <span class="font-bold text-slate-200">${idx+1}. ${m}</span>
+                                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">Evento ${idx+1}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
 
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] font-medium truncate max-w-[150px]">${bet.league}</span>
+                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] font-medium">${bet.league}</span>
                             <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-white mb-2.5 leading-snug group-hover:text-emerald-300 transition">${bet.match_name}</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-white mb-2 leading-snug break-words">${bet.match_name}</h3>
+                        ${toggleBtnHtml}
+                        ${submatchesHtml}
 
-                        <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="text-[9px] uppercase font-mono tracking-widest text-slate-500">Selezione VIP:</span>
-                                <span class="text-[9px] text-emerald-400 font-bold transition flex items-center gap-0.5">Apri Dettaglio ➔</span>
-                            </div>
+                        <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 my-3">
+                            <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Selezione VIP:</div>
                             ${canSee ? `
-                                <div class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center justify-between">
-                                    <span class="truncate">${bet.prediction}</span>
-                                    <span class="text-[11px] text-slate-400 font-normal truncate max-w-[110px] ml-2">${bet.market}</span>
+                                <div class="space-y-1">
+                                    <div class="text-xs sm:text-sm font-bold text-emerald-400 break-words">${bet.prediction}</div>
+                                    <div class="text-[10px] text-slate-400 font-normal">Mercato: ${bet.market}</div>
                                 </div>
                             ` : `
                                 <div class="flex items-center justify-between py-0.5">
                                     <span class="text-xs text-slate-500">Contenuto Riservato</span>
-                                    <button type="button" onclick="event.stopPropagation(); unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
+                                    <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
                                         <i data-lucide="unlock" class="w-3 h-3"></i> Sblocca (1c)
                                     </button>
                                 </div>
@@ -795,7 +689,7 @@
 
         function renderHistoryTable() {
             const tbody = document.getElementById('user-history-tbody');
-            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
+            const bets = getStoredBets();
             tbody.innerHTML = '';
 
             let completed = bets.filter(b => b.status === 'won' || b.status === 'lost');
@@ -815,21 +709,18 @@
                 const pl = isWon ? (bet.odds - 1) * s : -s;
 
                 tr.className = isWon 
-                    ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.08] transition cursor-pointer" 
-                    : "bg-rose-500/[0.02] hover:bg-rose-500/[0.08] transition cursor-pointer";
-                tr.onclick = function() {
-                    openBetModal(bet.id);
-                };
+                    ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" 
+                    : "bg-rose-500/[0.02] hover:bg-rose-500/[0.05] transition";
 
                 tr.innerHTML = `
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
-                    <td class="py-2.5 px-3 font-bold text-white max-w-[140px] truncate">
-                        ${bet.match_name}
-                        <div class="text-[9px] text-slate-500 font-normal truncate">${bet.league}</div>
+                    <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
+                        <div class="break-words">${bet.match_name}</div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league}</div>
                     </td>
-                    <td class="py-2.5 px-3 text-slate-300 font-medium">
-                        ${bet.prediction}
-                        <div class="text-[9px] text-slate-500 truncate max-w-[120px]">${bet.market}</div>
+                    <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
+                        <div class="break-words">${bet.prediction}</div>
+                        <div class="text-[9px] text-slate-500">${bet.market}</div>
                     </td>
                     <td class="py-2.5 px-3 font-mono font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</td>
                     <td class="py-2.5 px-3 font-mono text-slate-400">${bet.stake.toFixed(1)}u</td>
