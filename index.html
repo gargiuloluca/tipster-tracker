@@ -52,6 +52,18 @@
             border-bottom: 2px solid #22c55e;
             padding-bottom: 4px;
         }
+        .unit-pill-active {
+            background-color: #22c55e !important;
+            color: #020617 !important;
+            border-color: #22c55e !important;
+            font-weight: 800 !important;
+        }
+        .sim-pill-active {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            border-color: #3b82f6 !important;
+            font-weight: 800 !important;
+        }
     </style>
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black">
@@ -167,31 +179,86 @@
         </div>
     </header>
 
-    <!-- Global Verified Metrics Dashboard con Convertitore Unità -->
-    <section class="max-w-7xl mx-auto px-4 pb-16 w-full space-y-4">
+    <!-- Global Verified Metrics Dashboard con Simulatore Temporale -->
+    <section class="max-w-7xl mx-auto px-4 pb-16 w-full space-y-6">
         
-        <!-- Header Barra Convertitore Unità per il pubblico -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800 p-4 rounded-2xl">
-            <span class="text-xs text-slate-400 flex items-center gap-2">
-                <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i> Simula il rendimento in base alla dimensione della tua cassa:
-            </span>
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-slate-300 font-bold">1 Unità (€):</span>
-                <select id="public-unit-multiplier" onchange="updatePublicMonetaryCalculations()" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1 text-xs text-white font-mono font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
-                    <option value="5">5 €</option>
-                    <option value="10" selected>10 €</option>
-                    <option value="20">20 €</option>
-                    <option value="50">50 €</option>
-                    <option value="100">100 €</option>
-                </select>
+        <!-- SEZIONE SIMULATORE TEMPORALE PUBBLICO (CALENDARIO DAL 24 OTTOBRE IN POI) -->
+        <div class="bg-slate-900/90 border border-slate-800 p-6 rounded-3xl space-y-5 shadow-2xl relative overflow-hidden">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
+                            <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                        </span>
+                        <h3 class="text-lg font-black text-white">Simulatore di Rendimento nel Tempo</h3>
+                    </div>
+                    <p class="text-xs text-slate-400">Simula quanto avresti guadagnato seguendo il protocollo AtmBet a partire da una data specifica.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl">
+                        <span class="text-[11px] text-slate-400 font-semibold">Dal giorno:</span>
+                        <input type="date" id="public-sim-start-date" min="2026-10-24" value="2026-10-24" onchange="applyPublicSimDate(this.value)"
+                            class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl">
+                        <button type="button" onclick="setPublicSimPreset('2026-10-24', this)" id="pub-preset-24" class="pub-sim-btn sim-pill-active px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Da Ieri (24 Ott)</button>
+                        <button type="button" onclick="setPublicSimPreset('2026-10-25', this)" id="pub-preset-25" class="pub-sim-btn px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Oggi (25 Ott)</button>
+                        <button type="button" onclick="setPublicSimPreset('all', this)" id="pub-preset-all" class="pub-sim-btn px-2.5 py-1 text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition">Tutto lo Storico</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risultati Simulazione Periodo -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Profitto Periodo</span>
+                    <div id="pub-sim-profit-units" class="text-2xl font-mono font-black text-emerald-400">+0.00u</div>
+                    <div id="pub-sim-profit-fiat" class="text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Yield / ROI Periodo</span>
+                    <div id="pub-sim-roi" class="text-2xl font-mono font-black text-white">0.0%</div>
+                    <span class="text-[10px] text-slate-500">Rendimento sul periodo</span>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Win Rate Periodo</span>
+                    <div id="pub-sim-winrate" class="text-2xl font-mono font-black text-amber-400">0.0%</div>
+                    <span class="text-[10px] text-slate-500">Accuratezza esiti</span>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 p-4 rounded-2xl">
+                    <span class="text-[11px] text-slate-400 uppercase tracking-wider block mb-1">Pronostici Chiusi</span>
+                    <div id="pub-sim-resolved-count" class="text-2xl font-mono font-black text-slate-200">0</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5"><span id="pub-sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="pub-sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                </div>
             </div>
         </div>
 
+        <!-- Selettore Valore Unità a Pulsanti Rapidi -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800 p-4 rounded-2xl">
+            <span class="text-xs text-slate-400 flex items-center gap-2">
+                <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i> Imposta il valore monetario della tua singola unità:
+            </span>
+            <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 p-1.5 rounded-2xl shadow">
+                <span class="text-[11px] text-slate-400 font-bold px-2">1u =</span>
+                <button type="button" onclick="setPublicUnitValue(5, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">5€</button>
+                <button type="button" onclick="setPublicUnitValue(10, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">10€</button>
+                <button type="button" onclick="setPublicUnitValue(20, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">20€</button>
+                <button type="button" onclick="setPublicUnitValue(50, this)" id="pub-default-unit-btn" class="pub-unit-btn unit-pill-active px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">50€</button>
+                <button type="button" onclick="setPublicUnitValue(100, this)" class="pub-unit-btn px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-800 text-slate-300 hover:text-white transition">100€</button>
+            </div>
+        </div>
+
+        <!-- Metriche Storiche Globali -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
             <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
                 <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                    <span>YIELD / ROI</span>
+                    <span>YIELD / ROI GLOBALE</span>
                     <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
                 </div>
                 <div id="stat-roi" class="text-2xl sm:text-4xl font-mono font-black text-emerald-400 my-1">0.0%</div>
@@ -209,7 +276,7 @@
 
             <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
                 <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                    <span>PROFITTO NETTO</span>
+                    <span>PROFITTO NETTO TOTALE</span>
                     <i data-lucide="wallet" class="w-4 h-4 text-amber-400"></i>
                 </div>
                 <div>
@@ -225,7 +292,7 @@
                     <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
                 </div>
                 <div id="stat-resolved-count" class="text-2xl sm:text-4xl font-mono font-black text-slate-200 my-1">0</div>
-                <div class="text-[11px] text-slate-500">Giocate concluse e verificate</div>
+                <div class="text-[11px] text-slate-500">Giocate verificate in archivio</div>
             </div>
 
         </div>
@@ -450,7 +517,7 @@
         </div>
     </footer>
 
-    <!-- LOGICA FRONTEND JAVASCRIPT CON CONVERTITORE € REATTIVO -->
+    <!-- LOGICA FRONTEND JAVASCRIPT -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -458,6 +525,8 @@
 
         let activeFeedFilter = 'all';
         let publicNetProfitUnits = 0;
+        let publicMultiplier = 50; // Default 50€ come da dashboard
+        let publicSimStartDate = '2026-10-24'; // Default da ieri 24 Ottobre
 
         function checkUserSession() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -538,10 +607,17 @@
             });
         }
 
+        // CAMBIO VALORE UNITA' (€) TRAMITE PULSANTI
+        function setPublicUnitValue(val, btnElement) {
+            publicMultiplier = parseFloat(val);
+            document.querySelectorAll('.pub-unit-btn').forEach(b => b.classList.remove('unit-pill-active'));
+            if (btnElement) btnElement.classList.add('unit-pill-active');
+            updatePublicMonetaryCalculations();
+            calculatePublicSimulationPerformance();
+        }
+
         function updatePublicMonetaryCalculations() {
-            const selectEl = document.getElementById('public-unit-multiplier');
-            const multiplier = parseFloat(selectEl ? selectEl.value : 10) || 10;
-            const fiatAmount = publicNetProfitUnits * multiplier;
+            const fiatAmount = publicNetProfitUnits * publicMultiplier;
             const fiatEl = document.getElementById('public-stat-fiat');
             
             if (fiatEl) {
@@ -552,6 +628,87 @@
                     fiatEl.className = "text-xs font-mono font-bold text-rose-400 mt-0.5";
                 }
             }
+        }
+
+        // SIMULATORE TEMPORALE PUBBLICO (CALENDARIO & PRESET)
+        function applyPublicSimDate(dateStr) {
+            publicSimStartDate = dateStr;
+            document.querySelectorAll('.pub-sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+            calculatePublicSimulationPerformance();
+        }
+
+        function setPublicSimPreset(presetType, btnElement) {
+            const dateInput = document.getElementById('public-sim-start-date');
+            document.querySelectorAll('.pub-sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+            if (btnElement) btnElement.classList.add('sim-pill-active');
+
+            if (presetType === 'all') {
+                publicSimStartDate = '2020-01-01';
+                dateInput.value = '2026-10-24';
+            } else {
+                publicSimStartDate = presetType;
+                dateInput.value = presetType;
+            }
+
+            calculatePublicSimulationPerformance();
+        }
+
+        function calculatePublicSimulationPerformance() {
+            const bets = getStoredBets();
+            const simBets = bets.filter(b => {
+                const isResolved = b.status === 'won' || b.status === 'lost';
+                if (!isResolved) return false;
+                const betDate = (b.event_date || '').slice(0, 10);
+                return betDate >= publicSimStartDate;
+            });
+
+            const total = simBets.length;
+            const won = simBets.filter(b => b.status === 'won').length;
+            const lost = simBets.filter(b => b.status === 'lost').length;
+            const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            let totalStake = 0;
+
+            simBets.forEach(b => {
+                const s = b.stake || 1.0;
+                if (b.status === 'won') {
+                    netProfit += (b.odds - 1) * s;
+                } else if (b.status === 'lost') {
+                    netProfit -= s;
+                }
+                totalStake += s;
+            });
+
+            const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
+            const fiatSimAmount = netProfit * publicMultiplier;
+
+            const profitEl = document.getElementById('pub-sim-profit-units');
+            if (profitEl) {
+                profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+                profitEl.className = `text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            }
+
+            const fiatEl = document.getElementById('pub-sim-profit-fiat');
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
+                fiatEl.className = `text-xs font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            }
+
+            const roiEl = document.getElementById('pub-sim-roi');
+            if (roiEl) roiEl.innerText = (roi >= 0 ? '+' : '') + roi + '%';
+
+            const winEl = document.getElementById('pub-sim-winrate');
+            if (winEl) winEl.innerText = winRate + '%';
+
+            const resolvedEl = document.getElementById('pub-sim-resolved-count');
+            if (resolvedEl) resolvedEl.innerText = total;
+
+            const wonEl = document.getElementById('pub-sim-won-count');
+            if (wonEl) wonEl.innerText = won + 'V';
+
+            const lostEl = document.getElementById('pub-sim-lost-count');
+            if (lostEl) lostEl.innerText = lost + 'P';
         }
 
         function filterFeed(filterType, element) {
@@ -594,6 +751,7 @@
             document.getElementById('stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
 
             updatePublicMonetaryCalculations();
+            calculatePublicSimulationPerformance();
         }
 
         function renderFeed() {
