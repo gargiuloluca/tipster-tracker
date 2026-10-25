@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AtmBet | Portale Utente VIP</title>
+    <title>AtmBet | Portale Utente VIP & Rendiconto Finanziario</title>
     <link rel="icon" type="image/png" href="logo.png">
     
     <!-- Google Fonts & Tailwind -->
@@ -47,7 +47,7 @@
                 </a>
                 <div>
                     <span class="text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
-                    <span class="ml-2 text-[10px] font-mono tracking-widest uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">VIP Member</span>
+                    <span class="ml-2 text-[10px] font-mono tracking-widest uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">VIP Investor Hub</span>
                 </div>
             </div>
 
@@ -70,12 +70,14 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                 
                 <div>
-                    <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold block mb-1">Area Riservata Investitore</span>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold">Cruscotto Rendimento & Portafoglio</span>
+                        <span id="badge-portfolio-status" class="text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">IN ATTIVO</span>
+                    </div>
                     <h1 class="text-2xl sm:text-3xl font-black text-white">Bentornato, <span id="user-display-name">Investitore</span></h1>
-                    <p class="text-xs text-slate-400 mt-1 flex items-center gap-2">
-                        <i data-lucide="mail" class="w-3.5 h-3.5 text-slate-500"></i>
-                        <span id="user-display-email">...</span>
-                        <span class="text-slate-600">|</span>
+                    <p class="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-2">
+                        <span class="flex items-center gap-1"><i data-lucide="mail" class="w-3.5 h-3.5 text-slate-500"></i> <span id="user-display-email">...</span></span>
+                        <span class="text-slate-600 hidden sm:inline">|</span>
                         <span>Membro dal: <span id="user-created-date" class="font-mono text-slate-300">...</span></span>
                     </p>
                 </div>
@@ -89,7 +91,7 @@
                             <i data-lucide="shield-check" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Stato VIP</div>
+                            <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Stato Abbonamento</div>
                             <div id="badge-vip-status" class="text-xs font-black text-emerald-400">7 Giorni Rimanenti</div>
                         </div>
                     </div>
@@ -114,30 +116,136 @@
             </div>
         </div>
 
-        <!-- Sezione Pronostici Riservati per l'Utente -->
+        <!-- SEZIONE ANALISI DATI & METRICHE FINANZIARIE PERSONALI -->
         <section class="space-y-4">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                     <h2 class="text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> Selezioni VIP Attive
+                        <i data-lucide="pie-chart" class="w-5 h-5 text-emerald-400"></i> Rendiconto Economico del Portafoglio
                     </h2>
-                    <p class="text-xs text-slate-400">Tutti i match in programma con quote di valore atteso sbloccate per il tuo account.</p>
+                    <p class="text-xs text-slate-400">Statistiche aggregate calcolate unicamente sulle selezioni sbloccate e chiuse dal tuo profilo.</p>
+                </div>
+
+                <!-- Convertitore Valore Unità (€) -->
+                <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-xl">
+                    <span class="text-[11px] text-slate-400 font-medium">Valore Unità:</span>
+                    <select id="unit-multiplier" onchange="updateMonetaryCalculations()" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-white font-mono font-bold focus:outline-none focus:border-emerald-500">
+                        <option value="5">1u = 5€</option>
+                        <option value="10" selected>1u = 10€</option>
+                        <option value="20">1u = 20€</option>
+                        <option value="50">1u = 50€</option>
+                        <option value="100">1u = 100€</option>
+                    </select>
                 </div>
             </div>
 
-            <div id="user-bets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Grid 4 Card Metriche Personali -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+                        <span>PROFITTO NETTO</span>
+                        <i data-lucide="wallet" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <div>
+                        <div id="user-stat-profit" class="text-2xl sm:text-3xl font-mono font-black text-emerald-400">+0.00u</div>
+                        <div id="user-stat-fiat" class="text-xs font-mono text-slate-400 mt-0.5">≈ +0.00 €</div>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-2">Guadagno netto effettivo</div>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+                        <span>YIELD / ROI REALE</span>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+                    </div>
+                    <div id="user-stat-roi" class="text-2xl sm:text-3xl font-mono font-black text-white">0.0%</div>
+                    <div class="text-[10px] text-slate-500 mt-2">Rendimento sul capitale giocato</div>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+                        <span>WIN RATE ACCURATEZZA</span>
+                        <i data-lucide="target" class="w-4 h-4 text-amber-400"></i>
+                    </div>
+                    <div id="user-stat-winrate" class="text-2xl sm:text-3xl font-mono font-black text-amber-400">0.0%</div>
+                    <div class="text-[10px] text-slate-500 mt-2">Rapporto vinte vs concluse</div>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
+                        <span>OPERAZIONI CONCLUSE</span>
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-slate-400"></i>
+                    </div>
+                    <div id="user-stat-resolved" class="text-2xl sm:text-3xl font-mono font-black text-slate-200">0</div>
+                    <div class="text-[10px] text-slate-500 mt-2"><span id="user-stat-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="user-stat-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEZIONE 2: SELEZIONI ATTIVE DEL GIORNO -->
+        <section class="space-y-4 pt-4 border-t border-slate-800/80">
+            <div>
+                <h2 class="text-xl font-black text-white flex items-center gap-2">
+                    <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> Selezioni VIP Attive (In Corso)
+                </h2>
+                <p class="text-xs text-slate-400">Tutti i match in programma con quote di valore atteso sbloccate o sbloccabili con 1 credito.</p>
+            </div>
+
+            <div id="user-pending-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <!-- Popolato da JS -->
+            </div>
+        </section>
+
+        <!-- SEZIONE 3: REGISTRO STORICO DELLE GIOCATE CONCLUSE -->
+        <section class="space-y-4 pt-4 border-t border-slate-800/80">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="history" class="w-5 h-5 text-emerald-400"></i> Storico Completo Giocate Ricevute
+                    </h2>
+                    <p class="text-xs text-slate-400">Dettaglio puntuale di ogni esito con bilancio di profitto/perdita (P/L) calcolato.</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="filterHistory('all', this)" id="btn-hist-all" class="text-xs px-3 py-1.5 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
+                    <button type="button" onclick="filterHistory('won', this)" id="btn-hist-won" class="text-xs px-3 py-1.5 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
+                    <button type="button" onclick="filterHistory('lost', this)" id="btn-hist-lost" class="text-xs px-3 py-1.5 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
+                </div>
+            </div>
+
+            <!-- Tabella Storico Utente -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
+                            <tr>
+                                <th class="py-3 px-4">Data</th>
+                                <th class="py-3 px-4">Partita / Evento</th>
+                                <th class="py-3 px-4">Pronostico</th>
+                                <th class="py-3 px-4">Quota</th>
+                                <th class="py-3 px-4">Stake</th>
+                                <th class="py-3 px-4 text-center">Esito</th>
+                                <th class="py-3 px-4 text-right">P/L Netto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-history-tbody" class="divide-y divide-slate-800/60 font-medium">
+                            <!-- Popolato da JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900">
-        AtmBet &copy; 2026. Cruscotto Utente Certificato.
+    <footer class="py-8 text-center text-xs text-slate-600 border-t border-slate-900 mt-12">
+        AtmBet &copy; 2026. Cruscotto Rendimento & Portafoglio Utente Certificato.
     </footer>
 
-    <!-- LOGICA DASHBOARD -->
+    <!-- LOGICA DASHBOARD CON ANALISI RENDIMENTO & STORICO -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -145,6 +253,8 @@
         const USERS_DB_KEY = 'atmbet_users_accounts';
 
         let currentUser = null;
+        let currentHistoryFilter = 'all';
+        let latestNetProfitUnits = 0;
 
         function checkAuth() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -205,15 +315,13 @@
                 return;
             }
 
-            if (confirm("Vuoi utilizzare 1 credito per sbloccare definitivamente questa selezione?")) {
+            if (confirm("Vuoi utilizzare 1 credito per sbloccare questa selezione e aggiungerla al tuo portafoglio?")) {
                 currentUser.credits -= 1;
                 if (!currentUser.unlocked_bets) currentUser.unlocked_bets = [];
                 currentUser.unlocked_bets.push(betId);
 
-                // Aggiorna sessione locale
                 localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentUser));
 
-                // Aggiorna DB utenti
                 let users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
                 const idx = users.findIndex(u => u.email === currentUser.email);
                 if (idx !== -1) {
@@ -225,6 +333,30 @@
             }
         }
 
+        function updateMonetaryCalculations() {
+            const multiplier = parseFloat(document.getElementById('unit-multiplier').value) || 10;
+            const fiatAmount = latestNetProfitUnits * multiplier;
+            const fiatEl = document.getElementById('user-stat-fiat');
+            
+            fiatEl.innerText = `≈ ${fiatAmount >= 0 ? '+' : ''}${fiatAmount.toFixed(2)} €`;
+            if (fiatAmount >= 0) {
+                fiatEl.className = "text-xs font-mono text-emerald-400 mt-0.5";
+            } else {
+                fiatEl.className = "text-xs font-mono text-rose-400 mt-0.5";
+            }
+        }
+
+        function filterHistory(filterType, element) {
+            currentHistoryFilter = filterType;
+            document.querySelectorAll('#btn-hist-all, #btn-hist-won, #btn-hist-lost').forEach(btn => {
+                btn.className = "text-xs px-3 py-1.5 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
+            });
+            if (element) {
+                element.className = "text-xs px-3 py-1.5 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
+            }
+            renderHistoryTable();
+        }
+
         function initDashboard() {
             currentUser = checkAuth();
             if (!currentUser) return;
@@ -234,33 +366,93 @@
             document.getElementById('user-created-date').innerText = (currentUser.created_at || '').slice(0, 10);
             document.getElementById('badge-credits-count').innerText = (currentUser.credits || 0) + ' Crediti';
 
-            // Calcolo validità VIP
+            // Verifica validità VIP
             const now = new Date();
             const trialEnd = new Date(currentUser.trial_expiry || 0);
-            const isVipActive = trialEnd > now || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
+            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
 
             const vipBadge = document.getElementById('badge-vip-status');
             if (isVipActive) {
                 const diffDays = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
-                vipBadge.innerText = `Attivo (${diffDays > 0 ? diffDays + 'gg rimanenti' : 'Illimitato'})`;
+                vipBadge.innerText = `Attivo (${diffDays > 0 ? diffDays + 'gg rimanenti' : 'Abbonamento VIP'})`;
                 vipBadge.className = "text-xs font-black text-emerald-400";
             } else {
                 vipBadge.innerText = "Scaduto / Free";
                 vipBadge.className = "text-xs font-black text-rose-400";
             }
 
-            renderUserBets(isVipActive);
+            calculatePortfolioPerformance(isVipActive);
+            renderPendingBets(isVipActive);
+            renderHistoryTable();
         }
 
-        function renderUserBets(isVipActive) {
-            const container = document.getElementById('user-bets-container');
+        // CALCOLO RENDICONTO ECONOMICO PERSONALE
+        function calculatePortfolioPerformance(isVipActive) {
+            const bets = getStoredBets();
+            const unlocked = currentUser.unlocked_bets || [];
+
+            // Se l'utente ha il VIP attivo vede tutto lo storico, altrimenti solo quelle sbloccate con crediti
+            const myCompletedBets = bets.filter(b => {
+                const isResolved = b.status === 'won' || b.status === 'lost';
+                if (!isResolved) return false;
+                return isVipActive || unlocked.includes(b.id);
+            });
+
+            const total = myCompletedBets.length;
+            const won = myCompletedBets.filter(b => b.status === 'won').length;
+            const lost = myCompletedBets.filter(b => b.status === 'lost').length;
+            const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            let totalStake = 0;
+
+            myCompletedBets.forEach(b => {
+                const s = b.stake || 1.0;
+                if (b.status === 'won') {
+                    netProfit += (b.odds - 1) * s;
+                } else if (b.status === 'lost') {
+                    netProfit -= s;
+                }
+                totalStake += s;
+            });
+
+            latestNetProfitUnits = netProfit;
+            const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
+
+            // Aggiorna metriche a schermo
+            const profitEl = document.getElementById('user-stat-profit');
+            profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+            profitEl.className = `text-2xl sm:text-3xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+            document.getElementById('user-stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
+            document.getElementById('user-stat-winrate').innerText = winRate + '%';
+            document.getElementById('user-stat-resolved').innerText = total;
+            document.getElementById('user-stat-won-count').innerText = won + 'V';
+            document.getElementById('user-stat-lost-count').innerText = lost + 'P';
+
+            // Badge Portafoglio
+            const statusBadge = document.getElementById('badge-portfolio-status');
+            if (netProfit >= 0) {
+                statusBadge.innerText = "IN ATTIVO";
+                statusBadge.className = "text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+            } else {
+                statusBadge.innerText = "IN RECUPERO";
+                statusBadge.className = "text-[10px] font-mono uppercase font-black px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            }
+
+            updateMonetaryCalculations();
+        }
+
+        // SELEZIONI ATTIVE IN CORSO
+        function renderPendingBets(isVipActive) {
+            const container = document.getElementById('user-pending-container');
             const bets = getStoredBets();
             container.innerHTML = '';
 
             const pendingBets = bets.filter(b => b.status === 'pending');
 
             if (pendingBets.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-medium">Nessuna giocata in corso al momento. Torna tra poco per le nuove selezioni!</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-10 text-slate-500 font-medium">Nessuna giocata in corso al momento. Le nuove selezioni del giorno appariranno qui.</div>`;
                 return;
             }
 
@@ -288,7 +480,7 @@
                                 </div>
                             ` : `
                                 <div class="flex items-center justify-between py-1">
-                                    <span class="text-xs text-slate-500">Contenuto Riservato VIP</span>
+                                    <span class="text-xs text-slate-500">Contenuto Riservato</span>
                                     <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-xs bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-3 py-1 rounded-lg font-bold flex items-center gap-1 transition">
                                         <i data-lucide="unlock" class="w-3.5 h-3.5"></i> Sblocca (1 Credito)
                                     </button>
@@ -315,6 +507,55 @@
             });
 
             lucide.createIcons();
+        }
+
+        // TABELLA STORICO GIOCATE RICEVUTE CON P/L
+        function renderHistoryTable() {
+            const tbody = document.getElementById('user-history-tbody');
+            const bets = getStoredBets();
+            tbody.innerHTML = '';
+
+            let completed = bets.filter(b => b.status === 'won' || b.status === 'lost');
+
+            if (currentHistoryFilter === 'won') completed = completed.filter(b => b.status === 'won');
+            if (currentHistoryFilter === 'lost') completed = completed.filter(b => b.status === 'lost');
+
+            if (completed.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-500 font-medium">Nessuna giocata nello storico per questo filtro.</td></tr>`;
+                return;
+            }
+
+            completed.forEach(bet => {
+                const tr = document.createElement('tr');
+                const isWon = bet.status === 'won';
+                const s = bet.stake || 1.0;
+                const pl = isWon ? (bet.odds - 1) * s : -s;
+
+                tr.className = isWon ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" : "bg-rose-500/[0.02] hover:bg-rose-500/[0.05] transition";
+
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 text-slate-400 font-mono text-[11px] whitespace-nowrap">${bet.event_date}</td>
+                    <td class="py-3.5 px-4 font-bold text-white">
+                        ${bet.match_name}
+                        <div class="text-[10px] text-slate-500 font-normal">${bet.league}</div>
+                    </td>
+                    <td class="py-3.5 px-4 text-slate-300 font-medium">
+                        ${bet.prediction}
+                        <div class="text-[10px] text-slate-500">${bet.market}</div>
+                    </td>
+                    <td class="py-3.5 px-4 font-mono font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</td>
+                    <td class="py-3.5 px-4 font-mono text-slate-400">${bet.stake.toFixed(1)}u</td>
+                    <td class="py-3.5 px-4 text-center">
+                        ${isWon 
+                            ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
+                            : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
+                    </td>
+                    <td class="py-3.5 px-4 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
