@@ -257,8 +257,8 @@
                             <th class="py-3 px-3">Quota / Stake</th>
                             <th class="py-3 px-3">Fornitore</th>
                             <th class="py-3 px-3 text-center">Vetrina</th>
-                            <th class="py-3 px-3">Stato & Esito</th>
-                            <th class="py-3 px-3 text-right">Azioni</th>
+                            <th class="py-3 px-3">Stato & Azione Rapida</th>
+                            <th class="py-3 px-3 text-right">Elimina</th>
                         </tr>
                     </thead>
                     <tbody id="bets-tbody" class="divide-y divide-slate-800/60">
@@ -270,7 +270,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE CON GESTIONE IMPORTAZIONE AVANZATA -->
+    <!-- SCRIPT GESTIONALE CON PULSANTI RAPIDI 1-CLIC -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -347,7 +347,6 @@
             dlAnchor.remove();
         }
 
-        // IMPORTAZIONE POTENZIATA CON SOSTITUZIONE COMPLETA
         function importBackupJSON(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -592,6 +591,7 @@
             alert("Dati analizzati e compilati nel form.");
         }
 
+        // AGGIORNAMENTO DIRETTO DELLO STATO (USATO SIA DA SELECT CHE DAI PULSANTI RAPIDI)
         function updateStatus(id, newStatus) {
             const bets = loadAllBets();
             const b = bets.find(x => x.id === id);
@@ -701,6 +701,7 @@
             renderTable(filtered);
         }
 
+        // TABELLA CON PULSANTI RAPIDI 1-CLIC PER I MATCH IN CORSO
         function renderTable(betsToDisplay) {
             const tbody = document.getElementById('bets-tbody');
             tbody.innerHTML = '';
@@ -714,37 +715,69 @@
                 const tr = document.createElement('tr');
 
                 let rowClass = "row-pending transition";
-                let badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>';
+                let statusControlHtml = '';
 
-                if (bet.status === 'won') {
-                    rowClass = "row-won transition";
-                    badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>';
-                } else if (bet.status === 'lost') {
-                    rowClass = "row-lost transition";
-                    badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>';
-                } else if (bet.status === 'void') {
-                    rowClass = "transition bg-amber-500/5";
-                    badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>';
+                if (bet.status === 'pending') {
+                    // SE LA PARTITA È IN CORSO: PULSANTI RAPIDI 1-CLIC
+                    statusControlHtml = `
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 whitespace-nowrap">IN CORSO</span>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'won')" title="Segna come Vinta" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 font-black text-xs border border-emerald-500/40 transition active:scale-95 flex items-center gap-1 shadow-sm">
+                                <span>✓</span> V
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" title="Segna come Persa" class="px-2.5 py-1 rounded bg-rose-500/20 hover:bg-rose-500/40 text-rose-400 font-black text-xs border border-rose-500/40 transition active:scale-95 flex items-center gap-1 shadow-sm">
+                                <span>✕</span> P
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'void')" title="Segna come Void / Rimborso" class="px-1.5 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/20 transition active:scale-95">
+                                Void
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // SE LA PARTITA È GIÀ CONCLUSA: BADGE + SELETTORE DISCRETO PER EVENTUALI CORREZIONI
+                    let badge = '';
+                    if (bet.status === 'won') {
+                        rowClass = "row-won transition";
+                        badge = '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">VINTA</span>';
+                    } else if (bet.status === 'lost') {
+                        rowClass = "row-lost transition";
+                        badge = '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30 whitespace-nowrap">PERSA</span>';
+                    } else if (bet.status === 'void') {
+                        rowClass = "transition bg-amber-500/5";
+                        badge = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 whitespace-nowrap">VOID</span>';
+                    }
+
+                    statusControlHtml = `
+                        <div class="flex items-center gap-2">
+                            ${badge}
+                            <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[11px] text-slate-400 focus:outline-none focus:border-slate-700">
+                                <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
+                                <option value="lost" ${bet.status === 'lost' ? 'selected' : ''}>Persa</option>
+                                <option value="pending" ${bet.status === 'pending' ? 'selected' : ''}>Riapri (In corso)</option>
+                                <option value="void" ${bet.status === 'void' ? 'selected' : ''}>Void</option>
+                            </select>
+                        </div>
+                    `;
                 }
 
                 tr.className = rowClass;
 
                 tr.innerHTML = `
-                    <td class="py-3 px-3 text-slate-400 whitespace-nowrap">${bet.event_date}</td>
+                    <td class="py-3 px-3 text-slate-400 whitespace-nowrap font-mono text-[11px]">${bet.event_date}</td>
                     <td class="py-3 px-3 font-bold text-white">
                         ${bet.match_name}
                         <div class="text-[10px] text-slate-500 font-normal">${bet.league}</div>
                     </td>
-                    <td class="py-3 px-3 font-semibold text-emerald-400">
-                        ${bet.prediction}
-                        <div class="text-[10px] text-slate-500 font-normal">${bet.market}</div>
+                    <td class="py-3 px-3">
+                        <div class="font-bold text-emerald-400">${bet.prediction}</div>
+                        <div class="text-[10px] text-slate-400 font-normal">${bet.market}</div>
                     </td>
                     <td class="py-3 px-3">
-                        <span class="font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</span>
-                        <span class="text-slate-500 text-[10px]">(${bet.stake.toFixed(1)}u)</span>
+                        <span class="font-bold text-white font-mono">${parseFloat(bet.odds).toFixed(2)}</span>
+                        <span class="text-slate-500 text-[10px] font-mono">(${bet.stake.toFixed(1)}u)</span>
                     </td>
                     <td class="py-3 px-3">
-                        <span class="bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-[11px] text-slate-300">${bet.original_tipster}</span>
+                        <span class="bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-[11px] text-slate-300 font-medium">${bet.original_tipster}</span>
                     </td>
                     <td class="py-3 px-3 text-center">
                         <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
@@ -752,15 +785,7 @@
                         </button>
                     </td>
                     <td class="py-3 px-3">
-                        <div class="flex items-center gap-2">
-                            ${badgeStatus}
-                            <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none">
-                                <option value="pending" ${bet.status === 'pending' ? 'selected' : ''}>In corso</option>
-                                <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
-                                <option value="lost" ${bet.status === 'lost' ? 'selected' : ''}>Persa</option>
-                                <option value="void" ${bet.status === 'void' ? 'selected' : ''}>Void</option>
-                            </select>
-                        </div>
+                        ${statusControlHtml}
                     </td>
                     <td class="py-3 px-3 text-right">
                         <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
