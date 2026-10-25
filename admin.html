@@ -78,7 +78,7 @@
             </span>
             <div class="flex items-center gap-2">
                 <button onclick="deepForceSearch()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded transition">
-                    Scansione Forzata Totale
+                    Scansione Forzata
                 </button>
                 <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded border border-slate-700 transition">
                     Ricarica Pagina
@@ -87,17 +87,13 @@
         </div>
 
         <!-- Dashboard Statistiche DINAMICHE -->
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
                 <span class="text-xs text-slate-400 block mb-1">Pronostici Vista</span>
                 <span id="stat-total" class="text-2xl font-black text-white">0</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl border-l-4 border-l-emerald-500">
-                <span class="text-xs text-emerald-400 font-semibold block mb-1">In Vetrina AtmBet</span>
-                <span id="stat-atmbet" class="text-2xl font-black text-emerald-400">0</span>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span class="text-xs text-slate-400 block mb-1">Win Rate (Chiusi)</span>
+                <span class="text-xs text-emerald-400 font-semibold block mb-1">Win Rate (Chiusi)</span>
                 <span id="stat-winrate" class="text-2xl font-black text-white">0%</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
@@ -165,7 +161,6 @@
                         <option value="OLAND">
                         <option value="Zcode">
                         <option value="Pronostici1">
-                        <option value="AtmBet Lab">
                     </datalist>
                 </div>
 
@@ -193,13 +188,13 @@
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
-                <!-- Toggle Pubblicazione AtmBet -->
+                <!-- Toggle Pubblicazione Vetrina -->
                 <div class="sm:col-span-2 md:col-span-3 flex items-center pt-2">
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="is_published" checked class="sr-only peer">
                         <div class="w-10 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
                         <span class="ml-2.5 text-xs font-bold text-white flex items-center gap-1.5">
-                            <span class="text-emerald-400">★ Pubblica su Vetrina AtmBet</span>
+                            <span class="text-emerald-400">★ Pubblica su Vetrina AtmBet</span> (Visibile sul portale)
                         </span>
                     </label>
                 </div>
@@ -212,16 +207,13 @@
             </form>
         </section>
 
-        <!-- BARRA FILTRI RAPIDI & SCELTA FORNITORE -->
+        <!-- BARRA FILTRI (TUTTI / IN CORSO / CHIUSI / FORNITORE) -->
         <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-3 rounded-xl">
             <div class="flex flex-wrap items-center gap-2">
                 <span class="text-xs text-slate-400 font-semibold mr-1">Filtra:</span>
-                <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
-                <button type="button" onclick="setFilter('atmbet', this)" id="btn-filter-atmbet" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-1 transition">
-                    <i data-lucide="star" class="w-3 h-3 text-amber-400"></i> Solo AtmBet
-                </button>
-                <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">In Corso</button>
-                <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
+                <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn text-xs px-3.5 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
+                <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn text-xs px-3.5 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">In Corso</button>
+                <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn text-xs px-3.5 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
             </div>
 
             <!-- Selettore Singolo Fornitore -->
@@ -258,7 +250,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE CON SCANSIONE FORZATA TOTALE -->
+    <!-- SCRIPT GESTIONALE -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -318,12 +310,10 @@
             renderDashboard();
         }
 
-        // SCANSIONE FORZATA TOTALE IN TUTTA LA MEMORIA DEL BROWSER
         function deepForceSearch() {
             let foundRaw = [];
             let inspectedKeys = [];
 
-            // 1. Scansiona LocalStorage
             for (let i = 0; i < localStorage.length; i++) {
                 const k = localStorage.key(i);
                 inspectedKeys.push(k);
@@ -339,7 +329,6 @@
                 } catch(e) {}
             }
 
-            // 2. Scansiona SessionStorage
             for (let i = 0; i < sessionStorage.length; i++) {
                 const k = sessionStorage.key(i);
                 inspectedKeys.push('session:' + k);
@@ -349,17 +338,15 @@
                 } catch(e) {}
             }
 
-            // Filtra solo oggetti che contengono informazioni di scommessa
             const validBets = foundRaw.filter(item => 
                 item && (item.match_name || item.match || item.teams || item.prediction || item.pick || item.odds)
             );
 
             if (validBets.length === 0) {
-                alert(`Scansione completata su ${inspectedKeys.length} chiavi (${inspectedKeys.join(', ')}).\nNessun altro dato grezzo recuperabile trovato in questo browser.`);
+                alert(`Scansione completata su ${inspectedKeys.length} chiavi.\nNessun altro dato grezzo recuperabile trovato.`);
                 return;
             }
 
-            // Carica le giocate correnti e unisci senza duplicare
             const currentBets = loadAllBets();
             const existingKeys = new Set(currentBets.map(b => (b.match_name || '').toLowerCase() + '_' + parseFloat(b.odds || 0).toFixed(2)));
 
@@ -393,9 +380,9 @@
 
             if (addedCount > 0) {
                 persistBets(currentBets);
-                alert(`ECCEZIONALE! Scansione forzata completata:\nRecuperati e aggiunti ${addedCount} pronostici che erano dispersi in memoria!`);
+                alert(`Scansione forzata completata: aggiunti ${addedCount} pronostici recuperati.`);
             } else {
-                alert(`Scansione forzata completata:\nTutte le ${validBets.length} scommesse trovate nei registri sono già presenti nel tabellone.`);
+                alert(`Scansione forzata completata: tutte le ${validBets.length} scommesse trovate sono già presenti.`);
             }
         }
 
@@ -553,9 +540,7 @@
 
             let filtered = allBets;
 
-            if (currentFilter === 'atmbet') {
-                filtered = filtered.filter(b => b.is_published === true);
-            } else if (currentFilter === 'pending') {
+            if (currentFilter === 'pending') {
                 filtered = filtered.filter(b => b.status === 'pending');
             } else if (currentFilter === 'resolved') {
                 filtered = filtered.filter(b => b.status === 'won' || b.status === 'lost' || b.status === 'void');
@@ -566,8 +551,6 @@
             }
 
             const total = filtered.length;
-            const atmbetCount = filtered.filter(b => b.is_published === true).length;
-
             const resolved = filtered.filter(b => b.status === 'won' || b.status === 'lost');
             const won = filtered.filter(b => b.status === 'won').length;
             const winRate = resolved.length > 0 ? ((won / resolved.length) * 100).toFixed(1) : 0;
@@ -588,7 +571,6 @@
             const yieldVal = totalResolvedStake > 0 ? ((netProfit / totalResolvedStake) * 100).toFixed(1) : 0;
 
             document.getElementById('stat-total').innerText = total;
-            document.getElementById('stat-atmbet').innerText = atmbetCount;
             document.getElementById('stat-winrate').innerText = winRate + '%';
             document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
             document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
@@ -643,7 +625,7 @@
                     </td>
                     <td class="py-3 px-3 text-center">
                         <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
-                            ${bet.is_published ? '★ AtmBet' : 'Solo Interno'}
+                            ${bet.is_published ? '★ Vetrina AtmBet' : 'Solo Interno'}
                         </button>
                     </td>
                     <td class="py-3 px-3">
