@@ -56,7 +56,6 @@
 
     .container { max-width: 1200px; margin: 16px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 16px; }
 
-    /* Barra filtro fornitore principale */
     .filter-bar {
       background-color: #0f172a;
       border: 1px solid #1e293b;
@@ -86,7 +85,6 @@
       border-radius: 8px;
     }
 
-    /* KPI Grid */
     .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     @media (min-width: 768px) {
       .kpi-grid { grid-template-columns: repeat(5, 1fr); }
@@ -206,7 +204,6 @@
 
   <div class="container">
 
-    <!-- SELETTORE FORNITORE CENTRALE -->
     <div class="filter-bar">
       <div class="filter-bar-label">
         <span>VISUALIZZA STATISTICHE DI:</span>
@@ -216,12 +213,11 @@
       </select>
     </div>
 
-    <!-- STATISTICHE DINAMICHE -->
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div class="kpi-title" id="lbl-profit">Bilancio Netto</div>
+        <div class="kpi-title">Bilancio Netto</div>
         <div id="kpi-profit" class="kpi-value positive">+0.00 u</div>
-        <div id="kpi-profit-sub" class="kpi-sub">Unità guadagnate/perse</div>
+        <div class="kpi-sub">Unità guadagnate/perse</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">ROI (Yield)</div>
@@ -236,7 +232,7 @@
       <div class="kpi-card">
         <div class="kpi-title">Quota Media</div>
         <div id="kpi-odds" class="kpi-value">@0.00</div>
-        <div id="kpi-odds-sub" class="kpi-sub">Selezioni filtrate</div>
+        <div class="kpi-sub">Selezioni filtrate</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">In Attesa</div>
@@ -245,7 +241,6 @@
       </div>
     </div>
 
-    <!-- GRAFICO BANKROLL (SI ADATTA AL FORNITORE SELEZIONATO) -->
     <div class="card" style="padding: 14px;">
       <div class="card-title" id="chart-title" style="margin-bottom: 10px;">Andamento Bankroll Globale</div>
       <div style="height: 220px; width: 100%;">
@@ -253,10 +248,9 @@
       </div>
     </div>
 
-    <!-- TABELLA COMPARATIVA FORNITORI -->
     <div class="card">
       <div class="card-header">
-        <div class="card-title">Classifica Redditività di Tutti i Fornitori</div>
+        <div class="card-title">Classifica Redditività Fornitori</div>
       </div>
       <div class="table-responsive">
         <table>
@@ -276,7 +270,6 @@
       </div>
     </div>
 
-    <!-- TABELLA STORICO PRONOSTICI -->
     <div class="card">
       <div class="card-header">
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -314,18 +307,18 @@
 
   </div>
 
-  <!-- MODAL INCOLLA RISPOSTA AI -->
+  <!-- MODAL SMART AI -->
   <div id="modal-ai" class="modal">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h3 style="font-size: 15px; font-weight: bold; color: #60a5fa;">Incolla Risposta AI</h3>
         <button onclick="closeAiModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
-      <p style="font-size: 11px; color: #94a3b8;">Incolla direttamente il testo con i risultati inviati in chat da Gemini:</p>
-      <textarea id="ai-input" rows="8" placeholder="es.&#10;Bodo/Glimt: Vinto&#10;Lazio: Perso" style="width: 100%; font-size: 12px;"></textarea>
+      <p style="font-size: 11px; color: #94a3b8;">Incolla qui il messaggio con i nuovi pronostici o con gli esiti finali (Vinto/Perso):</p>
+      <textarea id="ai-input" rows="8" placeholder="Incolla il testo qui..." style="width: 100%; font-size: 12px;"></textarea>
       <div style="display: flex; justify-content: flex-end; gap: 8px;">
         <button onclick="closeAiModal()" class="btn-dark">Annulla</button>
-        <button onclick="parseAiResults()" class="btn-ai">Applica Esiti</button>
+        <button onclick="processAiInput()" class="btn-ai">Elabora e Salva</button>
       </div>
     </div>
   </div>
@@ -353,12 +346,12 @@
         <button onclick="closeManualModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
       </div>
       <form id="form-add-bet" onsubmit="handleManualAdd(event)" style="display: flex; flex-direction: column; gap: 8px;">
-        <input type="text" id="m-tipster" required placeholder="Fornitore (es. CalcioAI, Zcode, ecc.)">
-        <input type="text" id="m-match" required placeholder="Partita / Incontro">
-        <input type="text" id="m-market" required placeholder="Pronostico (es. 1X2, Over 2.5, GG)">
+        <input type="text" id="m-tipster" required placeholder="Fornitore">
+        <input type="text" id="m-match" required placeholder="Partita">
+        <input type="text" id="m-market" required placeholder="Pronostico">
         <div style="display: flex; gap: 8px;">
-          <input type="number" step="0.01" id="m-odds" required placeholder="Quota (es. 1.85)" style="flex: 1;">
-          <input type="number" step="0.5" id="m-stake" value="1" required placeholder="Stake (es. 1)" style="flex: 1;">
+          <input type="number" step="0.01" id="m-odds" required placeholder="Quota" style="flex: 1;">
+          <input type="number" step="0.1" id="m-stake" value="1" required placeholder="Stake" style="flex: 1;">
         </div>
         <button type="submit" class="btn-emerald" style="margin-top: 6px; padding: 10px;">Aggiungi</button>
       </form>
@@ -608,43 +601,103 @@
       e.target.reset();
     }
 
-    function parseAiResults() {
-      const text = document.getElementById('ai-input').value;
-      if (!text.trim()) return;
+    // ELABORATORE UNIFICATO SMART
+    function processAiInput() {
+      const input = document.getElementById('ai-input').value.trim();
+      if (!input) return;
 
-      const lines = text.split('\n');
-      let updatedCount = 0;
+      // 1. Prova a verificare se contiene un frammento JSON di nuovi pronostici
+      const jsonStart = input.indexOf('[');
+      const jsonEnd = input.lastIndexOf(']');
+      if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+        try {
+          const parsed = JSON.parse(input.substring(jsonStart, jsonEnd + 1));
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            let added = 0;
+            parsed.forEach(item => {
+              if (item.match && item.odds) {
+                if (!item.id) item.id = Date.now() + Math.floor(Math.random() * 1000);
+                if (!item.status) item.status = 'pending';
+                bets.unshift(item);
+                added++;
+              }
+            });
+            if (added > 0) {
+              saveBets();
+              closeAiModal();
+              document.getElementById('ai-input').value = '';
+              alert(`Aggiunti con successo ${added} nuovi pronostici!`);
+              return;
+            }
+          }
+        } catch(e) {}
+      }
+
+      // 2. Se non è JSON, prova a leggere i formati testuali riga per riga
+      const lines = input.split('\n');
+      let updatedStatus = 0;
+      let addedLines = 0;
 
       lines.forEach(line => {
-        const lower = line.toLowerCase();
-        let targetStatus = null;
+        const text = line.trim();
+        if (!text) return;
+        const lower = text.toLowerCase();
 
-        if (lower.includes('vinto') || lower.includes('vinta') || lower.includes('win')) {
-          targetStatus = 'win';
-        } else if (lower.includes('perso') || lower.includes('persa') || lower.includes('loss')) {
-          targetStatus = 'loss';
-        } else if (lower.includes('void') || lower.includes('rimbors')) {
-          targetStatus = 'void';
-        }
+        // Controllo se è un aggiornamento esiti (Vinto/Perso)
+        let targetStatus = null;
+        if (lower.includes('vinto') || lower.includes('vinta') || lower.includes('win')) targetStatus = 'win';
+        else if (lower.includes('perso') || lower.includes('persa') || lower.includes('loss')) targetStatus = 'loss';
+        else if (lower.includes('void') || lower.includes('rimbors')) targetStatus = 'void';
 
         if (targetStatus) {
           bets.forEach(bet => {
-            const matchKeywords = bet.match.toLowerCase().split(/[\s\/\-]+/).filter(w => w.length > 3);
-            const found = matchKeywords.some(keyword => lower.includes(keyword));
-            if (found) {
+            const keywords = bet.match.toLowerCase().split(/[\s\/\-]+/).filter(w => w.length > 3);
+            if (keywords.some(k => lower.includes(k))) {
               bet.status = targetStatus;
-              updatedCount++;
+              updatedStatus++;
             }
           });
+        } 
+        // Controllo se è una riga con un nuovo pronostico (es. Fornitore | Partita | Quota)
+        else if (text.includes('|') || text.includes('@')) {
+          const parts = text.split('|').map(p => p.trim());
+          if (parts.length >= 3) {
+            const tipster = parts[0];
+            const match = parts[1];
+            let odds = 1.0;
+            let market = '1X2';
+            let stake = 1;
+
+            parts.slice(2).forEach(p => {
+              if (p.includes('@') || !isNaN(parseFloat(p))) {
+                odds = parseFloat(p.replace('@', '').trim()) || 1.0;
+              } else if (p.toLowerCase().includes('stake')) {
+                stake = parseFloat(p.replace(/[^0-9.]/g, '')) || 1;
+              } else {
+                market = p;
+              }
+            });
+
+            bets.unshift({
+              id: Date.now() + Math.floor(Math.random() * 1000),
+              tipster, match, market, odds, stake,
+              status: 'pending'
+            });
+            addedLines++;
+          }
         }
       });
 
-      if (updatedCount > 0) {
+      if (updatedStatus > 0 || addedLines > 0) {
         saveBets();
         closeAiModal();
-        alert(`Aggiornati ${updatedCount} pronostici!`);
+        document.getElementById('ai-input').value = '';
+        let msg = [];
+        if (addedLines > 0) msg.push(`Aggiunti ${addedLines} nuovi pronostici`);
+        if (updatedStatus > 0) msg.push(`Aggiornati ${updatedStatus} esiti`);
+        alert(msg.join('\n'));
       } else {
-        alert("Nessuna corrispondenza trovata.");
+        alert("Nessun pronostico o esito riconosciuto nel testo incollato.");
       }
     }
 
