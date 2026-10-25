@@ -25,6 +25,14 @@
             }
         }
     </script>
+    <style>
+        .filter-btn-active {
+            background-color: #22c55e !important;
+            color: #020617 !important;
+            border-color: #22c55e !important;
+            font-weight: 800 !important;
+        }
+    </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-12">
 
@@ -52,7 +60,7 @@
         <div id="status-alert" class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs text-slate-300">
             <span class="flex items-center gap-2">
                 <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i>
-                <span id="status-text">Database locale connesso: archivio <b>tipster_tracker_v1</b> sincronizzato.</span>
+                <span id="status-text">Database locale connesso: archivio sincronizzato.</span>
             </span>
             <button onclick="rescanData()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded border border-slate-700 transition">
                 Ricarica Memoria
@@ -95,7 +103,7 @@
                 <textarea id="ai-input" rows="3" placeholder="Incolla qui il testo del tipster o la risposta AI (es: Arsenal - Chelsea | Over 2.5 @1.85 | Tipster: Stats4Bets | Stake 1)..."
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500"></textarea>
                 <div class="flex justify-end gap-2">
-                    <button onclick="parseAIText()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs px-4 py-2 rounded-lg font-semibold flex items-center gap-1.5 transition">
+                    <button type="button" onclick="parseAIText()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs px-4 py-2 rounded-lg font-semibold flex items-center gap-1.5 transition">
                         <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Analizza & Compila Form
                     </button>
                 </div>
@@ -189,12 +197,12 @@
         <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-3 rounded-xl">
             <div class="flex flex-wrap items-center gap-2">
                 <span class="text-xs text-slate-400 font-semibold mr-1">Filtra per:</span>
-                <button onclick="setFilter('all')" id="btn-filter-all" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-white border border-slate-700">Tutti</button>
-                <button onclick="setFilter('atmbet')" id="btn-filter-atmbet" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                    <i data-lucide="star" class="w-3 h-3"></i> Solo AtmBet
+                <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
+                <button type="button" onclick="setFilter('atmbet', this)" id="btn-filter-atmbet" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-1 transition">
+                    <i data-lucide="star" class="w-3 h-3 text-amber-400"></i> Solo AtmBet
                 </button>
-                <button onclick="setFilter('pending')" id="btn-filter-pending" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700">In Corso</button>
-                <button onclick="setFilter('resolved')" id="btn-filter-resolved" class="text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700">Chiusi</button>
+                <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">In Corso</button>
+                <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
             </div>
 
             <!-- Selettore per fornitore singolo -->
@@ -233,18 +241,14 @@
 
     <!-- SCRIPT GESTIONALE INTELLIGENTE -->
     <script>
-        // Chiave originale del tuo tracker precedente e chiave unificata
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
 
         let currentFilter = 'all';
         let currentTipsterFilter = 'all';
 
-        // Caricamento Dati Unificato
         function loadAllBets() {
             let bets = [];
-            
-            // 1. Cerca nella chiave storica principale
             const rawV1 = localStorage.getItem(PRIMARY_KEY);
             if (rawV1) {
                 try {
@@ -253,7 +257,6 @@
                 } catch(e) {}
             }
 
-            // 2. Se non li ha trovati, controlla la chiave atmbet o vecchie varianti
             if (bets.length === 0) {
                 const alternateKeys = [ATMBET_KEY, 'bets', 'tipster_tracker_bets', 'pronostici'];
                 for (const k of alternateKeys) {
@@ -270,7 +273,6 @@
                 }
             }
 
-            // Normalizza tutti i campi per garantire compatibilità al 100%
             return bets.map((b, idx) => ({
                 id: b.id || ('b_' + idx + '_' + (b.event_date || Date.now())),
                 event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
@@ -286,7 +288,6 @@
             }));
         }
 
-        // Salva simultaneamente in entrambe le chiavi così non si perde mai nulla
         function persistBets(bets) {
             localStorage.setItem(PRIMARY_KEY, JSON.stringify(bets));
             localStorage.setItem(ATMBET_KEY, JSON.stringify(bets));
@@ -320,7 +321,6 @@
             resetDate();
         }
 
-        // AI Text Parser
         function parseAIText() {
             const text = document.getElementById('ai-input').value;
             if (!text.trim()) {
@@ -328,21 +328,18 @@
                 return;
             }
 
-            // Cerca match (Team A - Team B o Team A vs Team B)
             const matchRegex = /([A-Za-z0-9\s]+)\s*(?:-|vs|v)\s*([A-Za-z0-9\s]+)/i;
             const matchFound = text.match(matchRegex);
             if (matchFound) {
                 document.getElementById('match_name').value = `${matchFound[1].trim()} - ${matchFound[2].trim()}`;
             }
 
-            // Cerca quota (@1.85 o quota 1.85 o 1,85)
             const oddsRegex = /(?:@|quota\s*|odd\s*|Q\s*)(\d+[\.,]\d{2})/i;
             const oddsFound = text.match(oddsRegex);
             if (oddsFound) {
                 document.getElementById('odds').value = parseFloat(oddsFound[1].replace(',', '.'));
             }
 
-            // Cerca pronostici comuni (Over, Under, Gol, 1, X, 2)
             if (/over\s*\d+\.?\d*/i.test(text)) {
                 document.getElementById('market').value = 'Over/Under';
                 document.getElementById('prediction').value = text.match(/over\s*\d+\.?\d*/i)[0];
@@ -354,7 +351,6 @@
                 document.getElementById('prediction').value = 'Gol (Entrambe Segnano)';
             }
 
-            // Cerca fornitore
             const tipsters = ['Stats4Bets', 'BetMines', 'CalcioAI', 'OLAND', 'Zcode', 'Pronostici1'];
             tipsters.forEach(t => {
                 if (new RegExp(t, 'i').test(text)) {
@@ -362,7 +358,7 @@
                 }
             });
 
-            alert("Testo analizzato! I campi disponibili sono stati compilati automaticamente nel form sotto.");
+            alert("Testo analizzato! I campi disponibili sono stati compilati automaticamente.");
         }
 
         function updateStatus(id, newStatus) {
@@ -391,13 +387,22 @@
             }
         }
 
-        function setFilter(f) {
-            currentFilter = f;
+        function setFilter(filterType, element) {
+            currentFilter = filterType;
+
+            // Aggiorna classi grafiche sui bottoni
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('filter-btn-active');
+            });
+            if (element) {
+                element.classList.add('filter-btn-active');
+            }
+
             renderTable();
         }
 
-        function filterByTipster(t) {
-            currentTipsterFilter = t;
+        function filterByTipster(tipsterValue) {
+            currentTipsterFilter = tipsterValue;
             renderTable();
         }
 
@@ -408,18 +413,22 @@
 
             let filtered = bets;
 
-            // Filtro stato / AtmBet
-            if (currentFilter === 'atmbet') filtered = filtered.filter(b => b.is_published);
-            if (currentFilter === 'pending') filtered = filtered.filter(b => b.status === 'pending');
-            if (currentFilter === 'resolved') filtered = filtered.filter(b => b.status !== 'pending');
+            // Filtro 1: Categoria / Stato
+            if (currentFilter === 'atmbet') {
+                filtered = filtered.filter(b => b.is_published === true);
+            } else if (currentFilter === 'pending') {
+                filtered = filtered.filter(b => b.status === 'pending');
+            } else if (currentFilter === 'resolved') {
+                filtered = filtered.filter(b => b.status === 'won' || b.status === 'lost' || b.status === 'void');
+            }
 
-            // Filtro tipster specifico
+            // Filtro 2: Fornitore
             if (currentTipsterFilter !== 'all') {
-                filtered = filtered.filter(b => b.original_tipster === currentTipsterFilter);
+                filtered = filtered.filter(b => (b.original_tipster || '').toLowerCase() === currentTipsterFilter.toLowerCase());
             }
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-500">Nessun pronostico corrispondente ai filtri.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-500">Nessun pronostico trovato per il filtro selezionato.</td></tr>`;
                 return;
             }
 
@@ -445,7 +454,7 @@
                         <span class="bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-[11px] text-slate-300">${bet.original_tipster}</span>
                     </td>
                     <td class="py-3 px-3 text-center">
-                        <button onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
+                        <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
                             ${bet.is_published ? '★ Vetrina AtmBet' : 'Solo Interno'}
                         </button>
                     </td>
@@ -458,7 +467,7 @@
                         </select>
                     </td>
                     <td class="py-3 px-3 text-right">
-                        <button onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
+                        <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
                     </td>
@@ -472,7 +481,7 @@
         function renderDashboard() {
             const bets = loadAllBets();
             const total = bets.length;
-            const atmbetCount = bets.filter(b => b.is_published).length;
+            const atmbetCount = bets.filter(b => b.is_published === true).length;
 
             const resolved = bets.filter(b => b.status === 'won' || b.status === 'lost');
             const won = bets.filter(b => b.status === 'won').length;
@@ -498,15 +507,15 @@
             document.getElementById('stat-profit').innerText = (profit >= 0 ? '+' : '') + profit.toFixed(2) + 'u';
             document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
 
-            // Popola il menu a tendina dei tipster unici
-            const tipsters = [...new Set(bets.map(b => b.original_tipster))];
+            // Popola selettore fornitori unici
+            const tipsters = [...new Set(bets.map(b => b.original_tipster).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
             select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
             tipsters.forEach(t => {
                 const opt = document.createElement('option');
                 opt.value = t;
                 opt.innerText = t;
-                if (t === currentTipsterFilter) opt.selected = true;
+                if (t.toLowerCase() === currentTipsterFilter.toLowerCase()) opt.selected = true;
                 select.appendChild(opt);
             });
 
@@ -516,17 +525,21 @@
         function resetDate() {
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            document.getElementById('event_date').value = now.toISOString().slice(0, 16);
+            const dateInput = document.getElementById('event_date');
+            if (dateInput) dateInput.value = now.toISOString().slice(0, 16);
         }
 
         function rescanData() {
             const bets = loadAllBets();
-            alert("Rilevati " + bets.length + " pronostici salvati nel browser!");
+            alert("Database aggiornato: " + bets.length + " pronostici caricati.");
             renderDashboard();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             resetDate();
+            // Evidenzia "Tutti" come default
+            const btnAll = document.getElementById('btn-filter-all');
+            if (btnAll) btnAll.classList.add('filter-btn-active');
             renderDashboard();
             lucide.createIcons();
         });
