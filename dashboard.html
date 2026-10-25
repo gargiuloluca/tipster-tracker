@@ -619,7 +619,7 @@
                                 </div>
                             ` : `
                                 <div class="flex items-center justify-between py-0.5">
-                                    <span class="text-xs text-slate-500">Contenuto Riservato</span>
+                                    <span class="text-xs font-bold text-slate-600 blur-sm select-none">Pronostico Riservato</span>
                                     <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
                                         <i data-lucide="unlock" class="w-3 h-3"></i> Sblocca (1c)
                                     </button>
@@ -631,7 +631,9 @@
                     <div class="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
                         <div>
                             <span class="text-slate-500 text-[10px]">Quota:</span>
-                            <span class="text-white font-mono font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>
+                            ${canSee 
+                                ? `<span class="text-white font-mono font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>` 
+                                : '<span class="text-slate-600 font-mono font-bold ml-1 blur-sm select-none">1.85</span>'}
                         </div>
                         <div>
                             <span class="text-slate-500 text-[10px]">Stake:</span>
