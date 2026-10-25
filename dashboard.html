@@ -245,13 +245,13 @@
             </div>
         </section>
 
-        <!-- SELEZIONI ATTIVE IN CORSO -->
+        <!-- SELEZIONI ATTIVE IN CORSO (CLICCABILI) -->
         <section class="space-y-3 pt-2 border-t border-slate-800/80">
             <div>
                 <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                     <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni VIP Attive
                 </h2>
-                <p class="text-[11px] sm:text-xs text-slate-400">Match in programma con quote di valore atteso sbloccate.</p>
+                <p class="text-[11px] sm:text-xs text-slate-400">Tocca una giocata per aprire la scheda dettagliata a schermo intero.</p>
             </div>
 
             <div id="user-pending-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
@@ -266,7 +266,7 @@
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                         <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Storico Giocate Ricevute
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L).</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L). Tocca una riga per aprirla.</p>
                 </div>
 
                 <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800">
@@ -305,6 +305,57 @@
     <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900 mt-8">
         AtmBet &copy; 2026. Cruscotto Rendimento Certificato.
     </footer>
+
+    <!-- MODAL DETTAGLIO PRONOSTICO A SCHERMO INTERO -->
+    <div id="bet-detail-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+            
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <span id="modal-badge-status" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">...</span>
+                    <span id="modal-league" class="text-xs text-slate-400 font-medium bg-slate-950 px-2 py-0.5 rounded border border-slate-800">...</span>
+                </div>
+                <button type="button" onclick="closeBetModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div>
+                <div class="text-[10px] font-mono text-slate-500 uppercase tracking-widest mb-1 flex items-center gap-1">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500"></i>
+                    <span id="modal-date">...</span>
+                </div>
+                <h3 id="modal-match-title" class="text-lg sm:text-xl font-black text-white leading-snug">...</h3>
+            </div>
+
+            <div id="modal-submatches-box" class="space-y-2"></div>
+
+            <div class="bg-slate-950/90 rounded-2xl p-4 border border-slate-800 space-y-2">
+                <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Pronostico & Mercato:</div>
+                <div id="modal-prediction-content" class="text-emerald-400 font-bold text-sm sm:text-base">...</div>
+                <div id="modal-market-content" class="text-xs text-slate-400">...</div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-center">
+                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                    <span class="text-[10px] text-slate-500 block">Quota</span>
+                    <span id="modal-odds" class="text-sm sm:text-base font-mono font-bold text-white">...</span>
+                </div>
+                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                    <span class="text-[10px] text-slate-500 block">Stake</span>
+                    <span id="modal-stake" class="text-sm sm:text-base font-mono font-bold text-white">...</span>
+                </div>
+                <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                    <span class="text-[10px] text-slate-500 block">Canale</span>
+                    <span id="modal-tipster" class="text-[11px] font-medium text-slate-300 block truncate">AtmBet</span>
+                </div>
+            </div>
+
+            <button type="button" onclick="closeBetModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
+                Chiudi Scheda
+            </button>
+        </div>
+    </div>
 
     <!-- LOGICA DASHBOARD -->
     <script>
@@ -366,6 +417,7 @@
                 match_name: b.match_name || b.match || 'Evento',
                 market: b.market || 'Mercato',
                 prediction: b.prediction || b.pick || '-',
+                original_tipster: b.original_tipster || b.tipster || 'AtmBet Selection',
                 odds: parseFloat(b.odds || b.odd || 1.80),
                 stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
                 status: b.status || 'pending',
@@ -501,6 +553,90 @@
             renderHistoryTable();
         }
 
+        // APERTURA MODAL DETTAGLIO
+        function openBetModal(betId) {
+            const bets = getStoredBets();
+            const bet = bets.find(b => String(b.id) === String(betId));
+            if (!bet) return;
+
+            const now = new Date();
+            const trialEnd = new Date(currentUser.trial_expiry || 0);
+            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
+            const isManuallyUnlocked = (currentUser.unlocked_bets || []).includes(bet.id);
+            const canSee = isVipActive || isManuallyUnlocked;
+
+            document.getElementById('modal-league').innerText = bet.league;
+            document.getElementById('modal-date').innerText = bet.event_date;
+            document.getElementById('modal-match-title').innerText = bet.match_name;
+
+            const badgeStatusEl = document.getElementById('modal-badge-status');
+            if (bet.status === 'won') {
+                badgeStatusEl.innerText = "VINTA";
+                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+            } else if (bet.status === 'lost') {
+                badgeStatusEl.innerText = "PERSA";
+                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30";
+            } else if (bet.status === 'void') {
+                badgeStatusEl.innerText = "VOID";
+                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            } else {
+                badgeStatusEl.innerText = "IN CORSO";
+                badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700";
+            }
+
+            const subBox = document.getElementById('modal-submatches-box');
+            subBox.innerHTML = '';
+            if (bet.match_name.includes('/')) {
+                const subMatches = bet.match_name.split('/').map(m => m.trim()).filter(Boolean);
+                let html = '<div class="text-[10px] uppercase font-mono tracking-wider text-slate-500 mt-2 mb-1">Partite della Multipla:</div>';
+                subMatches.forEach((sm, i) => {
+                    html += `
+                        <div class="bg-slate-950 px-3 py-2 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+                            <span class="font-bold text-slate-200">${i+1}. ${sm}</span>
+                            <span class="text-[10px] text-emerald-400 font-mono">Evento ${i+1}</span>
+                        </div>
+                    `;
+                });
+                subBox.innerHTML = html;
+            }
+
+            const predEl = document.getElementById('modal-prediction-content');
+            const marketEl = document.getElementById('modal-market-content');
+            const oddsEl = document.getElementById('modal-odds');
+
+            if (canSee) {
+                predEl.innerText = bet.prediction;
+                marketEl.innerText = "Mercato di riferimento: " + bet.market;
+                oddsEl.innerText = parseFloat(bet.odds).toFixed(2);
+            } else {
+                predEl.innerHTML = `<span class="blur-sm select-none text-slate-500">Pronostico Riservato</span> <button type="button" onclick="unlockWithCredit('${bet.id}'); closeBetModal();" class="ml-2 text-xs bg-amber-500/10 border border-amber-500/30 text-amber-400 px-2 py-0.5 rounded font-bold">Sblocca (1c)</button>`;
+                marketEl.innerText = "Sblocca con credito per visualizzare selezione e mercato";
+                oddsEl.innerHTML = `<span class="blur-sm select-none text-slate-600">1.85</span>`;
+            }
+
+            document.getElementById('modal-stake').innerText = bet.stake.toFixed(1) + 'u';
+            document.getElementById('modal-tipster').innerText = bet.original_tipster;
+
+            const modal = document.getElementById('bet-detail-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeBetModal() {
+            const modal = document.getElementById('bet-detail-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.getElementById('bet-detail-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeBetModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeBetModal();
+        });
+
         function initDashboard() {
             currentUser = checkAuth();
             if (!currentUser) return;
@@ -600,7 +736,8 @@
                 const canSee = isVipActive || isManuallyUnlocked;
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-slate-700 transition shadow-lg";
+                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-emerald-500/40 transition shadow-lg cursor-pointer group active:scale-[0.99]";
+                card.setAttribute("onclick", `openBetModal('${bet.id}')`);
 
                 card.innerHTML = `
                     <div>
@@ -608,19 +745,22 @@
                             <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] font-medium truncate max-w-[150px]">${bet.league}</span>
                             <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-white mb-2.5 leading-snug">${bet.match_name}</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-white mb-2.5 leading-snug group-hover:text-emerald-300 transition">${bet.match_name}</h3>
 
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
-                            <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Selezione VIP:</div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[9px] uppercase font-mono tracking-widest text-slate-500">Selezione VIP:</span>
+                                <span class="text-[9px] text-slate-500 group-hover:text-emerald-400 transition flex items-center gap-0.5">Dettaglio <i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></span>
+                            </div>
                             ${canSee ? `
                                 <div class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center justify-between">
-                                    <span>${bet.prediction}</span>
-                                    <span class="text-[11px] text-slate-400 font-normal truncate max-w-[120px]">${bet.market}</span>
+                                    <span class="truncate">${bet.prediction}</span>
+                                    <span class="text-[11px] text-slate-400 font-normal truncate max-w-[110px] ml-2">${bet.market}</span>
                                 </div>
                             ` : `
                                 <div class="flex items-center justify-between py-0.5">
-                                    <span class="text-xs font-bold text-slate-600 blur-sm select-none">Pronostico Riservato</span>
-                                    <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
+                                    <span class="text-xs text-slate-500">Contenuto Riservato</span>
+                                    <button type="button" onclick="event.stopPropagation(); unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
                                         <i data-lucide="unlock" class="w-3 h-3"></i> Sblocca (1c)
                                     </button>
                                 </div>
@@ -671,7 +811,10 @@
                 const s = bet.stake || 1.0;
                 const pl = isWon ? (bet.odds - 1) * s : -s;
 
-                tr.className = isWon ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" : "bg-rose-500/[0.02] hover:bg-rose-500/[0.05] transition";
+                tr.className = isWon 
+                    ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.08] transition cursor-pointer" 
+                    : "bg-rose-500/[0.02] hover:bg-rose-500/[0.08] transition cursor-pointer";
+                tr.setAttribute("onclick", `openBetModal('${bet.id}')`);
 
                 tr.innerHTML = `
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
