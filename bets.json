@@ -26,6 +26,19 @@
     "is_published": true
   },
   {
+    "id": "bet_1792941943332_2",
+    "event_date": "2026-10-25 19:30",
+    "match_name": "Gent vs Anderlecht",
+    "league": "Jupiler Pro League",
+    "market": "1X2 / Mercato",
+    "prediction": "1X (Gent o Pareggio)",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.41,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1792934519439_1",
     "event_date": "2026-10-25 18:15",
     "match_name": "Marsiglia vs Le Havre / Gent vs Anderlecht",
@@ -60,6 +73,32 @@
     "prediction": "Segno 1",
     "original_tipster": "Stats4Bets",
     "odds": 1.57,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792941943332_1",
+    "event_date": "2026-10-25 16:30",
+    "match_name": "Crystal Palace vs Newcastle United",
+    "league": "Premier League",
+    "market": "1X2 / Mercato",
+    "prediction": "X2 (Newcastle United o Pareggio)",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.41,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792941943332_0",
+    "event_date": "2026-10-25 16:15",
+    "match_name": "Hellas Verona vs Pisa",
+    "league": "Serie B",
+    "market": "1X2 / Mercato",
+    "prediction": "1X (Hellas Verona o Pareggio)",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.4,
     "stake": 1,
     "status": "pending",
     "is_published": true
