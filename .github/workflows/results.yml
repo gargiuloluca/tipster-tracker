@@ -1,0 +1,38 @@
+name: Verifica Risultati Automatica
+
+on:
+  schedule:
+    # Gira ogni ora dalle 12:00 alle 23:00 UTC (fascia oraria partite)
+    - cron: '0 12-23 * * *'
+  workflow_dispatch: # Permette anche di avviarlo manualmente con un clic!
+
+jobs:
+  update-bets:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Permesso di aggiornare bets.json
+
+    steps:
+      - name: Scarica Repository
+        uses: actions/checkout@v4
+
+      - name: Configura Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installa Librerie
+        run: pip install requests
+
+      - name: Esegui Controllo Risultati
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+        run: python updater.py
+
+      - name: Salva Modifiche se presenti
+        run: |
+          git config --global user.name "AtmBet Bot"
+          git config --global user.email "bot@atmbet.local"
+          git add bets.json
+          git commit -m "Automazione: esiti match aggiornati [skip ci]" || exit 0
+          git push
