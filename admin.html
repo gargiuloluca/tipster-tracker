@@ -32,7 +32,6 @@
             border-color: #22c55e !important;
             font-weight: 800 !important;
         }
-        /* Stili visivi immediati per gli esiti */
         .row-won {
             background-color: rgba(34, 197, 94, 0.08) !important;
             border-left: 4px solid #22c55e !important;
@@ -72,17 +71,17 @@
         <div id="status-alert" class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs text-slate-300">
             <span class="flex items-center gap-2">
                 <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i>
-                <span id="status-text">Database connesso: conteggi ricalcolati in tempo reale sui filtri attivi.</span>
+                <span id="status-text">Database connesso: conteggi ricalcolati in tempo reale sulla vista attiva.</span>
             </span>
             <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded border border-slate-700 transition">
                 Ricarica Pagina
             </button>
         </div>
 
-        <!-- Dashboard Statistiche DINAMICHE (Si aggiornano in base al filtro/fornitore selezionato) -->
+        <!-- Dashboard Statistiche DINAMICHE -->
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span class="text-xs text-slate-400 block mb-1" id="label-stat-total">Pronostici Vista</span>
+                <span class="text-xs text-slate-400 block mb-1">Pronostici Vista</span>
                 <span id="stat-total" class="text-2xl font-black text-white">0</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl border-l-4 border-l-emerald-500">
@@ -112,7 +111,7 @@
                 <span class="text-[11px] text-slate-500">Incolla lista esiti o nuovo pronostico</span>
             </div>
             <div class="space-y-3">
-                <textarea id="ai-input" rows="3" placeholder="Incolla qui l'elenco dei risultati (es. Inter vs Milan - Esito: Vinta) oppure testo grezzo per inserimento..."
+                <textarea id="ai-input" rows="4" placeholder="Incolla qui l'elenco dei risultati (es. Inter vs Juventus - Esito: Vinta oppure PSG - Lione - Esito: In corso)..."
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500"></textarea>
                 <div class="flex flex-wrap justify-end gap-2">
                     <button type="button" onclick="parseAIText()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
@@ -226,7 +225,7 @@
             </div>
         </div>
 
-        <!-- TABELLA PRONOSTICI CON DISTINZIONE VISIVA CHIARA -->
+        <!-- TABELLA PRONOSTICI -->
         <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs text-slate-300">
@@ -251,7 +250,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE INTELLIGENTE & RICALCOLO DINAMICO -->
+    <!-- SCRIPT GESTIONALE INTELLIGENTE -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -286,7 +285,6 @@
             }
 
             return bets.map((b, idx) => {
-                // NORMALIZZAZIONE STAKE: se lo stake è memorizzato come 50 (es. 50u) o anomalo, viene corretto a 1.0u per il calcolo matematico
                 let cleanStake = parseFloat(b.stake || b.units || 1.0);
                 if (cleanStake > 10) cleanStake = 1.0;
 
@@ -339,6 +337,7 @@
             resetDate();
         }
 
+        // PARSER CON SUPPORTO AD ESITI (VINTA, PERSA, VOID, IN CORSO)
         function parseAIText() {
             const text = document.getElementById('ai-input').value.trim();
             if (!text) {
@@ -356,9 +355,10 @@
                 let isWon = /esito:\s*vinta|vinta|won|win/i.test(line);
                 let isLost = /esito:\s*persa|persa|lost|lose/i.test(line);
                 let isVoid = /void|annullata|rimborso/i.test(line);
+                let isPending = /in corso|aperta|pending/i.test(line);
 
-                if (isWon || isLost || isVoid) {
-                    const targetStatus = isWon ? 'won' : (isLost ? 'lost' : 'void');
+                if (isWon || isLost || isVoid || isPending) {
+                    const targetStatus = isWon ? 'won' : (isLost ? 'lost' : (isVoid ? 'void' : 'pending'));
 
                     bets.forEach(b => {
                         const mName = b.match_name.toLowerCase();
@@ -388,7 +388,7 @@
                 return;
             }
 
-            // Parser singolo
+            // Parser nuovo pronostico singolo
             const matchRegex = /([A-Za-z0-9\s]+)\s*(?:-|vs|v)\s*([A-Za-z0-9\s]+)/i;
             const matchFound = text.match(matchRegex);
             if (matchFound) {
@@ -448,11 +448,10 @@
             renderDashboard();
         }
 
-        // RICALCOLO DINAMICO DELLE STATISTICHE BASATO SUL FILTRO ATTIVO
         function renderDashboard() {
             const allBets = loadAllBets();
 
-            // Popola menu a tendina fornitori unici (senza resettare selezione)
+            // Menu a tendina fornitori unici
             const tipsters = [...new Set(allBets.map(b => b.original_tipster).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
             if (select.options.length <= 1) {
@@ -466,7 +465,6 @@
             }
             select.value = currentTipsterFilter;
 
-            // Applica filtri
             let filtered = allBets;
 
             if (currentFilter === 'atmbet') {
@@ -481,7 +479,7 @@
                 filtered = filtered.filter(b => (b.original_tipster || '').toLowerCase() === currentTipsterFilter.toLowerCase());
             }
 
-            // CALCOLO STATISTICHE ESATTAMENTE SULLA VISTA FILTRATA
+            // CALCOLO STATISTICHE DINAMICHE
             const total = filtered.length;
             const atmbetCount = filtered.filter(b => b.is_published === true).length;
 
@@ -504,7 +502,6 @@
 
             const yieldVal = totalResolvedStake > 0 ? ((netProfit / totalResolvedStake) * 100).toFixed(1) : 0;
 
-            // Aggiorna etichette e contatori a video
             document.getElementById('stat-total').innerText = total;
             document.getElementById('stat-atmbet').innerText = atmbetCount;
             document.getElementById('stat-winrate').innerText = winRate + '%';
@@ -514,7 +511,6 @@
             renderTable(filtered);
         }
 
-        // RENDER DELLA TABELLA CON DISTINZIONE GRAFICA NETTA
         function renderTable(betsToDisplay) {
             const tbody = document.getElementById('bets-tbody');
             tbody.innerHTML = '';
@@ -527,7 +523,6 @@
             betsToDisplay.forEach(bet => {
                 const tr = document.createElement('tr');
 
-                // Applicazione colore e bordo in base allo stato
                 let rowClass = "row-pending transition";
                 let badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>';
 
@@ -592,7 +587,8 @@
         function resetDate() {
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            document.getElementById('event_date').value = now.toISOString().slice(0, 16);
+            const dateInput = document.getElementById('event_date');
+            if (dateInput) dateInput.value = now.toISOString().slice(0, 16);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
