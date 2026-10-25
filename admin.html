@@ -90,7 +90,7 @@
             </div>
         </div>
 
-        <!-- Dashboard Statistiche DINAMICHE -->
+        <!-- Dashboard Statistiche DINAMICHE con Convertitore € -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
                 <span class="text-xs text-slate-400 block mb-1">Pronostici Vista</span>
@@ -101,7 +101,10 @@
                 <span id="stat-winrate" class="text-2xl font-black text-white">0%</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span class="text-xs text-slate-400 block mb-1">Profitto Netto</span>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-slate-400 block mb-1">Profitto Netto</span>
+                    <span id="admin-stat-fiat" class="text-[11px] font-mono text-emerald-400 font-bold">≈ +0.00€</span>
+                </div>
                 <span id="stat-profit" class="text-2xl font-black text-amber-400">0.00u</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
@@ -192,7 +195,6 @@
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
-                <!-- Toggle Pubblicazione Vetrina -->
                 <div class="sm:col-span-2 md:col-span-3 flex items-center pt-2">
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="is_published" checked class="sr-only peer">
@@ -211,7 +213,7 @@
             </form>
         </section>
 
-        <!-- BARRA FILTRI (TUTTI / IN CORSO / CHIUSI / FORNITORE) -->
+        <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
         <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-3 rounded-xl">
             <div class="flex flex-wrap items-center gap-2">
                 <span class="text-xs text-slate-400 font-semibold mr-1">Filtra:</span>
@@ -220,12 +222,28 @@
                 <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn text-xs px-3.5 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
             </div>
 
-            <!-- Selettore Singolo Fornitore -->
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-slate-400 font-semibold">Fornitore:</span>
-                <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
-                    <option value="all">Tutti i Fornitori</option>
-                </select>
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Selettore Valore Unità (€) per l'Admin -->
+                <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-lg">
+                    <span class="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
+                        <i data-lucide="calculator" class="w-3.5 h-3.5 text-emerald-400"></i> Valore Unità:
+                    </span>
+                    <select id="admin-unit-multiplier" onchange="renderDashboard()" class="bg-transparent text-xs text-white font-mono font-bold focus:outline-none cursor-pointer">
+                        <option value="5">5 €</option>
+                        <option value="10" selected>10 €</option>
+                        <option value="20">20 €</option>
+                        <option value="50">50 €</option>
+                        <option value="100">100 €</option>
+                    </select>
+                </div>
+
+                <!-- Selettore Singolo Fornitore -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-400 font-semibold">Fornitore:</span>
+                    <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
+                        <option value="all">Tutti i Fornitori</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -254,7 +272,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE CON BACKUP & ORDINAMENTO -->
+    <!-- SCRIPT GESTIONALE CON CONVERTITORE REATTIVO -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -307,7 +325,6 @@
                 };
             });
 
-            // MIGLIORIA B: Ordinamento cronologico decrescente (le più recenti/odierne in cima)
             return formatted.sort((a, b) => {
                 const dateA = new Date(a.event_date.replace(' ', 'T')).getTime() || 0;
                 const dateB = new Date(b.event_date.replace(' ', 'T')).getTime() || 0;
@@ -321,7 +338,6 @@
             renderDashboard();
         }
 
-        // MIGLIORIA A: Esportazione Backup JSON
         function exportBackupJSON() {
             const bets = loadAllBets();
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bets, null, 2));
@@ -333,7 +349,6 @@
             dlAnchor.remove();
         }
 
-        // MIGLIORIA A: Importazione Backup JSON
         function importBackupJSON(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -642,6 +657,16 @@
             });
 
             const yieldVal = totalResolvedStake > 0 ? ((netProfit / totalResolvedStake) * 100).toFixed(1) : 0;
+
+            // Ricalcolo controvalore monetario per l'Admin
+            const unitMultiplierEl = document.getElementById('admin-unit-multiplier');
+            const unitVal = parseFloat(unitMultiplierEl ? unitMultiplierEl.value : 10) || 10;
+            const fiatProfit = netProfit * unitVal;
+            const fiatEl = document.getElementById('admin-stat-fiat');
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €`;
+                fiatEl.className = `text-[11px] font-mono font-bold ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            }
 
             document.getElementById('stat-total').innerText = total;
             document.getElementById('stat-winrate').innerText = winRate + '%';
