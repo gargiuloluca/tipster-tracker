@@ -64,14 +64,15 @@
             <div class="flex items-center space-x-3 sm:space-x-5">
                 <a href="#metodo" class="hidden md:inline-block text-xs font-semibold text-slate-300 hover:text-white transition">Il Metodo</a>
                 <a href="#palinsesto" class="hidden md:inline-block text-xs font-semibold text-slate-300 hover:text-white transition">Palinsesto Live</a>
+                <a href="#piani" class="hidden md:inline-block text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition">Piani & Prezzi</a>
                 <a href="#faq" class="hidden md:inline-block text-xs font-semibold text-slate-300 hover:text-white transition">FAQ</a>
 
                 <span id="nav-trial-active" class="hidden text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3.5 py-1.5 rounded-full font-bold flex items-center gap-1.5">
                     <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i> Prova Attiva (7gg)
                 </span>
 
-                <a href="#trial" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl font-extrabold transition shadow-lg shadow-emerald-500/20 flex items-center gap-1.5">
-                    <i data-lucide="zap" class="w-3.5 h-3.5"></i> Inizia Gratis
+                <a href="#trial-hero-box" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2 rounded-xl font-extrabold transition shadow-lg shadow-emerald-500/20 flex items-center gap-1.5">
+                    <i data-lucide="zap" class="w-3.5 h-3.5"></i> Prova Gratis
                 </a>
 
                 <a href="admin.html" title="Accesso Riservato Gestore" class="text-slate-500 hover:text-slate-300 p-2 transition">
@@ -145,7 +146,7 @@
         </div>
     </header>
 
-    <!-- Global Verified Metrics Dashboard -->
+    <!-- Global Verified Metrics Dashboard (SOLO DATI CHIUSI) -->
     <section class="max-w-7xl mx-auto px-4 -mt-4 mb-16 w-full">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
@@ -178,11 +179,11 @@
 
             <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
                 <div class="flex items-center justify-between text-slate-400 text-xs mb-1">
-                    <span>PRONOSTICI TOTALI</span>
-                    <i data-lucide="database" class="w-4 h-4 text-slate-400"></i>
+                    <span>PRONOSTICI CHIUSI</span>
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
                 </div>
-                <div id="stat-total" class="text-2xl sm:text-4xl font-mono font-black text-slate-200 my-1">0</div>
-                <div class="text-[11px] text-slate-500">Storico tracciato e verificabile</div>
+                <div id="stat-resolved-count" class="text-2xl sm:text-4xl font-mono font-black text-slate-200 my-1">0</div>
+                <div class="text-[11px] text-slate-500">Giocate concluse e verificate</div>
             </div>
 
         </div>
@@ -224,7 +225,7 @@
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">3. Tracciamento 100% Trasparente</h3>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    Ogni singolo pronostico viene archiviato, sia esso vincente o perdente. I dati di ROI, Win Rate e profitto che leggi sono reali, non manipolabili e verificabili da chiunque.
+                    Ogni singolo pronostico viene archiviato, sia esso vincente o perdente. I dati di ROI, Win Rate e profitto che vedi sono reali, non manipolabili e verificabili da chiunque.
                 </p>
             </div>
 
@@ -253,7 +254,100 @@
         </div>
     </main>
 
-    <!-- FAQ (Domande Frequenti) -->
+    <!-- SEZIONE PIANI & PREZZI (Crediti + Abbonamenti VIP) -->
+    <section id="piani" class="max-w-7xl mx-auto px-4 py-16 border-t border-slate-800/80 w-full">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2">Accesso & Pricing</span>
+            <h2 class="text-2xl sm:text-4xl font-black text-white">Scegli la Modalità Adatta al Tuo Bankroll</h2>
+            <p class="text-slate-400 text-sm mt-3">Al termine dei 7 giorni di prova gratuita, puoi continuare scegliendo pacchetti di crediti a consumo oppure un abbonamento all-inclusive con accesso continuo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <!-- OPZIONE 1: Pacchetto Crediti -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-slate-700 transition">
+                <div>
+                    <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-2">A Consumo</div>
+                    <h3 class="text-xl font-black text-white mb-2">Pack 10 Crediti</h3>
+                    <p class="text-xs text-slate-400 mb-4">Ideale per chi gioca sporadicamente o vuole sbloccare solo i singoli match del weekend.</p>
+                    <div class="text-3xl font-mono font-black text-white mb-6">19€ <span class="text-xs text-slate-500 font-sans font-normal">una tantum</span></div>
+                    
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> 10 Selezioni VIP sbloccabili</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Nessuna scadenza dei crediti</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Analisi quote e stake inclusi</li>
+                    </ul>
+                </div>
+                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                    Scegli Crediti
+                </a>
+            </div>
+
+            <!-- OPZIONE 2: Settimanale -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-slate-700 transition">
+                <div>
+                    <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-2">Flessibile</div>
+                    <h3 class="text-xl font-black text-white mb-2">VIP Settimanale</h3>
+                    <p class="text-xs text-slate-400 mb-4">Accesso totale per 7 giorni. Perfetto per seguire un intero turno infrasettimanale + weekend.</p>
+                    <div class="text-3xl font-mono font-black text-white mb-6">14€ <span class="text-xs text-slate-500 font-sans font-normal">/ settimana</span></div>
+                    
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Pronostici illimitati per 7gg</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Aggiornamenti live in tempo reale</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Disdici quando vuoi in 1 clic</li>
+                    </ul>
+                </div>
+                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                    Attiva Settimana
+                </a>
+            </div>
+
+            <!-- OPZIONE 3: Mensile (Consigliato) -->
+            <div class="bg-slate-900/90 border-2 border-emerald-500 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl shadow-emerald-500/10">
+                <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3 py-0.5 rounded-full">
+                    Più Popolare
+                </span>
+                <div>
+                    <div class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest mb-2">Consigliato</div>
+                    <h3 class="text-xl font-black text-white mb-2">VIP Mensile</h3>
+                    <p class="text-xs text-slate-400 mb-4">La scelta naturale per chi investe con metodo e vuole massimizzare il rendimento del bankroll.</p>
+                    <div class="text-3xl font-mono font-black text-emerald-400 mb-6">39€ <span class="text-xs text-slate-500 font-sans font-normal">/ mese</span></div>
+                    
+                    <ul class="space-y-2.5 text-xs text-slate-200 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Tutte le selezioni quotidiane +EV</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Tabella Money Management dedicata</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Notifiche pronostici prioritarie</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Supporto analitico diretto</li>
+                    </ul>
+                </div>
+                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black text-center transition">
+                    Inizia con il Mensile
+                </a>
+            </div>
+
+            <!-- OPZIONE 4: Annuale -->
+            <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-slate-700 transition">
+                <div>
+                    <div class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest mb-2">Miglior Valore</div>
+                    <h3 class="text-xl font-black text-white mb-2">VIP Annuale</h3>
+                    <p class="text-xs text-slate-400 mb-4">365 giorni di palinsesto quantitativo al costo più basso per chi fa investimento continuativo.</p>
+                    <div class="text-3xl font-mono font-black text-white mb-6">299€ <span class="text-xs text-slate-500 font-sans font-normal">/ anno</span></div>
+                    
+                    <ul class="space-y-2.5 text-xs text-slate-300 mb-6">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Risparmi oltre il 35% sul mensile</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Accesso anticipato a nuove strategie</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-400"></i> Archivio storico completo esportabile</li>
+                    </ul>
+                </div>
+                <a href="#trial-hero-box" class="w-full py-2.5 rounded-xl border border-slate-700 hover:border-emerald-500/50 text-slate-200 hover:text-white text-xs font-bold text-center transition">
+                    Abbonamento Annuale
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ (Domande Frequenti con spiegazione costi e trial) -->
     <section id="faq" class="max-w-5xl mx-auto px-4 py-16 border-t border-slate-800/80 w-full">
         <div class="text-center mb-10">
             <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2">Domande Frequenti</span>
@@ -263,23 +357,37 @@
         <div class="space-y-4 text-xs sm:text-sm">
             
             <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-                <h4 class="font-bold text-white text-base mb-2">Di quale cassa (Bankroll) ho bisogno per iniziare?</h4>
-                <p class="text-slate-400 leading-relaxed">
-                    Consigliamo di dividere il capitale totale in 100 unità (1u = 1% della cassa). Ad esempio, con un budget di 500€, ogni unità corrisponde a 5€. Con questo metodo le serie negative fisiologiche non intaccheranno la stabilità del tuo investimento.
-                </p>
-            </div>
-
-            <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
                 <h4 class="font-bold text-white text-base mb-2">Come funziona la prova gratuita di 7 giorni?</h4>
                 <p class="text-slate-400 leading-relaxed">
-                    Basta inserire la tua email nel riquadro in alto. Il sistema sbloccherà istantaneamente tutti i pronostici coperti da lucchetto per una settimana intera. Nessun vincolo, nessuna carta richiesta.
+                    Basta inserire la tua email nel box in cima alla pagina. Il sistema sbloccherà immediatamente tutti i pronostici e le quote riservate per 7 giorni esatti. Non ti chiediamo alcuna carta di credito o metodo di pagamento: la prova è al 100% libera e senza impegno.
                 </p>
             </div>
 
             <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
-                <h4 class="font-bold text-white text-base mb-2">Cosa succede nei periodi di varianza negativa?</h4>
+                <h4 class="font-bold text-white text-base mb-2">Cosa succede al termine dei 7 giorni di prova gratuita?</h4>
                 <p class="text-slate-400 leading-relaxed">
-                    Nel betting quantitativo le perdite fanno parte del percorso. Il nostro vantaggio non risiede nell'indovinare ogni singolo match, ma nel piazzare scommesse a quote con valore matematico positivo costante, garantendo la crescita progressiva del capitale nel medio-lungo termine.
+                    Allo scadere della settimana i nuovi pronostici torneranno ad apparire con il lucchetto protetto. Sarai tu a decidere in totale autonomia se acquistare un pacchetto di crediti a consumo (es. 10 selezioni) oppure attivare l'abbonamento VIP (settimanale, mensile o annuale). Nessun rinnovo nascosto e nessun addebito automatico.
+                </p>
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
+                <h4 class="font-bold text-white text-base mb-2">Qual è la differenza tra i pacchetti di crediti e l'abbonamento VIP?</h4>
+                <p class="text-slate-400 leading-relaxed">
+                    I **crediti a consumo** non hanno scadenza: puoi acquistare 10 crediti e utilizzarli nel corso di settimane o mesi, sbloccando solo le giocate che preferisci. L'**abbonamento VIP** (settimanale, mensile o annuale) offre invece l'accesso illimitato a tutte le selezioni del palinsesto ed è consigliato a chi desidera replicare l'intero portafoglio di investimento sportivo con continuità.
+                </p>
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
+                <h4 class="font-bold text-white text-base mb-2">Di quale cassa (Bankroll) ho bisogno per iniziare?</h4>
+                <p class="text-slate-400 leading-relaxed">
+                    Consigliamo di suddividere la propria cassa in 100 unità (1u = 1% del capitale totale). Ad esempio, con un budget di 500€, ogni unità corrisponde a 5€. Con questo metodo le serie negative fisiologiche non intaccano la serenità e la stabilità del tuo percorso di investimento.
+                </p>
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800 p-5 rounded-2xl">
+                <h4 class="font-bold text-white text-base mb-2">Come vengono calcolate le statistiche (ROI, Win Rate e Profitto)?</h4>
+                <p class="text-slate-400 leading-relaxed">
+                    Tutti i dati visibili nella dashboard superiore sono calcolati in tempo reale esclusivamente sui **pronostici già chiusi e verificati**. Le partite ancora in corso non alterano le percentuali fino al triplice fischio, garantendo la massima trasparenza e veridicità storica.
                 </p>
             </div>
 
@@ -347,7 +455,7 @@
                 };
             }).filter(b => b.is_published === true);
 
-            // Ordinamento intelligente: prima i match in corso ("pending"), poi data decrescente
+            // Ordinamento: prima i match in corso ("pending"), poi data decrescente
             return cleanBets.sort((a, b) => {
                 if (a.status === 'pending' && b.status !== 'pending') return -1;
                 if (a.status !== 'pending' && b.status === 'pending') return 1;
@@ -378,7 +486,7 @@
 
             localStorage.setItem(TRIAL_KEY, JSON.stringify({ email: email, expiry: expiryDate.toISOString() }));
 
-            // Salva lead per newsletter
+            // Salva lead per newsletter locale
             let leads = [];
             try {
                 leads = JSON.parse(localStorage.getItem(LEADS_KEY)) || [];
@@ -423,7 +531,7 @@
         }
 
         function updatePublicStats(bets) {
-            const total = bets.length;
+            // Conta unicamente i pronostici già chiusi
             const resolved = bets.filter(b => b.status === 'won' || b.status === 'lost');
             const won = bets.filter(b => b.status === 'won').length;
             const winRate = resolved.length > 0 ? ((won / resolved.length) * 100).toFixed(1) : 0;
@@ -443,7 +551,8 @@
 
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
 
-            document.getElementById('stat-total').innerText = total;
+            // Aggiorna contatori a schermo
+            document.getElementById('stat-resolved-count').innerText = resolved.length;
             document.getElementById('stat-winrate').innerText = winRate + '%';
             document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
             document.getElementById('stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
