@@ -266,7 +266,7 @@
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                         <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Storico Giocate Ricevute
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L). Tocca una riga per aprirla.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Tocca una riga per aprire la scheda a schermo intero.</p>
                 </div>
 
                 <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800">
@@ -306,16 +306,16 @@
         AtmBet &copy; 2026. Cruscotto Rendimento Certificato.
     </footer>
 
-    <!-- MODAL DETTAGLIO PRONOSTICO A SCHERMO INTERO -->
-    <div id="bet-detail-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+    <!-- MODAL DETTAGLIO PRONOSTICO -->
+    <div id="bet-detail-modal" class="fixed inset-0 z-[999] bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
                     <span id="modal-badge-status" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">...</span>
                     <span id="modal-league" class="text-xs text-slate-400 font-medium bg-slate-950 px-2 py-0.5 rounded border border-slate-800">...</span>
                 </div>
-                <button type="button" onclick="closeBetModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                <button type="button" onclick="closeBetModal()" class="text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800/80 hover:bg-slate-800 transition">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -330,7 +330,7 @@
 
             <div id="modal-submatches-box" class="space-y-2"></div>
 
-            <div class="bg-slate-950/90 rounded-2xl p-4 border border-slate-800 space-y-2">
+            <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 space-y-1.5">
                 <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Pronostico & Mercato:</div>
                 <div id="modal-prediction-content" class="text-emerald-400 font-bold text-sm sm:text-base">...</div>
                 <div id="modal-market-content" class="text-xs text-slate-400">...</div>
@@ -351,7 +351,7 @@
                 </div>
             </div>
 
-            <button type="button" onclick="closeBetModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
+            <button type="button" onclick="closeBetModal()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
                 Chiudi Scheda
             </button>
         </div>
@@ -370,6 +370,7 @@
         let currentMultiplier = 50; 
         let currentSimStartDate = '2026-10-24'; 
         let simNetProfitUnits = 0;
+        let currentDashboardBets = [];
 
         function checkAuth() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -410,8 +411,8 @@
                 }
             }
 
-            return bets.map(b => ({
-                id: b.id,
+            return bets.map((b, idx) => ({
+                id: String(b.id || idx),
                 event_date: b.event_date || b.date || '',
                 league: b.league || 'Generale',
                 match_name: b.match_name || b.match || 'Evento',
@@ -434,7 +435,7 @@
             if (confirm("Vuoi utilizzare 1 credito per sbloccare questa selezione?")) {
                 currentUser.credits -= 1;
                 if (!currentUser.unlocked_bets) currentUser.unlocked_bets = [];
-                currentUser.unlocked_bets.push(betId);
+                currentUser.unlocked_bets.push(String(betId));
 
                 localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentUser));
 
@@ -490,16 +491,16 @@
         }
 
         function calculateSimulationPerformance() {
-            const bets = getStoredBets();
+            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
             const now = new Date();
             const trialEnd = new Date(currentUser.trial_expiry || 0);
             const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
-            const unlocked = currentUser.unlocked_bets || [];
+            const unlocked = (currentUser.unlocked_bets || []).map(String);
 
             const simBets = bets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
-                if (!isVipActive && !unlocked.includes(b.id)) return false;
+                if (!isVipActive && !unlocked.includes(String(b.id))) return false;
 
                 const betDate = (b.event_date || '').slice(0, 10);
                 return betDate >= currentSimStartDate;
@@ -553,17 +554,17 @@
             renderHistoryTable();
         }
 
-        // APERTURA MODAL DETTAGLIO
-        function openBetModal(betId) {
-            const bets = getStoredBets();
+        // APERTURA MODAL SICURA
+        window.openBetModal = function(betId) {
+            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
             const bet = bets.find(b => String(b.id) === String(betId));
             if (!bet) return;
 
             const now = new Date();
             const trialEnd = new Date(currentUser.trial_expiry || 0);
             const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
-            const isManuallyUnlocked = (currentUser.unlocked_bets || []).includes(bet.id);
-            const canSee = isVipActive || isManuallyUnlocked;
+            const unlocked = (currentUser.unlocked_bets || []).map(String);
+            const canSee = isVipActive || unlocked.includes(String(bet.id));
 
             document.getElementById('modal-league').innerText = bet.league;
             document.getElementById('modal-date').innerText = bet.event_date;
@@ -618,16 +619,16 @@
             document.getElementById('modal-tipster').innerText = bet.original_tipster;
 
             const modal = document.getElementById('bet-detail-modal');
+            modal.style.display = 'flex';
             modal.classList.remove('hidden');
-            modal.classList.add('flex');
             lucide.createIcons();
-        }
+        };
 
-        function closeBetModal() {
+        window.closeBetModal = function() {
             const modal = document.getElementById('bet-detail-modal');
+            modal.style.display = 'none';
             modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+        };
 
         document.getElementById('bet-detail-modal').addEventListener('click', function(e) {
             if (e.target === this) closeBetModal();
@@ -667,13 +668,13 @@
         }
 
         function calculatePortfolioPerformance(isVipActive) {
-            const bets = getStoredBets();
-            const unlocked = currentUser.unlocked_bets || [];
+            currentDashboardBets = getStoredBets();
+            const unlocked = (currentUser.unlocked_bets || []).map(String);
 
-            const myCompletedBets = bets.filter(b => {
+            const myCompletedBets = currentDashboardBets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
-                return isVipActive || unlocked.includes(b.id);
+                return isVipActive || unlocked.includes(String(b.id));
             });
 
             const total = myCompletedBets.length;
@@ -721,7 +722,7 @@
 
         function renderPendingBets(isVipActive) {
             const container = document.getElementById('user-pending-container');
-            const bets = getStoredBets();
+            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
             container.innerHTML = '';
 
             const pendingBets = bets.filter(b => b.status === 'pending');
@@ -732,12 +733,14 @@
             }
 
             pendingBets.forEach(bet => {
-                const isManuallyUnlocked = (currentUser.unlocked_bets || []).includes(bet.id);
-                const canSee = isVipActive || isManuallyUnlocked;
+                const unlocked = (currentUser.unlocked_bets || []).map(String);
+                const canSee = isVipActive || unlocked.includes(String(bet.id));
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-emerald-500/40 transition shadow-lg cursor-pointer group active:scale-[0.99]";
-                card.setAttribute("onclick", `openBetModal('${bet.id}')`);
+                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-emerald-500/50 transition shadow-lg cursor-pointer group active:scale-[0.99]";
+                card.onclick = function() {
+                    openBetModal(bet.id);
+                };
 
                 card.innerHTML = `
                     <div>
@@ -750,7 +753,7 @@
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[9px] uppercase font-mono tracking-widest text-slate-500">Selezione VIP:</span>
-                                <span class="text-[9px] text-slate-500 group-hover:text-emerald-400 transition flex items-center gap-0.5">Dettaglio <i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></span>
+                                <span class="text-[9px] text-emerald-400 font-bold transition flex items-center gap-0.5">Apri Dettaglio ➔</span>
                             </div>
                             ${canSee ? `
                                 <div class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center justify-between">
@@ -792,7 +795,7 @@
 
         function renderHistoryTable() {
             const tbody = document.getElementById('user-history-tbody');
-            const bets = getStoredBets();
+            const bets = currentDashboardBets.length > 0 ? currentDashboardBets : getStoredBets();
             tbody.innerHTML = '';
 
             let completed = bets.filter(b => b.status === 'won' || b.status === 'lost');
@@ -814,7 +817,9 @@
                 tr.className = isWon 
                     ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.08] transition cursor-pointer" 
                     : "bg-rose-500/[0.02] hover:bg-rose-500/[0.08] transition cursor-pointer";
-                tr.setAttribute("onclick", `openBetModal('${bet.id}')`);
+                tr.onclick = function() {
+                    openBetModal(bet.id);
+                };
 
                 tr.innerHTML = `
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
