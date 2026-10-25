@@ -91,20 +91,20 @@
             </div>
         </div>
 
-        <!-- BOX 1: AI PARSER (Incolla Risposta AI / Tipster) -->
+        <!-- BOX 1: AI PARSER & AGGIORNAMENTO RISULTATI IN BLOCCO -->
         <section class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg">
             <div class="flex items-center justify-between mb-3">
                 <h2 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> Incolla Testo Tipster o Risposta AI (Parser Intelligente)
+                    <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> AI Parser & Aggiornamento Risultati in Blocco
                 </h2>
-                <span class="text-[11px] text-slate-500">Riconoscimento automatico campi</span>
+                <span class="text-[11px] text-slate-500">Incolla o l'elenco esiti o il nuovo pronostico</span>
             </div>
             <div class="space-y-3">
-                <textarea id="ai-input" rows="3" placeholder="Incolla qui il testo del tipster o la risposta AI (es: Arsenal - Chelsea | Over 2.5 @1.85 | Tipster: Stats4Bets | Stake 1)..."
+                <textarea id="ai-input" rows="4" placeholder="Incolla qui l'elenco dei risultati finali (aggiorna in automatico tutti i pronostici presenti) oppure un testo per nuovo inserimento..."
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500"></textarea>
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="parseAIText()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs px-4 py-2 rounded-lg font-semibold flex items-center gap-1.5 transition">
-                        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Analizza & Compila Form
+                <div class="flex flex-wrap justify-end gap-2">
+                    <button type="button" onclick="parseAIText()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
+                        <i data-lucide="check-check" class="w-4 h-4"></i> Aggiorna Esiti / Compila
                     </button>
                 </div>
             </div>
@@ -321,13 +321,61 @@
             resetDate();
         }
 
+        // MOTORE DI AGGIORNAMENTO AUTOMATICO IN BLOCCO + PARSER
         function parseAIText() {
-            const text = document.getElementById('ai-input').value;
-            if (!text.trim()) {
+            const text = document.getElementById('ai-input').value.trim();
+            if (!text) {
                 alert("Incolla prima il testo nell'area sopra!");
                 return;
             }
 
+            const bets = loadAllBets();
+            let updatedCount = 0;
+
+            // 1. MODALITÀ AGGIORNAMENTO ESITI MASSIVO: analizza riga per riga
+            const lines = text.split('\n');
+            lines.forEach(line => {
+                if (!line.trim()) return;
+
+                // Controlla se la riga specifica un esito
+                let isWon = /esito:\s*vinta|vinta|won|win/i.test(line);
+                let isLost = /esito:\s*persa|persa|lost|lose/i.test(line);
+                let isVoid = /void|annullata|rimborso/i.test(line);
+
+                if (isWon || isLost || isVoid) {
+                    const targetStatus = isWon ? 'won' : (isLost ? 'lost' : 'void');
+
+                    // Cerca nel database la partita che ha il nome più affine a questa riga
+                    bets.forEach(b => {
+                        const mName = b.match_name.toLowerCase();
+                        // Separa i nomi delle due squadre
+                        const teams = mName.split(/[-–vs\/]/i).map(t => t.trim()).filter(Boolean);
+
+                        let matchFound = false;
+                        if (teams.length >= 2) {
+                            if (line.toLowerCase().includes(teams[0]) && line.toLowerCase().includes(teams[1])) {
+                                matchFound = true;
+                            }
+                        } else if (line.toLowerCase().includes(mName)) {
+                            matchFound = true;
+                        }
+
+                        if (matchFound) {
+                            b.status = targetStatus;
+                            updatedCount++;
+                        }
+                    });
+                }
+            });
+
+            if (updatedCount > 0) {
+                persistBets(bets);
+                alert(`OTTIMO! Riconosciute e aggiornate ${updatedCount} giocate in automatico!`);
+                document.getElementById('ai-input').value = '';
+                return;
+            }
+
+            // 2. MODALITÀ PARSER SINGOLO PRONOSTICO (se non era un elenco di esiti)
             const matchRegex = /([A-Za-z0-9\s]+)\s*(?:-|vs|v)\s*([A-Za-z0-9\s]+)/i;
             const matchFound = text.match(matchRegex);
             if (matchFound) {
@@ -358,7 +406,7 @@
                 }
             });
 
-            alert("Testo analizzato! I campi disponibili sono stati compilati automaticamente.");
+            alert("Testo analizzato! I campi disponibili sono stati compilati automaticamente nel form sotto.");
         }
 
         function updateStatus(id, newStatus) {
@@ -390,7 +438,6 @@
         function setFilter(filterType, element) {
             currentFilter = filterType;
 
-            // Aggiorna classi grafiche sui bottoni
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('filter-btn-active');
             });
@@ -537,7 +584,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             resetDate();
-            // Evidenzia "Tutti" come default
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
             renderDashboard();
