@@ -56,7 +56,7 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black">
 
-    <!-- Top Navigation Bar (Altezza fissa calcolata h-20) -->
+    <!-- Top Navigation Bar -->
     <nav class="border-b border-atm-border/80 bg-atm-bg/95 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3.5">
@@ -95,7 +95,6 @@
                     </button>
                 </div>
 
-                <!-- Console Master Interna -->
                 <a href="admin.html" title="Accesso Riservato Gestore" class="text-slate-600 hover:text-slate-400 p-1.5 transition ml-1">
                     <i data-lucide="lock" class="w-4 h-4"></i>
                 </a>
@@ -168,8 +167,26 @@
         </div>
     </header>
 
-    <!-- Global Verified Metrics Dashboard -->
-    <section class="max-w-7xl mx-auto px-4 pb-16 w-full">
+    <!-- Global Verified Metrics Dashboard con Convertitore Unità -->
+    <section class="max-w-7xl mx-auto px-4 pb-16 w-full space-y-4">
+        
+        <!-- Header Barra Convertitore Unità per il pubblico -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/60 border border-slate-800 p-4 rounded-2xl">
+            <span class="text-xs text-slate-400 flex items-center gap-2">
+                <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i> Simula il rendimento in base alla dimensione della tua cassa:
+            </span>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-300 font-bold">1 Unità (€):</span>
+                <select id="public-unit-multiplier" onchange="updatePublicMonetaryCalculations()" class="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1 text-xs text-white font-mono font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
+                    <option value="5">5 €</option>
+                    <option value="10" selected>10 €</option>
+                    <option value="20">20 €</option>
+                    <option value="50">50 €</option>
+                    <option value="100">100 €</option>
+                </select>
+            </div>
+        </div>
+
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
             <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl stat-card-glow text-center flex flex-col justify-between">
@@ -195,7 +212,10 @@
                     <span>PROFITTO NETTO</span>
                     <i data-lucide="wallet" class="w-4 h-4 text-amber-400"></i>
                 </div>
-                <div id="stat-profit" class="text-2xl sm:text-4xl font-mono font-black text-amber-400 my-1">0.00u</div>
+                <div>
+                    <div id="stat-profit" class="text-2xl sm:text-3xl font-mono font-black text-amber-400">0.00u</div>
+                    <div id="public-stat-fiat" class="text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+                </div>
                 <div class="text-[11px] text-slate-500">Guadagno netto cumulativo</div>
             </div>
 
@@ -211,7 +231,7 @@
         </div>
     </section>
 
-    <!-- SEZIONE 1: IL METODO (scroll-mt-28 e py-24 per arresto perfetto) -->
+    <!-- SEZIONE 1: IL METODO -->
     <section id="metodo" class="page-section max-w-7xl mx-auto px-4 py-24 border-t border-slate-800/80 w-full scroll-mt-28">
         <div class="text-center max-w-3xl mx-auto mb-16">
             <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2 font-bold">Protocollo Operativo</span>
@@ -256,7 +276,7 @@
         </div>
     </section>
 
-    <!-- SEZIONE 2: PALINSESTO LIVE (scroll-mt-28 e py-24) -->
+    <!-- SEZIONE 2: PALINSESTO LIVE -->
     <main id="palinsesto" class="page-section max-w-7xl mx-auto px-4 py-24 flex-1 w-full border-t border-slate-800/80 scroll-mt-28">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
@@ -278,7 +298,7 @@
         </div>
     </main>
 
-    <!-- SEZIONE 3: PIANI & PREZZI (scroll-mt-28 e py-24) -->
+    <!-- SEZIONE 3: PIANI & PREZZI -->
     <section id="piani" class="page-section max-w-7xl mx-auto px-4 py-24 border-t border-slate-800/80 w-full scroll-mt-28">
         <div class="text-center max-w-3xl mx-auto mb-16">
             <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2 font-bold">Accesso & Pricing</span>
@@ -290,7 +310,6 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             
-            <!-- OPZIONE 1: Pacchetto Crediti -->
             <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition shadow-xl">
                 <div>
                     <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-2">A Consumo</div>
@@ -309,7 +328,6 @@
                 </a>
             </div>
 
-            <!-- OPZIONE 2: Settimanale -->
             <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition shadow-xl">
                 <div>
                     <div class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest mb-2">Flessibile</div>
@@ -328,7 +346,6 @@
                 </a>
             </div>
 
-            <!-- OPZIONE 3: Mensile -->
             <div class="bg-slate-900/90 border-2 border-emerald-500 rounded-3xl p-7 flex flex-col justify-between relative shadow-2xl shadow-emerald-500/10">
                 <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-full">
                     Più Popolare
@@ -351,7 +368,6 @@
                 </a>
             </div>
 
-            <!-- OPZIONE 4: Annuale -->
             <div class="bg-slate-900/70 border border-slate-800 rounded-3xl p-7 flex flex-col justify-between hover:border-slate-700 transition shadow-xl">
                 <div>
                     <div class="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest mb-2">Miglior Valore</div>
@@ -373,7 +389,7 @@
         </div>
     </section>
 
-    <!-- SEZIONE 4: FAQ (scroll-mt-28 e py-24) -->
+    <!-- SEZIONE 4: FAQ -->
     <section id="faq" class="page-section max-w-5xl mx-auto px-4 py-24 border-t border-slate-800/80 w-full scroll-mt-28">
         <div class="text-center mb-16">
             <span class="text-xs font-mono uppercase tracking-widest text-emerald-400 block mb-2 font-bold">Domande Frequenti</span>
@@ -434,13 +450,14 @@
         </div>
     </footer>
 
-    <!-- LOGICA FRONTEND JAVASCRIPT -->
+    <!-- LOGICA FRONTEND JAVASCRIPT CON CONVERTITORE € REATTIVO -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
 
         let activeFeedFilter = 'all';
+        let publicNetProfitUnits = 0;
 
         function checkUserSession() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -521,6 +538,22 @@
             });
         }
 
+        function updatePublicMonetaryCalculations() {
+            const selectEl = document.getElementById('public-unit-multiplier');
+            const multiplier = parseFloat(selectEl ? selectEl.value : 10) || 10;
+            const fiatAmount = publicNetProfitUnits * multiplier;
+            const fiatEl = document.getElementById('public-stat-fiat');
+            
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatAmount >= 0 ? '+' : ''}${fiatAmount.toFixed(2)} €`;
+                if (fiatAmount >= 0) {
+                    fiatEl.className = "text-xs font-mono font-bold text-emerald-400 mt-0.5";
+                } else {
+                    fiatEl.className = "text-xs font-mono font-bold text-rose-400 mt-0.5";
+                }
+            }
+        }
+
         function filterFeed(filterType, element) {
             activeFeedFilter = filterType;
 
@@ -552,12 +585,15 @@
                 totalStake += s;
             });
 
+            publicNetProfitUnits = netProfit;
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
 
             document.getElementById('stat-resolved-count').innerText = resolved.length;
             document.getElementById('stat-winrate').innerText = winRate + '%';
             document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
             document.getElementById('stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
+
+            updatePublicMonetaryCalculations();
         }
 
         function renderFeed() {
@@ -638,7 +674,6 @@
             lucide.createIcons();
         }
 
-        // SCROLL SPY AD ALTA PRECISIONE
         function initScrollSpy() {
             const sections = document.querySelectorAll('.page-section');
             const navLinks = {
