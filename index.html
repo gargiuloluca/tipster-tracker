@@ -61,7 +61,6 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
-        /* Mobile tap highlight reset */
         * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
@@ -187,7 +186,6 @@
                     <p class="text-[11px] sm:text-xs text-slate-400">Verifica i guadagni simulando la partenza da una data specifica.</p>
                 </div>
 
-                <!-- Input Data & Filtri Rapidi Adattivi -->
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
                         <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Dal:</span>
@@ -770,7 +768,9 @@
                     <div class="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
                         <div>
                             <span class="text-slate-500 text-[10px]">Quota:</span>
-                            <span class="text-white font-mono font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>
+                            ${isLocked 
+                                ? '<span class="text-slate-600 font-mono font-bold ml-1 blur-sm select-none">1.85</span>' 
+                                : `<span class="text-white font-mono font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>`}
                         </div>
                         <div>
                             <span class="text-slate-500 text-[10px]">Stake:</span>
