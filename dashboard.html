@@ -126,15 +126,17 @@
                     <p class="text-xs text-slate-400">Statistiche aggregate calcolate unicamente sulle selezioni sbloccate e chiuse dal tuo profilo.</p>
                 </div>
 
-                <!-- Convertitore Valore Unità (€) -->
-                <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-1.5 rounded-xl">
-                    <span class="text-[11px] text-slate-400 font-medium">Valore Unità:</span>
-                    <select id="unit-multiplier" onchange="updateMonetaryCalculations()" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-white font-mono font-bold focus:outline-none focus:border-emerald-500">
-                        <option value="5">1u = 5€</option>
-                        <option value="10" selected>1u = 10€</option>
-                        <option value="20">1u = 20€</option>
-                        <option value="50">1u = 50€</option>
-                        <option value="100">1u = 100€</option>
+                <!-- Convertitore Valore Unità (€) Reattivo -->
+                <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-xl shadow">
+                    <span class="text-xs text-slate-300 font-bold flex items-center gap-1">
+                        <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i> Valore Unità:
+                    </span>
+                    <select id="unit-multiplier" onchange="updateMonetaryCalculations()" class="bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-white font-mono font-bold focus:outline-none focus:border-emerald-500 cursor-pointer">
+                        <option value="5">1u = 5 €</option>
+                        <option value="10" selected>1u = 10 €</option>
+                        <option value="20">1u = 20 €</option>
+                        <option value="50">1u = 50 €</option>
+                        <option value="100">1u = 100 €</option>
                     </select>
                 </div>
             </div>
@@ -149,7 +151,7 @@
                     </div>
                     <div>
                         <div id="user-stat-profit" class="text-2xl sm:text-3xl font-mono font-black text-emerald-400">+0.00u</div>
-                        <div id="user-stat-fiat" class="text-xs font-mono text-slate-400 mt-0.5">≈ +0.00 €</div>
+                        <div id="user-stat-fiat" class="text-xs font-mono font-bold text-emerald-400 mt-1">≈ +0.00 €</div>
                     </div>
                     <div class="text-[10px] text-slate-500 mt-2">Guadagno netto effettivo</div>
                 </div>
@@ -245,7 +247,7 @@
         AtmBet &copy; 2026. Cruscotto Rendimento & Portafoglio Utente Certificato.
     </footer>
 
-    <!-- LOGICA DASHBOARD CON ANALISI RENDIMENTO & STORICO -->
+    <!-- LOGICA DASHBOARD CON CONVERTITORE REATTIVO -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -333,16 +335,20 @@
             }
         }
 
+        // Funzione Convertitore Reattivo
         function updateMonetaryCalculations() {
-            const multiplier = parseFloat(document.getElementById('unit-multiplier').value) || 10;
+            const selectEl = document.getElementById('unit-multiplier');
+            const multiplier = parseFloat(selectEl ? selectEl.value : 10) || 10;
             const fiatAmount = latestNetProfitUnits * multiplier;
             const fiatEl = document.getElementById('user-stat-fiat');
             
-            fiatEl.innerText = `≈ ${fiatAmount >= 0 ? '+' : ''}${fiatAmount.toFixed(2)} €`;
-            if (fiatAmount >= 0) {
-                fiatEl.className = "text-xs font-mono text-emerald-400 mt-0.5";
-            } else {
-                fiatEl.className = "text-xs font-mono text-rose-400 mt-0.5";
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatAmount >= 0 ? '+' : ''}${fiatAmount.toFixed(2)} €`;
+                if (fiatAmount >= 0) {
+                    fiatEl.className = "text-xs font-mono font-bold text-emerald-400 mt-1";
+                } else {
+                    fiatEl.className = "text-xs font-mono font-bold text-rose-400 mt-1";
+                }
             }
         }
 
@@ -366,7 +372,6 @@
             document.getElementById('user-created-date').innerText = (currentUser.created_at || '').slice(0, 10);
             document.getElementById('badge-credits-count').innerText = (currentUser.credits || 0) + ' Crediti';
 
-            // Verifica validità VIP
             const now = new Date();
             const trialEnd = new Date(currentUser.trial_expiry || 0);
             const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
@@ -386,12 +391,10 @@
             renderHistoryTable();
         }
 
-        // CALCOLO RENDICONTO ECONOMICO PERSONALE
         function calculatePortfolioPerformance(isVipActive) {
             const bets = getStoredBets();
             const unlocked = currentUser.unlocked_bets || [];
 
-            // Se l'utente ha il VIP attivo vede tutto lo storico, altrimenti solo quelle sbloccate con crediti
             const myCompletedBets = bets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
@@ -419,7 +422,6 @@
             latestNetProfitUnits = netProfit;
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
 
-            // Aggiorna metriche a schermo
             const profitEl = document.getElementById('user-stat-profit');
             profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
             profitEl.className = `text-2xl sm:text-3xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
@@ -430,7 +432,6 @@
             document.getElementById('user-stat-won-count').innerText = won + 'V';
             document.getElementById('user-stat-lost-count').innerText = lost + 'P';
 
-            // Badge Portafoglio
             const statusBadge = document.getElementById('badge-portfolio-status');
             if (netProfit >= 0) {
                 statusBadge.innerText = "IN ATTIVO";
@@ -443,7 +444,6 @@
             updateMonetaryCalculations();
         }
 
-        // SELEZIONI ATTIVE IN CORSO
         function renderPendingBets(isVipActive) {
             const container = document.getElementById('user-pending-container');
             const bets = getStoredBets();
@@ -509,7 +509,6 @@
             lucide.createIcons();
         }
 
-        // TABELLA STORICO GIOCATE RICEVUTE CON P/L
         function renderHistoryTable() {
             const tbody = document.getElementById('user-history-tbody');
             const bets = getStoredBets();
