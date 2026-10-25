@@ -32,6 +32,18 @@
             border-color: #22c55e !important;
             font-weight: 800 !important;
         }
+        /* Stili visivi immediati per gli esiti */
+        .row-won {
+            background-color: rgba(34, 197, 94, 0.08) !important;
+            border-left: 4px solid #22c55e !important;
+        }
+        .row-lost {
+            background-color: rgba(244, 63, 94, 0.08) !important;
+            border-left: 4px solid #f43f5e !important;
+        }
+        .row-pending {
+            border-left: 4px solid #475569 !important;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-12">
@@ -56,33 +68,33 @@
 
     <div class="max-w-7xl mx-auto px-4 pt-6 space-y-6">
 
-        <!-- Banner Recupero Dati Storici -->
+        <!-- Banner Info Memoria -->
         <div id="status-alert" class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs text-slate-300">
             <span class="flex items-center gap-2">
                 <i data-lucide="database" class="w-4 h-4 text-emerald-400"></i>
-                <span id="status-text">Database locale connesso: archivio sincronizzato.</span>
+                <span id="status-text">Database connesso: conteggi ricalcolati in tempo reale sui filtri attivi.</span>
             </span>
-            <button onclick="rescanData()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded border border-slate-700 transition">
-                Ricarica Memoria
+            <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded border border-slate-700 transition">
+                Ricarica Pagina
             </button>
         </div>
 
-        <!-- Dashboard Statistiche Globali & AtmBet -->
+        <!-- Dashboard Statistiche DINAMICHE (Si aggiornano in base al filtro/fornitore selezionato) -->
         <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span class="text-xs text-slate-400 block mb-1">Totale Pronostici</span>
+                <span class="text-xs text-slate-400 block mb-1" id="label-stat-total">Pronostici Vista</span>
                 <span id="stat-total" class="text-2xl font-black text-white">0</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl border-l-4 border-l-emerald-500">
-                <span class="text-xs text-emerald-400 font-semibold block mb-1">Solo Brand AtmBet</span>
+                <span class="text-xs text-emerald-400 font-semibold block mb-1">In Vetrina AtmBet</span>
                 <span id="stat-atmbet" class="text-2xl font-black text-emerald-400">0</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span class="text-xs text-slate-400 block mb-1">Win Rate</span>
+                <span class="text-xs text-slate-400 block mb-1">Win Rate (Chiusi)</span>
                 <span id="stat-winrate" class="text-2xl font-black text-white">0%</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                <span class="text-xs text-slate-400 block mb-1">Profitto Totale</span>
+                <span class="text-xs text-slate-400 block mb-1">Profitto Netto</span>
                 <span id="stat-profit" class="text-2xl font-black text-amber-400">0.00u</span>
             </div>
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
@@ -97,10 +109,10 @@
                 <h2 class="text-sm font-bold text-white flex items-center gap-2">
                     <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> AI Parser & Aggiornamento Risultati in Blocco
                 </h2>
-                <span class="text-[11px] text-slate-500">Incolla o l'elenco esiti o il nuovo pronostico</span>
+                <span class="text-[11px] text-slate-500">Incolla lista esiti o nuovo pronostico</span>
             </div>
             <div class="space-y-3">
-                <textarea id="ai-input" rows="4" placeholder="Incolla qui l'elenco dei risultati finali (aggiorna in automatico tutti i pronostici presenti) oppure un testo per nuovo inserimento..."
+                <textarea id="ai-input" rows="3" placeholder="Incolla qui l'elenco dei risultati (es. Inter vs Milan - Esito: Vinta) oppure testo grezzo per inserimento..."
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500"></textarea>
                 <div class="flex flex-wrap justify-end gap-2">
                     <button type="button" onclick="parseAIText()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
@@ -174,13 +186,13 @@
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
 
-                <!-- Tasto Toggle Pubblicazione AtmBet -->
+                <!-- Toggle Pubblicazione AtmBet -->
                 <div class="sm:col-span-2 md:col-span-3 flex items-center pt-2">
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="is_published" checked class="sr-only peer">
                         <div class="w-10 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
                         <span class="ml-2.5 text-xs font-bold text-white flex items-center gap-1.5">
-                            <span class="text-emerald-400">★ Pubblica su Vetrina AtmBet</span> (Visibile agli utenti)
+                            <span class="text-emerald-400">★ Pubblica su Vetrina AtmBet</span>
                         </span>
                     </label>
                 </div>
@@ -193,10 +205,10 @@
             </form>
         </section>
 
-        <!-- FILTRI RAPIDI & DISTINZIONE FORNITORI / SOLO ATMBET -->
+        <!-- BARRA FILTRI RAPIDI & SCELTA FORNITORE -->
         <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-3 rounded-xl">
             <div class="flex flex-wrap items-center gap-2">
-                <span class="text-xs text-slate-400 font-semibold mr-1">Filtra per:</span>
+                <span class="text-xs text-slate-400 font-semibold mr-1">Filtra:</span>
                 <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
                 <button type="button" onclick="setFilter('atmbet', this)" id="btn-filter-atmbet" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-1 transition">
                     <i data-lucide="star" class="w-3 h-3 text-amber-400"></i> Solo AtmBet
@@ -205,28 +217,28 @@
                 <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
             </div>
 
-            <!-- Selettore per fornitore singolo -->
+            <!-- Selettore Singolo Fornitore -->
             <div class="flex items-center gap-2">
-                <span class="text-xs text-slate-400">Fornitore:</span>
-                <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none">
+                <span class="text-xs text-slate-400 font-semibold">Fornitore:</span>
+                <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
                     <option value="all">Tutti i Fornitori</option>
                 </select>
             </div>
         </div>
 
-        <!-- TABELLA PRONOSTICI COMPLETA -->
+        <!-- TABELLA PRONOSTICI CON DISTINZIONE VISIVA CHIARA -->
         <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-950/80 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
+                    <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
                         <tr>
                             <th class="py-3 px-3">Data</th>
                             <th class="py-3 px-3">Partita</th>
                             <th class="py-3 px-3">Pronostico</th>
-                            <th class="py-3 px-3">Quota/Stake</th>
-                            <th class="py-3 px-3">Fornitore Reale</th>
-                            <th class="py-3 px-3 text-center">Vetrina AtmBet</th>
-                            <th class="py-3 px-3">Esito</th>
+                            <th class="py-3 px-3">Quota / Stake</th>
+                            <th class="py-3 px-3">Fornitore</th>
+                            <th class="py-3 px-3 text-center">Vetrina</th>
+                            <th class="py-3 px-3">Stato & Esito</th>
                             <th class="py-3 px-3 text-right">Azioni</th>
                         </tr>
                     </thead>
@@ -239,7 +251,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE INTELLIGENTE -->
+    <!-- SCRIPT GESTIONALE INTELLIGENTE & RICALCOLO DINAMICO -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -273,19 +285,25 @@
                 }
             }
 
-            return bets.map((b, idx) => ({
-                id: b.id || ('b_' + idx + '_' + (b.event_date || Date.now())),
-                event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
-                match_name: b.match_name || b.match || b.teams || 'Evento',
-                league: b.league || b.competition || 'Generale',
-                market: b.market || b.type || 'Mercato',
-                prediction: b.prediction || b.pick || b.selection || '-',
-                original_tipster: b.original_tipster || b.tipster || b.source || 'AtmBet Selection',
-                odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
-                stake: parseFloat(b.stake || b.units || 1.0),
-                status: b.status || b.result || 'pending',
-                is_published: b.is_published !== undefined ? b.is_published : true
-            }));
+            return bets.map((b, idx) => {
+                // NORMALIZZAZIONE STAKE: se lo stake è memorizzato come 50 (es. 50u) o anomalo, viene corretto a 1.0u per il calcolo matematico
+                let cleanStake = parseFloat(b.stake || b.units || 1.0);
+                if (cleanStake > 10) cleanStake = 1.0;
+
+                return {
+                    id: b.id || ('b_' + idx + '_' + (b.event_date || Date.now())),
+                    event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
+                    match_name: b.match_name || b.match || b.teams || 'Evento',
+                    league: b.league || b.competition || 'Generale',
+                    market: b.market || b.type || 'Mercato',
+                    prediction: b.prediction || b.pick || b.selection || '-',
+                    original_tipster: b.original_tipster || b.tipster || b.source || 'AtmBet Selection',
+                    odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
+                    stake: cleanStake,
+                    status: b.status || b.result || 'pending',
+                    is_published: b.is_published !== undefined ? b.is_published : true
+                };
+            });
         }
 
         function persistBets(bets) {
@@ -307,7 +325,7 @@
                 market: document.getElementById('market').value.trim(),
                 prediction: document.getElementById('prediction').value.trim(),
                 odds: parseFloat(document.getElementById('odds').value),
-                stake: parseFloat(document.getElementById('stake').value),
+                stake: parseFloat(document.getElementById('stake').value) || 1.0,
                 status: 'pending',
                 is_published: document.getElementById('is_published').checked
             };
@@ -321,7 +339,6 @@
             resetDate();
         }
 
-        // MOTORE DI AGGIORNAMENTO AUTOMATICO IN BLOCCO + PARSER
         function parseAIText() {
             const text = document.getElementById('ai-input').value.trim();
             if (!text) {
@@ -332,12 +349,10 @@
             const bets = loadAllBets();
             let updatedCount = 0;
 
-            // 1. MODALITÀ AGGIORNAMENTO ESITI MASSIVO: analizza riga per riga
             const lines = text.split('\n');
             lines.forEach(line => {
                 if (!line.trim()) return;
 
-                // Controlla se la riga specifica un esito
                 let isWon = /esito:\s*vinta|vinta|won|win/i.test(line);
                 let isLost = /esito:\s*persa|persa|lost|lose/i.test(line);
                 let isVoid = /void|annullata|rimborso/i.test(line);
@@ -345,10 +360,8 @@
                 if (isWon || isLost || isVoid) {
                     const targetStatus = isWon ? 'won' : (isLost ? 'lost' : 'void');
 
-                    // Cerca nel database la partita che ha il nome più affine a questa riga
                     bets.forEach(b => {
                         const mName = b.match_name.toLowerCase();
-                        // Separa i nomi delle due squadre
                         const teams = mName.split(/[-–vs\/]/i).map(t => t.trim()).filter(Boolean);
 
                         let matchFound = false;
@@ -370,12 +383,12 @@
 
             if (updatedCount > 0) {
                 persistBets(bets);
-                alert(`OTTIMO! Riconosciute e aggiornate ${updatedCount} giocate in automatico!`);
+                alert(`Aggiornati con successo gli esiti di ${updatedCount} giocate!`);
                 document.getElementById('ai-input').value = '';
                 return;
             }
 
-            // 2. MODALITÀ PARSER SINGOLO PRONOSTICO (se non era un elenco di esiti)
+            // Parser singolo
             const matchRegex = /([A-Za-z0-9\s]+)\s*(?:-|vs|v)\s*([A-Za-z0-9\s]+)/i;
             const matchFound = text.match(matchRegex);
             if (matchFound) {
@@ -388,25 +401,7 @@
                 document.getElementById('odds').value = parseFloat(oddsFound[1].replace(',', '.'));
             }
 
-            if (/over\s*\d+\.?\d*/i.test(text)) {
-                document.getElementById('market').value = 'Over/Under';
-                document.getElementById('prediction').value = text.match(/over\s*\d+\.?\d*/i)[0];
-            } else if (/under\s*\d+\.?\d*/i.test(text)) {
-                document.getElementById('market').value = 'Over/Under';
-                document.getElementById('prediction').value = text.match(/under\s*\d+\.?\d*/i)[0];
-            } else if (/gol|gg|btts/i.test(text)) {
-                document.getElementById('market').value = 'Gol / NoGol';
-                document.getElementById('prediction').value = 'Gol (Entrambe Segnano)';
-            }
-
-            const tipsters = ['Stats4Bets', 'BetMines', 'CalcioAI', 'OLAND', 'Zcode', 'Pronostici1'];
-            tipsters.forEach(t => {
-                if (new RegExp(t, 'i').test(text)) {
-                    document.getElementById('original_tipster').value = t;
-                }
-            });
-
-            alert("Testo analizzato! I campi disponibili sono stati compilati automaticamente nel form sotto.");
+            alert("Dati analizzati e compilati nel form.");
         }
 
         function updateStatus(id, newStatus) {
@@ -445,22 +440,35 @@
                 element.classList.add('filter-btn-active');
             }
 
-            renderTable();
+            renderDashboard();
         }
 
         function filterByTipster(tipsterValue) {
             currentTipsterFilter = tipsterValue;
-            renderTable();
+            renderDashboard();
         }
 
-        function renderTable() {
-            const tbody = document.getElementById('bets-tbody');
-            const bets = loadAllBets();
-            tbody.innerHTML = '';
+        // RICALCOLO DINAMICO DELLE STATISTICHE BASATO SUL FILTRO ATTIVO
+        function renderDashboard() {
+            const allBets = loadAllBets();
 
-            let filtered = bets;
+            // Popola menu a tendina fornitori unici (senza resettare selezione)
+            const tipsters = [...new Set(allBets.map(b => b.original_tipster).filter(Boolean))];
+            const select = document.getElementById('tipster-select-filter');
+            if (select.options.length <= 1) {
+                select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
+                tipsters.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t;
+                    opt.innerText = t;
+                    select.appendChild(opt);
+                });
+            }
+            select.value = currentTipsterFilter;
 
-            // Filtro 1: Categoria / Stato
+            // Applica filtri
+            let filtered = allBets;
+
             if (currentFilter === 'atmbet') {
                 filtered = filtered.filter(b => b.is_published === true);
             } else if (currentFilter === 'pending') {
@@ -469,19 +477,72 @@
                 filtered = filtered.filter(b => b.status === 'won' || b.status === 'lost' || b.status === 'void');
             }
 
-            // Filtro 2: Fornitore
             if (currentTipsterFilter !== 'all') {
                 filtered = filtered.filter(b => (b.original_tipster || '').toLowerCase() === currentTipsterFilter.toLowerCase());
             }
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-500">Nessun pronostico trovato per il filtro selezionato.</td></tr>`;
+            // CALCOLO STATISTICHE ESATTAMENTE SULLA VISTA FILTRATA
+            const total = filtered.length;
+            const atmbetCount = filtered.filter(b => b.is_published === true).length;
+
+            const resolved = filtered.filter(b => b.status === 'won' || b.status === 'lost');
+            const won = filtered.filter(b => b.status === 'won').length;
+            const winRate = resolved.length > 0 ? ((won / resolved.length) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            let totalResolvedStake = 0;
+
+            resolved.forEach(b => {
+                const s = b.stake || 1.0;
+                if (b.status === 'won') {
+                    netProfit += (b.odds - 1) * s;
+                } else if (b.status === 'lost') {
+                    netProfit -= s;
+                }
+                totalResolvedStake += s;
+            });
+
+            const yieldVal = totalResolvedStake > 0 ? ((netProfit / totalResolvedStake) * 100).toFixed(1) : 0;
+
+            // Aggiorna etichette e contatori a video
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-atmbet').innerText = atmbetCount;
+            document.getElementById('stat-winrate').innerText = winRate + '%';
+            document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+            document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
+
+            renderTable(filtered);
+        }
+
+        // RENDER DELLA TABELLA CON DISTINZIONE GRAFICA NETTA
+        function renderTable(betsToDisplay) {
+            const tbody = document.getElementById('bets-tbody');
+            tbody.innerHTML = '';
+
+            if (betsToDisplay.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-500 font-medium">Nessun pronostico per i filtri selezionati.</td></tr>`;
                 return;
             }
 
-            filtered.forEach(bet => {
+            betsToDisplay.forEach(bet => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-950/40 transition";
+
+                // Applicazione colore e bordo in base allo stato
+                let rowClass = "row-pending transition";
+                let badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>';
+
+                if (bet.status === 'won') {
+                    rowClass = "row-won transition";
+                    badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>';
+                } else if (bet.status === 'lost') {
+                    rowClass = "row-lost transition";
+                    badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>';
+                } else if (bet.status === 'void') {
+                    rowClass = "transition bg-amber-500/5";
+                    badgeStatus = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>';
+                }
+
+                tr.className = rowClass;
 
                 tr.innerHTML = `
                     <td class="py-3 px-3 text-slate-400 whitespace-nowrap">${bet.event_date}</td>
@@ -495,23 +556,26 @@
                     </td>
                     <td class="py-3 px-3">
                         <span class="font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</span>
-                        <span class="text-slate-500 text-[10px]">(${bet.stake}u)</span>
+                        <span class="text-slate-500 text-[10px]">(${bet.stake.toFixed(1)}u)</span>
                     </td>
                     <td class="py-3 px-3">
                         <span class="bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-[11px] text-slate-300">${bet.original_tipster}</span>
                     </td>
                     <td class="py-3 px-3 text-center">
                         <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
-                            ${bet.is_published ? '★ Vetrina AtmBet' : 'Solo Interno'}
+                            ${bet.is_published ? '★ AtmBet' : 'Solo Interno'}
                         </button>
                     </td>
                     <td class="py-3 px-3">
-                        <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                            <option value="pending" ${bet.status === 'pending' ? 'selected' : ''}>In corso</option>
-                            <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
-                            <option value="lost" ${bet.status === 'lost' ? 'selected' : ''}>Persa</option>
-                            <option value="void" ${bet.status === 'void' ? 'selected' : ''}>Void</option>
-                        </select>
+                        <div class="flex items-center gap-2">
+                            ${badgeStatus}
+                            <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none">
+                                <option value="pending" ${bet.status === 'pending' ? 'selected' : ''}>In corso</option>
+                                <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
+                                <option value="lost" ${bet.status === 'lost' ? 'selected' : ''}>Persa</option>
+                                <option value="void" ${bet.status === 'void' ? 'selected' : ''}>Void</option>
+                            </select>
+                        </div>
                     </td>
                     <td class="py-3 px-3 text-right">
                         <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
@@ -525,61 +589,10 @@
             lucide.createIcons();
         }
 
-        function renderDashboard() {
-            const bets = loadAllBets();
-            const total = bets.length;
-            const atmbetCount = bets.filter(b => b.is_published === true).length;
-
-            const resolved = bets.filter(b => b.status === 'won' || b.status === 'lost');
-            const won = bets.filter(b => b.status === 'won').length;
-            const winRate = resolved.length > 0 ? ((won / resolved.length) * 100).toFixed(1) : 0;
-
-            let profit = 0;
-            let totalStake = 0;
-            bets.forEach(b => {
-                if (b.status === 'won') {
-                    profit += (b.odds - 1) * b.stake;
-                    totalStake += b.stake;
-                } else if (b.status === 'lost') {
-                    profit -= b.stake;
-                    totalStake += b.stake;
-                }
-            });
-
-            const yieldVal = totalStake > 0 ? ((profit / totalStake) * 100).toFixed(1) : 0;
-
-            document.getElementById('stat-total').innerText = total;
-            document.getElementById('stat-atmbet').innerText = atmbetCount;
-            document.getElementById('stat-winrate').innerText = winRate + '%';
-            document.getElementById('stat-profit').innerText = (profit >= 0 ? '+' : '') + profit.toFixed(2) + 'u';
-            document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
-
-            // Popola selettore fornitori unici
-            const tipsters = [...new Set(bets.map(b => b.original_tipster).filter(Boolean))];
-            const select = document.getElementById('tipster-select-filter');
-            select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
-            tipsters.forEach(t => {
-                const opt = document.createElement('option');
-                opt.value = t;
-                opt.innerText = t;
-                if (t.toLowerCase() === currentTipsterFilter.toLowerCase()) opt.selected = true;
-                select.appendChild(opt);
-            });
-
-            renderTable();
-        }
-
         function resetDate() {
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            const dateInput = document.getElementById('event_date');
-            if (dateInput) dateInput.value = now.toISOString().slice(0, 16);
-        }
-
-        function rescanData() {
-            const bets = loadAllBets();
-            alert("Database aggiornato: " + bets.length + " pronostici caricati.");
-            renderDashboard();
+            document.getElementById('event_date').value = now.toISOString().slice(0, 16);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
