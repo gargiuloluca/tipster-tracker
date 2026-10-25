@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtmBet | Portale Ufficiale Pronostici & Statistiche</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#0b0f17',
+                            card: '#111827',
+                            border: '#1f2937',
+                            gold: '#facc15'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- Top Navigation -->
+    <nav class="border-b border-atm-border bg-atm-card/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <img src="logo.png" alt="AtmBet Logo" class="h-10 w-auto">
+                <span class="text-xl font-black tracking-wider text-white">ATM<span class="text-atm-green">BET</span></span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="trial-badge" class="hidden text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-bold flex items-center gap-1">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Trial Attivo (7gg)
+                </span>
+                <a href="admin.html" class="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded border border-slate-700 hover:border-slate-500 transition">
+                    Area Riservata
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="max-w-7xl mx-auto px-4 pt-10 pb-6 text-center">
+        <div class="flex justify-center mb-4">
+            <img src="logo.png" alt="AtmBet" class="h-28 w-auto drop-shadow-[0_10px_20px_rgba(34,197,94,0.25)]">
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black tracking-tight text-white mb-3">
+            Investimento Sportivo <span class="text-atm-green">Basato sui Dati</span>
+        </h1>
+        <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+            Selezioni matematiche ad alto valore atteso verificate e tracciate. Niente improvvisazione: solo metodo, rendimento costante e gestione rigorosa dello stake.
+        </p>
+
+        <!-- Newsletter / 7-Day Trial Box -->
+        <div id="trial-box" class="mt-8 max-w-xl mx-auto bg-gradient-to-b from-atm-card to-slate-900 border border-atm-green/30 p-6 rounded-2xl shadow-xl relative overflow-hidden">
+            <div class="absolute -right-8 -top-8 w-24 h-24 bg-atm-green/10 rounded-full blur-2xl"></div>
+            <span class="inline-block bg-atm-green text-black font-extrabold text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full mb-3">
+                Offerta Lancio
+            </span>
+            <h2 class="text-lg sm:text-xl font-bold text-white mb-1">Attiva 7 Giorni di Accesso Gratuito</h2>
+            <p class="text-xs text-slate-400 mb-4">
+                Iscriviti alla newsletter di AtmBet per sbloccare tutti i pronostici e ricevere analisi esclusive sui mercati sportivi.
+            </p>
+            <form id="trial-form" class="flex flex-col sm:flex-row gap-2" onsubmit="activateTrial(event)">
+                <input type="email" id="user-email" required placeholder="Inserisci la tua email migliore..." 
+                    class="bg-slate-950/80 border border-slate-700 text-sm rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-atm-green flex-1">
+                <button type="submit" class="bg-atm-green hover:bg-emerald-400 text-black font-bold text-sm px-5 py-2.5 rounded-lg transition duration-150 flex items-center justify-center gap-1.5">
+                    <i data-lucide="zap" class="w-4 h-4"></i> Attiva Subito
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Global Performance Stats -->
+    <section class="max-w-7xl mx-auto px-4 py-6">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-atm-card border border-atm-border p-4 rounded-xl text-center">
+                <span class="text-xs text-slate-400 uppercase tracking-wider block mb-1">ROI Verificato</span>
+                <span id="stat-roi" class="text-2xl font-black text-atm-green">+14.2%</span>
+            </div>
+            <div class="bg-atm-card border border-atm-border p-4 rounded-xl text-center">
+                <span class="text-xs text-slate-400 uppercase tracking-wider block mb-1">Win Rate</span>
+                <span id="stat-winrate" class="text-2xl font-black text-white">68.4%</span>
+            </div>
+            <div class="bg-atm-card border border-atm-border p-4 rounded-xl text-center">
+                <span class="text-xs text-slate-400 uppercase tracking-wider block mb-1">Profitto (U)</span>
+                <span id="stat-profit" class="text-2xl font-black text-atm-gold">+42.8u</span>
+            </div>
+            <div class="bg-atm-card border border-atm-border p-4 rounded-xl text-center">
+                <span class="text-xs text-slate-400 uppercase tracking-wider block mb-1">Pronostici Tracciati</span>
+                <span id="stat-total" class="text-2xl font-black text-white">0</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Betting Feed -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <i data-lucide="flame" class="text-atm-green w-5 h-5"></i> Palinsesto Selezionato AtmBet
+            </h2>
+            <div class="flex gap-2">
+                <button onclick="renderBets('all')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700">Tutti</button>
+                <button onclick="renderBets('pending')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700">Attivi</button>
+                <button onclick="renderBets('completed')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700">Storico</button>
+            </div>
+        </div>
+
+        <div id="bets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Le card vengono inserite qui via JS -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-atm-border bg-atm-card mt-12 py-8 text-center text-xs text-slate-500">
+        <p class="mb-2">AtmBet &copy; 2026. Tutti i diritti riservati.</p>
+        <p>Il gioco è riservato ai maggiorenni. Gioca responsabilmente.</p>
+    </footer>
+
+    <!-- Logic JS -->
+    <script>
+        // Chiave localStorage condivisa con admin.html
+        const STORAGE_KEY = 'atmbet_bets_data';
+        const TRIAL_KEY = 'atmbet_trial_session';
+
+        // Dati di fallback iniziali se il localStorage è vuoto
+        const initialMockBets = [
+            {
+                id: '1',
+                event_date: '2026-10-25 18:00',
+                league: 'Serie A',
+                match_name: 'Inter - Juventus',
+                market: 'Entrambe Segnano',
+                prediction: 'Gol (GG)',
+                odds: 1.80,
+                stake: 1.0,
+                status: 'pending',
+                is_published: true
+            },
+            {
+                id: '2',
+                event_date: '2026-10-25 20:45',
+                league: 'La Liga',
+                match_name: 'Real Madrid - Barcellona',
+                market: 'Over/Under',
+                prediction: 'Over 2.5 Goals',
+                odds: 1.65,
+                stake: 1.5,
+                status: 'won',
+                is_published: true
+            },
+            {
+                id: '3',
+                event_date: '2026-10-25 17:30',
+                league: 'Premier League',
+                match_name: 'Arsenal - Liverpool',
+                market: '1X2 Finale',
+                prediction: '1 (Arsenal Vince)',
+                odds: 2.15,
+                stake: 1.0,
+                status: 'pending',
+                is_published: true
+            }
+        ];
+
+        function getStoredBets() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initialMockBets));
+                return initialMockBets;
+            }
+            return JSON.parse(raw);
+        }
+
+        function isTrialActive() {
+            const trial = localStorage.getItem(TRIAL_KEY);
+            if (!trial) return false;
+            const data = JSON.parse(trial);
+            return new Date(data.expiry) > new Date();
+        }
+
+        function activateTrial(e) {
+            e.preventDefault();
+            const email = document.getElementById('user-email').value;
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 7);
+
+            localStorage.setItem(TRIAL_KEY, JSON.stringify({ email: email, expiry: expiryDate.toISOString() }));
+            updateTrialUI();
+            renderBets('all');
+        }
+
+        function updateTrialUI() {
+            const active = isTrialActive();
+            const box = document.getElementById('trial-box');
+            const badge = document.getElementById('trial-badge');
+            if (active) {
+                box.classList.add('hidden');
+                badge.classList.remove('hidden');
+            } else {
+                box.classList.remove('hidden');
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderBets(filter = 'all') {
+            const container = document.getElementById('bets-container');
+            const bets = getStoredBets().filter(b => b.is_published);
+            const activeTrial = isTrialActive();
+
+            container.innerHTML = '';
+
+            let filtered = bets;
+            if (filter === 'pending') filtered = bets.filter(b => b.status === 'pending');
+            if (filter === 'completed') filtered = bets.filter(b => b.status !== 'pending');
+
+            // Aggiorna metriche
+            document.getElementById('stat-total').innerText = bets.length;
+
+            filtered.forEach(bet => {
+                const isLocked = !activeTrial && bet.status === 'pending';
+
+                const card = document.createElement('div');
+                card.className = "bg-atm-card border border-atm-border rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition";
+
+                let statusBadge = '<span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300">In attesa</span>';
+                if (bet.status === 'won') statusBadge = '<span class="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">Vinta</span>';
+                if (bet.status === 'lost') statusBadge = '<span class="text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold border border-rose-500/30">Persa</span>';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                            <span>${bet.league || 'AtmBet Selection'}</span>
+                            <div class="flex items-center gap-2">
+                                <span>${bet.event_date}</span>
+                                ${statusBadge}
+                            </div>
+                        </div>
+                        <h3 class="text-base font-bold text-white mb-2">${bet.match_name}</h3>
+                        
+                        <div class="bg-slate-950/60 rounded-lg p-3 border border-slate-800/80 mb-3">
+                            <div class="text-xs text-slate-400 mb-1">Selezione:</div>
+                            ${isLocked ? `
+                                <div class="flex items-center justify-between py-1">
+                                    <span class="text-sm font-bold text-slate-500 blur-sm select-none">Pronostico Pro</span>
+                                    <span class="text-xs text-atm-green bg-atm-green/10 border border-atm-green/30 px-2 py-1 rounded flex items-center gap-1 font-semibold">
+                                        <i data-lucide="lock" class="w-3 h-3"></i> Riservato
+                                    </span>
+                                </div>
+                            ` : `
+                                <div class="text-sm font-bold text-atm-green flex items-center justify-between">
+                                    <span>${bet.prediction}</span>
+                                    <span class="text-xs text-slate-400 font-normal">Mercato: ${bet.market}</span>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                        <div>
+                            <span class="text-slate-500">Quota:</span>
+                            <span class="text-white font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500">Stake:</span>
+                            <span class="text-white font-bold ml-1">${bet.stake}u</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500">Brand:</span>
+                            <span class="text-atm-green font-bold ml-1">AtmBet</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTrialUI();
+            renderBets('all');
+        });
+    </script>
+</body>
+</html>
