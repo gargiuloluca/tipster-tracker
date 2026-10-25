@@ -166,8 +166,9 @@
                     <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Freak Elite VIP" 
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                     <datalist id="tipsters-list">
-                        <option value="Stats4Bets">
+                        <option value="AtmBetSignal">
                         <option value="Freak Elite VIP">
+                        <option value="Stats4Bets">
                         <option value="Zcode System VIP">
                         <option value="BetMines">
                         <option value="CalcioAI">
@@ -215,6 +216,38 @@
                     </button>
                 </div>
             </form>
+        </section>
+
+        <!-- SEZIONE ESCLUSIVA ADMIN: CLASSIFICA RENDIMENTO FORNITORI -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                <div>
+                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Classifica Rendimento Fornitori / Tipster
+                    </h2>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra vinta netta in Euro per ciascun canale.</p>
+                </div>
+                <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold uppercase">Uso Riservato Admin</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+                <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                    <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                        <tr>
+                            <th class="py-2.5 px-3 text-center">Rank</th>
+                            <th class="py-2.5 px-3">Fornitore / Tipster</th>
+                            <th class="py-2.5 px-3 text-center">Giocate Chiuse</th>
+                            <th class="py-2.5 px-3 text-center">Win Rate</th>
+                            <th class="py-2.5 px-3 text-center">Yield / ROI</th>
+                            <th class="py-2.5 px-3 text-right">Profitto (Unità)</th>
+                            <th class="py-2.5 px-3 text-right">Cifra Guadagnata (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium">
+                        <!-- Popolato dinamicamente da JS -->
+                    </tbody>
+                </table>
+            </div>
         </section>
 
         <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
@@ -273,7 +306,7 @@
 
     </div>
 
-    <!-- SCRIPT GESTIONALE CON GESTIONE MULTIPLE E TESTI COMPLETI -->
+    <!-- SCRIPT GESTIONALE CON GESTIONE MULTIPLE E CLASSIFICA FORNITORI -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -608,6 +641,92 @@
             }
         };
 
+        // CALCOLO E RENDERING CLASSIFICA FORNITORI ESCLUSIVA ADMIN
+        function renderAdminTipstersLeaderboard(allBets, unitVal) {
+            const tbody = document.getElementById('admin-tipsters-leaderboard-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const resolvedBets = allBets.filter(b => b.status === 'won' || b.status === 'lost');
+
+            if (resolvedBets.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun dato fornitore disponibile (nessuna giocata ancora conclusa).</td></tr>`;
+                return;
+            }
+
+            const tipsterStats = {};
+
+            resolvedBets.forEach(bet => {
+                const name = bet.original_tipster || 'AtmBet Selection';
+                if (!tipsterStats[name]) {
+                    tipsterStats[name] = {
+                        name: name,
+                        total: 0,
+                        won: 0,
+                        lost: 0,
+                        netProfit: 0,
+                        totalStake: 0
+                    };
+                }
+
+                const s = bet.stake || 1.0;
+                tipsterStats[name].total += 1;
+                tipsterStats[name].totalStake += s;
+
+                if (bet.status === 'won') {
+                    tipsterStats[name].won += 1;
+                    tipsterStats[name].netProfit += (bet.odds - 1) * s;
+                } else if (bet.status === 'lost') {
+                    tipsterStats[name].lost += 1;
+                    tipsterStats[name].netProfit -= s;
+                }
+            });
+
+            const leaderboard = Object.values(tipsterStats).sort((a, b) => b.netProfit - a.netProfit);
+
+            leaderboard.forEach((t, index) => {
+                const winRate = t.total > 0 ? ((t.won / t.total) * 100).toFixed(1) : 0;
+                const roi = t.totalStake > 0 ? ((t.netProfit / t.totalStake) * 100).toFixed(1) : 0;
+                const fiatProfit = t.netProfit * unitVal;
+
+                let rankBadge = `<span class="font-mono text-slate-400 font-bold">${index + 1}</span>`;
+                if (index === 0) rankBadge = `<span class="text-sm">🥇</span>`;
+                if (index === 1) rankBadge = `<span class="text-sm">🥈</span>`;
+                if (index === 2) rankBadge = `<span class="text-sm">🥉</span>`;
+
+                const tr = document.createElement('tr');
+                tr.className = t.netProfit >= 0 
+                    ? "hover:bg-emerald-500/[0.04] transition" 
+                    : "hover:bg-rose-500/[0.04] transition";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 text-center">${rankBadge}</td>
+                    <td class="py-2.5 px-3">
+                        <div class="font-bold text-white flex items-center gap-1.5">
+                            <span>${t.name}</span>
+                            ${index === 0 ? '<span class="text-[8px] bg-amber-500/20 text-amber-400 px-1 py-0.2 rounded font-black uppercase tracking-wider">Top Performer</span>' : ''}
+                        </div>
+                    </td>
+                    <td class="py-2.5 px-3 text-center font-mono text-slate-300">
+                        ${t.total} <span class="text-[10px] text-slate-500">(${t.won}V - ${t.lost}P)</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-center font-mono font-bold ${parseFloat(winRate) >= 55 ? 'text-amber-400' : 'text-slate-300'}">
+                        ${winRate}%
+                    </td>
+                    <td class="py-2.5 px-3 text-center font-mono font-bold ${parseFloat(roi) >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${parseFloat(roi) >= 0 ? '+' : ''}${roi}%
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-mono font-black ${t.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${t.netProfit >= 0 ? '+' : ''}${t.netProfit.toFixed(2)}u
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-mono font-black ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         function renderDashboard() {
             const allBets = loadAllBets();
 
@@ -670,6 +789,7 @@
             document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
             document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
 
+            renderAdminTipstersLeaderboard(allBets, unitVal);
             renderTable(filtered);
         }
 
@@ -729,7 +849,6 @@
                     `;
                 }
 
-                // Gestione spacchettamento multiple per la tabella
                 let submatchesHtml = '';
                 let toggleBtnHtml = '';
                 if (bet.match_name.includes('/')) {
