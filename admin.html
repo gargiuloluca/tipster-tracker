@@ -1,793 +1,426 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TipsterHub - Tracking & Storico Fornitori</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #0b1120;
-      color: #f1f5f9;
-      padding-bottom: 50px;
-    }
-    .header {
-      background-color: #0f172a;
-      border-bottom: 1px solid #1e293b;
-      padding: 12px 16px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo-box { display: flex; align-items: center; gap: 10px; }
-    .logo-icon {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, #10b981, #06b6d4);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; color: #022c22; font-size: 18px;
-    }
-    .logo-text h1 { font-size: 17px; font-weight: 800; color: #fff; }
-    .logo-text span { font-size: 10px; color: #34d399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-
-    .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-    button {
-      border: none;
-      cursor: pointer;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 13px;
-      padding: 8px 12px;
-      transition: all 0.2s;
-    }
-    .btn-emerald { background-color: #10b981; color: #022c22; font-weight: 700; }
-    .btn-dark { background-color: #1e293b; color: #e2e8f0; border: 1px solid #334155; }
-    .btn-ai { background-color: #3b82f6; color: #ffffff; font-weight: 700; }
-    .btn-atm { background-color: #8b5cf6; color: #ffffff; font-weight: 700; border: 1px solid #a78bfa; }
-    .btn-atm.active { background-color: #6d28d9; border-color: #c4b5fd; box-shadow: 0 0 10px rgba(139, 92, 246, 0.5); }
-    .btn-emerald:hover { background-color: #059669; }
-    .btn-dark:hover { background-color: #334155; }
-    .btn-ai:hover { background-color: #2563eb; }
-
-    .container { max-width: 1200px; margin: 16px auto; padding: 0 14px; display: flex; flex-direction: column; gap: 16px; }
-
-    .filter-bar {
-      background-color: #0f172a;
-      border: 1px solid #1e293b;
-      padding: 12px 14px;
-      border-radius: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-    .filter-bar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .filter-bar-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: #94a3b8;
-    }
-    .filter-bar select {
-      background-color: #1e293b;
-      border: 1px solid #34d399;
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 6px 10px;
-      border-radius: 8px;
-    }
-
-    .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    @media (min-width: 768px) {
-      .kpi-grid { grid-template-columns: repeat(5, 1fr); }
-    }
-    .kpi-card {
-      background-color: #0f172a;
-      border: 1px solid #1e293b;
-      padding: 12px 14px;
-      border-radius: 14px;
-    }
-    .kpi-title { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
-    .kpi-value { font-size: 20px; font-weight: 800; margin: 4px 0; color: #f8fafc; }
-    .kpi-sub { font-size: 11px; color: #64748b; }
-
-    .card {
-      background-color: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .card-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid #1e293b;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .card-title { font-size: 15px; font-weight: 700; color: #fff; }
-
-    select, input, textarea {
-      background-color: #1e293b;
-      border: 1px solid #334155;
-      color: #f8fafc;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 12px;
-      outline: none;
-    }
-
-    .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
-    th {
-      background-color: #1e293b;
-      color: #94a3b8;
-      padding: 10px 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 10px;
-    }
-    td { padding: 12px; border-bottom: 1px solid #1e293b; }
-    tr:hover { background-color: rgba(30, 41, 59, 0.4); }
-
-    .tag-provider {
-      display: inline-block;
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #34d399;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11px;
-    }
-    .tag-provider.tag-atm {
-      background: #3b0764;
-      border-color: #8b5cf6;
-      color: #c4b5fd;
-    }
-
-    .btn-status-group { display: inline-flex; background: #1e293b; border-radius: 6px; padding: 2px; gap: 2px; }
-    .btn-s {
-      border: none;
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 7px;
-      border-radius: 4px;
-      background: transparent;
-      color: #94a3b8;
-    }
-    .btn-s.active-w { background-color: #10b981; color: #022c22; }
-    .btn-s.active-l { background-color: #ef4444; color: #fff; }
-    .btn-s.active-v { background-color: #f59e0b; color: #022c22; }
-    .btn-s.active-p { background-color: #475569; color: #fff; }
-
-    .modal {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-      display: none; align-items: center; justify-content: center;
-      padding: 16px; z-index: 200;
-    }
-    .modal.open { display: flex; }
-    .modal-box {
-      background-color: #0f172a;
-      border: 1px solid #1e293b;
-      border-radius: 14px;
-      width: 100%; max-width: 500px;
-      padding: 16px;
-      display: flex; flex-direction: column; gap: 12px;
-    }
-
-    .positive { color: #34d399 !important; font-weight: 700; }
-    .negative { color: #f87171 !important; font-weight: 700; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtmBet Console | Gestione Interna Tipster & Palinsesto</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#0b0f17',
+                            card: '#111827',
+                            border: '#1f2937',
+                            gold: '#facc15'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="logo-box">
-      <div class="logo-icon">⚡</div>
-      <div class="logo-text">
-        <h1 id="brand-title">TipsterHub</h1>
-        <span id="brand-sub">Multi-Provider Tracker</span>
-      </div>
-    </div>
-    <div class="btn-group">
-      <button onclick="openAiModal()" class="btn-ai">Incolla Risposta AI</button>
-      <button onclick="openJsonModal()" class="btn-dark">JSON</button>
-      <button onclick="openManualModal()" class="btn-emerald">+ Pronostico</button>
-    </div>
-  </header>
-
-  <div class="container">
-
-    <!-- SELETTORE / SWITCH ATMBET -->
-    <div class="filter-bar">
-      <div class="filter-bar-left">
-        <button id="btn-toggle-atm" onclick="toggleAtmMode()" class="btn-atm">
-          ⚡ Storico Generale (AtmBet)
-        </button>
-        <span class="filter-bar-label" id="filter-label">OPPURE FORNITORE:</span>
-        <select id="main-tipster-filter" onchange="onTipsterSelectChange()">
-          <option value="all">🌍 Tutti i Fornitori</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- STATISTICHE DINAMICHE -->
-    <div class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-title">Bilancio Netto</div>
-        <div id="kpi-profit" class="kpi-value positive">+0.00 u</div>
-        <div class="kpi-sub">Unità complessive</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">ROI (Yield)</div>
-        <div id="kpi-roi" class="kpi-value">0.0%</div>
-        <div id="kpi-staked" class="kpi-sub">Investito: 0u</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Win Rate</div>
-        <div id="kpi-winrate" class="kpi-value">0.0%</div>
-        <div id="kpi-wl" class="kpi-sub">0 Vinte / 0 Chiuse</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">Quota Media</div>
-        <div id="kpi-odds" class="kpi-value">@0.00</div>
-        <div class="kpi-sub">Selezioni filtrate</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-title">In Attesa</div>
-        <div id="kpi-pending" class="kpi-value" style="color: #fbbf24;">0</div>
-        <div class="kpi-sub">Pronostici aperti</div>
-      </div>
-    </div>
-
-    <!-- GRAFICO -->
-    <div class="card" style="padding: 14px;">
-      <div class="card-title" id="chart-title" style="margin-bottom: 10px;">Andamento Bankroll</div>
-      <div style="height: 220px; width: 100%;">
-        <canvas id="profitChart"></canvas>
-      </div>
-    </div>
-
-    <!-- CLASSIFICA (visibile solo se non in modalità AtmBet singola) -->
-    <div class="card" id="card-leaderboard">
-      <div class="card-header">
-        <div class="card-title">Classifica Redditività Fornitori</div>
-      </div>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Fornitore</th>
-              <th style="text-align: center;">Giocate</th>
-              <th style="text-align: center;">W / L / V</th>
-              <th style="text-align: center;">Win Rate</th>
-              <th style="text-align: center;">Quota Med.</th>
-              <th style="text-align: center;">ROI %</th>
-              <th style="text-align: right;">Profitto Netto</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboard-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- TABELLA PRONOSTICI -->
-    <div class="card">
-      <div class="card-header">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <div class="card-title" id="table-title">Elenco Pronostici</div>
-          <span id="badge-total-count" style="background:#1e293b; color:#34d399; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700;">0</span>
+    <!-- Top Admin Bar -->
+    <header class="border-b border-atm-border bg-atm-card/90 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet Logo" class="h-9 w-auto">
+                <div>
+                    <span class="text-lg font-black tracking-wider text-white">ATM<span class="text-atm-green">BET</span></span>
+                    <span class="ml-2 text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Console Admin</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="index.html" target="_blank" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-atm-green"></i> Vedi Vetrina Pubblica
+                </a>
+            </div>
         </div>
-        <div>
-          <select id="filter-status" onchange="renderBetsTable()">
-            <option value="all">Tutti gli stati</option>
-            <option value="pending">In Attesa</option>
-            <option value="win">Vinti</option>
-            <option value="loss">Persi</option>
-            <option value="void">Void</option>
-          </select>
-        </div>
-      </div>
+    </header>
 
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Fornitore</th>
-              <th>Incontro & Pronostico</th>
-              <th style="text-align: center;">Quota</th>
-              <th style="text-align: center;">Stake</th>
-              <th style="text-align: center;">Esito</th>
-              <th style="text-align: right;">Profitto</th>
-              <th style="text-align: center;">X</th>
-            </tr>
-          </thead>
-          <tbody id="bets-tbody"></tbody>
-        </table>
-      </div>
-    </div>
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Performance Overview (Interna fornitore per fornitore) -->
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i data-lucide="bar-chart-3" class="text-atm-green w-5 h-5"></i> Monitoraggio & ROI Tipster Reali
+                </h2>
+                <span class="text-xs text-slate-400">Dati riservati ad uso interno</span>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                <div class="bg-atm-card border border-atm-border p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block mb-1">Totale Selezioni</span>
+                    <span id="stat-total" class="text-2xl font-black text-white">0</span>
+                </div>
+                <div class="bg-atm-card border border-atm-border p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block mb-1">Pubblicate su AtmBet</span>
+                    <span id="stat-published" class="text-2xl font-black text-atm-green">0</span>
+                </div>
+                <div class="bg-atm-card border border-atm-border p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block mb-1">Win Rate Globale</span>
+                    <span id="stat-winrate" class="text-2xl font-black text-white">0%</span>
+                </div>
+                <div class="bg-atm-card border border-atm-border p-4 rounded-xl">
+                    <span class="text-xs text-slate-400 block mb-1">Profitto Netto (U)</span>
+                    <span id="stat-profit" class="text-2xl font-black text-atm-gold">0.00u</span>
+                </div>
+            </div>
 
-  </div>
+            <!-- Tabella Rendimento per singolo Tipster -->
+            <div class="bg-atm-card border border-atm-border rounded-xl p-4 overflow-x-auto">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Rendimento Per Fornitore Reale</h3>
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-xs text-slate-400">
+                            <th class="pb-2">Tipster / Fonte</th>
+                            <th class="pb-2">Pronostici</th>
+                            <th class="pb-2">Vinte / Perse</th>
+                            <th class="pb-2">Win Rate</th>
+                            <th class="pb-2">Profitto (u)</th>
+                            <th class="pb-2">ROI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tipsters-breakdown" class="divide-y divide-slate-800 text-slate-300">
+                        <!-- Popolato dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-  <!-- MODAL SMART AI -->
-  <div id="modal-ai" class="modal">
-    <div class="modal-box">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 15px; font-weight: bold; color: #60a5fa;">Incolla Risposta AI</h3>
-        <button onclick="closeAiModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
-      </div>
-      <p style="font-size: 11px; color: #94a3b8;">Incolla qui i nuovi pronostici o gli esiti finali:</p>
-      <textarea id="ai-input" rows="8" placeholder="Incolla il testo qui..." style="width: 100%; font-size: 12px;"></textarea>
-      <div style="display: flex; justify-content: flex-end; gap: 8px;">
-        <button onclick="closeAiModal()" class="btn-dark">Annulla</button>
-        <button onclick="processAiInput()" class="btn-ai">Elabora e Salva</button>
-      </div>
-    </div>
-  </div>
+        <!-- Form Inserimento Nuovo Pronostico -->
+        <section class="bg-atm-card border border-atm-border rounded-2xl p-6 shadow-lg">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="text-atm-green w-5 h-5"></i> Inserisci Nuovo Pronostico
+            </h2>
 
-  <!-- MODAL JSON -->
-  <div id="modal-json" class="modal">
-    <div class="modal-box">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 15px; font-weight: bold;">Backup / Modifica JSON</h3>
-        <button onclick="closeJsonModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
-      </div>
-      <textarea id="json-input" rows="8" style="width: 100%; font-family: monospace; font-size: 11px; color: #34d399;"></textarea>
-      <div style="display: flex; justify-content: space-between;">
-        <button onclick="exportJson()" class="btn-dark">Copia Negli Appunti</button>
-        <button onclick="importJson()" class="btn-emerald">Salva Dati</button>
-      </div>
-    </div>
-  </div>
+            <form id="bet-form" onsubmit="addBet(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Partita -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Evento / Partita</label>
+                    <input type="text" id="match_name" required placeholder="Es. Inter - Milan" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                </div>
 
-  <!-- MODAL MANUALE -->
-  <div id="modal-manual" class="modal">
-    <div class="modal-box">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3 style="font-size: 15px; font-weight: bold;">Aggiungi Pronostico</h3>
-        <button onclick="closeManualModal()" class="btn-dark" style="padding: 4px 8px;">✕</button>
-      </div>
-      <form id="form-add-bet" onsubmit="handleManualAdd(event)" style="display: flex; flex-direction: column; gap: 8px;">
-        <input type="text" id="m-tipster" required placeholder="Fornitore (es. CalcioAI, Stats4Bets)">
-        <input type="text" id="m-match" required placeholder="Partita">
-        <input type="text" id="m-market" required placeholder="Pronostico">
-        <div style="display: flex; gap: 8px;">
-          <input type="number" step="0.01" id="m-odds" required placeholder="Quota" style="flex: 1;">
-          <input type="number" step="0.1" id="m-stake" value="1" required placeholder="Stake" style="flex: 1;">
-        </div>
-        <button type="submit" class="btn-emerald" style="margin-top: 6px; padding: 10px;">Aggiungi</button>
-      </form>
-    </div>
-  </div>
+                <!-- Campionato / Lega -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Campionato / Lega</label>
+                    <input type="text" id="league" placeholder="Es. Serie A" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                </div>
 
-  <script>
-    let bets = JSON.parse(localStorage.getItem('tipster_bets_v2')) || [];
-    let isAtmMode = false;
-    let profitChart = null;
+                <!-- Data / Ora Evento -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Data e Ora</label>
+                    <input type="datetime-local" id="event_date" required 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                </div>
 
-    function saveBets() {
-      localStorage.setItem('tipster_bets_v2', JSON.stringify(bets));
-      updateApp();
-    }
+                <!-- Mercato -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Mercato</label>
+                    <input type="text" id="market" required placeholder="Es. Over/Under, 1X2, Gol" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                </div>
 
-    function toggleAtmMode() {
-      isAtmMode = !isAtmMode;
-      const btn = document.getElementById('btn-toggle-atm');
-      const select = document.getElementById('main-tipster-filter');
-      const cardLb = document.getElementById('card-leaderboard');
+                <!-- Pronostico Esatto -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Selezione / Pronostico</label>
+                    <input type="text" id="prediction" required placeholder="Es. Over 2.5, 1 Fisso" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                </div>
 
-      if (isAtmMode) {
-        btn.classList.add('active');
-        btn.textContent = '✓ Storico AtmBet Attivo (Clicca per uscire)';
-        select.value = 'all';
-        select.disabled = true;
-        cardLb.style.display = 'none';
-      } else {
-        btn.classList.remove('active');
-        btn.textContent = '⚡ Storico Generale (AtmBet)';
-        select.disabled = false;
-        cardLb.style.display = 'block';
-      }
-      updateApp();
-    }
+                <!-- Fornitore Reale (Riservato) -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Fornitore Originale (Riservato)</label>
+                    <select id="original_tipster" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                        <option value="Stats4Bets">Stats4Bets</option>
+                        <option value="BetMines">BetMines</option>
+                        <option value="CalcioAI">CalcioAI</option>
+                        <option value="OLAND">OLAND</option>
+                        <option value="Zcode">Zcode</option>
+                        <option value="Pronostici1">Pronostici1</option>
+                        <option value="Analisi Personale">Analisi Personale</option>
+                    </select>
+                </div>
 
-    function onTipsterSelectChange() {
-      if (isAtmMode) {
-        isAtmMode = false;
-        const btn = document.getElementById('btn-toggle-atm');
-        btn.classList.remove('active');
-        btn.textContent = '⚡ Storico Generale (AtmBet)';
-        document.getElementById('card-leaderboard').style.display = 'block';
-      }
-      updateApp();
-    }
+                <!-- Quota -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Quota Decimale</label>
+                    <input type="number" step="0.01" min="1.01" id="odds" required placeholder="Es. 1.85" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                </div>
 
-    function populateTipsterFilter() {
-      const tipsters = [...new Set(bets.map(b => b.tipster))].sort();
-      const filterSelect = document.getElementById('main-tipster-filter');
-      const currentSelected = filterSelect.value;
-      
-      filterSelect.innerHTML = '<option value="all">🌍 Tutti i Fornitori</option>';
-      tipsters.forEach(t => {
-        filterSelect.innerHTML += `<option value="${t}" ${t === currentSelected ? 'selected' : ''}>👤 ${t}</option>`;
-      });
-    }
+                <!-- Stake -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Stake (Unità)</label>
+                    <input type="number" step="0.25" min="0.25" max="10" id="stake" value="1.0" required 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
+                </div>
 
-    function getSelectedBets() {
-      if (isAtmMode) return bets;
-      const selected = document.getElementById('main-tipster-filter').value;
-      if (selected === 'all') return bets;
-      return bets.filter(b => b.tipster === selected);
-    }
+                <!-- Toggle Pubblica su AtmBet -->
+                <div class="flex items-center pt-5">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="is_published" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-atm-green"></div>
+                        <span class="ml-3 text-xs font-semibold text-white">Pubblica su Vetrina AtmBet</span>
+                    </label>
+                </div>
 
-    function updateApp() {
-      populateTipsterFilter();
-      renderKPIs();
-      renderChart();
-      if (!isAtmMode) renderLeaderboard();
-      renderBetsTable();
-    }
+                <!-- Submit Button -->
+                <div class="md:col-span-3 flex justify-end gap-3 mt-2">
+                    <button type="submit" class="bg-atm-green hover:bg-emerald-400 text-black font-bold text-sm px-6 py-2.5 rounded-lg flex items-center gap-2 transition duration-150">
+                        <i data-lucide="check" class="w-4 h-4"></i> Registra Pronostico
+                    </button>
+                </div>
+            </form>
+        </section>
 
-    function renderKPIs() {
-      const currentBets = getSelectedBets();
-      const selectedTipster = document.getElementById('main-tipster-filter').value;
-      
-      if (isAtmMode) {
-        document.getElementById('chart-title').textContent = "Andamento Bankroll: AtmBet (Storico Generale)";
-        document.getElementById('table-title').textContent = "Pronostici AtmBet";
-      } else {
-        document.getElementById('chart-title').textContent = selectedTipster === 'all' 
-          ? "Andamento Bankroll Globale" 
-          : `Andamento Bankroll: ${selectedTipster}`;
-        document.getElementById('table-title').textContent = "Elenco Pronostici";
-      }
+        <!-- Gestione Pronostici Registrati -->
+        <section class="bg-atm-card border border-atm-border rounded-2xl p-6">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="list-checks" class="text-atm-green w-5 h-5"></i> Tabellone Pronostici Inseriti
+                </h2>
+                <div class="flex gap-2">
+                    <button onclick="filterTable('all')" class="text-xs bg-slate-800 text-slate-300 px-3 py-1.5 rounded border border-slate-700">Tutti</button>
+                    <button onclick="filterTable('pending')" class="text-xs bg-slate-800 text-slate-300 px-3 py-1.5 rounded border border-slate-700">Aperti</button>
+                    <button onclick="filterTable('published')" class="text-xs bg-slate-800 text-slate-300 px-3 py-1.5 rounded border border-slate-700">Pubblicati AtmBet</button>
+                </div>
+            </div>
 
-      const settled = currentBets.filter(b => b.status !== 'pending');
-      const won = currentBets.filter(b => b.status === 'win');
-      const pending = currentBets.filter(b => b.status === 'pending');
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="border-b border-slate-800 text-slate-500 uppercase tracking-wider">
+                        <tr>
+                            <th class="py-2.5">Data</th>
+                            <th class="py-2.5">Partita</th>
+                            <th class="py-2.5">Mercato / Selezione</th>
+                            <th class="py-2.5">Quota / Stake</th>
+                            <th class="py-2.5">Fornitore Reale</th>
+                            <th class="py-2.5">Stato Vetrina</th>
+                            <th class="py-2.5">Esito</th>
+                            <th class="py-2.5 text-right">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bets-table-body" class="divide-y divide-slate-800/80">
+                        <!-- Popolato dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
-      let staked = 0, profit = 0, totalOdds = 0;
-      currentBets.forEach(b => totalOdds += Number(b.odds));
-      settled.forEach(b => {
-        const s = Number(b.stake);
-        staked += s;
-        if (b.status === 'win') profit += (b.odds - 1) * s;
-        else if (b.status === 'loss') profit -= s;
-      });
+    <script>
+        const STORAGE_KEY = 'atmbet_bets_data';
 
-      const roi = staked > 0 ? (profit / staked) * 100 : 0;
-      const winRate = settled.length > 0 ? (won.length / settled.length) * 100 : 0;
-      const avgOdds = currentBets.length > 0 ? totalOdds / currentBets.length : 0;
-
-      const pElem = document.getElementById('kpi-profit');
-      pElem.textContent = `${profit >= 0 ? '+' : ''}${profit.toFixed(2)} u`;
-      pElem.className = `kpi-value ${profit >= 0 ? 'positive' : 'negative'}`;
-
-      document.getElementById('kpi-roi').textContent = `${roi >= 0 ? '+' : ''}${roi.toFixed(1)}%`;
-      document.getElementById('kpi-staked').textContent = `Investito: ${staked.toFixed(1)}u`;
-      document.getElementById('kpi-winrate').textContent = `${winRate.toFixed(1)}%`;
-      document.getElementById('kpi-wl').textContent = `${won.length} Vinte / ${settled.length} Chiuse`;
-      document.getElementById('kpi-odds').textContent = `@${avgOdds.toFixed(2)}`;
-      document.getElementById('kpi-pending').textContent = pending.length;
-    }
-
-    function renderChart() {
-      const ctx = document.getElementById('profitChart').getContext('2d');
-      const currentBets = getSelectedBets();
-      const settled = currentBets.filter(b => b.status !== 'pending');
-      
-      let running = 0;
-      const dataPoints = [0];
-      const labels = ['0'];
-
-      settled.forEach((b, i) => {
-        if (b.status === 'win') running += (b.odds - 1) * b.stake;
-        else if (b.status === 'loss') running -= b.stake;
-        dataPoints.push(running);
-        labels.push(`${i + 1}`);
-      });
-
-      if (profitChart) profitChart.destroy();
-      profitChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [{
-            data: dataPoints,
-            borderColor: isAtmMode ? '#8b5cf6' : '#10b981',
-            backgroundColor: isAtmMode ? 'rgba(139, 92, 246, 0.15)' : 'rgba(16, 185, 129, 0.1)',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.3,
-            pointRadius: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } },
-            y: { grid: { color: '#1e293b' }, ticks: { color: '#64748b' } }
-          },
-          plugins: { legend: { display: false } }
+        function getBets() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : [];
         }
-      });
-    }
 
-    function renderLeaderboard() {
-      const tipsters = [...new Set(bets.map(b => b.tipster))];
-      const stats = tipsters.map(t => {
-        const tBets = bets.filter(b => b.tipster === t);
-        const settled = tBets.filter(b => b.status !== 'pending');
-        const won = tBets.filter(b => b.status === 'win');
-        const lost = tBets.filter(b => b.status === 'loss');
-        const voided = tBets.filter(b => b.status === 'void');
+        function saveBets(bets) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(bets));
+            renderAll();
+        }
 
-        let staked = 0, profit = 0, totalOdds = 0;
-        tBets.forEach(b => totalOdds += Number(b.odds));
-        settled.forEach(b => {
-          const s = Number(b.stake);
-          staked += s;
-          if (b.status === 'win') profit += (b.odds - 1) * s;
-          else if (b.status === 'loss') profit -= s;
+        function addBet(e) {
+            e.preventDefault();
+            const bets = getBets();
+            
+            const newBet = {
+                id: 'bet_' + Date.now(),
+                event_date: document.getElementById('event_date').value.replace('T', ' '),
+                match_name: document.getElementById('match_name').value,
+                league: document.getElementById('league').value || 'Generale',
+                market: document.getElementById('market').value,
+                prediction: document.getElementById('prediction').value,
+                original_tipster: document.getElementById('original_tipster').value,
+                odds: parseFloat(document.getElementById('odds').value),
+                stake: parseFloat(document.getElementById('stake').value),
+                status: 'pending',
+                is_published: document.getElementById('is_published').checked
+            };
+
+            bets.unshift(newBet);
+            saveBets(bets);
+            document.getElementById('bet-form').reset();
+            document.getElementById('stake').value = '1.0';
+            document.getElementById('is_published').checked = true;
+        }
+
+        function updateStatus(id, newStatus) {
+            const bets = getBets();
+            const bet = bets.find(b => b.id === id);
+            if (bet) {
+                bet.status = newStatus;
+                saveBets(bets);
+            }
+        }
+
+        function togglePublished(id) {
+            const bets = getBets();
+            const bet = bets.find(b => b.id === id);
+            if (bet) {
+                bet.is_published = !bet.is_published;
+                saveBets(bets);
+            }
+        }
+
+        function deleteBet(id) {
+            if (confirm('Sei sicuro di voler eliminare questo pronostico?')) {
+                let bets = getBets();
+                bets = bets.filter(b => b.id !== id);
+                saveBets(bets);
+            }
+        }
+
+        let currentFilter = 'all';
+        function filterTable(filter) {
+            currentFilter = filter;
+            renderBetsTable();
+        }
+
+        function renderBetsTable() {
+            const tbody = document.getElementById('bets-table-body');
+            const bets = getBets();
+            tbody.innerHTML = '';
+
+            let filtered = bets;
+            if (currentFilter === 'pending') filtered = bets.filter(b => b.status === 'pending');
+            if (currentFilter === 'published') filtered = bets.filter(b => b.is_published);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500">Nessun pronostico registrato.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(bet => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/50 transition";
+
+                let statusColor = "bg-slate-800 text-slate-400";
+                if (bet.status === 'won') statusColor = "bg-emerald-500/20 text-emerald-400 font-bold";
+                if (bet.status === 'lost') statusColor = "bg-rose-500/20 text-rose-400 font-bold";
+                if (bet.status === 'void') statusColor = "bg-amber-500/20 text-amber-400";
+
+                tr.innerHTML = `
+                    <td class="py-3 text-slate-400">${bet.event_date}</td>
+                    <td class="py-3 font-semibold text-white">${bet.match_name}<div class="text-[10px] text-slate-500">${bet.league}</div></td>
+                    <td class="py-3 text-slate-300 font-medium">${bet.prediction} <div class="text-[10px] text-slate-500">${bet.market}</div></td>
+                    <td class="py-3"><span class="text-atm-green font-bold">${parseFloat(bet.odds).toFixed(2)}</span> / <span class="text-slate-400">${bet.stake}u</span></td>
+                    <td class="py-3"><span class="bg-slate-800 border border-slate-700 px-2 py-0.5 rounded text-[11px] text-slate-300">${bet.original_tipster}</span></td>
+                    <td class="py-3">
+                        <button onclick="togglePublished('${bet.id}')" class="px-2 py-0.5 rounded text-[10px] font-bold border transition ${bet.is_published ? 'bg-atm-green/10 text-atm-green border-atm-green/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
+                            ${bet.is_published ? '✓ In Vetrina' : 'Privato'}
+                        </button>
+                    </td>
+                    <td class="py-3">
+                        <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                            <option value="pending" ${bet.status === 'pending' ? 'selected' : ''}>In corso</option>
+                            <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
+                            <option value="lost" ${bet.status === 'lost' ? 'selected' : ''}>Persa</option>
+                            <option value="void" ${bet.status === 'void' ? 'selected' : ''}>Void</option>
+                        </select>
+                    </td>
+                    <td class="py-3 text-right">
+                        <button onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition" title="Elimina">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+        }
+
+        function calculateStats() {
+            const bets = getBets();
+            const total = bets.length;
+            const published = bets.filter(b => b.is_published).length;
+            
+            const finished = bets.filter(b => b.status === 'won' || b.status === 'lost');
+            const won = bets.filter(b => b.status === 'won').length;
+            const winRate = finished.length > 0 ? ((won / finished.length) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            bets.forEach(b => {
+                if (b.status === 'won') netProfit += (b.odds - 1) * b.stake;
+                if (b.status === 'lost') netProfit -= b.stake;
+            });
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-published').innerText = published;
+            document.getElementById('stat-winrate').innerText = winRate + '%';
+            document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+
+            // Breakdown fornitore per fornitore
+            const tipsterStats = {};
+            bets.forEach(b => {
+                const name = b.original_tipster || 'Altro';
+                if (!tipsterStats[name]) {
+                    tipsterStats[name] = { total: 0, won: 0, lost: 0, profit: 0, totalStake: 0 };
+                }
+                tipsterStats[name].total++;
+                if (b.status === 'won') {
+                    tipsterStats[name].won++;
+                    tipsterStats[name].profit += (b.odds - 1) * b.stake;
+                    tipsterStats[name].totalStake += b.stake;
+                } else if (b.status === 'lost') {
+                    tipsterStats[name].lost++;
+                    tipsterStats[name].profit -= b.stake;
+                    tipsterStats[name].totalStake += b.stake;
+                }
+            });
+
+            const tipsterBody = document.getElementById('tipsters-breakdown');
+            tipsterBody.innerHTML = '';
+            
+            Object.keys(tipsterStats).forEach(tipster => {
+                const s = tipsterStats[tipster];
+                const resolved = s.won + s.lost;
+                const wr = resolved > 0 ? ((s.won / resolved) * 100).toFixed(1) + '%' : '-';
+                const roi = s.totalStake > 0 ? ((s.profit / s.totalStake) * 100).toFixed(1) + '%' : '-';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-2 font-semibold text-white">${tipster}</td>
+                    <td class="py-2 text-slate-400">${s.total}</td>
+                    <td class="py-2"><span class="text-emerald-400">${s.won}</span> / <span class="text-rose-400">${s.lost}</span></td>
+                    <td class="py-2 text-white font-medium">${wr}</td>
+                    <td class="py-2 font-bold ${s.profit >= 0 ? 'text-atm-green' : 'text-rose-400'}">${s.profit >= 0 ? '+' : ''}${s.profit.toFixed(2)}u</td>
+                    <td class="py-2 font-bold ${s.profit >= 0 ? 'text-atm-gold' : 'text-rose-400'}">${roi}</td>
+                `;
+                tipsterBody.appendChild(tr);
+            });
+        }
+
+        function renderAll() {
+            renderBetsTable();
+            calculateStats();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Imposta orario attuale di default per l'input datetime-local
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const dateInput = document.getElementById('event_date');
+            if (dateInput) dateInput.value = now.toISOString().slice(0, 16);
+
+            renderAll();
         });
-
-        const roi = staked > 0 ? (profit / staked) * 100 : 0;
-        const winRate = settled.length > 0 ? (won.length / settled.length) * 100 : 0;
-        const avgOdds = tBets.length > 0 ? totalOdds / tBets.length : 0;
-
-        return { tipster: t, total: tBets.length, won: won.length, lost: lost.length, voided: voided.length, winRate, avgOdds, roi, profit };
-      });
-
-      stats.sort((a, b) => b.profit - a.profit);
-      const tbody = document.getElementById('leaderboard-tbody');
-      tbody.innerHTML = '';
-      stats.forEach(s => {
-        tbody.innerHTML += `
-          <tr onclick="document.getElementById('main-tipster-filter').value='${s.tipster}'; onTipsterSelectChange();" style="cursor: pointer;">
-            <td style="font-weight: 700; color: #fff;">👤 ${s.tipster}</td>
-            <td style="text-align: center; color: #e2e8f0; font-weight: 600;">${s.total}</td>
-            <td style="text-align: center; color: #94a3b8;">${s.won} / ${s.lost} / ${s.voided}</td>
-            <td style="text-align: center; font-weight: 700;">${s.winRate.toFixed(1)}%</td>
-            <td style="text-align: center;">@${s.avgOdds.toFixed(2)}</td>
-            <td style="text-align: center;" class="${s.roi >= 0 ? 'positive' : 'negative'}">${s.roi >= 0 ? '+' : ''}${s.roi.toFixed(1)}%</td>
-            <td style="text-align: right;" class="${s.profit >= 0 ? 'positive' : 'negative'}">${s.profit >= 0 ? '+' : ''}${s.profit.toFixed(2)} u</td>
-          </tr>
-        `;
-      });
-    }
-
-    function renderBetsTable() {
-      const statusFilter = document.getElementById('filter-status').value;
-      const currentBets = getSelectedBets();
-
-      const filtered = currentBets.filter(b => {
-        return statusFilter === 'all' || b.status === statusFilter;
-      });
-
-      document.getElementById('badge-total-count').textContent = filtered.length;
-      const tbody = document.getElementById('bets-tbody');
-      tbody.innerHTML = '';
-
-      filtered.forEach(b => {
-        let pNet = 0;
-        let pClass = '';
-        let pText = '-';
-
-        if (b.status === 'win') {
-          pNet = (b.odds - 1) * b.stake;
-          pClass = 'positive';
-          pText = `+${pNet.toFixed(2)}u`;
-        } else if (b.status === 'loss') {
-          pClass = 'negative';
-          pText = `-${b.stake.toFixed(2)}u`;
-        } else if (b.status === 'void') {
-          pText = '0.00u';
-        }
-
-        const displayedTipster = isAtmMode ? 'AtmBet' : b.tipster;
-        const tagClass = isAtmMode ? 'tag-provider tag-atm' : 'tag-provider';
-
-        tbody.innerHTML += `
-          <tr>
-            <td><span class="${tagClass}">${displayedTipster}</span></td>
-            <td>
-              <div style="font-weight: 700; color: #fff;">${b.match}</div>
-              <div style="font-size: 11px; color: #94a3b8;">${b.market} ${b.league ? '• ' + b.league : ''}</div>
-            </td>
-            <td style="text-align: center; font-weight: 700;">@${Number(b.odds).toFixed(2)}</td>
-            <td style="text-align: center; color: #94a3b8;">${b.stake}u</td>
-            <td style="text-align: center;">
-              <div class="btn-status-group">
-                <button onclick="setBetStatus(${b.id}, 'win')" class="btn-s ${b.status === 'win' ? 'active-w' : ''}">W</button>
-                <button onclick="setBetStatus(${b.id}, 'loss')" class="btn-s ${b.status === 'loss' ? 'active-l' : ''}">L</button>
-                <button onclick="setBetStatus(${b.id}, 'void')" class="btn-s ${b.status === 'void' ? 'active-v' : ''}">V</button>
-                <button onclick="setBetStatus(${b.id}, 'pending')" class="btn-s ${b.status === 'pending' ? 'active-p' : ''}">P</button>
-              </div>
-            </td>
-            <td style="text-align: right;" class="${pClass}">${pText}</td>
-            <td style="text-align: center;">
-              <button onclick="deleteBet(${b.id})" style="background: none; border: none; color: #64748b; font-size: 12px; cursor: pointer;">✕</button>
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    function setBetStatus(id, status) {
-      const idx = bets.findIndex(b => b.id === id);
-      if (idx !== -1) {
-        bets[idx].status = status;
-        saveBets();
-      }
-    }
-
-    function deleteBet(id) {
-      if (confirm('Rimuovere questo pronostico?')) {
-        bets = bets.filter(b => b.id !== id);
-        saveBets();
-      }
-    }
-
-    function handleManualAdd(e) {
-      e.preventDefault();
-      const newBet = {
-        id: Date.now(),
-        tipster: document.getElementById('m-tipster').value.trim(),
-        match: document.getElementById('m-match').value.trim(),
-        market: document.getElementById('m-market').value.trim(),
-        odds: parseFloat(document.getElementById('m-odds').value),
-        stake: parseFloat(document.getElementById('m-stake').value) || 1,
-        status: 'pending'
-      };
-      bets.unshift(newBet);
-      saveBets();
-      closeManualModal();
-      e.target.reset();
-    }
-
-    function processAiInput() {
-      const input = document.getElementById('ai-input').value.trim();
-      if (!input) return;
-
-      const jsonStart = input.indexOf('[');
-      const jsonEnd = input.lastIndexOf(']');
-      if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
-        try {
-          const parsed = JSON.parse(input.substring(jsonStart, jsonEnd + 1));
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            let added = 0;
-            parsed.forEach(item => {
-              if (item.match && item.odds) {
-                if (!item.id) item.id = Date.now() + Math.floor(Math.random() * 1000);
-                if (!item.status) item.status = 'pending';
-                bets.unshift(item);
-                added++;
-              }
-            });
-            if (added > 0) {
-              saveBets();
-              closeAiModal();
-              document.getElementById('ai-input').value = '';
-              alert(`Aggiunti con successo ${added} nuovi pronostici!`);
-              return;
-            }
-          }
-        } catch(e) {}
-      }
-
-      const lines = input.split('\n');
-      let updatedStatus = 0;
-      let addedLines = 0;
-
-      lines.forEach(line => {
-        const text = line.trim();
-        if (!text) return;
-        const lower = text.toLowerCase();
-
-        let targetStatus = null;
-        if (lower.includes('vinto') || lower.includes('vinta') || lower.includes('win')) targetStatus = 'win';
-        else if (lower.includes('perso') || lower.includes('persa') || lower.includes('loss')) targetStatus = 'loss';
-        else if (lower.includes('void') || lower.includes('rimbors')) targetStatus = 'void';
-
-        if (targetStatus) {
-          bets.forEach(bet => {
-            const keywords = bet.match.toLowerCase().split(/[\s\/\-]+/).filter(w => w.length > 3);
-            if (keywords.some(k => lower.includes(k))) {
-              bet.status = targetStatus;
-              updatedStatus++;
-            }
-          });
-        } else if (text.includes('|') || text.includes('@')) {
-          const parts = text.split('|').map(p => p.trim());
-          if (parts.length >= 3) {
-            const tipster = parts[0];
-            const match = parts[1];
-            let odds = 1.0;
-            let market = '1X2';
-            let stake = 1;
-
-            parts.slice(2).forEach(p => {
-              if (p.includes('@') || !isNaN(parseFloat(p))) {
-                odds = parseFloat(p.replace('@', '').trim()) || 1.0;
-              } else if (p.toLowerCase().includes('stake')) {
-                stake = parseFloat(p.replace(/[^0-9.]/g, '')) || 1;
-              } else {
-                market = p;
-              }
-            });
-
-            bets.unshift({
-              id: Date.now() + Math.floor(Math.random() * 1000),
-              tipster, match, market, odds, stake,
-              status: 'pending'
-            });
-            addedLines++;
-          }
-        }
-      });
-
-      if (updatedStatus > 0 || addedLines > 0) {
-        saveBets();
-        closeAiModal();
-        document.getElementById('ai-input').value = '';
-        let msg = [];
-        if (addedLines > 0) msg.push(`Aggiunti ${addedLines} nuovi pronostici`);
-        if (updatedStatus > 0) msg.push(`Aggiornati ${updatedStatus} esiti`);
-        alert(msg.join('\n'));
-      } else {
-        alert("Nessun pronostico o esito riconosciuto nel testo incollato.");
-      }
-    }
-
-    function openAiModal() { document.getElementById('modal-ai').classList.add('open'); }
-    function closeAiModal() { document.getElementById('modal-ai').classList.remove('open'); }
-
-    function openJsonModal() {
-      document.getElementById('json-input').value = JSON.stringify(bets, null, 2);
-      document.getElementById('modal-json').classList.add('open');
-    }
-    function closeJsonModal() { document.getElementById('modal-json').classList.remove('open'); }
-
-    function openManualModal() { document.getElementById('modal-manual').classList.add('open'); }
-    function closeManualModal() { document.getElementById('modal-manual').classList.remove('open'); }
-
-    function exportJson() {
-      navigator.clipboard.writeText(JSON.stringify(bets, null, 2));
-      alert('Copiato negli appunti!');
-    }
-
-    function importJson() {
-      try {
-        const parsed = JSON.parse(document.getElementById('json-input').value);
-        if (Array.isArray(parsed)) {
-          bets = parsed;
-          saveBets();
-          closeJsonModal();
-          alert('Database aggiornato!');
-        } else alert('Formato non valido');
-      } catch (err) {
-        alert('Errore JSON: ' + err.message);
-      }
-    }
-
-    updateApp();
-  </script>
+    </script>
 </body>
 </html>
