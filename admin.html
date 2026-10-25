@@ -50,6 +50,15 @@
 
     <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full space-y-8">
         
+        <!-- Notifica di avvenuto recupero dati (visibile solo se migrati) -->
+        <div id="migration-banner" class="hidden bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 px-4 py-2.5 rounded-xl text-xs flex items-center justify-between">
+            <span class="flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4 text-atm-green"></i>
+                <span>Storico precedente recuperato e sincronizzato con successo!</span>
+            </span>
+            <button onclick="document.getElementById('migration-banner').remove()" class="text-slate-400 hover:text-white">&times;</button>
+        </div>
+
         <!-- Performance Overview (Interna fornitore per fornitore) -->
         <section>
             <div class="flex items-center justify-between mb-4">
@@ -109,7 +118,7 @@
                 <!-- Partita -->
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Evento / Partita</label>
-                    <input type="text" id="match_name" required placeholder="Es. Inter - Milan" 
+                    <input type="text" id="match_name" required placeholder="Es. Inter - Juventus" 
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
                 </div>
 
@@ -137,7 +146,7 @@
                 <!-- Pronostico Esatto -->
                 <div>
                     <label class="block text-xs text-slate-400 mb-1">Selezione / Pronostico</label>
-                    <input type="text" id="prediction" required placeholder="Es. Over 2.5, 1 Fisso" 
+                    <input type="text" id="prediction" required placeholder="Es. Over 2.5, Gol" 
                         class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-atm-green">
                 </div>
 
@@ -225,9 +234,84 @@
     <script>
         const STORAGE_KEY = 'atmbet_bets_data';
 
+        // Funzione di lettura con auto-rilevamento e migrazione vecchi dati
         function getBets() {
-            const data = localStorage.getItem(STORAGE_KEY);
-            return data ? JSON.parse(data) : [];
+            let data = localStorage.getItem(STORAGE_KEY);
+            if (data && JSON.parse(data).length > 0) {
+                return JSON.parse(data);
+            }
+
+            // Scansione di tutte le possibili chiavi del vecchio tracker
+            const oldKeys = [
+                'tipster_tracker_bets', 
+                'bets', 
+                'pronostici', 
+                'tracker_data', 
+                'tipster_bets',
+                'my_bets'
+            ];
+
+            for (const key of oldKeys) {
+                const oldRaw = localStorage.getItem(key);
+                if (oldRaw) {
+                    try {
+                        const parsed = JSON.parse(oldRaw);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            const migrated = parsed.map((b, idx) => ({
+                                id: b.id || ('migrated_' + idx + '_' + Date.now()),
+                                event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 10),
+                                match_name: b.match_name || b.match || b.teams || 'Evento Archiviato',
+                                league: b.league || b.competition || 'Generale',
+                                market: b.market || b.type || 'Standard',
+                                prediction: b.prediction || b.pick || b.selection || '-',
+                                original_tipster: b.original_tipster || b.tipster || b.source || 'Archivio Precedente',
+                                odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
+                                stake: parseFloat(b.stake || b.units || 1.0),
+                                status: b.status || b.result || 'pending',
+                                is_published: b.is_published !== undefined ? b.is_published : true
+                            }));
+
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+                            
+                            const banner = document.getElementById('migration-banner');
+                            if (banner) banner.classList.remove('hidden');
+
+                            return migrated;
+                        }
+                    } catch (err) {
+                        console.warn("Errore parsing chiave: " + key, err);
+                    }
+                }
+            }
+
+            // Se non c'è nulla, controlla tutte le chiavi nel localStorage alla ricerca di array di scommesse
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k !== STORAGE_KEY && !k.includes('trial')) {
+                    try {
+                        const val = JSON.parse(localStorage.getItem(k));
+                        if (Array.isArray(val) && val.length > 0 && (val[0].match || val[0].match_name || val[0].odds || val[0].pick)) {
+                            const autoMigrated = val.map((b, idx) => ({
+                                id: b.id || ('auto_' + idx),
+                                event_date: b.event_date || b.date || new Date().toISOString().slice(0, 10),
+                                match_name: b.match_name || b.match || 'Evento',
+                                league: b.league || 'Generale',
+                                market: b.market || 'Standard',
+                                prediction: b.prediction || b.pick || '-',
+                                original_tipster: b.original_tipster || b.tipster || 'Precedente',
+                                odds: parseFloat(b.odds || 1.80),
+                                stake: parseFloat(b.stake || 1.0),
+                                status: b.status || 'pending',
+                                is_published: true
+                            }));
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(autoMigrated));
+                            return autoMigrated;
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            return [];
         }
 
         function saveBets(bets) {
@@ -258,6 +342,10 @@
             document.getElementById('bet-form').reset();
             document.getElementById('stake').value = '1.0';
             document.getElementById('is_published').checked = true;
+
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('event_date').value = now.toISOString().slice(0, 16);
         }
 
         function updateStatus(id, newStatus) {
@@ -310,11 +398,6 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-900/50 transition";
 
-                let statusColor = "bg-slate-800 text-slate-400";
-                if (bet.status === 'won') statusColor = "bg-emerald-500/20 text-emerald-400 font-bold";
-                if (bet.status === 'lost') statusColor = "bg-rose-500/20 text-rose-400 font-bold";
-                if (bet.status === 'void') statusColor = "bg-amber-500/20 text-amber-400";
-
                 tr.innerHTML = `
                     <td class="py-3 text-slate-400">${bet.event_date}</td>
                     <td class="py-3 font-semibold text-white">${bet.match_name}<div class="text-[10px] text-slate-500">${bet.league}</div></td>
@@ -366,7 +449,7 @@
             document.getElementById('stat-winrate').innerText = winRate + '%';
             document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
 
-            // Breakdown fornitore per fornitore
+            // Statistiche individuali per ogni Tipster
             const tipsterStats = {};
             bets.forEach(b => {
                 const name = b.original_tipster || 'Altro';
@@ -413,7 +496,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Imposta orario attuale di default per l'input datetime-local
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
             const dateInput = document.getElementById('event_date');
