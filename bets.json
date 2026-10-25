@@ -1,5 +1,18 @@
 [
   {
+    "id": "bet_1792934519439_0",
+    "event_date": "2026-10-25 22:30",
+    "match_name": "Sporting CP vs Académico de Viseu",
+    "league": "Primeira Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "Sporting Handicap -1.5",
+    "original_tipster": "Freak Elite VIP",
+    "odds": 1.65,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1792930352002_0",
     "event_date": "2026-10-25 22:00",
     "match_name": "FC Barcellona vs Real Madrid",
@@ -8,6 +21,19 @@
     "prediction": "1 + Over 2.5",
     "original_tipster": "Freak Elite VIP",
     "odds": 1.79,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792934519439_1",
+    "event_date": "2026-10-25 18:15",
+    "match_name": "Marsiglia vs Le Havre / Gent vs Anderlecht",
+    "league": "Ligue 1 / Jupiler League",
+    "market": "Multipla",
+    "prediction": "Doppia (Segno 1 / Goal)",
+    "original_tipster": "Freak Elite VIP",
+    "odds": 2.55,
     "stake": 1,
     "status": "pending",
     "is_published": true
@@ -73,19 +99,6 @@
     "prediction": "Tripla 1 (1 / 1 / 1)",
     "original_tipster": "Stats4Bets",
     "odds": 1.98,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
-    "id": "bet_1792932562965_0",
-    "event_date": "2026-10-25 13:15",
-    "match_name": "Inter vs Fiorentina",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "Segno 1 (Inter Vincente)",
-    "original_tipster": "Freak Elite VIP",
-    "odds": 1.57,
     "stake": 1,
     "status": "pending",
     "is_published": true
