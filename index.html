@@ -332,14 +332,14 @@
         </div>
     </section>
 
-    <!-- SEZIONE 2: PALINSESTO LIVE CON CLICK MODAL -->
+    <!-- SEZIONE 2: PALINSESTO LIVE CON APERTURA DIRETTA -->
     <main id="palinsesto" class="page-section max-w-7xl mx-auto px-4 py-16 sm:py-24 flex-1 w-full border-t border-slate-800/80 scroll-mt-20">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
             <div>
                 <h2 class="text-xl sm:text-3xl font-black text-white flex items-center gap-2">
                     <i data-lucide="activity" class="text-emerald-400 w-5 h-5 sm:w-7 sm:h-7"></i> Palinsesto Ufficiale
                 </h2>
-                <p class="text-[11px] sm:text-sm text-slate-400 mt-1">Tocca qualsiasi pronostico per aprire la scheda dettagliata a schermo intero.</p>
+                <p class="text-[11px] sm:text-sm text-slate-400 mt-1">Tocca una card per espandere e leggere tutti i match della multipla.</p>
             </div>
 
             <!-- Filtro Palinsesto Touch -->
@@ -476,16 +476,16 @@
         </div>
     </footer>
 
-    <!-- MODAL DETTAGLIO PRONOSTICO A SCHERMO INTERO -->
-    <div id="bet-detail-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+    <!-- MODAL DETTAGLIO PRONOSTICO -->
+    <div id="bet-detail-modal" class="fixed inset-0 z-[999] bg-slate-950/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-lg p-5 sm:p-6 shadow-2xl relative space-y-4 max-h-[90vh] overflow-y-auto">
             
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
                     <span id="modal-badge-status" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">...</span>
                     <span id="modal-league" class="text-xs text-slate-400 font-medium bg-slate-950 px-2 py-0.5 rounded border border-slate-800">...</span>
                 </div>
-                <button type="button" onclick="closeBetModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+                <button type="button" onclick="closeBetModal()" class="text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800/80 hover:bg-slate-800 transition">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -498,19 +498,14 @@
                 <h3 id="modal-match-title" class="text-lg sm:text-xl font-black text-white leading-snug">...</h3>
             </div>
 
-            <!-- Elenco Eventi Spacchettati se multipla -->
-            <div id="modal-submatches-box" class="space-y-2">
-                <!-- Generato dinamicamente se contiene partite multiple -->
-            </div>
+            <div id="modal-submatches-box" class="space-y-2"></div>
 
-            <!-- Scheda Selezione -->
-            <div class="bg-slate-950/90 rounded-2xl p-4 border border-slate-800 space-y-2">
+            <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 space-y-1.5">
                 <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500">Pronostico & Mercato:</div>
                 <div id="modal-prediction-content" class="text-emerald-400 font-bold text-sm sm:text-base">...</div>
                 <div id="modal-market-content" class="text-xs text-slate-400">...</div>
             </div>
 
-            <!-- Griglia Quota, Stake e Tipster -->
             <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-center">
                 <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
                     <span class="text-[10px] text-slate-500 block">Quota</span>
@@ -526,7 +521,7 @@
                 </div>
             </div>
 
-            <button type="button" onclick="closeBetModal()" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
+            <button type="button" onclick="closeBetModal()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition">
                 Chiudi Scheda
             </button>
         </div>
@@ -542,6 +537,7 @@
         let publicNetProfitUnits = 0;
         let publicMultiplier = 50; 
         let publicSimStartDate = '2026-10-24'; 
+        let currentFeedBets = [];
 
         function checkUserSession() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -595,12 +591,12 @@
                 }
             }
 
-            const cleanBets = bets.map(b => {
+            const cleanBets = bets.map((b, idx) => {
                 let cleanStake = parseFloat(b.stake || b.units || 1.0);
                 if (cleanStake > 10) cleanStake = 1.0;
 
                 return {
-                    id: b.id,
+                    id: String(b.id || idx),
                     event_date: b.event_date || b.date || '',
                     league: b.league || 'Generale',
                     match_name: b.match_name || b.match || 'Evento',
@@ -664,7 +660,7 @@
         }
 
         function calculatePublicSimulationPerformance() {
-            const bets = getStoredBets();
+            const bets = currentFeedBets.length > 0 ? currentFeedBets : getStoredBets();
             const simBets = bets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
@@ -764,9 +760,9 @@
             calculatePublicSimulationPerformance();
         }
 
-        // APERTURA MODAL DETTAGLIO
-        function openBetModal(betId) {
-            const bets = getStoredBets();
+        // FUNZIONE MODAL SICURA
+        window.openBetModal = function(betId) {
+            const bets = currentFeedBets.length > 0 ? currentFeedBets : getStoredBets();
             const bet = bets.find(b => String(b.id) === String(betId));
             if (!bet) return;
 
@@ -792,7 +788,6 @@
                 badgeStatusEl.className = "text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider bg-slate-800 text-slate-400 border border-slate-700";
             }
 
-            // Spacchetta singole partite se c'è lo slash
             const subBox = document.getElementById('modal-submatches-box');
             subBox.innerHTML = '';
             if (bet.match_name.includes('/')) {
@@ -827,16 +822,16 @@
             document.getElementById('modal-tipster').innerText = bet.original_tipster;
 
             const modal = document.getElementById('bet-detail-modal');
+            modal.style.display = 'flex';
             modal.classList.remove('hidden');
-            modal.classList.add('flex');
             lucide.createIcons();
-        }
+        };
 
-        function closeBetModal() {
+        window.closeBetModal = function() {
             const modal = document.getElementById('bet-detail-modal');
+            modal.style.display = 'none';
             modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+        };
 
         document.getElementById('bet-detail-modal').addEventListener('click', function(e) {
             if (e.target === this) closeBetModal();
@@ -848,15 +843,15 @@
 
         function renderFeed() {
             const container = document.getElementById('bets-container');
-            const bets = getStoredBets();
+            currentFeedBets = getStoredBets();
             const loggedUser = checkUserSession();
 
-            updatePublicStats(bets);
+            updatePublicStats(currentFeedBets);
             container.innerHTML = '';
 
-            let filtered = bets;
-            if (activeFeedFilter === 'pending') filtered = bets.filter(b => b.status === 'pending');
-            if (activeFeedFilter === 'completed') filtered = bets.filter(b => b.status !== 'pending');
+            let filtered = currentFeedBets;
+            if (activeFeedFilter === 'pending') filtered = currentFeedBets.filter(b => b.status === 'pending');
+            if (activeFeedFilter === 'completed') filtered = currentFeedBets.filter(b => b.status !== 'pending');
 
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 font-medium text-xs">Nessun pronostico disponibile per questo filtro.</div>`;
@@ -867,8 +862,10 @@
                 const isLocked = !loggedUser && bet.status === 'pending';
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-emerald-500/40 transition shadow-lg cursor-pointer group active:scale-[0.99]";
-                card.setAttribute("onclick", `openBetModal('${bet.id}')`);
+                card.className = "bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between hover:border-emerald-500/50 transition shadow-lg cursor-pointer group active:scale-[0.99]";
+                card.onclick = function() {
+                    openBetModal(bet.id);
+                };
 
                 let statusBadge = '<span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold border border-slate-700 uppercase tracking-wider">In Corso</span>';
                 if (bet.status === 'won') statusBadge = '<span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-black border border-emerald-500/30 uppercase tracking-wider">Vinta</span>';
@@ -890,7 +887,7 @@
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 mb-3">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[9px] uppercase font-mono tracking-widest text-slate-500">Selezione:</span>
-                                <span class="text-[9px] text-slate-500 group-hover:text-emerald-400 transition flex items-center gap-0.5">Dettaglio <i data-lucide="chevron-right" class="w-2.5 h-2.5"></i></span>
+                                <span class="text-[9px] text-emerald-400 font-bold transition flex items-center gap-0.5">Apri Dettaglio ➔</span>
                             </div>
                             ${isLocked ? `
                                 <div class="flex items-center justify-between py-0.5">
