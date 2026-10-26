@@ -52,7 +52,7 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- Navbar Pubblica Completa con Link Admin Discreto -->
+    <!-- Navbar Pubblica Pulita (Console Spostata nel Footer) -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -64,13 +64,6 @@
 
             <div class="flex items-center gap-2 sm:gap-4">
                 <a href="#piani" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani & Prezzi</a>
-                
-                <!-- Accesso Rapido Admin Discreto -->
-                <a href="admin.html" title="Area Amministrativa" class="text-slate-400 hover:text-white p-1.5 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center gap-1 text-xs">
-                    <i data-lucide="shield" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span class="hidden md:inline font-mono text-[10px]">Console</span>
-                </a>
-
                 <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1 transition">Accedi</a>
                 <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Registrati VIP
@@ -109,7 +102,7 @@
             </div>
         </section>
 
-        <!-- SIMULATORE TEMPORALE DINAMICO VETRINA -->
+        <!-- SIMULATORE TEMPORALE DINAMICO VETRINA (CON PRECISIONE GIORNALIERA) -->
         <section class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
@@ -124,8 +117,8 @@
 
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Dal:</span>
-                        <input type="date" id="sim-start-date" onchange="applySimulationDate(this.value)"
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Data:</span>
+                        <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)"
                             class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
                     </div>
 
@@ -138,6 +131,7 @@
                 </div>
             </div>
 
+            <!-- Metriche Periodo -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
                     <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
@@ -227,7 +221,7 @@
             </div>
         </section>
 
-        <!-- SELEZIONI DEL GIORNO IN VETRINA (CARD CON PARLAY ACCORDION & BLUR QUOTE) -->
+        <!-- SELEZIONI DEL GIORNO IN VETRINA (CARD CON BLUR E ACCORDION MULTIPLE) -->
         <section class="space-y-4 pt-4 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
@@ -378,21 +372,53 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900 mt-8">
-        AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
+    <!-- Footer con Link Console Discreto in Basso -->
+    <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
+        <div>
+            AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
+        </div>
+        <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500">
+            <a href="index.html" class="hover:text-slate-400 transition">Home</a>
+            <span>•</span>
+            <a href="auth.html" class="hover:text-slate-400 transition">Accesso VIP</a>
+            <span>•</span>
+            <a href="admin.html" class="hover:text-emerald-400 transition flex items-center gap-1 font-mono">
+                <i data-lucide="lock" class="w-3 h-3 text-slate-600"></i> Console Gestore
+            </a>
+        </div>
     </footer>
 
-    <!-- LOGICA SCRIPT DINAMICO VETRINA CON DATI BLUR & ACCORDION PARLAY -->
+    <!-- LOGICA SCRIPT DINAMICO VETRINA CON NORMALIZZAZIONE DATE E CALCOLO RIGOROSO -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
 
         let currentMultiplier = 50;
         let globalNetProfitUnits = 0;
-        let currentSimStartDate = '2026-10-25';
+        let currentSimMode = 'yesterday'; // 'today', 'yesterday', '7days', 'all', 'custom'
+        let currentCustomDate = '';
         let currentPublicHistFilter = 'all';
         let cachedAllBets = [];
+
+        // Normalizza qualsiasi data (YYYY-MM-DD, DD.MM.YYYY, DD/MM/YYYY) in YYYY-MM-DD
+        function extractStandardDate(rawDateStr) {
+            if (!rawDateStr) return '';
+            const clean = String(rawDateStr).trim();
+
+            // Formato ISO YYYY-MM-DD
+            const isoMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+            if (isoMatch) {
+                return `${isoMatch[1]}-${String(isoMatch[2]).padStart(2, '0')}-${String(isoMatch[3]).padStart(2, '0')}`;
+            }
+
+            // Formato Europeo DD.MM.YYYY o DD/MM/YYYY
+            const euMatch = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
+            if (euMatch) {
+                return `${euMatch[3]}-${String(euMatch[2]).padStart(2, '0')}-${String(euMatch[1]).padStart(2, '0')}`;
+            }
+
+            return clean.slice(0, 10);
+        }
 
         function getLocalDateString(d) {
             const year = d.getFullYear();
@@ -418,13 +444,15 @@
             if (btnToday) btnToday.innerText = todayLabel;
             if (btnYesterday) btnYesterday.innerText = yesterdayLabel;
 
-            const defaultDate = getLocalDateString(yesterday);
+            const yesterdayStr = getLocalDateString(yesterday);
             if (dateInput) {
-                dateInput.value = defaultDate;
+                dateInput.value = yesterdayStr;
                 dateInput.max = getLocalDateString(today);
             }
             
-            currentSimStartDate = defaultDate;
+            currentSimMode = 'yesterday';
+            currentCustomDate = yesterdayStr;
+
             if (btnYesterday) {
                 document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
                 btnYesterday.classList.add('sim-pill-active');
@@ -434,18 +462,14 @@
         async function fetchAllBets() {
             let bets = [];
 
-            // 1. Prova a caricare dal file bets.json aggiornato dal bot GitHub Actions
             try {
                 const res = await fetch('bets.json?t=' + Date.now());
                 if (res.ok) {
                     const data = await res.json();
-                    if (Array.isArray(data) && data.length > 0) {
-                        bets = data;
-                    }
+                    if (Array.isArray(data) && data.length > 0) bets = data;
                 }
             } catch(e) {}
 
-            // 2. Se vuoto o assente, fallback su localStorage
             if (bets.length === 0) {
                 const rawV1 = localStorage.getItem(PRIMARY_KEY);
                 if (rawV1) {
@@ -498,46 +522,77 @@
             }
         }
 
-        function applySimulationDate(dateStr) {
-            currentSimStartDate = dateStr;
+        function applyCustomCalendarDate(dateStr) {
+            currentSimMode = 'custom';
+            currentCustomDate = dateStr;
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             calculateSimulationPerformance();
         }
 
         function setDynamicPreset(type, btnElement) {
+            currentSimMode = type;
             const dateInput = document.getElementById('sim-start-date');
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             if (btnElement) btnElement.classList.add('sim-pill-active');
 
             const today = new Date();
+            const todayStr = getLocalDateString(today);
+
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
 
             if (type === 'today') {
-                currentSimStartDate = getLocalDateString(today);
+                if (dateInput) dateInput.value = todayStr;
+                currentCustomDate = todayStr;
             } else if (type === 'yesterday') {
-                const y = new Date();
-                y.setDate(today.getDate() - 1);
-                currentSimStartDate = getLocalDateString(y);
+                if (dateInput) dateInput.value = yesterdayStr;
+                currentCustomDate = yesterdayStr;
             } else if (type === '7days') {
                 const d7 = new Date();
                 d7.setDate(today.getDate() - 7);
-                currentSimStartDate = getLocalDateString(d7);
+                const d7Str = getLocalDateString(d7);
+                if (dateInput) dateInput.value = d7Str;
+                currentCustomDate = d7Str;
             } else if (type === 'all') {
-                currentSimStartDate = '2020-01-01';
-            }
-
-            if (dateInput && type !== 'all') {
-                dateInput.value = currentSimStartDate;
+                currentCustomDate = '2020-01-01';
             }
 
             calculateSimulationPerformance();
         }
 
+        // Calcolo Rigoroso Risultati del Periodo / Giorno Selezionato
         function calculateSimulationPerformance() {
+            const today = new Date();
+            const todayStr = getLocalDateString(today);
+
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
+
+            const d7 = new Date();
+            d7.setDate(today.getDate() - 7);
+            const d7Str = getLocalDateString(d7);
+
             const simBets = cachedAllBets.filter(b => {
+                // Considera solo partite con esito definitivo
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
-                const betDate = (b.event_date || '').slice(0, 10);
-                return betDate >= currentSimStartDate;
+
+                const bDate = extractStandardDate(b.event_date);
+
+                if (currentSimMode === 'today') {
+                    return bDate === todayStr;
+                } else if (currentSimMode === 'yesterday') {
+                    return bDate === yesterdayStr;
+                } else if (currentSimMode === '7days') {
+                    return bDate >= d7Str && bDate <= todayStr;
+                } else if (currentSimMode === 'all') {
+                    return true;
+                } else if (currentSimMode === 'custom') {
+                    return bDate >= currentCustomDate;
+                }
+                return true;
             });
 
             const total = simBets.length;
