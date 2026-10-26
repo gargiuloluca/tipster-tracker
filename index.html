@@ -47,7 +47,6 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
-        /* Scrollbar elegante per card orizzontali e tabella */
         .custom-cards-scroll::-webkit-scrollbar,
         .custom-table-scroll::-webkit-scrollbar {
             width: 6px;
@@ -77,7 +76,7 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- 1. NAVBAR DI CONVERSIONE -->
+    <!-- NAVBAR -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -105,7 +104,7 @@
     <!-- MAIN BODY -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-12 sm:space-y-16 flex-1 w-full">
 
-        <!-- 2. HERO SECTION -->
+        <!-- HERO SECTION -->
         <section class="text-center max-w-3xl mx-auto pt-2 pb-2 space-y-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verifica Risultati Ufficiale via API-Football
@@ -135,7 +134,7 @@
             </div>
         </section>
 
-        <!-- 3. SEZIONE METODO STRATEGICO -->
+        <!-- SEZIONE METODO STRATEGICO -->
         <section id="metodo" class="bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6">
             <div class="text-center max-w-2xl mx-auto space-y-1.5">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
@@ -169,7 +168,6 @@
                 </div>
             </div>
 
-            <!-- Matrice a Confronto -->
             <div class="mt-6 pt-6 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 <div class="bg-rose-500/[0.04] border border-rose-500/20 p-4 rounded-xl space-y-2">
                     <div class="text-rose-400 font-bold flex items-center gap-1.5 text-xs">
@@ -195,7 +193,7 @@
             </div>
         </section>
 
-        <!-- 4. SIMULATORE TEMPORALE DINAMICO -->
+        <!-- SIMULATORE TEMPORALE DINAMICO -->
         <section id="simulatore" class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
@@ -224,7 +222,6 @@
                 </div>
             </div>
 
-            <!-- Griglia Metriche Simulazione -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
                     <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
@@ -252,7 +249,7 @@
             </div>
         </section>
 
-        <!-- 5. RENDICONTO GLOBALE & CONVERTITORE UNITA' (€) -->
+        <!-- RENDICONTO GLOBALE & CONVERTITORE UNITA' (€) -->
         <section class="space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
@@ -314,7 +311,7 @@
             </div>
         </section>
 
-        <!-- 6. SELEZIONI APERTE DEL GIORNO (CON SCROLL ORIZZONTALE E CURSORE) -->
+        <!-- SELEZIONI APERTE (SOLO OGGI, SCROLL ORIZZONTALE) -->
         <section id="selezioni" class="space-y-3 pt-2">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
@@ -325,7 +322,6 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">Verifica Automatica Attiva</span>
-                    <!-- Cursori di scorrimento rapido -->
                     <div class="hidden sm:flex items-center gap-1">
                         <button onclick="scrollPublicCards('left')" class="p-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
                             <i data-lucide="chevron-left" class="w-4 h-4"></i>
@@ -337,10 +333,9 @@
                 </div>
             </div>
 
-            <!-- CONTENITORE CARD A SCORRIMENTO ORIZZONTALE ELEGANTE (NON INGLOBA PIÙ LA PAGINA) -->
             <div class="relative">
                 <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory">
-                    <!-- Popolato dinamicamente solo con le partite di OGGI -->
+                    <!-- Popolato da JS -->
                 </div>
                 <div class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
                     Scorri lateralmente per vedere tutti i match &rarr;
@@ -348,7 +343,7 @@
             </div>
         </section>
 
-        <!-- 7. STORICO OTTIMIZZATO: CONTENITORE COMPATTO A SCROLL & PAGINAZIONE -->
+        <!-- STORICO COMPATTO A SCROLL VERTICALE -->
         <section id="storico" class="space-y-4 pt-4 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
@@ -365,7 +360,6 @@
                 </div>
             </div>
 
-            <!-- CONTENITORE A SCROLL INTERNO (ALTEZZA MASSIMA 440px) -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 <div class="max-h-[440px] overflow-y-auto overflow-x-auto custom-table-scroll">
                     <table class="w-full text-left text-xs text-slate-300">
@@ -386,7 +380,6 @@
                     </table>
                 </div>
 
-                <!-- Footer di controllo dello storico -->
                 <div class="bg-slate-950/80 p-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
                     <span id="history-counter-text" class="text-[11px] text-slate-400 font-mono">Visualizzati 0 pronostici</span>
                     <div class="flex items-center gap-2">
@@ -401,7 +394,7 @@
             </div>
         </section>
 
-        <!-- 8. SEZIONE PIANI & CREDITI -->
+        <!-- PIANI & PACCHETTI CREDITI -->
         <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Accesso VIP & Ricariche</span>
@@ -411,7 +404,6 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 pt-2">
                 
-                <!-- Card 1: Pacchetto 10 Crediti -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Flessibile</span>
@@ -429,7 +421,6 @@
                     </a>
                 </div>
 
-                <!-- Card 2: VIP Settimanale -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Pass Breve</span>
@@ -447,7 +438,6 @@
                     </a>
                 </div>
 
-                <!-- Card 3: VIP Mensile (Consigliato) -->
                 <div class="bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500 rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[9px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
                         Consigliato
@@ -469,7 +459,6 @@
                     </a>
                 </div>
 
-                <!-- Card 4: VIP Trimestrale -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/20">Risparmio 25%</span>
@@ -490,7 +479,7 @@
             </div>
         </section>
 
-        <!-- 9. SEZIONE FAQ -->
+        <!-- SEZIONE FAQ -->
         <section id="faq" class="space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
             <div class="text-center space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
@@ -543,7 +532,7 @@
 
     </main>
 
-    <!-- 10. FOOTER CON LINK CONSOLE RISERVATO -->
+    <!-- FOOTER -->
     <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
         <div>
             AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
@@ -561,7 +550,7 @@
         </div>
     </footer>
 
-    <!-- LOGICA JAVASCRIPT OTTIMIZZATA -->
+    <!-- LOGICA JAVASCRIPT CON BYPASS CACHE E AGGIORNAMENTO AUTOMATICO -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -631,35 +620,49 @@
             }
         }
 
+        // FUNZIONE ANTI-CACHE: LEGGE ISTANTANEAMENTE I DATI AGGIORNATI
         async function fetchAllBets() {
             let bets = [];
 
+            // 1. Prova a scaricare bets.json bypassando la cache del server
             try {
-                const res = await fetch('bets.json?t=' + Date.now());
+                const timestamp = new Date().getTime();
+                const res = await fetch(`bets.json?_nocache=${timestamp}`, {
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    }
+                });
                 if (res.ok) {
                     const data = await res.json();
                     if (Array.isArray(data) && data.length > 0) bets = data;
                 }
             } catch(e) {}
 
-            if (bets.length === 0) {
-                const rawV1 = localStorage.getItem(PRIMARY_KEY);
-                if (rawV1) {
-                    try {
-                        const parsed = JSON.parse(rawV1);
-                        if (Array.isArray(parsed) && parsed.length > 0) bets = parsed;
-                    } catch(e) {}
-                }
-            }
-
-            if (bets.length === 0) {
-                const rawAtm = localStorage.getItem(ATMBET_KEY);
-                if (rawAtm) {
-                    try {
-                        const parsed = JSON.parse(rawAtm);
-                        if (Array.isArray(parsed) && parsed.length > 0) bets = parsed;
-                    } catch(e) {}
-                }
+            // 2. Se apri la pagina dal tuo dispositivo, sincronizza all'istante con le modifiche fatte in admin
+            const rawV1 = localStorage.getItem(PRIMARY_KEY);
+            if (rawV1) {
+                try {
+                    const localBets = JSON.parse(rawV1);
+                    if (Array.isArray(localBets) && localBets.length > 0) {
+                        if (bets.length === 0) {
+                            bets = localBets;
+                        } else {
+                            // Dai priorità agli stati appena modificati dall'admin
+                            const localMap = new Map(localBets.map(b => [String(b.id || b.match_name), b]));
+                            bets = bets.map(remoteBet => {
+                                const key = String(remoteBet.id || remoteBet.match_name);
+                                const localVersion = localMap.get(key);
+                                if (localVersion && localVersion.status !== 'pending' && remoteBet.status === 'pending') {
+                                    return localVersion;
+                                }
+                                return remoteBet;
+                            });
+                        }
+                    }
+                } catch(e) {}
             }
 
             return bets.map((b, idx) => ({
@@ -851,14 +854,12 @@
             container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         }
 
-        // RENDERING SELEZIONI APERTE: SOLO OGGI (E FUTURE) IN FORMATO CAROSELLO SCORREVOLE
         function renderPublicCards() {
             const container = document.getElementById('public-bets-container');
             container.innerHTML = '';
 
             const todayStr = getLocalDateString(new Date());
 
-            // Filtro: Solo partite "pending" di OGGI o future
             const pendingBetsToday = cachedAllBets.filter(b => {
                 if (b.status !== 'pending') return false;
                 const bDate = extractStandardDate(b.event_date);
@@ -872,7 +873,6 @@
 
             pendingBetsToday.forEach(bet => {
                 const card = document.createElement('div');
-                // Card compatte con larghezza definita per scorrimento orizzontale
                 card.className = "min-w-[280px] sm:min-w-[320px] max-w-[340px] bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg snap-start shrink-0 hover:border-slate-700 transition";
 
                 let submatchesHtml = '';
