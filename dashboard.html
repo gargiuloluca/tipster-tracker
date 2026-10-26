@@ -401,7 +401,7 @@
                 match_name: b.match_name || b.match || 'Evento',
                 market: b.market || 'Mercato',
                 prediction: b.prediction || b.pick || '-',
-                original_tipster: b.original_tipster || b.tipster || 'AtmBet Selection',
+                original_tipster: 'AtmBet Selection',
                 odds: parseFloat(b.odds || b.odd || 1.80),
                 stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
                 status: b.status || 'pending',
@@ -704,7 +704,7 @@
                                 <div class="flex items-center justify-between py-0.5">
                                     <span class="text-xs text-slate-500">Contenuto Riservato</span>
                                     <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
-                                        <i data-lucide="unlock" class="w-3 h-3"></i> Sblocca (1c)
+                                        <i data-lucide="unlock" class="w-3 ins-3"></i> Sblocca (1c)
                                     </button>
                                 </div>
                             `}
@@ -723,7 +723,7 @@
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[100px] inline-block text-right">${bet.original_tipster}</span>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">AtmBet Selection</span>
                         </div>
                     </div>
                 `;
@@ -762,7 +762,7 @@
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
                     <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
                         <div class="break-words">${bet.match_name}</div>
-                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-slate-400">${bet.original_tipster}</span></div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-emerald-400 font-semibold">AtmBet Selection</span></div>
                     </td>
                     <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
                         <div class="break-words">${bet.prediction}</div>
