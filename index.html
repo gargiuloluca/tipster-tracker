@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AtmBet | Analisi Statistica e Betting Quantitativo Certificato</title>
+    <title>AtmBet | Algoritmi Quantitativi & Tipster Tracking Certificato</title>
     <link rel="icon" type="image/png" href="logo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,12 +47,18 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
         * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- Navbar Pubblica Pulita (Console Spostata nel Footer) -->
+    <!-- 1. NAVBAR DI CONVERSIONE -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -62,48 +68,116 @@
                 </a>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-4">
-                <a href="#piani" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani & Prezzi</a>
+            <div class="flex items-center gap-2 sm:gap-5">
+                <a href="#metodo" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
+                <a href="#simulatore" class="hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
+                <a href="#selezioni" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici</a>
+                <a href="#piani" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
+                <a href="#faq" class="hidden lg:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+
                 <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1 transition">Accedi</a>
-                <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
+                <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Registrati VIP
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-8 sm:space-y-12 flex-1 w-full">
+    <!-- MAIN BODY -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-12 sm:space-y-16 flex-1 w-full">
 
-        <!-- Hero Section -->
-        <section class="text-center max-w-3xl mx-auto pt-4 pb-2 space-y-4">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-mono uppercase tracking-wider font-bold">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Archivio Verificato & Aggiornato Giornalmente
+        <!-- 2. HERO SECTION -->
+        <section class="text-center max-w-3xl mx-auto pt-2 pb-2 space-y-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verifica Risultati Ufficiale via API-Football
             </div>
-            <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
                 Non scommettere sul caso.<br><span class="text-atm-green">Investi nei Dati.</span>
             </h1>
-            <p class="text-xs sm:text-base text-slate-400 leading-relaxed px-2">
-                Modelli quantitativi per scovare anomalie di quota nei campionati mondiali. Money management scientifico e disciplina statistica costante.
+            
+            <p class="text-xs sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto px-2">
+                Modelli quantitativi proprietari per identificare disallineamenti statistici di quota prima della variazione di mercato. Disciplina matematica, zero azzardo emotivo.
             </p>
             
             <div class="pt-2">
-                <div class="inline-block bg-slate-900 border border-slate-800 p-4 rounded-2xl max-w-md w-full shadow-2xl">
-                    <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2 border-b border-slate-800 pb-2">
+                <div class="inline-block bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-md w-full shadow-2xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
+                    <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2 border-b border-slate-800 pb-2 relative z-10">
                         <span class="flex items-center gap-1 text-emerald-400 font-bold"><i data-lucide="gift" class="w-3.5 h-3.5"></i> OFFERTA BENVENUTO</span>
                         <span class="font-mono text-slate-500">Zero Carta Richiesta</span>
                     </div>
-                    <div class="text-base sm:text-lg font-black text-white text-left mb-1">7 Giorni VIP + 5 Crediti Omaggio</div>
-                    <p class="text-[11px] text-slate-400 text-left mb-3">Registrati gratis per sbloccare all'istante tutte le quote, i mercati e le selezioni del giorno nel tuo cruscotto personale.</p>
-                    <a href="auth.html?mode=register" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20">
+                    <div class="text-base sm:text-lg font-black text-white text-left mb-1 relative z-10">7 Giorni VIP + 5 Crediti Omaggio</div>
+                    <p class="text-[11px] text-slate-400 text-left mb-3.5 relative z-10">Registrati gratuitamente per sbloccare le quote reali, i mercati e le analisi dettagliate nel tuo cruscotto personale.</p>
+                    <a href="auth.html?mode=register" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 relative z-10">
                         Crea Account Gratuito <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- SIMULATORE TEMPORALE DINAMICO VETRINA (CON PRECISIONE GIORNALIERA) -->
-        <section class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
+        <!-- 3. SEZIONE METODO STRATEGICO (POSIZIONATA IN ALTO PER CONVERTIRE) -->
+        <section id="metodo" class="bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="text-center max-w-2xl mx-auto space-y-1.5">
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
+                <h2 class="text-xl sm:text-2xl font-black text-white">Perché il Nostro Metodo Funziona nel Lungo Termine</h2>
+                <p class="text-xs text-slate-400">Il 97% degli scommettitori perde perché gioca per sensazione. Il betting quantitativo opera come un fondo d'investimento.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">1. Expected Value (+EV)</h3>
+                    <p class="text-slate-400 leading-relaxed">Confrontiamo le quote dei bookmaker con distribuzioni Poisson proprietarie: giochiamo solo quando la quota offerta è superiore alla probabilità reale calcolata.</p>
+                </div>
+                
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
+                        <i data-lucide="shield" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">2. Money Management Ferreo</h3>
+                    <p class="text-slate-400 leading-relaxed">Puntate rigorose basate su Unità Fisse (1.0u standard). Nessun azzardo a recupero o raddoppio: preservare il capitale è la regola numero uno.</p>
+                </div>
+                
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+                        <i data-lucide="cpu" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">3. Risultati Certificati API</h3>
+                    <p class="text-slate-400 leading-relaxed">Al fischio finale dei match, i nostri bot GitHub Actions interrogano i feed mondiali ufficiali e certificano lo storico senza possibilità di alterazione.</p>
+                </div>
+            </div>
+
+            <!-- Matrice a Confronto: Scommettitore Tradizionale vs Investitore AtmBet -->
+            <div class="mt-6 pt-6 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div class="bg-rose-500/[0.04] border border-rose-500/20 p-4 rounded-xl space-y-2">
+                    <div class="text-rose-400 font-bold flex items-center gap-1.5 text-xs">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i> Lo Scommettitore Tradizionale
+                    </div>
+                    <ul class="text-slate-400 space-y-1.5 text-[11px]">
+                        <li>• Scommette a simpatia o intuito senza modelli statistici</li>
+                        <li>• Raddoppia lo stake dopo una giocata persa bruciando la cassa</li>
+                        <li>• Gioca multiple infinite con quote ingannevoli</li>
+                    </ul>
+                </div>
+
+                <div class="bg-emerald-500/[0.04] border border-emerald-500/20 p-4 rounded-xl space-y-2">
+                    <div class="text-emerald-400 font-bold flex items-center gap-1.5 text-xs">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> L'Investitore AtmBet
+                    </div>
+                    <ul class="text-slate-300 space-y-1.5 text-[11px]">
+                        <li>• Sfrutta solo anomalie numeriche con vantaggio sul banco (+EV)</li>
+                        <li>• Stake disciplinato in unità percentuali fisse (1 Unità)</li>
+                        <li>• Storico consultabile e verificato al 100% via feed ufficiali</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SIMULATORE TEMPORALE DINAMICO -->
+        <section id="simulatore" class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
                     <div class="flex items-center gap-2 mb-1">
@@ -131,7 +205,7 @@
                 </div>
             </div>
 
-            <!-- Metriche Periodo -->
+            <!-- Griglia Metriche Simulazione -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
                     <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
@@ -159,14 +233,14 @@
             </div>
         </section>
 
-        <!-- Rendiconto Finanziario Storico Globale -->
+        <!-- 5. RENDICONTO GLOBALE & CONVERTITORE UNITA' (€) -->
         <section class="space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                         <i data-lucide="activity" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Performance Globale Certificata
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Dati cumulativi di tutto l'archivio.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Dati cumulativi di tutto l'archivio verificato.</p>
                 </div>
 
                 <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
@@ -221,25 +295,25 @@
             </div>
         </section>
 
-        <!-- SELEZIONI DEL GIORNO IN VETRINA (CARD CON BLUR E ACCORDION MULTIPLE) -->
-        <section class="space-y-4 pt-4 border-t border-slate-800/80">
+        <!-- 6. SELEZIONI APERTE DEL GIORNO (BLURRE RATE E ACCORDION MULTIPLE) -->
+        <section id="selezioni" class="space-y-4 pt-2">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                         <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni Aperte del Giorno
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Pronostici attualmente in monitoraggio.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Pronostici attualmente attivi in monitoraggio.</p>
                 </div>
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold">Verifica Automatica Attiva</span>
             </div>
 
             <div id="public-bets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-                <!-- Generato via JavaScript -->
+                <!-- Generato da JS -->
             </div>
         </section>
 
-        <!-- SEZIONE STORICO COMPLETO TRASPARENTE VETRINA -->
-        <section class="space-y-4 pt-4 border-t border-slate-800/80">
+        <!-- 7. STORICO INTEGRALE TRASPARENTE -->
+        <section id="storico" class="space-y-4 pt-4 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
@@ -277,102 +351,149 @@
             </div>
         </section>
 
-        <!-- SEZIONE PIANI & PREZZI -->
+        <!-- 8. SEZIONE PIANI & CREDITI -->
         <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-xl mx-auto space-y-2">
-                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Accesso VIP & Crediti</span>
-                <h2 class="text-2xl sm:text-3xl font-black text-white">Scegli il Tuo Piano di Crescita</h2>
-                <p class="text-xs text-slate-400">Sblocca quote con Expected Value positivo e ricevi i segnali selezionati prima della variazione quote.</p>
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Accesso VIP & Ricariche</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Scegli la Modalità Perfetta per Te</h2>
+                <p class="text-xs text-slate-400">Sblocca singoli pronostici con i pacchetti crediti flessibili oppure attiva un abbonamento VIP illimitato.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2">
-                <!-- Card 1: Pacchetto Crediti -->
-                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 pt-2">
+                
+                <!-- Card 1: Pacchetto 10 Crediti -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Flessibile</span>
-                        <h3 class="text-lg font-black text-white">Pacchetto 10 Crediti</h3>
-                        <div class="text-2xl sm:text-3xl font-black font-mono text-white">9,90 €</div>
-                        <p class="text-[11px] text-slate-400">Ideale per sbloccare singoli pronostici ad alta quota senza abbonamento vincolante.</p>
+                        <h3 class="text-base font-black text-white">Pacchetto Crediti</h3>
+                        <div class="text-2xl font-black font-mono text-white">9,90 €</div>
+                        <p class="text-[11px] text-slate-400">10 Crediti per sbloccare singolarmente i pronostici che preferisci.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 10 pronostici sbloccabili</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Nessuna scadenza crediti</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Accesso quote complete</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 10 sblocchi singoli</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Crediti senza scadenza</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Nessun rinnovo automatico</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
-                        Acquista Crediti
+                        Acquista 10 Crediti
                     </a>
                 </div>
 
-                <!-- Card 2: VIP Mensile -->
-                <div class="bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-2xl relative">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
-                        Più Richiesto
+                <!-- Card 2: VIP Settimanale -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Pass Breve</span>
+                        <h3 class="text-base font-black text-white">VIP Settimanale</h3>
+                        <div class="text-2xl font-black font-mono text-white">14,90 € <span class="text-xs text-slate-400 font-normal">/sett</span></div>
+                        <p class="text-[11px] text-slate-400">Accesso illimitato per testare tutti i segnali del weekend calcistico.</p>
+                        <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i pronostici inclusi</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Singole e multiple</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Notifiche in tempo reale</li>
+                        </ul>
+                    </div>
+                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
+                        Attiva 7 Giorni
+                    </a>
+                </div>
+
+                <!-- Card 3: VIP Mensile (Best Seller in Risalto) -->
+                <div class="bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500 rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[9px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
+                        Consigliato
                     </div>
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/30">Abbonamento VIP</span>
-                        <h3 class="text-lg font-black text-white">VIP Mensile</h3>
-                        <div class="text-2xl sm:text-3xl font-black font-mono text-emerald-400">29,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
-                        <p class="text-[11px] text-slate-400">Accesso illimitato e automatico a tutti i segnali giornalieri, singole e multiple.</p>
+                        <h3 class="text-base font-black text-white">VIP Mensile</h3>
+                        <div class="text-2xl font-black font-mono text-emerald-400">29,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
+                        <p class="text-[11px] text-slate-400">Accesso completo a tutti i segnali e strumenti per investire con costanza.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i pronostici sbloccati</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Notifiche istantanee via Telegram</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Cruscotto Simulatore VIP</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Cancelli in qualsiasi momento</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Accesso illimitato al 100%</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Notifiche Telegram VIP</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Cruscotto Simulatore Personale</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Disdici quando vuoi in un clic</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-500/20">
-                        Attiva 7 Giorni Gratis
+                        Inizia Gratis (7 Giorni)
                     </a>
                 </div>
 
-                <!-- Card 3: VIP Trimestrale -->
-                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl">
+                <!-- Card 4: VIP Trimestrale -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/20">Massimo Risparmio</span>
-                        <h3 class="text-lg font-black text-white">VIP Trimestrale</h3>
-                        <div class="text-2xl sm:text-3xl font-black font-mono text-white">69,90 € <span class="text-xs text-slate-400 font-normal">/3 mesi</span></div>
-                        <p class="text-[11px] text-slate-400">Per investitori costanti che applicano la legge dei grandi numeri su 90 giorni.</p>
+                        <span class="text-[10px] font-mono uppercase bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/20">Risparmio 25%</span>
+                        <h3 class="text-base font-black text-white">VIP Trimestrale</h3>
+                        <div class="text-2xl font-black font-mono text-white">69,90 € <span class="text-xs text-slate-400 font-normal">/3 mesi</span></div>
+                        <p class="text-[11px] text-slate-400">Ideale per massimizzare la resa matematica nel medio termine.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Risparmio oltre 20% sul mensile</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Assistenza prioritaria dedicata</li>
-                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Storico esportabile CSV/Excel</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Massimo risparmio sul prezzo mensile</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Assistenza prioritaria dedicata</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Esportazione storico Excel/CSV</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
-                        Seleziona Trimestrale
+                        Scegli Trimestrale
                     </a>
                 </div>
+
             </div>
         </section>
 
-        <!-- SEZIONE PERCHÉ FUNZIONA -->
-        <section class="bg-slate-900/50 border border-slate-800/80 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4">
-            <div class="text-center max-w-xl mx-auto space-y-1">
-                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
-                <h3 class="text-lg sm:text-2xl font-black text-white">Perché Funziona nel Lungo Termine</h3>
-                <p class="text-xs text-slate-400">Nessuna giocata casuale. Il betting quantitativo sfrutta il vantaggio matematico sul banco (Expected Value positivo).</p>
+        <!-- 9. SEZIONE FAQ -->
+        <section id="faq" class="space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
+            <div class="text-center space-y-2">
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
+                <h2 class="text-2xl font-black text-white">Tutto Quello che Devi Sapere</h2>
+                <p class="text-xs text-slate-400">Risposte chiare sul metodo, sui crediti e sulla verifica automatica.</p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 text-xs">
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
-                    <div class="text-emerald-400 font-bold flex items-center gap-1.5"><i data-lucide="crosshair" class="w-4 h-4"></i> Selezione Rigorosa</div>
-                    <p class="text-slate-400">Ogni pronostico supera un test incrociato di quote e probabilità reali calcolate da modelli Poisson e algoritmi quantitativi.</p>
-                </div>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
-                    <div class="text-amber-400 font-bold flex items-center gap-1.5"><i data-lucide="shield" class="w-4 h-4"></i> Money Management Rigido</div>
-                    <p class="text-slate-400">L'allocazione del capitale usa porzioni fisse di cassa (1 Unità standard) per eliminare il rischio di rovina ed assorbire le normali serie negative.</p>
-                </div>
-                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
-                    <div class="text-blue-400 font-bold flex items-center gap-1.5"><i data-lucide="check-check" class="w-4 h-4"></i> Verifica Indipendente</div>
-                    <p class="text-slate-400">Nessun esito manipolato: i risultati vengono confrontati via API dai feed ufficiali del calcio mondiale a fine partita.</p>
-                </div>
+
+            <div class="space-y-3">
+                <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
+                    <summary class="font-bold text-white flex items-center justify-between">
+                        <span>Come funziona la prova gratuita di 7 giorni?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
+                        Registrandoti ricevi istantaneamente 7 giorni di accesso VIP illimitato e 5 crediti omaggio, senza dover inserire carte di credito o metodi di pagamento.
+                    </p>
+                </details>
+
+                <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
+                    <summary class="font-bold text-white flex items-center justify-between">
+                        <span>Cosa rappresenta 1 Unità (1u)?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
+                        1 Unità corrisponde a una percentuale fissa del tuo budget personale (in genere 1% o 2%). Puoi usare il nostro selettore in alto per convertire all'istante le unità in Euro reali (es. 1u = 10€, 50€ o 100€).
+                    </p>
+                </details>
+
+                <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
+                    <summary class="font-bold text-white flex items-center justify-between">
+                        <span>I risultati sono realmente oggettivi e non modificabili?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
+                        Sì. Tutte le scommesse vengono inserite prima del calcio d'inizio. Al termine dei match, lo script automatico su GitHub verifica il punteggio ufficiale tramite API-Football, azzerando qualsiasi intervento soggettivo.
+                    </p>
+                </details>
+
+                <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
+                    <summary class="font-bold text-white flex items-center justify-between">
+                        <span>I crediti ricaricabili hanno una scadenza?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
+                        Assolutamente no. I crediti acquistati rimangono nel tuo profilo finché non decidi tu di spenderli per sbloccare singoli pronostici.
+                    </p>
+                </details>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer con Link Console Discreto in Basso -->
+    <!-- 10. FOOTER CON LINK CONSOLE RISERVATO -->
     <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
         <div>
             AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
@@ -380,7 +501,9 @@
         <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500">
             <a href="index.html" class="hover:text-slate-400 transition">Home</a>
             <span>•</span>
-            <a href="auth.html" class="hover:text-slate-400 transition">Accesso VIP</a>
+            <a href="#piani" class="hover:text-slate-400 transition">Piani VIP</a>
+            <span>•</span>
+            <a href="auth.html" class="hover:text-slate-400 transition">Area Utente</a>
             <span>•</span>
             <a href="admin.html" class="hover:text-emerald-400 transition flex items-center gap-1 font-mono">
                 <i data-lucide="lock" class="w-3 h-3 text-slate-600"></i> Console Gestore
@@ -388,30 +511,27 @@
         </div>
     </footer>
 
-    <!-- LOGICA SCRIPT DINAMICO VETRINA CON NORMALIZZAZIONE DATE E CALCOLO RIGOROSO -->
+    <!-- LOGICA SCRIPT DINAMICO VETRINA -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
 
         let currentMultiplier = 50;
         let globalNetProfitUnits = 0;
-        let currentSimMode = 'yesterday'; // 'today', 'yesterday', '7days', 'all', 'custom'
+        let currentSimMode = 'yesterday';
         let currentCustomDate = '';
         let currentPublicHistFilter = 'all';
         let cachedAllBets = [];
 
-        // Normalizza qualsiasi data (YYYY-MM-DD, DD.MM.YYYY, DD/MM/YYYY) in YYYY-MM-DD
         function extractStandardDate(rawDateStr) {
             if (!rawDateStr) return '';
             const clean = String(rawDateStr).trim();
 
-            // Formato ISO YYYY-MM-DD
             const isoMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
             if (isoMatch) {
                 return `${isoMatch[1]}-${String(isoMatch[2]).padStart(2, '0')}-${String(isoMatch[3]).padStart(2, '0')}`;
             }
 
-            // Formato Europeo DD.MM.YYYY o DD/MM/YYYY
             const euMatch = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
             if (euMatch) {
                 return `${euMatch[3]}-${String(euMatch[2]).padStart(2, '0')}-${String(euMatch[1]).padStart(2, '0')}`;
@@ -561,7 +681,6 @@
             calculateSimulationPerformance();
         }
 
-        // Calcolo Rigoroso Risultati del Periodo / Giorno Selezionato
         function calculateSimulationPerformance() {
             const today = new Date();
             const todayStr = getLocalDateString(today);
@@ -575,7 +694,6 @@
             const d7Str = getLocalDateString(d7);
 
             const simBets = cachedAllBets.filter(b => {
-                // Considera solo partite con esito definitivo
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
 
@@ -720,7 +838,6 @@
                         ${toggleBtnHtml}
                         ${submatchesHtml}
 
-                        <!-- BOX SEGNALE OSCURATO CON BLUR E LUCCHETTO -->
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 my-3">
                             <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Dettagli Segnale:</div>
                             <div class="flex items-center justify-between py-1">
