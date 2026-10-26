@@ -145,7 +145,7 @@
                 </div>
             </section>
 
-            <!-- NUOVO MODULO: CONTROLLO SOVRAESPOSIZIONE & CONFLITTI SCOMMESSE -->
+            <!-- MODULO: CONTROLLO SOVRAESPOSIZIONE & CONFLITTI CON TASTO CONFERMA -->
             <section id="conflict-panel" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 shadow-lg space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -154,13 +154,13 @@
                         </div>
                         <div>
                             <h3 class="text-xs sm:text-sm font-bold text-amber-300">Rilevata Sovraesposizione / Conflitto Match</h3>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Ci sono partite duplicate o pronostici contrapposti che rischiano di annullarsi o sovraesporre la cassa.</p>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">Partite duplicate o pronostici contrapposti. Puoi rimuoverle o confermare di volerle mantenere entrambe.</p>
                         </div>
                     </div>
                     <span id="conflict-count-badge" class="text-[10px] font-mono font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0 Anomalie</span>
                 </div>
                 <div id="conflict-items-container" class="space-y-2 pt-1">
-                    <!-- Generato dinamicamente con dettagli e azioni rapide -->
+                    <!-- Popolato dinamicamente -->
                 </div>
             </section>
 
@@ -262,7 +262,7 @@
                 </div>
             </section>
 
-            <!-- FORM DI INSERIMENTO MANUALE CON AVVISO PREVENTIVO -->
+            <!-- FORM DI INSERIMENTO MANUALE -->
             <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
                 <h2 class="text-xs sm:text-sm font-bold text-white mb-3 flex items-center gap-2">
                     <i data-lucide="plus-circle" class="text-emerald-400 w-4 h-4"></i> Inserimento Manuale Pronostico
@@ -437,10 +437,28 @@
         </div>
     </div>
 
-    <!-- LOGICA DI SICUREZZA, GITHUB SYNC, SCANNER CONFLITTI & GESTIONALE -->
+    <!-- SCRIPT GESTIONALE, SCANNER & CONFERMA CONFLITTI -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
+        const CONFIRMED_CONFLICTS_KEY = "atmbet_confirmed_conflicts";
+
+        function getConfirmedConflicts() {
+            try {
+                return JSON.parse(localStorage.getItem(CONFIRMED_CONFLICTS_KEY)) || [];
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function confirmConflictMatch(groupKey) {
+            const confirmed = getConfirmedConflicts();
+            if (!confirmed.includes(groupKey)) {
+                confirmed.push(groupKey);
+                localStorage.setItem(CONFIRMED_CONFLICTS_KEY, JSON.stringify(confirmed));
+            }
+            renderDashboard();
+        }
 
         function verifyAdminAuth(e) {
             e.preventDefault();
@@ -489,7 +507,6 @@
         let currentSimMode = 'yesterday';
         let currentCustomDate = '';
 
-        // FUNZIONE DI NORMALIZZAZIONE TESTO PER CONFRONTARE LE SQUADRE
         function normalizeMatchText(str) {
             if (!str) return '';
             return str.toLowerCase()
@@ -498,27 +515,26 @@
                       .trim();
         }
 
-        // MOTORE DI SCANNER DEI DUPLICATI E DEI CONFLITTI
+        // SCANNER CONFLITTI CON FILTRO SU QUELLI GIA' CONFERMATI DALL'ADMIN
         function scanForConflictsAndDuplicates(bets) {
             const conflictPanel = document.getElementById('conflict-panel');
             const conflictContainer = document.getElementById('conflict-items-container');
             const badge = document.getElementById('conflict-count-badge');
             if (!conflictPanel || !conflictContainer) return;
 
-            // Filtra solo pronostici "pending" (in corso)
             const activeBets = bets.filter(b => b.status === 'pending');
+            const confirmedKeys = getConfirmedConflicts();
             
             const matchGroups = {};
             activeBets.forEach(bet => {
                 const norm = normalizeMatchText(bet.match_name);
                 if (!norm) return;
 
-                // Cerca se esiste già un gruppo corrispondente
                 let foundKey = Object.keys(matchGroups).find(k => {
                     const wordsA = k.split(' ').filter(w => w.length > 2);
                     const wordsB = norm.split(' ').filter(w => w.length > 2);
                     const intersection = wordsA.filter(w => wordsB.includes(w));
-                    return intersection.length >= 2; // Almeno 2 parole in comune (squadra casa e ospite)
+                    return intersection.length >= 2;
                 });
 
                 const groupKey = foundKey || norm;
@@ -526,8 +542,8 @@
                 matchGroups[groupKey].push(bet);
             });
 
-            // Isola i gruppi che hanno più di 1 scommessa sullo stesso evento
-            const conflicts = Object.entries(matchGroups).filter(([_, items]) => items.length > 1);
+            // Isola i gruppi con più di 1 scommessa ESCLUDENDO quelli già confermati dall'admin
+            const conflicts = Object.entries(matchGroups).filter(([key, items]) => items.length > 1 && !confirmedKeys.includes(key));
 
             if (conflicts.length === 0) {
                 conflictPanel.classList.add('hidden');
@@ -535,23 +551,22 @@
             }
 
             conflictPanel.classList.remove('hidden');
-            if (badge) badge.innerText = `${conflicts.length} Casi di Sovraesposizione`;
+            if (badge) badge.innerText = `${conflicts.length} da verificare`;
 
             conflictContainer.innerHTML = '';
             conflicts.forEach(([key, items]) => {
-                // Controlla se hanno stesso o diverso pronostico
                 const uniquePicks = [...new Set(items.map(i => i.prediction.trim().toLowerCase()))];
                 const isConflict = uniquePicks.length > 1;
 
                 const box = document.createElement('div');
-                box.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5";
+                box.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-3";
 
                 let itemsListHtml = items.map(i => `
                     <div class="text-xs flex items-center justify-between gap-2 bg-slate-900 px-2 py-1 rounded border border-slate-800">
                         <span class="text-slate-300 font-semibold">${i.original_tipster}: <span class="text-emerald-400 font-bold">${i.prediction}</span> (@${parseFloat(i.odds).toFixed(2)})</span>
                         <div class="flex items-center gap-1.5">
                             <span class="font-mono text-slate-400 text-[10px]">${i.stake.toFixed(1)}u</span>
-                            <button onclick="deleteBet('${i.id}')" class="text-rose-400 hover:text-rose-300 p-0.5 rounded text-[10px] border border-rose-500/30 px-1 bg-rose-500/10">
+                            <button onclick="deleteBet('${i.id}')" title="Elimina questa giocata" class="text-rose-400 hover:text-rose-300 p-0.5 rounded text-[10px] border border-rose-500/30 px-1 bg-rose-500/10 transition">
                                 Rimuovi
                             </button>
                         </div>
@@ -560,16 +575,22 @@
 
                 box.innerHTML = `
                     <div class="space-y-1">
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <span class="font-bold text-white text-xs sm:text-sm">${items[0].match_name}</span>
                             <span class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase font-mono ${isConflict ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
                                 ${isConflict ? 'Pronostici Contrapposti' : 'Stesso Pronostico (Duplicato)'}
                             </span>
                         </div>
-                        <div class="text-[10px] text-slate-400 font-mono">Totale Stake Rischio: <span class="text-white font-bold">${items.reduce((acc, curr) => acc + curr.stake, 0).toFixed(1)}u</span></div>
+                        <div class="text-[10px] text-slate-400 font-mono">Stake Rischio Totale: <span class="text-white font-bold">${items.reduce((acc, curr) => acc + curr.stake, 0).toFixed(1)}u</span></div>
                     </div>
-                    <div class="space-y-1 w-full sm:w-auto">
-                        ${itemsListHtml}
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <div class="space-y-1">
+                            ${itemsListHtml}
+                        </div>
+                        <button type="button" onclick="confirmConflictMatch('${key}')" class="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap flex items-center justify-center gap-1">
+                            <i data-lucide="check" class="w-3.5 h-3.5"></i> Conferma & Mantieni
+                        </button>
                     </div>
                 `;
                 conflictContainer.appendChild(box);
@@ -578,7 +599,6 @@
             lucide.createIcons();
         }
 
-        // AVVISO IN TEMPO REALE QUANDO DIGITI NEL MODULO MANUALE
         function checkMatchDuplicateWarning(typedName) {
             const warningEl = document.getElementById('live-dup-warning');
             if (!typedName || typedName.trim().length < 3) {
@@ -717,14 +737,14 @@
             const token = document.getElementById('gh-token').value.trim();
 
             if (!repo || !token) {
-                alert("Inserisci sia il nome repository sia il Personal Access Token.");
+                alert("Inserisci repository e token.");
                 return;
             }
 
             localStorage.setItem(GH_REPO_KEY, repo);
             localStorage.setItem(GH_TOKEN_KEY, token);
             updateSyncBadge('ready');
-            alert("Credenziali salvate! Le modifiche verranno sincronizzate in automatico.");
+            alert("Credenziali salvate!");
             syncBetsToGitHub(loadAllBets());
         }
 
@@ -747,7 +767,7 @@
                 text.className = 'text-[10px] text-emerald-400 font-mono font-bold';
             } else if (status === 'error') {
                 icon.className = 'w-3 h-3 rounded-full bg-rose-500 shrink-0';
-                text.innerText = 'Errore sincronizzazione GitHub: ' + (message || 'Verifica credenziali.');
+                text.innerText = 'Errore sincronizzazione: ' + (message || 'Verifica dati.');
                 text.className = 'text-[10px] text-rose-400 font-mono font-bold';
             } else {
                 icon.className = 'w-3 h-3 rounded-full bg-slate-500 shrink-0';
@@ -909,27 +929,6 @@
             const bets = loadAllBets();
             const matchName = document.getElementById('match_name').value.trim();
 
-            // Controllo anti-duplicato
-            const normNew = normalizeMatchText(matchName);
-            const newWords = normNew.split(' ').filter(w => w.length > 2);
-            const existingMatch = bets.find(b => {
-                if (b.status !== 'pending') return false;
-                const normB = normalizeMatchText(b.match_name);
-                const bWords = normB.split(' ').filter(w => w.length > 2);
-                const inter = newWords.filter(w => bWords.includes(w));
-                return inter.length >= 2;
-            });
-
-            if (existingMatch) {
-                const proceed = confirm(
-                    `ATTENZIONE: Questa partita è già in archivio!\n\n` +
-                    `Evento esistente: ${existingMatch.match_name}\n` +
-                    `Tipster: ${existingMatch.original_tipster} | Pronostico: ${existingMatch.prediction}\n\n` +
-                    `Sei sicuro di voler inserire una seconda giocata sullo stesso match e aumentare l'esposizione?`
-                );
-                if (!proceed) return;
-            }
-
             const newBet = {
                 id: 'bet_' + Date.now(),
                 match_name: matchName,
@@ -991,8 +990,6 @@
             }
 
             let addedCount = 0;
-            let skippedDuplicates = 0;
-
             lines.forEach((line, idx) => {
                 if (line.includes('|')) {
                     const parts = line.split('|').map(p => p.trim());
@@ -1003,18 +1000,6 @@
                         const oddsPart = parseFloat(parts[3].replace(',', '.')) || 1.80;
                         const tipsterPart = parts[4] || 'Freak Elite VIP';
                         const leaguePart = parts[5] || 'Generale';
-
-                        // Controllo duplicato identico già presente tra le partite aperte
-                        const isExactDuplicate = bets.some(b => 
-                            b.status === 'pending' && 
-                            normalizeMatchText(b.match_name) === normalizeMatchText(matchPart) &&
-                            b.prediction.toLowerCase().trim() === predPart.toLowerCase().trim()
-                        );
-
-                        if (isExactDuplicate) {
-                            skippedDuplicates++;
-                            return;
-                        }
 
                         bets.unshift({
                             id: 'bet_' + Date.now() + '_' + idx,
@@ -1034,13 +1019,9 @@
                 }
             });
 
-            if (addedCount > 0 || skippedDuplicates > 0) {
+            if (addedCount > 0) {
                 persistBets(bets);
-                let msg = `Inseriti ${addedCount} nuovi pronostici.`;
-                if (skippedDuplicates > 0) {
-                    msg += `\n(${skippedDuplicates} pronostici identici duplicati sono stati scartati automaticamente per evitare sovraesposizione).`;
-                }
-                alert(msg);
+                alert(`Inseriti ${addedCount} nuovi pronostici in blocco!`);
                 document.getElementById('ai-input').value = '';
             }
         }
@@ -1270,8 +1251,6 @@
 
         function renderDashboard() {
             const allBets = loadAllBets();
-
-            // 1. Controllo sovraesposizione e conflitti attivo
             scanForConflictsAndDuplicates(allBets);
 
             const tipsters = [...new Set(allBets.map(b => b.original_tipster).filter(Boolean))];
