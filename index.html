@@ -63,6 +63,7 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-4">
+                <a href="#piani" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani & Prezzi</a>
                 <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1 transition">Accedi</a>
                 <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Registrati VIP
@@ -236,6 +237,114 @@
             </div>
         </section>
 
+        <!-- SEZIONE STORICO COMPLETO TRASPARENTE VETRINA -->
+        <section class="space-y-4 pt-4 border-t border-slate-800/80">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div>
+                    <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Storico Pronostici Conclusi
+                    </h2>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Trasparenza al 100%: consulta ogni singola giocata chiusa in archivio.</p>
+                </div>
+
+                <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-900 p-1 rounded-xl border border-slate-800">
+                    <button type="button" onclick="filterPublicHistory('all', this)" id="btn-pubhist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
+                    <button type="button" onclick="filterPublicHistory('won', this)" id="btn-pubhist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
+                    <button type="button" onclick="filterPublicHistory('lost', this)" id="btn-pubhist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                            <tr>
+                                <th class="py-2.5 px-3">Data</th>
+                                <th class="py-2.5 px-3">Partita / Evento</th>
+                                <th class="py-2.5 px-3">Pronostico</th>
+                                <th class="py-2.5 px-3">Quota</th>
+                                <th class="py-2.5 px-3">Stake</th>
+                                <th class="py-2.5 px-3 text-center">Esito</th>
+                                <th class="py-2.5 px-3 text-right">P/L Netto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="public-history-tbody" class="divide-y divide-slate-800/60 font-medium">
+                            <!-- Popolato da JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEZIONE PIANI & PREZZI (RECUPERATA) -->
+        <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Accesso VIP & Crediti</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Scegli il Tuo Piano di Crescita</h2>
+                <p class="text-xs text-slate-400">Sblocca quote con Expected Value positivo e ricevi i segnali selezionati prima della variazione quote.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 pt-2">
+                <!-- Card 1: Pacchetto Crediti -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl">
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Flessibile</span>
+                        <h3 class="text-lg font-black text-white">Pacchetto 10 Crediti</h3>
+                        <div class="text-2xl sm:text-3xl font-black font-mono text-white">9,90 €</div>
+                        <p class="text-[11px] text-slate-400">Ideale per sbloccare singoli pronostici ad alta quota senza abbonamento vincolante.</p>
+                        <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 10 pronostici sbloccabili</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Nessuna scadenza crediti</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Accesso quote complete</li>
+                        </ul>
+                    </div>
+                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
+                        Acquista Crediti
+                    </a>
+                </div>
+
+                <!-- Card 2: VIP Mensile (In Evidenza) -->
+                <div class="bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-2xl relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
+                        Più Richiesto
+                    </div>
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-mono uppercase bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/30">Abbonamento VIP</span>
+                        <h3 class="text-lg font-black text-white">VIP Mensile</h3>
+                        <div class="text-2xl sm:text-3xl font-black font-mono text-emerald-400">29,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
+                        <p class="text-[11px] text-slate-400">Accesso illimitato e automatico a tutti i segnali giornalieri, singole e multiple.</p>
+                        <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i pronostici sbloccati</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Notifiche istantanee via Telegram</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Cruscotto Simulatore VIP</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Cancelli in qualsiasi momento</li>
+                        </ul>
+                    </div>
+                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-500/20">
+                        Attiva 7 Giorni Gratis
+                    </a>
+                </div>
+
+                <!-- Card 3: VIP Trimestrale -->
+                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-xl">
+                    <div class="space-y-3">
+                        <span class="text-[10px] font-mono uppercase bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/20">Massimo Risparmio</span>
+                        <h3 class="text-lg font-black text-white">VIP Trimestrale</h3>
+                        <div class="text-2xl sm:text-3xl font-black font-mono text-white">69,90 € <span class="text-xs text-slate-400 font-normal">/3 mesi</span></div>
+                        <p class="text-[11px] text-slate-400">Per investitori costanti che applicano la legge dei grandi numeri su 90 giorni.</p>
+                        <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Risparmio oltre 20% sul mensile</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Assistenza prioritaria dedicata</li>
+                            <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Storico esportabile CSV/Excel</li>
+                        </ul>
+                    </div>
+                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
+                        Seleziona Trimestrale
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- SEZIONE PERCHÉ FUNZIONA -->
         <section class="bg-slate-900/50 border border-slate-800/80 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-4">
             <div class="text-center max-w-xl mx-auto space-y-1">
@@ -247,7 +356,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 text-xs">
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
                     <div class="text-emerald-400 font-bold flex items-center gap-1.5"><i data-lucide="crosshair" class="w-4 h-4"></i> Selezione Rigorosa</div>
-                    <p class="text-slate-400">Ogni pronostico supera un test incrociato di quote e probabilità reali calcolate da modelli Poisson e intelligenze artificiali esterne.</p>
+                    <p class="text-slate-400">Ogni pronostico supera un test incrociato di quote e probabilità reali calcolate da modelli Poisson e algoritmi quantitativi.</p>
                 </div>
                 <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1.5">
                     <div class="text-amber-400 font-bold flex items-center gap-1.5"><i data-lucide="shield" class="w-4 h-4"></i> Money Management Rigido</div>
@@ -275,6 +384,8 @@
         let currentMultiplier = 50;
         let globalNetProfitUnits = 0;
         let currentSimStartDate = '2026-10-25';
+        let currentPublicHistFilter = 'all';
+        let cachedAllBets = [];
 
         function getLocalDateString(d) {
             const year = d.getFullYear();
@@ -290,8 +401,8 @@
 
             const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
             
-            const todayLabel = `Oggi (${today.getDate()} ${monthNames[today.getMonth()]})`;
-            const yesterdayLabel = `Ieri (${yesterday.getDate()} ${monthNames[yesterday.getMonth()]})`;
+            const todayLabel = `Oggi (${today.getDate()}${monthNames[today.getMonth()]})`;
+            const yesterdayLabel = `Ieri (${yesterday.getDate()}${monthNames[yesterday.getMonth()]})`;
 
             const btnToday = document.getElementById('btn-preset-today');
             const btnYesterday = document.getElementById('btn-preset-yesterday');
@@ -316,7 +427,7 @@
         async function fetchAllBets() {
             let bets = [];
 
-            // 1. Prova a caricare da file bets.json su GitHub
+            // 1. Prova a caricare dal file bets.json su GitHub
             try {
                 const res = await fetch('bets.json?t=' + Date.now());
                 if (res.ok) {
@@ -413,8 +524,6 @@
 
             calculateSimulationPerformance();
         }
-
-        let cachedAllBets = [];
 
         function calculateSimulationPerformance() {
             const simBets = cachedAllBets.filter(b => {
@@ -546,8 +655,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
                         </div>
                         <h3 class="text-sm sm:text-base font-bold text-white mb-2 leading-snug break-words">${bet.match_name}</h3>
-                        ${toggleBtnHtml}
-                        ${submatchesHtml}
+                        ${toggleBtnHtml}${submatchesHtml}
 
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 my-3">
                             <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Dettagli Segnale:</div>
@@ -576,12 +684,74 @@
             lucide.createIcons();
         }
 
+        function filterPublicHistory(type, element) {
+            currentPublicHistFilter = type;
+            document.querySelectorAll('#btn-pubhist-all, #btn-pubhist-won, #btn-pubhist-lost').forEach(btn => {
+                btn.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
+            });
+            if (element) {
+                element.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
+            }
+            renderPublicHistoryTable();
+        }
+
+        function renderPublicHistoryTable() {
+            const tbody = document.getElementById('public-history-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
+
+            if (currentPublicHistFilter === 'won') completed = completed.filter(b => b.status === 'won');
+            if (currentPublicHistFilter === 'lost') completed = completed.filter(b => b.status === 'lost');
+
+            if (completed.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna giocata nello storico pubblico per questo filtro.</td></tr>`;
+                return;
+            }
+
+            completed.forEach(bet => {
+                const tr = document.createElement('tr');
+                const isWon = bet.status === 'won';
+                const s = bet.stake || 1.0;
+                const pl = isWon ? (bet.odds - 1) * s : -s;
+
+                tr.className = isWon 
+                    ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" 
+                    : "bg-rose-500/[0.02] hover:bg-rose-500/[0.05] transition";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
+                    <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
+                        <div class="break-words">${bet.match_name}</div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-slate-400">${bet.original_tipster}</span></div>
+                    </td>
+                    <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
+                        <div class="break-words">${bet.prediction}</div>
+                        <div class="text-[9px] text-slate-500">${bet.market}</div>
+                    </td>
+                    <td class="py-2.5 px-3 font-mono font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-400">${bet.stake.toFixed(1)}u</td>
+                    <td class="py-2.5 px-3 text-center">
+                        ${isWon 
+                            ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
+                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             setupDynamicDatePresets();
             cachedAllBets = await fetchAllBets();
             calculateGlobalPerformance();
             calculateSimulationPerformance();
             renderPublicCards();
+            renderPublicHistoryTable();
             lucide.createIcons();
         });
     </script>
