@@ -169,19 +169,6 @@
     "is_published": true
   },
   {
-    "id": "bet_1793000252930_2",
-    "event_date": "2026-10-26 18:00",
-    "match_name": "Galatasaray vs Fenerbahçe",
-    "league": "Süper Lig",
-    "market": "1X2 / Mercato",
-    "prediction": "Doppia Chance Fenerbahçe o Pareggio (X2)",
-    "original_tipster": "Pronostici1",
-    "odds": 1.64,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
     "id": "bet_1793000252930_0",
     "event_date": "2026-10-26 17:00",
     "match_name": "Beşiktaş vs Başakşehir",
