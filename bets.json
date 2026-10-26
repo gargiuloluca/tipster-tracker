@@ -1,5 +1,252 @@
 [
   {
+    "id": "bet_1793000252931_7",
+    "event_date": "2026-10-26 23:00",
+    "match_name": "Flamengo vs Atletico-MG",
+    "league": "Brasile Serie A",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5 gol",
+    "original_tipster": "Pronostici1",
+    "odds": 1.55,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252930_5",
+    "event_date": "2026-10-26 23:00",
+    "match_name": "Juventude vs Nautico Recife",
+    "league": "Brasile Serie B",
+    "market": "1X2 / Mercato",
+    "prediction": "Vittoria Juventude (Segno 1)",
+    "original_tipster": "Pronostici1",
+    "odds": 1.49,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252930_1",
+    "event_date": "2026-10-26 23:00",
+    "match_name": "Coritiba vs Grêmio",
+    "league": "Brasile Serie A",
+    "market": "1X2 / Mercato",
+    "prediction": "Grêmio o Pareggio (X2)",
+    "original_tipster": "Pronostici1",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792988449387_0",
+    "event_date": "2026-10-26 21:00",
+    "match_name": "Sevilla vs CA Osasuna",
+    "league": "La Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "Segno 1 (Vittoria Sevilla)",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.91,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793014650192_0",
+    "event_date": "2026-10-26 20:40",
+    "match_name": "Edmonton Oilers vs Detroit Red Wings",
+    "league": "NHL",
+    "market": "1X2 / Mercato",
+    "prediction": "Vittoria Edmonton Oilers",
+    "original_tipster": "ZCODE",
+    "odds": 1.58,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252931_9",
+    "event_date": "2026-10-26 20:00",
+    "match_name": "Tecnico Universitario vs Mushuc Runa SC",
+    "league": "Ecuador Liga Pro",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 2.5 gol",
+    "original_tipster": "Pronostici1",
+    "odds": 1.6,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252930_4",
+    "event_date": "2026-10-26 19:45",
+    "match_name": "Santa Clara vs Benfica",
+    "league": "Primeira Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5 gol",
+    "original_tipster": "Pronostici1",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792988449387_2",
+    "event_date": "2026-10-26 19:45",
+    "match_name": "Santa Clara vs Benfica",
+    "league": "Primeira Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "2 + Over 1.5",
+    "original_tipster": "CalcioAI",
+    "odds": 1.73,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793010582811_0",
+    "event_date": "2026-10-26 19:30",
+    "match_name": "Galatasaray vs Fenerbahçe",
+    "league": "Süper Lig",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Stats4Bets",
+    "odds": 1.5,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252931_8",
+    "event_date": "2026-10-26 19:00",
+    "match_name": "FC Copenaghen vs Odense",
+    "league": "Danimarca Superliga",
+    "market": "1X2 / Mercato",
+    "prediction": "Vittoria FC Copenaghen (Segno 1)",
+    "original_tipster": "Pronostici1",
+    "odds": 1.44,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792988784754_0",
+    "event_date": "2026-10-26 19:00",
+    "match_name": "FC København vs Odense BK",
+    "league": "Danimarca",
+    "market": "1X2 / Mercato",
+    "prediction": "Segno 1",
+    "original_tipster": "Stats4bets bollamaker",
+    "odds": 1.49,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792988449387_3",
+    "event_date": "2026-10-26 19:00",
+    "match_name": "FC Copenhagen vs Odense / Santa Clara vs Benfica",
+    "league": "Superliga / Primeira Liga",
+    "market": "Multipla",
+    "prediction": "Doppia (1 + Over 1.5 / 2 + Over 1.5)",
+    "original_tipster": "CalcioAI",
+    "odds": 2.99,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252930_3",
+    "event_date": "2026-10-26 18:00",
+    "match_name": "Rizespor vs Trabzonspor",
+    "league": "Süper Lig",
+    "market": "1X2 / Mercato",
+    "prediction": "Vittoria Trabzonspor (Segno 2)",
+    "original_tipster": "Pronostici1",
+    "odds": 1.95,
+    "stake": 1,
+    "status": "won",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252930_2",
+    "event_date": "2026-10-26 18:00",
+    "match_name": "Galatasaray vs Fenerbahçe",
+    "league": "Süper Lig",
+    "market": "1X2 / Mercato",
+    "prediction": "Doppia Chance Fenerbahçe o Pareggio (X2)",
+    "original_tipster": "Pronostici1",
+    "odds": 1.64,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252930_0",
+    "event_date": "2026-10-26 17:00",
+    "match_name": "Beşiktaş vs Başakşehir",
+    "league": "Süper Lig",
+    "market": "1X2 / Mercato",
+    "prediction": "Başakşehir +1.5 Handicap Asiatico",
+    "original_tipster": "Pronostici1",
+    "odds": 1.88,
+    "stake": 1,
+    "status": "won",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792988449387_4",
+    "event_date": "2026-10-26 17:00",
+    "match_name": "Beşiktaş vs Başakşehir / FC Copenhagen vs Odense / Santa Clara vs Benfica",
+    "league": "Süper Lig / Multi-League",
+    "market": "Multipla",
+    "prediction": "Tripla (1 + Over 1.5 / 1 + Over 1.5 / 2 + Over 1.5)",
+    "original_tipster": "CalcioAI",
+    "odds": 4.25,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792988784754_1",
+    "event_date": "2026-10-26 16:00",
+    "match_name": "FC Iberia vs Torpedo Kutaisi / Beşiktaş vs Başakşehir / Resistencia vs Benjamin Aceval",
+    "league": "Multi-League",
+    "market": "Multipla",
+    "prediction": "Tripla (1X / 1 / Over 1.5)",
+    "original_tipster": "Stats4bets bollamaker",
+    "odds": 2.25,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1792988449387_1",
+    "event_date": "2026-10-26 16:00",
+    "match_name": "Ararat-Armenia vs Noah / Istra 1961 vs Hajduk Split",
+    "league": "Premier League / 1. HNL",
+    "market": "Multipla",
+    "prediction": "Doppia (Over 2.5 / Over 1.5)",
+    "original_tipster": "BetMines",
+    "odds": 2.1,
+    "stake": 1,
+    "status": "won",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793000252931_6",
+    "event_date": "2026-10-26 15:00",
+    "match_name": "Xorazm vs Navbahor",
+    "league": "Uzbekistan Super League",
+    "market": "1X2 / Mercato",
+    "prediction": "Vittoria Navbahor (Segno 2)",
+    "original_tipster": "Pronostici1",
+    "odds": 1.52,
+    "stake": 1,
+    "status": "won",
+    "is_published": true
+  },
+  {
     "id": "bet_1792934519439_0",
     "event_date": "2026-10-25 22:30",
     "match_name": "Sporting CP vs Académico de Viseu",
@@ -9,7 +256,7 @@
     "original_tipster": "Freak Elite VIP",
     "odds": 1.65,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -22,7 +269,7 @@
     "original_tipster": "Freak Elite VIP",
     "odds": 1.79,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -35,7 +282,7 @@
     "original_tipster": "AtmBetSignal",
     "odds": 1.41,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -48,7 +295,7 @@
     "original_tipster": "Freak Elite VIP",
     "odds": 2.55,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -61,7 +308,7 @@
     "original_tipster": "Stats4Bets",
     "odds": 1.53,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -74,7 +321,7 @@
     "original_tipster": "Stats4Bets",
     "odds": 1.57,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -87,7 +334,7 @@
     "original_tipster": "AtmBetSignal",
     "odds": 1.41,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -100,7 +347,7 @@
     "original_tipster": "AtmBetSignal",
     "odds": 1.4,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -113,7 +360,7 @@
     "original_tipster": "Freak Elite VIP",
     "odds": 2.34,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -126,7 +373,7 @@
     "original_tipster": "Freak Elite VIP",
     "odds": 2.16,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -139,7 +386,7 @@
     "original_tipster": "Stats4Bets",
     "odds": 1.98,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -165,7 +412,7 @@
     "original_tipster": "Stats4Bets",
     "odds": 1.99,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -191,7 +438,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.74,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -204,7 +451,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.82,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -217,7 +464,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.91,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -230,7 +477,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.91,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -243,7 +490,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.95,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -256,7 +503,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.76,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -269,7 +516,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.85,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -282,7 +529,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.62,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -295,7 +542,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.75,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -308,7 +555,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.6,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -321,7 +568,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.75,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -334,7 +581,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.66,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -360,7 +607,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.8,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -373,7 +620,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.73,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -386,7 +633,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.57,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -399,7 +646,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.68,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -412,7 +659,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.7,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -425,7 +672,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.65,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -438,7 +685,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.71,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -451,7 +698,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.93,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -464,7 +711,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.67,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -477,7 +724,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.74,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -490,7 +737,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.57,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -503,7 +750,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.53,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -516,7 +763,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.87,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -529,7 +776,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.9,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -542,7 +789,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.67,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -555,7 +802,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.83,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -568,7 +815,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.62,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -581,7 +828,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.66,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -594,7 +841,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.6,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -607,7 +854,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.8,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -620,7 +867,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.65,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -633,7 +880,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.7,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -646,7 +893,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.6,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -659,7 +906,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.98,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -685,7 +932,7 @@
     "original_tipster": "CalcioAI",
     "odds": 3.72,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -698,7 +945,7 @@
     "original_tipster": "BetMines",
     "odds": 1.91,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -737,7 +984,7 @@
     "original_tipster": "BetMines PreMatch",
     "odds": 1.44,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -750,7 +997,7 @@
     "original_tipster": "BetMines PreMatch",
     "odds": 1.55,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -763,7 +1010,7 @@
     "original_tipster": "BetMines PreMatch",
     "odds": 1.9,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
@@ -789,7 +1036,7 @@
     "original_tipster": "BetMines PreMatch",
     "odds": 1.65,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -1205,7 +1452,7 @@
     "original_tipster": "ZCODE",
     "odds": 1.53,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   }
 ]
