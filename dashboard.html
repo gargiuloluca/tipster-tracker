@@ -79,7 +79,7 @@
     <!-- Main Dashboard Area -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8 flex-1 w-full">
 
-        <!-- Welcome & Status Banner Mobile Responsive -->
+        <!-- Welcome Banner -->
         <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden shadow-xl">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative z-10">
                 
@@ -126,7 +126,7 @@
             </div>
         </div>
 
-        <!-- SIMULATORE TEMPORALE MOBILE -->
+        <!-- SIMULATORE TEMPORALE DINAMICO DASHBOARD -->
         <section class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
@@ -142,19 +142,20 @@
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
                         <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Dal:</span>
-                        <input type="date" id="sim-start-date" min="2026-10-24" value="2026-10-24" onchange="applySimulationDate(this.value)"
+                        <input type="date" id="sim-start-date" onchange="applySimulationDate(this.value)"
                             class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
                     </div>
 
                     <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
-                        <button type="button" onclick="setSimPreset('2026-10-24', this)" id="preset-24" class="sim-btn sim-pill-active px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Da Ieri (24 Ott)</button>
-                        <button type="button" onclick="setSimPreset('2026-10-25', this)" id="preset-25" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi (25 Ott)</button>
-                        <button type="button" onclick="setSimPreset('all', this)" id="preset-all" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
+                        <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi</button>
+                        <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ieri</button>
+                        <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ultimi 7gg</button>
+                        <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Griglia Metriche Simulazione -->
+            <!-- Metriche Simulazione -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
                     <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
@@ -192,7 +193,6 @@
                     <p class="text-[11px] sm:text-xs text-slate-400">Statistiche aggregate su tutte le selezioni chiuse.</p>
                 </div>
 
-                <!-- Convertitore Valore Unità Touch -->
                 <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
                     <span class="text-[10px] text-slate-400 font-bold px-1.5 hidden sm:inline">1u =</span>
                     <button type="button" onclick="setUnitValue(5, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">5€</button>
@@ -276,7 +276,6 @@
                 </div>
             </div>
 
-            <!-- Tabella Storico con Testo a Capo Pulito -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-slate-300">
@@ -291,7 +290,7 @@
                                 <th class="py-2.5 px-3 text-right">P/L Netto</th>
                             </tr>
                         </thead>
-                        <tbody id="user-history-tbody" class="divide-y divide-slate-800/60 font-medium">
+                        <tbody id="user-history-tbody" class="divide-y border-slate-800/60 font-medium">
                             <!-- Popolato da JS -->
                         </tbody>
                     </table>
@@ -306,7 +305,7 @@
         AtmBet &copy; 2026. Cruscotto Rendimento Certificato.
     </footer>
 
-    <!-- LOGICA DASHBOARD -->
+    <!-- LOGICA DASHBOARD CON DATE DINAMICHE -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -317,8 +316,44 @@
         let currentHistoryFilter = 'all';
         let latestNetProfitUnits = 0;
         let currentMultiplier = 50; 
-        let currentSimStartDate = '2026-10-24'; 
-        let simNetProfitUnits = 0;
+        let currentSimStartDate = '2026-10-25'; 
+
+        function getLocalDateString(d) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function setupDynamicDatePresets() {
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+
+            const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+            
+            const todayLabel = `Oggi (${today.getDate()} ${monthNames[today.getMonth()]})`;
+            const yesterdayLabel = `Ieri (${yesterday.getDate()} ${monthNames[yesterday.getMonth()]})`;
+
+            const btnToday = document.getElementById('btn-preset-today');
+            const btnYesterday = document.getElementById('btn-preset-yesterday');
+            const dateInput = document.getElementById('sim-start-date');
+
+            if (btnToday) btnToday.innerText = todayLabel;
+            if (btnYesterday) btnYesterday.innerText = yesterdayLabel;
+
+            const defaultDate = getLocalDateString(yesterday);
+            if (dateInput) {
+                dateInput.value = defaultDate;
+                dateInput.max = getLocalDateString(today);
+            }
+            
+            currentSimStartDate = defaultDate;
+            if (btnYesterday) {
+                document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+                btnYesterday.classList.add('sim-pill-active');
+            }
+        }
 
         function checkAuth() {
             const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -422,17 +457,29 @@
             calculateSimulationPerformance();
         }
 
-        function setSimPreset(presetType, btnElement) {
+        function setDynamicPreset(type, btnElement) {
             const dateInput = document.getElementById('sim-start-date');
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             if (btnElement) btnElement.classList.add('sim-pill-active');
 
-            if (presetType === 'all') {
+            const today = new Date();
+
+            if (type === 'today') {
+                currentSimStartDate = getLocalDateString(today);
+            } else if (type === 'yesterday') {
+                const y = new Date();
+                y.setDate(today.getDate() - 1);
+                currentSimStartDate = getLocalDateString(y);
+            } else if (type === '7days') {
+                const d7 = new Date();
+                d7.setDate(today.getDate() - 7);
+                currentSimStartDate = getLocalDateString(d7);
+            } else if (type === 'all') {
                 currentSimStartDate = '2020-01-01';
-                dateInput.value = '2026-10-24';
-            } else {
-                currentSimStartDate = presetType;
-                dateInput.value = presetType;
+            }
+
+            if (dateInput && type !== 'all') {
+                dateInput.value = currentSimStartDate;
             }
 
             calculateSimulationPerformance();
@@ -472,7 +519,6 @@
                 totalStake += s;
             });
 
-            simNetProfitUnits = netProfit;
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
             const fiatSimAmount = netProfit * currentMultiplier;
 
@@ -677,7 +723,7 @@
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">AtmBet</span>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[100px] inline-block text-right">${bet.original_tipster}</span>
                         </div>
                     </div>
                 `;
@@ -716,7 +762,7 @@
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
                     <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
                         <div class="break-words">${bet.match_name}</div>
-                        <div class="text-[9px] text-slate-500 font-normal">${bet.league}</div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-slate-400">${bet.original_tipster}</span></div>
                     </td>
                     <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
                         <div class="break-words">${bet.prediction}</div>
@@ -738,6 +784,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            setupDynamicDatePresets();
             initDashboard();
         });
     </script>
