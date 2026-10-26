@@ -76,7 +76,7 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- NAVBAR -->
+    <!-- 1. NAVBAR DI CONVERSIONE -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -104,7 +104,7 @@
     <!-- MAIN BODY -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-12 sm:space-y-16 flex-1 w-full">
 
-        <!-- HERO SECTION -->
+        <!-- 2. HERO SECTION -->
         <section class="text-center max-w-3xl mx-auto pt-2 pb-2 space-y-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verifica Risultati Ufficiale via API-Football
@@ -134,7 +134,7 @@
             </div>
         </section>
 
-        <!-- SEZIONE METODO STRATEGICO -->
+        <!-- 3. SEZIONE METODO STRATEGICO -->
         <section id="metodo" class="bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6">
             <div class="text-center max-w-2xl mx-auto space-y-1.5">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
@@ -168,6 +168,7 @@
                 </div>
             </div>
 
+            <!-- Matrice a Confronto -->
             <div class="mt-6 pt-6 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 <div class="bg-rose-500/[0.04] border border-rose-500/20 p-4 rounded-xl space-y-2">
                     <div class="text-rose-400 font-bold flex items-center gap-1.5 text-xs">
@@ -193,7 +194,7 @@
             </div>
         </section>
 
-        <!-- SIMULATORE TEMPORALE DINAMICO -->
+        <!-- 4. SIMULATORE TEMPORALE DINAMICO -->
         <section id="simulatore" class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
@@ -222,6 +223,7 @@
                 </div>
             </div>
 
+            <!-- Griglia Metriche Simulazione -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
                     <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
@@ -249,7 +251,7 @@
             </div>
         </section>
 
-        <!-- RENDICONTO GLOBALE & CONVERTITORE UNITA' (€) -->
+        <!-- 5. RENDICONTO GLOBALE & CONVERTITORE UNITA' (€) -->
         <section class="space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
@@ -311,7 +313,7 @@
             </div>
         </section>
 
-        <!-- SELEZIONI APERTE (SOLO OGGI, SCROLL ORIZZONTALE) -->
+        <!-- 6. SELEZIONI APERTE (SOLO OGGI, SCROLL ORIZZONTALE) -->
         <section id="selezioni" class="space-y-3 pt-2">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
@@ -343,7 +345,7 @@
             </div>
         </section>
 
-        <!-- STORICO COMPATTO A SCROLL VERTICALE -->
+        <!-- 7. STORICO OTTIMIZZATO (SOLO ATMBET) -->
         <section id="storico" class="space-y-4 pt-4 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
@@ -360,6 +362,7 @@
                 </div>
             </div>
 
+            <!-- CONTENITORE A SCROLL INTERNO (ALTEZZA MASSIMA 440px) -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 <div class="max-h-[440px] overflow-y-auto overflow-x-auto custom-table-scroll">
                     <table class="w-full text-left text-xs text-slate-300">
@@ -380,6 +383,7 @@
                     </table>
                 </div>
 
+                <!-- Footer di controllo dello storico -->
                 <div class="bg-slate-950/80 p-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
                     <span id="history-counter-text" class="text-[11px] text-slate-400 font-mono">Visualizzati 0 pronostici</span>
                     <div class="flex items-center gap-2">
@@ -394,7 +398,7 @@
             </div>
         </section>
 
-        <!-- PIANI & PACCHETTI CREDITI -->
+        <!-- 8. SEZIONE PIANI & CREDITI -->
         <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Accesso VIP & Ricariche</span>
@@ -479,7 +483,7 @@
             </div>
         </section>
 
-        <!-- SEZIONE FAQ -->
+        <!-- 9. SEZIONE FAQ -->
         <section id="faq" class="space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
             <div class="text-center space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
@@ -532,7 +536,7 @@
 
     </main>
 
-    <!-- FOOTER -->
+    <!-- 10. FOOTER -->
     <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
         <div>
             AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
@@ -550,7 +554,7 @@
         </div>
     </footer>
 
-    <!-- LOGICA JAVASCRIPT CON BYPASS CACHE E AGGIORNAMENTO AUTOMATICO -->
+    <!-- LOGICA JAVASCRIPT OTTIMIZZATA -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -620,11 +624,9 @@
             }
         }
 
-        // FUNZIONE ANTI-CACHE: LEGGE ISTANTANEAMENTE I DATI AGGIORNATI
         async function fetchAllBets() {
             let bets = [];
 
-            // 1. Prova a scaricare bets.json bypassando la cache del server
             try {
                 const timestamp = new Date().getTime();
                 const res = await fetch(`bets.json?_nocache=${timestamp}`, {
@@ -641,7 +643,6 @@
                 }
             } catch(e) {}
 
-            // 2. Se apri la pagina dal tuo dispositivo, sincronizza all'istante con le modifiche fatte in admin
             const rawV1 = localStorage.getItem(PRIMARY_KEY);
             if (rawV1) {
                 try {
@@ -650,7 +651,6 @@
                         if (bets.length === 0) {
                             bets = localBets;
                         } else {
-                            // Dai priorità agli stati appena modificati dall'admin
                             const localMap = new Map(localBets.map(b => [String(b.id || b.match_name), b]));
                             bets = bets.map(remoteBet => {
                                 const key = String(remoteBet.id || remoteBet.match_name);
@@ -672,7 +672,7 @@
                 match_name: b.match_name || b.match || 'Evento',
                 market: b.market || 'Mercato',
                 prediction: b.prediction || b.pick || '-',
-                original_tipster: b.original_tipster || b.tipster || 'AtmBet Selection',
+                original_tipster: 'AtmBet Selection', // Protezione Brand: sempre AtmBet Selection in vetrina
                 odds: parseFloat(b.odds || b.odd || 1.80),
                 stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
                 status: b.status || 'pending',
@@ -925,7 +925,7 @@
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">${bet.original_tipster}</span>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">AtmBet Selection</span>
                         </div>
                     </div>
                 `;
@@ -1005,7 +1005,7 @@
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
                     <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
                         <div class="break-words">${bet.match_name}</div>
-                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-slate-400">${bet.original_tipster}</span></div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-emerald-400 font-semibold">AtmBet Selection</span></div>
                     </td>
                     <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
                         <div class="break-words">${bet.prediction}</div>
