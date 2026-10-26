@@ -48,21 +48,25 @@
             font-weight: 800 !important;
         }
         .custom-cards-scroll::-webkit-scrollbar,
-        .custom-scroll-box::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+        .custom-scroll-box::-webkit-scrollbar,
+        .custom-nav-scroll::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
         }
         .custom-cards-scroll::-webkit-scrollbar-track,
-        .custom-scroll-box::-webkit-scrollbar-track {
+        .custom-scroll-box::-webkit-scrollbar-track,
+        .custom-nav-scroll::-webkit-scrollbar-track {
             background: #0b0f17;
         }
         .custom-cards-scroll::-webkit-scrollbar-thumb,
-        .custom-scroll-box::-webkit-scrollbar-thumb {
+        .custom-scroll-box::-webkit-scrollbar-thumb,
+        .custom-nav-scroll::-webkit-scrollbar-thumb {
             background: #1e293b;
             border-radius: 4px;
         }
         .custom-cards-scroll::-webkit-scrollbar-thumb:hover,
-        .custom-scroll-box::-webkit-scrollbar-thumb:hover {
+        .custom-scroll-box::-webkit-scrollbar-thumb:hover,
+        .custom-nav-scroll::-webkit-scrollbar-thumb:hover {
             background: #22c55e;
         }
         details > summary {
@@ -76,26 +80,82 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- 1. NAVBAR DI CONVERSIONE -->
-    <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+    <!-- 1. NAVBAR DI CONVERSIONE CON SUPPORTO MOBILE COMPLETO -->
+    <nav class="border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <a href="index.html" class="flex items-center gap-2">
-                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-9 w-auto">
                     <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
                 </a>
             </div>
 
-            <div class="flex items-center gap-2 sm:gap-5">
-                <a href="#metodo" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
-                <a href="#simulatore" class="hidden md:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
-                <a href="#selezioni" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici</a>
-                <a href="#piani" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
-                <a href="#faq" class="hidden lg:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+            <!-- MENU LINK PER DESKTOP -->
+            <div class="hidden md:flex items-center gap-5">
+                <a href="#metodo" class="text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
+                <a href="#simulatore" class="text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
+                <a href="#selezioni" class="text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici</a>
+                <a href="#storico" class="text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
+                <a href="#piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
+                <a href="#faq" class="text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+            </div>
 
-                <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1 transition">Accedi</a>
-                <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Registrati VIP
+            <!-- PULSANTI ACCEDI / REGISTRATI & HAMBURGER MOBILE -->
+            <div class="flex items-center gap-2">
+                <a href="auth.html" class="hidden sm:inline-block text-xs font-semibold text-slate-300 hover:text-white px-2 py-1 transition">Accedi</a>
+                <a href="auth.html?mode=register" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> VIP
+                </a>
+                
+                <!-- TASTO HAMBURGER MENU MOBILE -->
+                <button type="button" onclick="toggleMobileNavMenu()" aria-label="Menu" class="md:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white focus:outline-none">
+                    <i id="mobile-menu-icon" data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- BARRA ORIZZONTALE MOBILE SCORREVOLE (SUB-NAV SUBITO SOTTO) -->
+        <div class="md:hidden border-t border-slate-800/60 bg-slate-900/60 px-2 py-1.5 flex items-center gap-1.5 overflow-x-auto custom-nav-scroll whitespace-nowrap">
+            <a href="#metodo" class="text-[11px] font-bold text-slate-300 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg">Metodo</a>
+            <a href="#simulatore" class="text-[11px] font-bold text-slate-300 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg">Simulatore</a>
+            <a href="#selezioni" class="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg">Oggi</a>
+            <a href="#storico" class="text-[11px] font-bold text-slate-300 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg">Storico</a>
+            <a href="#piani" class="text-[11px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-lg">Piani VIP</a>
+            <a href="#faq" class="text-[11px] font-bold text-slate-300 bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded-lg">FAQ</a>
+        </div>
+
+        <!-- MENU MOBILE A TENDINA COMPLETO (A SCOMPARSA) -->
+        <div id="mobile-dropdown-menu" class="hidden md:hidden border-t border-slate-800 bg-slate-950 px-4 py-4 space-y-2.5">
+            <a href="#metodo" onclick="toggleMobileNavMenu()" class="block py-2 text-xs font-bold text-slate-300 border-b border-slate-900 flex items-center justify-between">
+                <span>Metodo Operativo (+EV)</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+            </a>
+            <a href="#simulatore" onclick="toggleMobileNavMenu()" class="block py-2 text-xs font-bold text-slate-300 border-b border-slate-900 flex items-center justify-between">
+                <span>Simulatore per Data</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+            </a>
+            <a href="#selezioni" onclick="toggleMobileNavMenu()" class="block py-2 text-xs font-bold text-slate-300 border-b border-slate-900 flex items-center justify-between">
+                <span>Pronostici di Oggi</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+            </a>
+            <a href="#storico" onclick="toggleMobileNavMenu()" class="block py-2 text-xs font-bold text-slate-300 border-b border-slate-900 flex items-center justify-between">
+                <span>Storico Concluso</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+            </a>
+            <a href="#piani" onclick="toggleMobileNavMenu()" class="block py-2 text-xs font-bold text-slate-300 border-b border-slate-900 flex items-center justify-between">
+                <span>Piani VIP & Crediti</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+            </a>
+            <a href="#faq" onclick="toggleMobileNavMenu()" class="block py-2 text-xs font-bold text-slate-300 border-b border-slate-900 flex items-center justify-between">
+                <span>Domande Frequenti (FAQ)</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+            </a>
+            <div class="pt-2 flex items-center gap-2">
+                <a href="auth.html" class="flex-1 text-center bg-slate-900 border border-slate-800 text-xs py-2 rounded-xl font-bold text-slate-300">
+                    Accedi
+                </a>
+                <a href="auth.html?mode=register" class="flex-1 text-center bg-emerald-500 text-slate-950 text-xs py-2 rounded-xl font-black">
+                    Registrati VIP
                 </a>
             </div>
         </div>
@@ -362,9 +422,9 @@
 
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 
-                <!-- VISTA MOBILE: FEED A CARD VERTICALI (ZERO SCROLL ORIZZONTALE, SOLO SU/GIÙ) -->
+                <!-- VISTA MOBILE: FEED A CARD VERTICALI -->
                 <div class="block md:hidden max-h-[500px] overflow-y-auto custom-scroll-box p-3 space-y-2.5" id="public-history-mobile-container">
-                    <!-- Popolato da JS con card ottimizzate -->
+                    <!-- Popolato da JS -->
                 </div>
 
                 <!-- VISTA DESKTOP: TABELLA TRADIZIONALE -->
@@ -387,7 +447,7 @@
                     </table>
                 </div>
 
-                <!-- Footer di controllo dello storico con contatore e pulsante Carica Altri -->
+                <!-- Footer di controllo dello storico -->
                 <div class="bg-slate-950/80 p-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
                     <span id="history-counter-text" class="text-[11px] text-slate-400 font-mono">Visualizzati 0 pronostici</span>
                     <div class="flex items-center gap-2">
@@ -571,6 +631,22 @@
         let cachedAllBets = [];
         
         let historyDisplayLimit = 15;
+
+        // GESTIONE APERTURA / CHIUSURA MENU MOBILE HAMBURGER
+        function toggleMobileNavMenu() {
+            const menu = document.getElementById('mobile-dropdown-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            if (!menu) return;
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                if (icon) icon.setAttribute('data-lucide', 'x');
+            } else {
+                menu.classList.add('hidden');
+                if (icon) icon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
 
         function extractStandardDate(rawDateStr) {
             if (!rawDateStr) return '';
@@ -961,7 +1037,6 @@
             renderPublicHistory();
         }
 
-        // RENDERING DUAL-MODE: CARDS VERTICALI SU MOBILE, TABELLA SU DESKTOP
         function renderPublicHistory() {
             const mobileContainer = document.getElementById('public-history-mobile-container');
             const desktopTbody = document.getElementById('public-history-tbody');
@@ -1005,7 +1080,7 @@
                 const s = bet.stake || 1.0;
                 const pl = isWon ? (bet.odds - 1) * s : -s;
 
-                // 1. GENERAZIONE CARD MOBILE (Verticale, no scroll orizzontale)
+                // CARD MOBILE
                 const cardMob = document.createElement('div');
                 cardMob.className = `p-3 rounded-xl border transition ${
                     isWon 
@@ -1043,7 +1118,7 @@
                 `;
                 mobileContainer.appendChild(cardMob);
 
-                // 2. GENERAZIONE RIGA TABELLA DESKTOP
+                // TABELLA DESKTOP
                 const tr = document.createElement('tr');
                 tr.className = isWon 
                     ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" 
