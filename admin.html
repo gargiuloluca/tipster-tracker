@@ -61,7 +61,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-12 overflow-x-hidden">
 
-    <!-- MODALE DI AUTENTICAZIONE E PROTEZIONE PASSWORD (SHA-256) -->
+    <!-- MODALE DI AUTENTICAZIONE E PROTEZIONE PASSWORD -->
     <div id="admin-auth-overlay" class="fixed inset-0 bg-slate-950 z-[9999] flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-sm w-full shadow-2xl text-center space-y-4">
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
@@ -72,14 +72,14 @@
                 <p class="text-xs text-slate-400 mt-1">Area riservata. Inserisci la chiave di sicurezza per accedere al pannello di controllo.</p>
             </div>
             <form onsubmit="verifyAdminAuth(event)" class="space-y-3">
-                <input type="password" id="admin-pass-input" placeholder="Password di accesso" required
+                <input type="password" id="admin-pass-input" placeholder="Password di accesso" required autofocus
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white text-center tracking-widest placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono">
-                <div id="auth-error-msg" class="text-[11px] font-bold text-rose-400 hidden">Password non valida. Riprova.</div>
+                <div id="auth-error-msg" class="text-[11px] font-bold text-rose-400 hidden">Password errata. Riprova.</div>
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
                     Sblocca Console
                 </button>
             </form>
-            <div class="text-[10px] text-slate-600 font-mono">AtmBet Security Core • Crittografia SHA-256</div>
+            <div class="text-[10px] text-slate-600 font-mono">AtmBet Security Core</div>
         </div>
     </div>
 
@@ -251,206 +251,197 @@
                 <div class="space-y-2.5">
                     <textarea id="ai-input" rows="3" placeholder="Formato inserimento in blocco:&#10;DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;&#10;Oppure aggiorna esiti:&#10;Paju Frontier - Hwaseong - Esito: Persa"
                         class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 sm:p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
-                    <div class="flex justify-end">
-                        <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2.5 rounded-lg font-bold flex items-center justify-center gap-1.5 transition">
-                            <i data-lucide="check-check" class="w-4 h-4"></i> Esegui AI Parser / Salva in Blocco
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- BOX 2: FORM DI INSERIMENTO MANUALE -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
-                <h2 class="text-xs sm:text-sm font-bold text-white mb-3 flex items-center gap-2">
-                    <i data-lucide="plus-circle" class="text-emerald-400 w-4 h-4"></i> Inserimento Manuale Pronostico
-                </h2>
-
-                <form id="bet-form" onsubmit="saveBet(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Partita / Evento</label>
-                        <input type="text" id="match_name" required placeholder="Es. Inter - Milan" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Campionato</label>
-                        <input type="text" id="league" placeholder="Es. Serie A" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Data e Ora</label>
-                        <input type="datetime-local" id="event_date" required 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Fornitore / Tipster</label>
-                        <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Freak Elite VIP" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        <datalist id="tipsters-list">
-                            <option value="AtmBetSignal">
-                            <option value="Freak Elite VIP">
-                            <option value="Stats4bets bollamaker">
-                            <option value="Stats4Bets Automatibet">
-                            <option value="BetMines">
-                            <option value="CalcioAI">
-                            <option value="Pronostici1">
-                            <option value="Zcode System VIP">
-                        </datalist>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Mercato</label>
-                        <input type="text" id="market" required placeholder="Es. 1X2, Multipla" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Pronostico Esatto</label>
-                        <input type="text" id="prediction" required placeholder="Es. 1 + Over 2.5" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Quota Decimale</label>
-                        <input type="number" step="0.01" min="1.01" id="odds" required placeholder="1.85" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Stake (Unità)</label>
-                        <input type="number" step="0.25" min="0.25" max="10" id="stake" value="1.0" required 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div class="sm:col-span-2 md:col-span-3 flex items-center pt-1 sm:pt-2">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="is_published" checked class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                            <span class="ml-2.5 text-[11px] sm:text-xs font-bold text-white flex items-center gap-1">
-                                <span class="text-emerald-400">★ Pubblica in Vetrina</span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="flex justify-end pt-1 sm:pt-2">
-                        <button type="submit" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-5 py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Salva Pronostico
-                        </button>
-                    </div>
-                </form>
-            </section>
-
-            <!-- SEZIONE ESCLUSIVA ADMIN: CLASSIFICA RENDIMENTO FORNITORI -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                    <div>
-                        <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                            <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Classifica Rendimento Fornitori / Tipster
-                        </h2>
-                        <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra vinta netta in Euro per ciascun canale.</p>
-                    </div>
-                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold uppercase">Uso Riservato Admin</span>
-                </div>
-
-                <div class="overflow-x-auto rounded-xl border border-slate-800">
-                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
-                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
-                            <tr>
-                                <th class="py-2.5 px-3 text-center">Rank</th>
-                                <th class="py-2.5 px-3">Fornitore / Tipster</th>
-                                <th class="py-2.5 px-3 text-center">Giocate Chiuse</th>
-                                <th class="py-2.5 px-3 text-center">Win Rate</th>
-                                <th class="py-2.5 px-3 text-center">Yield / ROI</th>
-                                <th class="py-2.5 px-3 text-right">Profitto (Unità)</th>
-                                <th class="py-2.5 px-3 text-right">Cifra Guadagnata (€)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium">
-                            <!-- Popolato dinamicamente da JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-900 border border-slate-800 p-2.5 sm:p-3 rounded-xl">
-                <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-                    <span class="text-[11px] text-slate-400 font-semibold mr-1 hidden sm:inline">Filtra:</span>
-                    <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
-                    <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition whitespace-nowrap">In Corso</button>
-                    <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
-                </div>
-
-                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
-                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-2 py-1 rounded-lg">
-                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold flex items-center gap-1">
-                            <i data-lucide="calculator" class="w-3 h-3 text-emerald-400"></i> 1u =
-                        </span>
-                        <select id="admin-unit-multiplier" onchange="renderDashboard()" class="bg-transparent text-xs text-white font-mono font-bold focus:outline-none cursor-pointer">
-                            <option value="5">5 €</option>
-                            <option value="10" selected>10 €</option>
-                            <option value="20">20 €</option>
-                            <option value="50">50 €</option>
-                            <option value="100">100 €</option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-center gap-1">
-                        <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
-                            <option value="all">Tutti i Fornitori</option>
-                        </select>
-                    </div>
+                <div class="flex justify-end">
+                    <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2.5 rounded-lg font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="check-check" class="w-4 h-4"></i> Esegui AI Parser / Salva in Blocco
+                    </button>
                 </div>
             </div>
+        </section>
 
-            <!-- TABELLA PRONOSTICI COMPLETA -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
-                            <tr>
-                                <th class="py-2.5 px-3">Data</th>
-                                <th class="py-2.5 px-3">Partita</th>
-                                <th class="py-2.5 px-3">Pronostico</th>
-                                <th class="py-2.5 px-3">Quota/Stake</th>
-                                <th class="py-2.5 px-3">Fornitore</th>
-                                <th class="py-2.5 px-3 text-center">Vetrina</th>
-                                <th class="py-2.5 px-3">Stato & Azione Rapida</th>
-                                <th class="py-2.5 px-3 text-right">Elimina</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bets-tbody" class="divide-y divide-slate-800/60 font-medium">
-                            <!-- Popolato dinamicamente -->
-                        </tbody>
-                    </table>
+        <!-- BOX 2: FORM DI INSERIMENTO MANUALE -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
+            <h2 class="text-xs sm:text-sm font-bold text-white mb-3 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="text-emerald-400 w-4 h-4"></i> Inserimento Manuale Pronostico
+            </h2>
+
+            <form id="bet-form" onsubmit="saveBet(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Partita / Evento</label>
+                    <input type="text" id="match_name" required placeholder="Es. Inter - Milan" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                 </div>
-            </section>
 
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Campionato</label>
+                    <input type="text" id="league" placeholder="Es. Serie A" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Data e Ora</label>
+                    <input type="datetime-local" id="event_date" required 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Fornitore / Tipster</label>
+                    <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Freak Elite VIP" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    <datalist id="tipsters-list">
+                        <option value="AtmBetSignal">
+                        <option value="Freak Elite VIP">
+                        <option value="Stats4bets bollamaker">
+                        <option value="Stats4Bets Automatibet">
+                        <option value="BetMines">
+                        <option value="CalcioAI">
+                        <option value="Pronostici1">
+                        <option value="Zcode System VIP">
+                    </datalist>
+                </div>
+
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Mercato</label>
+                    <input type="text" id="market" required placeholder="Es. 1X2, Multipla" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Pronostico Esatto</label>
+                    <input type="text" id="prediction" required placeholder="Es. 1 + Over 2.5" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Quota Decimale</label>
+                    <input type="number" step="0.01" min="1.01" id="odds" required placeholder="1.85" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Stake (Unità)</label>
+                    <input type="number" step="0.25" min="0.25" max="10" id="stake" value="1.0" required 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div class="sm:col-span-2 md:col-span-3 flex items-center pt-1 sm:pt-2">
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="is_published" checked class="sr-only peer">
+                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                        <span class="ml-2.5 text-[11px] sm:text-xs font-bold text-white flex items-center gap-1">
+                            <span class="text-emerald-400">★ Pubblica in Vetrina</span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="flex justify-end pt-1 sm:pt-2">
+                    <button type="submit" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-5 py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Salva Pronostico
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- SEZIONE ESCLUSIVA ADMIN: CLASSIFICA RENDIMENTO FORNITORI -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                <div>
+                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Classifica Rendimento Fornitori / Tipster
+                    </h2>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra vinta netta in Euro per ciascun canale.</p>
+                </div>
+                <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold uppercase">Uso Riservato Admin</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+                <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                    <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                        <tr>
+                            <th class="py-2.5 px-3 text-center">Rank</th>
+                            <th class="py-2.5 px-3">Fornitore / Tipster</th>
+                            <th class="py-2.5 px-3 text-center">Giocate Chiuse</th>
+                            <th class="py-2.5 px-3 text-center">Win Rate</th>
+                            <th class="py-2.5 px-3 text-center">Yield / ROI</th>
+                            <th class="py-2.5 px-3 text-right">Profitto (Unità)</th>
+                            <th class="py-2.5 px-3 text-right">Cifra Guadagnata (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium">
+                        <!-- Popolato dinamicamente da JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-900 border border-slate-800 p-2.5 sm:p-3 rounded-xl">
+            <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
+                <span class="text-[11px] text-slate-400 font-semibold mr-1 hidden sm:inline">Filtra:</span>
+                <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
+                <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition whitespace-nowrap">In Corso</button>
+                <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
+            </div>
+
+            <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-2 py-1 rounded-lg">
+                    <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold flex items-center gap-1">
+                        <i data-lucide="calculator" class="w-3 h-3 text-emerald-400"></i> 1u =
+                    </span>
+                    <select id="admin-unit-multiplier" onchange="renderDashboard()" class="bg-transparent text-xs text-white font-mono font-bold focus:outline-none cursor-pointer">
+                        <option value="5">5 €</option>
+                        <option value="10" selected>10 €</option>
+                        <option value="20">20 €</option>
+                        <option value="50">50 €</option>
+                        <option value="100">100 €</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-1">
+                    <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
+                        <option value="all">Tutti i Fornitori</option>
+                    </select>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- LOGICA DI SICUREZZA SHA-256, GITHUB SYNC & GESTIONALE -->
+        <!-- TABELLA PRONOSTICI COMPLETA -->
+        <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs text-slate-300">
+                    <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                        <tr>
+                            <th class="py-2.5 px-3">Data</th>
+                            <th class="py-2.5 px-3">Partita</th>
+                            <th class="py-2.5 px-3">Pronostico</th>
+                            <th class="py-2.5 px-3">Quota/Stake</th>
+                            <th class="py-2.5 px-3">Fornitore</th>
+                            <th class="py-2.5 px-3 text-center">Vetrina</th>
+                            <th class="py-2.5 px-3">Stato & Azione Rapida</th>
+                            <th class="py-2.5 px-3 text-right">Elimina</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bets-tbody" class="divide-y divide-slate-800/60 font-medium">
+                        <!-- Popolato dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+    <!-- LOGICA DI SICUREZZA DIRETTA, GITHUB SYNC & GESTIONALE -->
     <script>
-        // HASH SHA-256 IRREVERSIBILE DELLA PASSWORD (Default: AtmBet2026!)
-        const ADMIN_PASSWORD_HASH = "8fc8fe2cff091eb82d92bbef8e24fa2a91ae19fbb8b15d2a75908e0e0a5e81f1";
+        const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
 
-        async function computeSHA256(str) {
-            const buffer = new TextEncoder().encode(str);
-            const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function verifyAdminAuth(e) {
+        function verifyAdminAuth(e) {
             e.preventDefault();
-            const pass = document.getElementById('admin-pass-input').value.trim();
-            const computedHash = await computeSHA256(pass);
+            const inputVal = document.getElementById('admin-pass-input').value.trim();
             const errEl = document.getElementById('auth-error-msg');
 
-            if (computedHash === ADMIN_PASSWORD_HASH) {
+            if (inputVal === ADMIN_REAL_PASSWORD) {
                 sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
                 unlockConsoleUI();
             } else {
