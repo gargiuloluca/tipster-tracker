@@ -47,18 +47,22 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
-        /* Scrollbar elegante per la tabella interna */
+        /* Scrollbar elegante per card orizzontali e tabella */
+        .custom-cards-scroll::-webkit-scrollbar,
         .custom-table-scroll::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
+        .custom-cards-scroll::-webkit-scrollbar-track,
         .custom-table-scroll::-webkit-scrollbar-track {
             background: #0b0f17;
         }
+        .custom-cards-scroll::-webkit-scrollbar-thumb,
         .custom-table-scroll::-webkit-scrollbar-thumb {
             background: #1e293b;
             border-radius: 4px;
         }
+        .custom-cards-scroll::-webkit-scrollbar-thumb:hover,
         .custom-table-scroll::-webkit-scrollbar-thumb:hover {
             background: #22c55e;
         }
@@ -310,20 +314,37 @@
             </div>
         </section>
 
-        <!-- 6. SELEZIONI APERTE DEL GIORNO -->
-        <section id="selezioni" class="space-y-4 pt-2">
+        <!-- 6. SELEZIONI APERTE DEL GIORNO (CON SCROLL ORIZZONTALE E CURSORE) -->
+        <section id="selezioni" class="space-y-3 pt-2">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni Aperte del Giorno
+                        <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni Aperte di Oggi
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Pronostici attualmente attivi in monitoraggio.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Pronostici della giornata odierna attualmente in corso o in attesa di inizio.</p>
                 </div>
-                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold">Verifica Automatica Attiva</span>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">Verifica Automatica Attiva</span>
+                    <!-- Cursori di scorrimento rapido -->
+                    <div class="hidden sm:flex items-center gap-1">
+                        <button onclick="scrollPublicCards('left')" class="p-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="scrollPublicCards('right')" class="p-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div id="public-bets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
-                <!-- Generato da JS -->
+            <!-- CONTENITORE CARD A SCORRIMENTO ORIZZONTALE ELEGANTE (NON INGLOBA PIÙ LA PAGINA) -->
+            <div class="relative">
+                <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory">
+                    <!-- Popolato dinamicamente solo con le partite di OGGI -->
+                </div>
+                <div class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
+                    Scorri lateralmente per vedere tutti i match &rarr;
+                </div>
             </div>
         </section>
 
@@ -344,7 +365,7 @@
                 </div>
             </div>
 
-            <!-- CONTENITORE A SCROLL INTERNO (ALTEZZA MASSIMA 440px CON SCROLLBAR ELEGANTE) -->
+            <!-- CONTENITORE A SCROLL INTERNO (ALTEZZA MASSIMA 440px) -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
                 <div class="max-h-[440px] overflow-y-auto overflow-x-auto custom-table-scroll">
                     <table class="w-full text-left text-xs text-slate-300">
@@ -365,7 +386,7 @@
                     </table>
                 </div>
 
-                <!-- Footer di controllo dello storico: mostra quante partite sono visualizzate e pulsante "Carica Altri" -->
+                <!-- Footer di controllo dello storico -->
                 <div class="bg-slate-950/80 p-3 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
                     <span id="history-counter-text" class="text-[11px] text-slate-400 font-mono">Visualizzati 0 pronostici</span>
                     <div class="flex items-center gap-2">
@@ -540,7 +561,7 @@
         </div>
     </footer>
 
-    <!-- LOGICA SCRIPT DINAMICO VETRINA CON STORICO A SCROLL & CARICAMENTO FRAZIONATO -->
+    <!-- LOGICA JAVASCRIPT OTTIMIZZATA -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -552,7 +573,6 @@
         let currentPublicHistFilter = 'all';
         let cachedAllBets = [];
         
-        // Paginazione storico
         let historyDisplayLimit = 15;
 
         function extractStandardDate(rawDateStr) {
@@ -824,20 +844,36 @@
             }
         };
 
+        function scrollPublicCards(direction) {
+            const container = document.getElementById('public-bets-container');
+            if (!container) return;
+            const scrollAmount = direction === 'left' ? -320 : 320;
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+
+        // RENDERING SELEZIONI APERTE: SOLO OGGI (E FUTURE) IN FORMATO CAROSELLO SCORREVOLE
         function renderPublicCards() {
             const container = document.getElementById('public-bets-container');
             container.innerHTML = '';
 
-            const pendingBets = cachedAllBets.filter(b => b.status === 'pending');
+            const todayStr = getLocalDateString(new Date());
 
-            if (pendingBets.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 font-medium text-xs">Nessuna giocata aperta al momento. Torna più tardi per i nuovi segnali.</div>`;
+            // Filtro: Solo partite "pending" di OGGI o future
+            const pendingBetsToday = cachedAllBets.filter(b => {
+                if (b.status !== 'pending') return false;
+                const bDate = extractStandardDate(b.event_date);
+                return bDate >= todayStr;
+            });
+
+            if (pendingBetsToday.length === 0) {
+                container.innerHTML = `<div class="w-full text-center py-6 text-slate-500 font-medium text-xs">Nessuna selezione aperta per la giornata odierna. Nuovi segnali in arrivo prima dei match.</div>`;
                 return;
             }
 
-            pendingBets.forEach(bet => {
+            pendingBetsToday.forEach(bet => {
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-lg hover:border-slate-700 transition";
+                // Card compatte con larghezza definita per scorrimento orizzontale
+                card.className = "min-w-[280px] sm:min-w-[320px] max-w-[340px] bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg snap-start shrink-0 hover:border-slate-700 transition";
 
                 let submatchesHtml = '';
                 let toggleBtnHtml = '';
@@ -849,11 +885,11 @@
                         </button>
                     `;
                     submatchesHtml = `
-                        <div id="public-submatches-${bet.id}" class="hidden space-y-1.5 mt-2 pt-2 border-t border-slate-800/80">
+                        <div id="public-submatches-${bet.id}" class="hidden space-y-1 mt-2 pt-2 border-t border-slate-800/80">
                             ${subList.map((m, idx) => `
-                                <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 flex items-center justify-between text-[11px]">
-                                    <span class="font-bold text-slate-200">${idx+1}. ${m}</span>
-                                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">Evento ${idx+1}</span>
+                                <div class="bg-slate-950 p-1.5 rounded-lg border border-slate-800 flex items-center justify-between text-[10px]">
+                                    <span class="font-bold text-slate-200 truncate mr-1">${idx+1}. ${m}</span>
+                                    <span class="text-[8px] font-mono text-emerald-400 bg-emerald-500/10 px-1 py-0.2 rounded border border-emerald-500/20 shrink-0">E${idx+1}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -863,18 +899,18 @@
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
-                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] font-medium">${bet.league}</span>
-                            <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
+                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-medium truncate max-w-[140px]">${bet.league}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">${bet.event_date.slice(11, 16) || bet.event_date}</span>
                         </div>
-                        <h3 class="text-sm sm:text-base font-bold text-white mb-2 leading-snug break-words">${bet.match_name}</h3>
+                        <h3 class="text-sm font-bold text-white mb-1 leading-snug break-words">${bet.match_name}</h3>
                         ${toggleBtnHtml}
                         ${submatchesHtml}
 
-                        <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 my-3">
+                        <div class="bg-slate-950/80 rounded-xl p-2.5 border border-slate-800/80 my-2.5">
                             <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Dettagli Segnale:</div>
-                            <div class="flex items-center justify-between py-1">
+                            <div class="flex items-center justify-between py-0.5">
                                 <span class="text-xs text-slate-400 flex items-center gap-1.5">
-                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Quota & Mercato Riservati
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Riservato
                                 </span>
                                 <a href="auth.html?mode=register" class="text-[10px] bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-1 rounded-lg font-bold transition">
                                     Sblocca VIP
@@ -883,13 +919,13 @@
                         </div>
                     </div>
 
-                    <div class="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
                         <div>
                             <span class="text-slate-500 text-[10px]">Stake:</span>
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[120px] inline-block text-right">${bet.original_tipster}</span>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">${bet.original_tipster}</span>
                         </div>
                     </div>
                 `;
@@ -901,7 +937,7 @@
 
         function filterPublicHistory(type, element) {
             currentPublicHistFilter = type;
-            historyDisplayLimit = 15; // reset del limite quando si cambia filtro
+            historyDisplayLimit = 15;
             document.querySelectorAll('#btn-pubhist-all, #btn-pubhist-won, #btn-pubhist-lost').forEach(btn => {
                 btn.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
             });
