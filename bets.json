@@ -230,7 +230,7 @@
     "original_tipster": "BetMines",
     "odds": 2.1,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true
   },
   {
@@ -243,7 +243,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.52,
     "stake": 1,
-    "status": "won",
+    "status": "pending",
     "is_published": true
   },
   {
