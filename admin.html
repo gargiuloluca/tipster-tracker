@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AtmBet Console | Tipster Tracker & AI Parser</title>
+    <title>AtmBet Console | Tipster Tracker & Direct GitHub Sync</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,330 +61,453 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-12 overflow-x-hidden">
 
-    <!-- Top Navbar Ufficiale Admin -->
-    <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur">
-        <div class="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
-                <div>
-                    <span class="text-lg sm:text-xl font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
-                    <span class="ml-1.5 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Console Admin</span>
-                </div>
+    <!-- MODALE DI AUTENTICAZIONE E PROTEZIONE PASSWORD (SHA-256) -->
+    <div id="admin-auth-overlay" class="fixed inset-0 bg-slate-950 z-[9999] flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-sm w-full shadow-2xl text-center space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                <i data-lucide="lock" class="w-6 h-6"></i>
             </div>
-            <div class="flex items-center space-x-1.5 sm:space-x-2">
-                <button type="button" onclick="exportBackupJSON()" title="Scarica backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
-                    <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    <span class="hidden sm:inline">Esporta</span>
+            <div>
+                <h2 class="text-lg font-black text-white">AtmBet Console</h2>
+                <p class="text-xs text-slate-400 mt-1">Area riservata. Inserisci la chiave di sicurezza per accedere al pannello di controllo.</p>
+            </div>
+            <form onsubmit="verifyAdminAuth(event)" class="space-y-3">
+                <input type="password" id="admin-pass-input" placeholder="Password di accesso" required
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white text-center tracking-widest placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono">
+                <div id="auth-error-msg" class="text-[11px] font-bold text-rose-400 hidden">Password non valida. Riprova.</div>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
+                    Sblocca Console
                 </button>
-                <label for="import-backup-file" title="Ripristina backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
-                    <i data-lucide="upload" class="w-3.5 h-3.5 text-amber-400"></i>
-                    <span class="hidden sm:inline">Importa</span>
-                    <input type="file" id="import-backup-file" class="hidden" accept=".json" onchange="importBackupJSON(event)">
-                </label>
-                <a href="index.html" target="_blank" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3.5 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
-                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                    <span class="hidden sm:inline">Vetrina</span>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <div class="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-4 sm:space-y-6">
-
-        <!-- Banner Info Database -->
-        <div id="status-alert" class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-wrap items-center justify-between gap-2.5 text-[11px] sm:text-xs text-slate-300">
-            <span class="flex items-center gap-2">
-                <i data-lucide="database" class="w-4 h-4 text-emerald-400 shrink-0"></i>
-                <span id="status-text">Database locale attivo e sincronizzato con il feed API.</span>
-            </span>
-            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <button onclick="deepForceSearch()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded text-xs transition flex items-center gap-1">
-                    <i data-lucide="scan-search" class="w-3 h-3"></i> Scansione
-                </button>
-                <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded text-xs border border-slate-700 transition">
-                    Ricarica
-                </button>
-            </div>
-        </div>
-
-        <!-- SIMULATORE TEMPORALE DINAMICO INSERITO ANCHE IN ADMIN -->
-        <section class="bg-slate-900 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-4 shadow-xl">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
-                <div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
-                            <i data-lucide="calendar-clock" class="w-4 h-4"></i>
-                        </span>
-                        <h2 class="text-xs sm:text-sm font-bold text-white">Analisi Rendimento per Data (Admin Inspector)</h2>
-                    </div>
-                    <p class="text-[10px] sm:text-[11px] text-slate-400">Verifica i risultati filtrando da un giorno specifico o per intervalli temporali dinamici.</p>
-                </div>
-
-                <div class="flex flex-wrap items-center gap-2">
-                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-                        <span class="text-[10px] text-slate-400 font-semibold">Dal:</span>
-                        <input type="date" id="sim-start-date" onchange="applySimulationDate(this.value)"
-                            class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
-                    </div>
-
-                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
-                        <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi</button>
-                        <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ieri</button>
-                        <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ultimi 7gg</button>
-                        <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Metriche Periodo Selezionato -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-                <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
-                    <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
-                    <div id="sim-profit-units" class="text-lg sm:text-xl font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
-                    <div id="sim-profit-fiat" class="text-[10px] font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
-                </div>
-
-                <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
-                    <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Yield / ROI Periodo</span>
-                    <div id="sim-roi" class="text-lg sm:text-xl font-mono font-black text-white mt-0.5">0.0%</div>
-                    <span class="text-[9px] text-slate-500">Sul volume periodo</span>
-                </div>
-
-                <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
-                    <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Win Rate Periodo</span>
-                    <div id="sim-winrate" class="text-lg sm:text-xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
-                    <span class="text-[9px] text-slate-500">Accuratezza esiti</span>
-                </div>
-
-                <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
-                    <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Chiuse Periodo</span>
-                    <div id="sim-resolved-count" class="text-lg sm:text-xl font-mono font-black text-slate-200 mt-0.5">0</div>
-                    <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Statistiche Globali con Convertitore Unità Monetaria (€) -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-            <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
-                <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Pronostici Totali</span>
-                <span id="stat-total" class="text-xl sm:text-2xl font-black text-white">0</span>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl border-l-4 border-l-emerald-500 flex flex-col justify-between">
-                <span class="text-[10px] sm:text-xs text-emerald-400 font-semibold block mb-0.5">Win Rate Globale</span>
-                <span id="stat-winrate" class="text-xl sm:text-2xl font-black text-white">0%</span>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
-                <div class="flex items-center justify-between">
-                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Profitto Globale</span>
-                    <span id="admin-stat-fiat" class="text-[10px] sm:text-[11px] font-mono text-emerald-400 font-bold">≈ +0.00€</span>
-                </div>
-                <span id="stat-profit" class="text-xl sm:text-2xl font-black text-amber-400">0.00u</span>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
-                <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Yield / ROI Globale</span>
-                <span id="stat-yield" class="text-xl sm:text-2xl font-black text-white">0%</span>
-            </div>
-        </div>
-
-        <!-- BOX 1: AI PARSER & GESTIONE IN BLOCCO -->
-        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
-            <div class="flex items-center justify-between mb-2.5">
-                <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                    <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> AI Parser & Gestione in Blocco
-                </h2>
-                <span class="text-[10px] sm:text-[11px] text-slate-500">Inserimento o aggiornamento esiti</span>
-            </div>
-            <div class="space-y-2.5">
-                <textarea id="ai-input" rows="3" placeholder="Formato inserimento in blocco:&#10;DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;&#10;Oppure aggiorna esiti:&#10;Paju Frontier - Hwaseong - Esito: Persa"
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 sm:p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
-                <div class="flex justify-end">
-                    <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2.5 rounded-lg font-bold flex items-center justify-center gap-1.5 transition">
-                        <i data-lucide="check-check" class="w-4 h-4"></i> Esegui AI Parser / Salva in Blocco
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- BOX 2: FORM DI INSERIMENTO MANUALE -->
-        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
-            <h2 class="text-xs sm:text-sm font-bold text-white mb-3 flex items-center gap-2">
-                <i data-lucide="plus-circle" class="text-emerald-400 w-4 h-4"></i> Inserimento Manuale Pronostico
-            </h2>
-
-            <form id="bet-form" onsubmit="saveBet(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Partita / Evento</label>
-                    <input type="text" id="match_name" required placeholder="Es. Inter - Milan" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Campionato</label>
-                    <input type="text" id="league" placeholder="Es. Serie A" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Data e Ora</label>
-                    <input type="datetime-local" id="event_date" required 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Fornitore / Tipster</label>
-                    <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Freak Elite VIP" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    <datalist id="tipsters-list">
-                        <option value="AtmBetSignal">
-                        <option value="Freak Elite VIP">
-                        <option value="Stats4bets bollamaker">
-                        <option value="Stats4Bets Automatibet">
-                        <option value="BetMines">
-                        <option value="CalcioAI">
-                        <option value="Pronostici1">
-                        <option value="Zcode System VIP">
-                    </datalist>
-                </div>
-
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Mercato</label>
-                    <input type="text" id="market" required placeholder="Es. 1X2, Multipla" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Pronostico Esatto</label>
-                    <input type="text" id="prediction" required placeholder="Es. 1 + Over 2.5" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Quota Decimale</label>
-                    <input type="number" step="0.01" min="1.01" id="odds" required placeholder="1.85" 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <div>
-                    <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Stake (Unità)</label>
-                    <input type="number" step="0.25" min="0.25" max="10" id="stake" value="1.0" required 
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-
-                <div class="sm:col-span-2 md:col-span-3 flex items-center pt-1 sm:pt-2">
-                    <label class="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="is_published" checked class="sr-only peer">
-                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                        <span class="ml-2.5 text-[11px] sm:text-xs font-bold text-white flex items-center gap-1">
-                            <span class="text-emerald-400">★ Pubblica in Vetrina</span>
-                        </span>
-                    </label>
-                </div>
-
-                <div class="flex justify-end pt-1 sm:pt-2">
-                    <button type="submit" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-5 py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Salva Pronostico
-                    </button>
-                </div>
             </form>
-        </section>
-
-        <!-- SEZIONE ESCLUSIVA ADMIN: CLASSIFICA RENDIMENTO FORNITORI -->
-        <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                <div>
-                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                        <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Classifica Rendimento Fornitori / Tipster
-                    </h2>
-                    <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra vinta netta in Euro per ciascun canale.</p>
-                </div>
-                <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold uppercase">Uso Riservato Admin</span>
-            </div>
-
-            <div class="overflow-x-auto rounded-xl border border-slate-800">
-                <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
-                    <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
-                        <tr>
-                            <th class="py-2.5 px-3 text-center">Rank</th>
-                            <th class="py-2.5 px-3">Fornitore / Tipster</th>
-                            <th class="py-2.5 px-3 text-center">Giocate Chiuse</th>
-                            <th class="py-2.5 px-3 text-center">Win Rate</th>
-                            <th class="py-2.5 px-3 text-center">Yield / ROI</th>
-                            <th class="py-2.5 px-3 text-right">Profitto (Unità)</th>
-                            <th class="py-2.5 px-3 text-right">Cifra Guadagnata (€)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium">
-                        <!-- Popolato dinamicamente da JS -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-900 border border-slate-800 p-2.5 sm:p-3 rounded-xl">
-            <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-                <span class="text-[11px] text-slate-400 font-semibold mr-1 hidden sm:inline">Filtra:</span>
-                <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
-                <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition whitespace-nowrap">In Corso</button>
-                <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
-            </div>
-
-            <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
-                <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-2 py-1 rounded-lg">
-                    <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold flex items-center gap-1">
-                        <i data-lucide="calculator" class="w-3 h-3 text-emerald-400"></i> 1u =
-                    </span>
-                    <select id="admin-unit-multiplier" onchange="renderDashboard()" class="bg-transparent text-xs text-white font-mono font-bold focus:outline-none cursor-pointer">
-                        <option value="5">5 €</option>
-                        <option value="10" selected>10 €</option>
-                        <option value="20">20 €</option>
-                        <option value="50">50 €</option>
-                        <option value="100">100 €</option>
-                    </select>
-                </div>
-
-                <div class="flex items-center gap-1">
-                    <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
-                        <option value="all">Tutti i Fornitori</option>
-                    </select>
-                </div>
-            </div>
+            <div class="text-[10px] text-slate-600 font-mono">AtmBet Security Core • Crittografia SHA-256</div>
         </div>
-
-        <!-- TABELLA PRONOSTICI COMPLETA -->
-        <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
-                        <tr>
-                            <th class="py-2.5 px-3">Data</th>
-                            <th class="py-2.5 px-3">Partita</th>
-                            <th class="py-2.5 px-3">Pronostico</th>
-                            <th class="py-2.5 px-3">Quota/Stake</th>
-                            <th class="py-2.5 px-3">Fornitore</th>
-                            <th class="py-2.5 px-3 text-center">Vetrina</th>
-                            <th class="py-2.5 px-3">Stato & Azione Rapida</th>
-                            <th class="py-2.5 px-3 text-right">Elimina</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bets-tbody" class="divide-y divide-slate-800/60 font-medium">
-                        <!-- Popolato dinamicamente -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
     </div>
 
-    <!-- SCRIPT GESTIONALE ADMIN CON CALENDARIO DINAMICO -->
+    <!-- CONTENUTO AMMINISTRATIVO (NASCOSTO FINCHÉ NON SI SBLOCCA) -->
+    <div id="admin-main-content" class="hidden">
+
+        <!-- Top Navbar Ufficiale Admin -->
+        <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
+                    <div>
+                        <span class="text-lg sm:text-xl font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
+                        <span class="ml-1.5 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Console Admin</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-1.5 sm:space-x-2">
+                    <button type="button" onclick="exportBackupJSON()" title="Scarica backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                        <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span class="hidden sm:inline">Esporta</span>
+                    </button>
+                    <label for="import-backup-file" title="Ripristina backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
+                        <i data-lucide="upload" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span class="hidden sm:inline">Importa</span>
+                        <input type="file" id="import-backup-file" class="hidden" accept=".json" onchange="importBackupJSON(event)">
+                    </label>
+                    <a href="index.html" target="_blank" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3.5 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Vetrina</span>
+                    </a>
+                    <button type="button" onclick="lockAdminConsole()" title="Blocca console" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2.5 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Esci</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-4 sm:space-y-6">
+
+            <!-- BOX CONNESSIONE DIRETTA GITHUB API -->
+            <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-lg">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div id="sync-status-icon" class="w-3 h-3 rounded-full bg-slate-500 shrink-0"></div>
+                        <div>
+                            <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione Diretta GitHub API
+                            </div>
+                            <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">Non configurata. Inserisci Repository e Token per salvare online in automatico.</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <input type="text" id="gh-repo" placeholder="username/repository" 
+                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-44">
+                        <input type="password" id="gh-token" placeholder="GitHub Token (ghp_...)" 
+                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-44">
+                        <button type="button" onclick="saveGitHubSettings()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-3 py-1 rounded-lg transition whitespace-nowrap">
+                            Salva
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Banner Info Memoria & Scansione -->
+            <div id="status-alert" class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-wrap items-center justify-between gap-2.5 text-[11px] sm:text-xs text-slate-300">
+                <span class="flex items-center gap-2">
+                    <i data-lucide="database" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                    <span id="status-text">Database locale attivo.</span>
+                </span>
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <button onclick="deepForceSearch()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded text-xs transition flex items-center gap-1">
+                        <i data-lucide="scan-search" class="w-3 h-3"></i> Scansione
+                    </button>
+                    <button onclick="location.reload()" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded text-xs border border-slate-700 transition">
+                        Ricarica
+                    </button>
+                </div>
+            </div>
+
+            <!-- SIMULATORE TEMPORALE DINAMICO IN ADMIN -->
+            <section class="bg-slate-900 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-4 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
+                                <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                            </span>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Analisi Rendimento per Data (Admin Inspector)</h2>
+                        </div>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Verifica i risultati filtrando per giorno specifico o intervalli dinamici.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
+                            <span class="text-[10px] text-slate-400 font-semibold">Data:</span>
+                            <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)"
+                                class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
+                        </div>
+
+                        <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
+                            <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi</button>
+                            <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ieri</button>
+                            <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ultimi 7gg</button>
+                            <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
+                        <div id="sim-profit-units" class="text-lg sm:text-xl font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
+                        <div id="sim-profit-fiat" class="text-[10px] font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Yield / ROI Periodo</span>
+                        <div id="sim-roi" class="text-lg sm:text-xl font-mono font-black text-white mt-0.5">0.0%</div>
+                        <span class="text-[9px] text-slate-500">Sul volume periodo</span>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Win Rate Periodo</span>
+                        <div id="sim-winrate" class="text-lg sm:text-xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
+                        <span class="text-[9px] text-slate-500">Accuratezza esiti</span>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Chiuse Periodo</span>
+                        <div id="sim-resolved-count" class="text-lg sm:text-xl font-mono font-black text-slate-200 mt-0.5">0</div>
+                        <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistiche Globali con Convertitore Unità Monetaria (€) -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Pronostici Totali</span>
+                    <span id="stat-total" class="text-xl sm:text-2xl font-black text-white">0</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl border-l-4 border-l-emerald-500 flex flex-col justify-between">
+                    <span class="text-[10px] sm:text-xs text-emerald-400 font-semibold block mb-0.5">Win Rate Globale</span>
+                    <span id="stat-winrate" class="text-xl sm:text-2xl font-black text-white">0%</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Profitto Globale</span>
+                        <span id="admin-stat-fiat" class="text-[10px] sm:text-[11px] font-mono text-emerald-400 font-bold">≈ +0.00€</span>
+                    </div>
+                    <span id="stat-profit" class="text-xl sm:text-2xl font-black text-amber-400">0.00u</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Yield / ROI Globale</span>
+                    <span id="stat-yield" class="text-xl sm:text-2xl font-black text-white">0%</span>
+                </div>
+            </div>
+
+            <!-- BOX 1: AI PARSER & GESTIONE IN BLOCCO -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
+                <div class="flex items-center justify-between mb-2.5">
+                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                        <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> AI Parser & Gestione in Blocco
+                    </h2>
+                    <span class="text-[10px] sm:text-[11px] text-slate-500">Inserimento o aggiornamento esiti</span>
+                </div>
+                <div class="space-y-2.5">
+                    <textarea id="ai-input" rows="3" placeholder="Formato inserimento in blocco:&#10;DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;&#10;Oppure aggiorna esiti:&#10;Paju Frontier - Hwaseong - Esito: Persa"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 sm:p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
+                    <div class="flex justify-end">
+                        <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2.5 rounded-lg font-bold flex items-center justify-center gap-1.5 transition">
+                            <i data-lucide="check-check" class="w-4 h-4"></i> Esegui AI Parser / Salva in Blocco
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOX 2: FORM DI INSERIMENTO MANUALE -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
+                <h2 class="text-xs sm:text-sm font-bold text-white mb-3 flex items-center gap-2">
+                    <i data-lucide="plus-circle" class="text-emerald-400 w-4 h-4"></i> Inserimento Manuale Pronostico
+                </h2>
+
+                <form id="bet-form" onsubmit="saveBet(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Partita / Evento</label>
+                        <input type="text" id="match_name" required placeholder="Es. Inter - Milan" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Campionato</label>
+                        <input type="text" id="league" placeholder="Es. Serie A" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Data e Ora</label>
+                        <input type="datetime-local" id="event_date" required 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Fornitore / Tipster</label>
+                        <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Freak Elite VIP" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <datalist id="tipsters-list">
+                            <option value="AtmBetSignal">
+                            <option value="Freak Elite VIP">
+                            <option value="Stats4bets bollamaker">
+                            <option value="Stats4Bets Automatibet">
+                            <option value="BetMines">
+                            <option value="CalcioAI">
+                            <option value="Pronostici1">
+                            <option value="Zcode System VIP">
+                        </datalist>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Mercato</label>
+                        <input type="text" id="market" required placeholder="Es. 1X2, Multipla" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Pronostico Esatto</label>
+                        <input type="text" id="prediction" required placeholder="Es. 1 + Over 2.5" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Quota Decimale</label>
+                        <input type="number" step="0.01" min="1.01" id="odds" required placeholder="1.85" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Stake (Unità)</label>
+                        <input type="number" step="0.25" min="0.25" max="10" id="stake" value="1.0" required 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+
+                    <div class="sm:col-span-2 md:col-span-3 flex items-center pt-1 sm:pt-2">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="is_published" checked class="sr-only peer">
+                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
+                            <span class="ml-2.5 text-[11px] sm:text-xs font-bold text-white flex items-center gap-1">
+                                <span class="text-emerald-400">★ Pubblica in Vetrina</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="flex justify-end pt-1 sm:pt-2">
+                        <button type="submit" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-5 py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Salva Pronostico
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- SEZIONE ESCLUSIVA ADMIN: CLASSIFICA RENDIMENTO FORNITORI -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                    <div>
+                        <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                            <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Classifica Rendimento Fornitori / Tipster
+                        </h2>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra vinta netta in Euro per ciascun canale.</p>
+                    </div>
+                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold uppercase">Uso Riservato Admin</span>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-800">
+                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                            <tr>
+                                <th class="py-2.5 px-3 text-center">Rank</th>
+                                <th class="py-2.5 px-3">Fornitore / Tipster</th>
+                                <th class="py-2.5 px-3 text-center">Giocate Chiuse</th>
+                                <th class="py-2.5 px-3 text-center">Win Rate</th>
+                                <th class="py-2.5 px-3 text-center">Yield / ROI</th>
+                                <th class="py-2.5 px-3 text-right">Profitto (Unità)</th>
+                                <th class="py-2.5 px-3 text-right">Cifra Guadagnata (€)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium">
+                            <!-- Popolato dinamicamente da JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-900 border border-slate-800 p-2.5 sm:p-3 rounded-xl">
+                <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
+                    <span class="text-[11px] text-slate-400 font-semibold mr-1 hidden sm:inline">Filtra:</span>
+                    <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
+                    <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition whitespace-nowrap">In Corso</button>
+                    <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
+                </div>
+
+                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-2 py-1 rounded-lg">
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold flex items-center gap-1">
+                            <i data-lucide="calculator" class="w-3 h-3 text-emerald-400"></i> 1u =
+                        </span>
+                        <select id="admin-unit-multiplier" onchange="renderDashboard()" class="bg-transparent text-xs text-white font-mono font-bold focus:outline-none cursor-pointer">
+                            <option value="5">5 €</option>
+                            <option value="10" selected>10 €</option>
+                            <option value="20">20 €</option>
+                            <option value="50">50 €</option>
+                            <option value="100">100 €</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center gap-1">
+                        <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
+                            <option value="all">Tutti i Fornitori</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELLA PRONOSTICI COMPLETA -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                            <tr>
+                                <th class="py-2.5 px-3">Data</th>
+                                <th class="py-2.5 px-3">Partita</th>
+                                <th class="py-2.5 px-3">Pronostico</th>
+                                <th class="py-2.5 px-3">Quota/Stake</th>
+                                <th class="py-2.5 px-3">Fornitore</th>
+                                <th class="py-2.5 px-3 text-center">Vetrina</th>
+                                <th class="py-2.5 px-3">Stato & Azione Rapida</th>
+                                <th class="py-2.5 px-3 text-right">Elimina</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bets-tbody" class="divide-y divide-slate-800/60 font-medium">
+                            <!-- Popolato dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- LOGICA DI SICUREZZA SHA-256, GITHUB SYNC & GESTIONALE -->
     <script>
+        // HASH SHA-256 IRREVERSIBILE DELLA PASSWORD (Default: AtmBet2026!)
+        const ADMIN_PASSWORD_HASH = "8fc8fe2cff091eb82d92bbef8e24fa2a91ae19fbb8b15d2a75908e0e0a5e81f1";
+        const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
+
+        async function computeSHA256(str) {
+            const buffer = new TextEncoder().encode(str);
+            const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        async function verifyAdminAuth(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-pass-input').value.trim();
+            const computedHash = await computeSHA256(pass);
+            const errEl = document.getElementById('auth-error-msg');
+
+            if (computedHash === ADMIN_PASSWORD_HASH) {
+                sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
+                unlockConsoleUI();
+            } else {
+                if (errEl) errEl.classList.remove('hidden');
+                document.getElementById('admin-pass-input').value = '';
+            }
+        }
+
+        function unlockConsoleUI() {
+            document.getElementById('admin-auth-overlay').classList.add('hidden');
+            document.getElementById('admin-main-content').classList.remove('hidden');
+            setupDynamicDatePresets();
+            loadGitHubSettings();
+            resetDate();
+            const btnAll = document.getElementById('btn-filter-all');
+            if (btnAll) btnAll.classList.add('filter-btn-active');
+            renderDashboard();
+            lucide.createIcons();
+        }
+
+        function lockAdminConsole() {
+            sessionStorage.removeItem(ADMIN_AUTH_SESSION_KEY);
+            location.reload();
+        }
+
+        function checkAdminSession() {
+            if (sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true") {
+                unlockConsoleUI();
+            }
+        }
+
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
+        const GH_REPO_KEY = 'atmbet_gh_repo';
+        const GH_TOKEN_KEY = 'atmbet_gh_token';
 
         let currentFilter = 'all';
         let currentTipsterFilter = 'all';
-        let currentSimStartDate = '2026-10-25';
+        let currentSimMode = 'yesterday';
+        let currentCustomDate = '';
+
+        function extractStandardDate(rawDateStr) {
+            if (!rawDateStr) return '';
+            const clean = String(rawDateStr).trim();
+
+            const isoMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+            if (isoMatch) {
+                return `${isoMatch[1]}-${String(isoMatch[2]).padStart(2, '0')}-${String(isoMatch[3]).padStart(2, '0')}`;
+            }
+
+            const euMatch = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
+            if (euMatch) {
+                return `${euMatch[3]}-${String(euMatch[2]).padStart(2, '0')}-${String(euMatch[1]).padStart(2, '0')}`;
+            }
+
+            return clean.slice(0, 10);
+        }
 
         function getLocalDateString(d) {
             const year = d.getFullYear();
@@ -410,51 +533,171 @@
             if (btnToday) btnToday.innerText = todayLabel;
             if (btnYesterday) btnYesterday.innerText = yesterdayLabel;
 
-            const defaultDate = getLocalDateString(yesterday);
+            const yesterdayStr = getLocalDateString(yesterday);
             if (dateInput) {
-                dateInput.value = defaultDate;
+                dateInput.value = yesterdayStr;
                 dateInput.max = getLocalDateString(today);
             }
             
-            currentSimStartDate = defaultDate;
+            currentSimMode = 'yesterday';
+            currentCustomDate = yesterdayStr;
+
             if (btnYesterday) {
                 document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
                 btnYesterday.classList.add('sim-pill-active');
             }
         }
 
-        function applySimulationDate(dateStr) {
-            currentSimStartDate = dateStr;
+        function applyCustomCalendarDate(dateStr) {
+            currentSimMode = 'custom';
+            currentCustomDate = dateStr;
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             renderDashboard();
         }
 
         function setDynamicPreset(type, btnElement) {
+            currentSimMode = type;
             const dateInput = document.getElementById('sim-start-date');
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             if (btnElement) btnElement.classList.add('sim-pill-active');
 
             const today = new Date();
+            const todayStr = getLocalDateString(today);
+
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
 
             if (type === 'today') {
-                currentSimStartDate = getLocalDateString(today);
+                if (dateInput) dateInput.value = todayStr;
+                currentCustomDate = todayStr;
             } else if (type === 'yesterday') {
-                const y = new Date();
-                y.setDate(today.getDate() - 1);
-                currentSimStartDate = getLocalDateString(y);
+                if (dateInput) dateInput.value = yesterdayStr;
+                currentCustomDate = yesterdayStr;
             } else if (type === '7days') {
                 const d7 = new Date();
                 d7.setDate(today.getDate() - 7);
-                currentSimStartDate = getLocalDateString(d7);
+                const d7Str = getLocalDateString(d7);
+                if (dateInput) dateInput.value = d7Str;
+                currentCustomDate = d7Str;
             } else if (type === 'all') {
-                currentSimStartDate = '2020-01-01';
-            }
-
-            if (dateInput && type !== 'all') {
-                dateInput.value = currentSimStartDate;
+                currentCustomDate = '2020-01-01';
             }
 
             renderDashboard();
+        }
+
+        function loadGitHubSettings() {
+            const savedRepo = localStorage.getItem(GH_REPO_KEY) || '';
+            const savedToken = localStorage.getItem(GH_TOKEN_KEY) || '';
+
+            const repoInput = document.getElementById('gh-repo');
+            const tokenInput = document.getElementById('gh-token');
+
+            if (repoInput && savedRepo) repoInput.value = savedRepo;
+            if (tokenInput && savedToken) tokenInput.value = savedToken;
+
+            updateSyncBadge(savedRepo && savedToken ? 'ready' : 'empty');
+        }
+
+        function saveGitHubSettings() {
+            const repo = document.getElementById('gh-repo').value.trim();
+            const token = document.getElementById('gh-token').value.trim();
+
+            if (!repo || !token) {
+                alert("Inserisci sia il nome repository (es. username/repo) sia il Personal Access Token.");
+                return;
+            }
+
+            localStorage.setItem(GH_REPO_KEY, repo);
+            localStorage.setItem(GH_TOKEN_KEY, token);
+            updateSyncBadge('ready');
+            alert("Credenziali GitHub salvate con successo! I prossimi aggiornamenti saranno inviati automaticamente a bets.json.");
+            syncBetsToGitHub(loadAllBets());
+        }
+
+        function updateSyncBadge(status, message) {
+            const icon = document.getElementById('sync-status-icon');
+            const text = document.getElementById('sync-status-text');
+            if (!icon || !text) return;
+
+            if (status === 'ready') {
+                icon.className = 'w-3 h-3 rounded-full bg-emerald-500 shrink-0 animate-pulse';
+                text.innerText = 'Pronto. I commit automatici su bets.json sono attivi.';
+                text.className = 'text-[10px] text-emerald-400 font-mono';
+            } else if (status === 'syncing') {
+                icon.className = 'w-3 h-3 rounded-full bg-amber-500 shrink-0 animate-ping';
+                text.innerText = 'Invio aggiornamento a GitHub in corso...';
+                text.className = 'text-[10px] text-amber-400 font-mono';
+            } else if (status === 'success') {
+                icon.className = 'w-3 h-3 rounded-full bg-emerald-500 shrink-0';
+                text.innerText = `Sincronizzato con successo su GitHub (${new Date().toLocaleTimeString()}). Tutto il sito è aggiornato!`;
+                text.className = 'text-[10px] text-emerald-400 font-mono font-bold';
+            } else if (status === 'error') {
+                icon.className = 'w-3 h-3 rounded-full bg-rose-500 shrink-0';
+                text.innerText = 'Errore sincronizzazione GitHub: ' + (message || 'Verifica token o permessi repo.');
+                text.className = 'text-[10px] text-rose-400 font-mono font-bold';
+            } else {
+                icon.className = 'w-3 h-3 rounded-full bg-slate-500 shrink-0';
+                text.innerText = 'Non configurata. Inserisci Repository e Token per salvare online in automatico.';
+                text.className = 'text-[10px] text-slate-400 font-mono';
+            }
+        }
+
+        async function syncBetsToGitHub(bets) {
+            const repo = localStorage.getItem(GH_REPO_KEY);
+            const token = localStorage.getItem(GH_TOKEN_KEY);
+
+            if (!repo || !token) return;
+
+            updateSyncBadge('syncing');
+
+            try {
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/bets.json`;
+                let currentSha = null;
+
+                const getRes = await fetch(getFileUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    currentSha = fileData.sha;
+                }
+
+                const jsonString = JSON.stringify(bets, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+
+                const bodyPayload = {
+                    message: `Aggiornamento automatico bets.json da AtmBet Console [${new Date().toISOString()}]`,
+                    content: base64Content
+                };
+                if (currentSha) {
+                    bodyPayload.sha = currentSha;
+                }
+
+                const putRes = await fetch(getFileUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+
+                if (putRes.ok) {
+                    updateSyncBadge('success');
+                } else {
+                    const errData = await putRes.json();
+                    updateSyncBadge('error', errData.message || 'Errore commit');
+                }
+            } catch (err) {
+                updateSyncBadge('error', err.message);
+            }
         }
 
         function loadAllBets() {
@@ -513,6 +756,7 @@
             localStorage.setItem(PRIMARY_KEY, JSON.stringify(bets));
             localStorage.setItem(ATMBET_KEY, JSON.stringify(bets));
             renderDashboard();
+            syncBetsToGitHub(bets);
         }
 
         function exportBackupJSON() {
@@ -784,7 +1028,6 @@
             }
         };
 
-        // CALCOLO E RENDERING CLASSIFICA FORNITORI ESCLUSIVA ADMIN
         function renderAdminTipstersLeaderboard(allBets, unitVal) {
             const tbody = document.getElementById('admin-tipsters-leaderboard-tbody');
             if (!tbody) return;
@@ -871,11 +1114,35 @@
         }
 
         function calculateSimulationInAdmin(allBets, unitVal) {
+            const today = new Date();
+            const todayStr = getLocalDateString(today);
+
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
+
+            const d7 = new Date();
+            d7.setDate(today.getDate() - 7);
+            const d7Str = getLocalDateString(d7);
+
             const simBets = allBets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
-                const betDate = (b.event_date || '').slice(0, 10);
-                return betDate >= currentSimStartDate;
+
+                const bDate = extractStandardDate(b.event_date);
+
+                if (currentSimMode === 'today') {
+                    return bDate === todayStr;
+                } else if (currentSimMode === 'yesterday') {
+                    return bDate === yesterdayStr;
+                } else if (currentSimMode === '7days') {
+                    return bDate >= d7Str && bDate <= todayStr;
+                } else if (currentSimMode === 'all') {
+                    return true;
+                } else if (currentSimMode === 'custom') {
+                    return bDate >= currentCustomDate;
+                }
+                return true;
             });
 
             const total = simBets.length;
@@ -1120,12 +1387,8 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            setupDynamicDatePresets();
-            resetDate();
-            const btnAll = document.getElementById('btn-filter-all');
-            if (btnAll) btnAll.classList.add('filter-btn-active');
-            renderDashboard();
             lucide.createIcons();
+            checkAdminSession();
         });
     </script>
 </body>
