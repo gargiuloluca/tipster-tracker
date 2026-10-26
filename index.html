@@ -52,7 +52,7 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- Navbar Pubblica -->
+    <!-- Navbar Pubblica Completa con Link Admin Discreto -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -64,6 +64,13 @@
 
             <div class="flex items-center gap-2 sm:gap-4">
                 <a href="#piani" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">Piani & Prezzi</a>
+                
+                <!-- Accesso Rapido Admin Discreto -->
+                <a href="admin.html" title="Area Amministrativa" class="text-slate-400 hover:text-white p-1.5 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 transition flex items-center gap-1 text-xs">
+                    <i data-lucide="shield" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    <span class="hidden md:inline font-mono text-[10px]">Console</span>
+                </a>
+
                 <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1 transition">Accedi</a>
                 <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Registrati VIP
@@ -220,7 +227,7 @@
             </div>
         </section>
 
-        <!-- SELEZIONI DEL GIORNO IN VETRINA (CARD CON PARLAY ACCORDION) -->
+        <!-- SELEZIONI DEL GIORNO IN VETRINA (CARD CON PARLAY ACCORDION & BLUR QUOTE) -->
         <section class="space-y-4 pt-4 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
@@ -276,7 +283,7 @@
             </div>
         </section>
 
-        <!-- SEZIONE PIANI & PREZZI (RECUPERATA) -->
+        <!-- SEZIONE PIANI & PREZZI -->
         <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Accesso VIP & Crediti</span>
@@ -303,7 +310,7 @@
                     </a>
                 </div>
 
-                <!-- Card 2: VIP Mensile (In Evidenza) -->
+                <!-- Card 2: VIP Mensile -->
                 <div class="bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-2xl relative">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
                         Più Richiesto
@@ -376,7 +383,7 @@
         AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
     </footer>
 
-    <!-- LOGICA SCRIPT DINAMICO VETRINA -->
+    <!-- LOGICA SCRIPT DINAMICO VETRINA CON DATI BLUR & ACCORDION PARLAY -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -401,8 +408,8 @@
 
             const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
             
-            const todayLabel = `Oggi (${today.getDate()}${monthNames[today.getMonth()]})`;
-            const yesterdayLabel = `Ieri (${yesterday.getDate()}${monthNames[yesterday.getMonth()]})`;
+            const todayLabel = `Oggi (${today.getDate()} ${monthNames[today.getMonth()]})`;
+            const yesterdayLabel = `Ieri (${yesterday.getDate()} ${monthNames[yesterday.getMonth()]})`;
 
             const btnToday = document.getElementById('btn-preset-today');
             const btnYesterday = document.getElementById('btn-preset-yesterday');
@@ -427,7 +434,7 @@
         async function fetchAllBets() {
             let bets = [];
 
-            // 1. Prova a caricare dal file bets.json su GitHub
+            // 1. Prova a caricare dal file bets.json aggiornato dal bot GitHub Actions
             try {
                 const res = await fetch('bets.json?t=' + Date.now());
                 if (res.ok) {
@@ -438,7 +445,7 @@
                 }
             } catch(e) {}
 
-            // 2. Se non presente o vuoto, fallback su localStorage
+            // 2. Se vuoto o assente, fallback su localStorage
             if (bets.length === 0) {
                 const rawV1 = localStorage.getItem(PRIMARY_KEY);
                 if (rawV1) {
@@ -655,12 +662,16 @@
                             <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
                         </div>
                         <h3 class="text-sm sm:text-base font-bold text-white mb-2 leading-snug break-words">${bet.match_name}</h3>
-                        ${toggleBtnHtml}${submatchesHtml}
+                        ${toggleBtnHtml}
+                        ${submatchesHtml}
 
+                        <!-- BOX SEGNALE OSCURATO CON BLUR E LUCCHETTO -->
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 my-3">
                             <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Dettagli Segnale:</div>
                             <div class="flex items-center justify-between py-1">
-                                <span class="text-xs text-slate-400 flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Quota & Mercato Riservati</span>
+                                <span class="text-xs text-slate-400 flex items-center gap-1.5">
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Quota & Mercato Riservati
+                                </span>
                                 <a href="auth.html?mode=register" class="text-[10px] bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-1 rounded-lg font-bold transition">
                                     Sblocca VIP
                                 </a>
