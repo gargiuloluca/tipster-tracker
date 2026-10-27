@@ -1,18 +1,5 @@
 [
   {
-    "id": "bet_1793099301896_0",
-    "event_date": "2026-10-27 13:00",
-    "match_name": "Adana Adaletgucu - MKE Ankaragucu",
-    "league": "Coppa di Turchia",
-    "original_tipster": "Infoland",
-    "market": "1X2 / Mercato",
-    "prediction": "1 DNB (Rimborso in caso di parità)",
-    "odds": 2.1,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
     "id": "bet_1793099218663_2",
     "event_date": "2026-10-27 22:00",
     "match_name": "Fleetwood Town - Arsenal",
@@ -312,6 +299,19 @@
     "is_published": true
   },
   {
+    "id": "bet_1793099301896_0",
+    "event_date": "2026-10-27 13:00",
+    "match_name": "Adana Adaletgucu - MKE Ankaragucu",
+    "league": "Coppa di Turchia",
+    "market": "1X2 / Mercato",
+    "prediction": "1 DNB (Rimborso in caso di parità)",
+    "original_tipster": "Infoland",
+    "odds": 2.1,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1793000252931_7",
     "event_date": "2026-10-26 23:00",
     "match_name": "Flamengo vs Atletico-MG",
@@ -373,7 +373,7 @@
     "original_tipster": "ZCODE",
     "odds": 1.58,
     "stake": 1,
-    "status": "won",
+    "status": "lost",
     "is_published": true
   },
   {
