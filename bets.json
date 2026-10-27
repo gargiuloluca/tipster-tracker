@@ -299,32 +299,6 @@
     "is_published": true
   },
   {
-    "id": "bet_1793126816772_1",
-    "event_date": "2026-10-27 20:00",
-    "match_name": "Roda - De Graafschap",
-    "league": "KNVB Beker",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "BetExpBot",
-    "odds": 2.15,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
-    "id": "bet_1793126816772_0",
-    "event_date": "2026-10-27 20:00",
-    "match_name": "Entella - Avellino",
-    "league": "Serie B",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "BetExpBot",
-    "odds": 2.4,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
     "id": "bet_1793102345140_0",
     "event_date": "2026-10-27 19:00",
     "match_name": "Rot-Weiss Essen - RB Lipsia / Al Shamal - Al-Hilal",
