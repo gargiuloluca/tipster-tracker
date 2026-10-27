@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793102545634_0",
-    "event_date": "2026-10-27 13:15",
-    "match_name": "Beijing Guoan - Jeonbuk",
-    "league": "AFC Champions League",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 2.08,
+    "id": "bet_1793102669187_0",
+    "event_date": "2026-10-27 18:00",
+    "match_name": "Dubai - Paris / Panathinaikos - Olimpia Milano",
+    "league": "EuroLeague",
+    "original_tipster": "Freak Elite VIP",
+    "market": "Multipla",
+    "prediction": "Doppia: Dubai Under 95.5 (1.76) + Olimpia Milano +16 Handicap (1.60)",
+    "odds": 2.81,
     "stake": 1,
     "status": "pending",
     "is_published": true
@@ -346,6 +346,19 @@
     "prediction": "Alex Michelsen Vincente",
     "original_tipster": "ZCODE",
     "odds": 1.5,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793102545634_0",
+    "event_date": "2026-10-27 13:15",
+    "match_name": "Beijing Guoan - Jeonbuk",
+    "league": "AFC Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 2.08,
     "stake": 1,
     "status": "pending",
     "is_published": true
