@@ -76,7 +76,7 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- 1. NAVBAR IBRIDA: LINK COMPLETI SU DESKTOP, MINIMALE SU MOBILE -->
+    <!-- 1. NAVBAR IBRIDA -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -86,7 +86,7 @@
                 </a>
             </div>
 
-            <!-- LINK NAVIGAZIONE DESKTOP (VISIBILI ANCHE IN MODALITA' SITO DESKTOP) -->
+            <!-- LINK NAVIGAZIONE DESKTOP -->
             <div class="hidden md:flex items-center gap-3 lg:gap-6">
                 <a href="#metodo" class="text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
                 <a href="#simulatore" class="text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
@@ -99,7 +99,7 @@
             <!-- PULSANTI ACCEDI / REGISTRATI -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition">Accedi</a>
-                <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
+                <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Registrati</span> VIP
                 </a>
             </div>
@@ -407,81 +407,85 @@
             </div>
         </section>
 
-        <!-- 8. SEZIONE PIANI & CREDITI -->
+        <!-- 8. SEZIONE PIANI & CREDITI: NUOVA ARCHITETTURA COMMERCIALE -->
         <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
-            <div class="text-center max-w-xl mx-auto space-y-2">
-                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Accesso VIP & Ricariche</span>
-                <h2 class="text-2xl sm:text-3xl font-black text-white">Scegli la Modalità Perfetta per Te</h2>
-                <p class="text-xs text-slate-400">Sblocca singoli pronostici con i pacchetti crediti flessibili oppure attiva un abbonamento VIP illimitato.</p>
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Piani d'Abbonamento & Crediti</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Scegli la Strategia Più Adatta al Tuo Capitale</h2>
+                <p class="text-xs text-slate-400">Dalla flessibilità dei singoli crediti all'esclusività del nostro algoritmo ad altissima restrizione.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 pt-2">
                 
+                <!-- 1. Pacchetto Crediti -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Flessibile</span>
-                        <h3 class="text-base font-black text-white">Pacchetto Crediti</h3>
+                        <h3 class="text-base font-black text-white">10 Crediti</h3>
                         <div class="text-2xl font-black font-mono text-white">9,90 €</div>
-                        <p class="text-[11px] text-slate-400">10 Crediti per sbloccare singolarmente i pronostici che preferisci.</p>
+                        <p class="text-[11px] text-slate-400">Per sbloccare singolarmente solo i match che ti interessano.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 10 sblocchi singoli</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 10 selezioni a scelta</li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Crediti senza scadenza</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Nessun rinnovo automatico</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Zero canoni o rinnovi</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
-                        Acquista 10 Crediti
+                        Acquista Crediti
                     </a>
                 </div>
 
+                <!-- 2. VIP All-Inclusive (Full Volume) -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Pass Breve</span>
-                        <h3 class="text-base font-black text-white">VIP Settimanale</h3>
-                        <div class="text-2xl font-black font-mono text-white">14,90 € <span class="text-xs text-slate-400 font-normal">/sett</span></div>
-                        <p class="text-[11px] text-slate-400">Accesso illimitato per testare tutti i segnali del weekend calcistico.</p>
+                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Alto Volume</span>
+                        <h3 class="text-base font-black text-white">VIP All-Inclusive</h3>
+                        <div class="text-2xl font-black font-mono text-white">24,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
+                        <p class="text-[11px] text-slate-400">Tutti i pronostici generati da tutti i fornitori (30-50 giocate al giorno).</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i pronostici inclusi</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Singole e multiple</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Notifiche in tempo reale</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i canali inclusi</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Singole, doppie e multiple</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Ideale per chi fa alto turnover</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
-                        Attiva 7 Giorni
+                        Attiva All-Inclusive
                     </a>
                 </div>
 
-                <div class="bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500 rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 text-[9px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
-                        Consigliato
+                <!-- 3. TOP DI GAMMA: AtmBet Signal PURE (Max 5/die, >65% WR) -->
+                <div class="bg-gradient-to-b from-slate-900 via-slate-950 to-amber-950/20 border-2 border-amber-500 rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[9px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
+                        Top Performer ★
                     </div>
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/30">Abbonamento VIP</span>
-                        <h3 class="text-base font-black text-white">VIP Mensile</h3>
-                        <div class="text-2xl font-black font-mono text-emerald-400">29,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
-                        <p class="text-[11px] text-slate-400">Accesso completo a tutti i segnali e strumenti per investire con costanza.</p>
+                        <span class="text-[10px] font-mono uppercase bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/30">Ultra Restrittivo</span>
+                        <h3 class="text-base font-black text-white">AtmBet Signal PURE</h3>
+                        <div class="text-2xl font-black font-mono text-amber-400">39,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
+                        <p class="text-[11px] text-slate-400">Solo i 5 migliori segnali del giorno con probabilità stimata > 65%.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Accesso illimitato al 100%</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Notifiche Telegram VIP</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Cruscotto Simulatore Personale</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Disdici quando vuoi in un clic</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Max 5 selezioni/giorno</strong></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Filtro matematico > 65% Win Rate</strong></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Zero fatica: copi tutto in 2 minuti</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Minimo drawdown, massima resa</li>
                         </ul>
                     </div>
-                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-500/20">
-                        Inizia Gratis (7 Giorni)
+                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-500/20">
+                        Abbonati a Signal PURE
                     </a>
                 </div>
 
+                <!-- 4. Trimestrale PURE (Miglior Risparmio) -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/20">Risparmio 25%</span>
-                        <h3 class="text-base font-black text-white">VIP Trimestrale</h3>
-                        <div class="text-2xl font-black font-mono text-white">69,90 € <span class="text-xs text-slate-400 font-normal">/3 mesi</span></div>
-                        <p class="text-[11px] text-slate-400">Ideale per massimizzare la resa matematica nel medio termine.</p>
+                        <span class="text-[10px] font-mono uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/20">Risparmio 25%</span>
+                        <h3 class="text-base font-black text-white">Trimestrale PURE</h3>
+                        <div class="text-2xl font-black font-mono text-white">89,00 € <span class="text-xs text-slate-400 font-normal">/3 mesi</span></div>
+                        <p class="text-[11px] text-slate-400">Il ciclo ideale per massimizzare la crescita composta su base trimestrale.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Massimo risparmio sul prezzo mensile</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i vantaggi di Signal PURE</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Risparmi oltre 30€ sul canone</li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Assistenza prioritaria dedicata</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Esportazione storico Excel/CSV</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
@@ -497,10 +501,20 @@
             <div class="text-center space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
                 <h2 class="text-2xl font-black text-white">Tutto Quello che Devi Sapere</h2>
-                <p class="text-xs text-slate-400">Risposte chiare sul metodo, sui crediti e sulla verifica automatica.</p>
+                <p class="text-xs text-slate-400">Risposte chiare su piani, volumi e verifiche automatiche.</p>
             </div>
 
             <div class="space-y-3">
+                <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
+                    <summary class="font-bold text-white flex items-center justify-between">
+                        <span>Qual è la differenza tra "All-Inclusive" e "Signal PURE"?</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
+                    </summary>
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
+                        Il piano All-Inclusive è rivolto a chi vuole operare ad alto volume e ricevere tutte le 30-50 giocate giornaliere elaborate dagli algoritmi. Il piano <strong>Signal PURE</strong> effettua una scrematura ferrea, selezionando <strong>solo i 5 pronostici top</strong> con la percentuale di riuscita stimata più elevata (>65%), ideale per chi vuole investire senza dover seguire decine di partite al giorno.
+                    </p>
+                </details>
+
                 <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
                     <summary class="font-bold text-white flex items-center justify-between">
                         <span>Come funziona la prova gratuita di 7 giorni?</span>
@@ -513,31 +527,11 @@
 
                 <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
                     <summary class="font-bold text-white flex items-center justify-between">
-                        <span>Cosa rappresenta 1 Unità (1u)?</span>
+                        <span>I risultati sono verificati oggettivamente?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
                     </summary>
                     <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
-                        1 Unità corrisponde a una percentuale fissa del tuo budget personale (in genere 1% o 2%). Puoi usare il nostro selettore in alto per convertire all'istante le unità in Euro reali (es. 1u = 10€, 50€ o 100€).
-                    </p>
-                </details>
-
-                <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
-                    <summary class="font-bold text-white flex items-center justify-between">
-                        <span>I risultati sono realmente oggettivi e non modificabili?</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
-                    </summary>
-                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
-                        Sì. Tutte le scommesse vengono inserite prima del calcio d'inizio. Al termine dei match, lo script automatico su GitHub verifica il punteggio ufficiale tramite API-Football, azzerando qualsiasi intervento soggettivo.
-                    </p>
-                </details>
-
-                <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
-                    <summary class="font-bold text-white flex items-center justify-between">
-                        <span>I crediti ricaricabili hanno una scadenza?</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
-                    </summary>
-                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
-                        Assolutamente no. I crediti acquistati rimangono nel tuo profilo finché non decidi tu di spenderli per sbloccare singoli pronostici.
+                        Sì. Tutte le quote e i match vengono inseriti a mercato aperto prima del calcio d'inizio. Al termine delle partite lo script automatico GitHub interroga API-Football e certifica l'esito reale nello storico.
                     </p>
                 </details>
             </div>
