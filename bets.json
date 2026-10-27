@@ -1,18 +1,5 @@
 [
   {
-    "id": "bet_1793102669187_0",
-    "event_date": "2026-10-27 18:00",
-    "match_name": "Dubai - Paris / Panathinaikos - Olimpia Milano",
-    "league": "EuroLeague",
-    "original_tipster": "Freak Elite VIP",
-    "market": "Multipla",
-    "prediction": "Doppia: Dubai Under 95.5 (1.76) + Olimpia Milano +16 Handicap (1.60)",
-    "odds": 2.81,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
     "id": "bet_1793099218663_2",
     "event_date": "2026-10-27 22:00",
     "match_name": "Fleetwood Town - Arsenal",
@@ -273,6 +260,19 @@
     "is_published": true
   },
   {
+    "id": "bet_1793102669187_0",
+    "event_date": "2026-10-27 18:00",
+    "match_name": "Dubai - Paris / Panathinaikos - Olimpia Milano",
+    "league": "EuroLeague",
+    "market": "Multipla",
+    "prediction": "Doppia: Dubai Under 95.5 (1.76) + Olimpia Milano +16 Handicap (1.60)",
+    "original_tipster": "Freak Elite VIP",
+    "odds": 2.81,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1793095782063_9",
     "event_date": "2026-10-27 18:00",
     "match_name": "VfL Bochum 1848 - FSV Mainz 05",
@@ -373,7 +373,7 @@
     "original_tipster": "Infoland",
     "odds": 2.1,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
