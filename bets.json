@@ -1,5 +1,31 @@
 [
   {
+    "id": "bet_1793098994673_1",
+    "event_date": "2026-10-27 21:00",
+    "match_name": "Bayern Monaco - Barcellona",
+    "league": "EuroLeague",
+    "original_tipster": "Freak Elite VIP",
+    "market": "1X2 / Mercato",
+    "prediction": "Bayern Monaco +4 Handicap (Inc. Overtime)",
+    "odds": 1.55,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793098994673_0",
+    "event_date": "2026-10-27 21:30",
+    "match_name": "Valencia - Fenerbahce",
+    "league": "EuroLeague",
+    "original_tipster": "Freak Elite VIP",
+    "market": "1X2 / Mercato",
+    "prediction": "Valencia Vincente (W1 Inc. Overtime)",
+    "odds": 1.92,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1793095782063_8",
     "event_date": "2026-10-27 20:45",
     "match_name": "Torino - Como",
