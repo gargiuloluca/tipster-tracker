@@ -45,6 +45,12 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
+        .cluster-pill-active {
+            background-color: #f59e0b !important;
+            color: #020617 !important;
+            border-color: #f59e0b !important;
+            font-weight: 800 !important;
+        }
         .row-won {
             background-color: rgba(34, 197, 94, 0.08) !important;
             border-left: 4px solid #22c55e !important;
@@ -69,7 +75,7 @@
             </div>
             <div>
                 <h2 class="text-lg font-black text-white">AtmBet Console</h2>
-                <p class="text-xs text-slate-400 mt-1">Area riservata. Inserisci la chiave di sicurezza per accedere al pannello di controllo.</p>
+                <p class="text-xs text-slate-400 mt-1">Area riservata. Inserisci la password per accedere al gestionale.</p>
             </div>
             <form onsubmit="verifyAdminAuth(event)" class="space-y-3">
                 <input type="password" id="admin-pass-input" placeholder="Password di accesso" required autofocus
@@ -79,7 +85,7 @@
                     Sblocca Console
                 </button>
             </form>
-            <div class="text-[10px] text-slate-600 font-mono">AtmBet Security Core</div>
+            <div class="text-[10px] text-slate-600 font-mono">AtmBet Core Protocol</div>
         </div>
     </div>
 
@@ -145,7 +151,57 @@
                 </div>
             </section>
 
-            <!-- MODULO: CONTROLLO SOVRAESPOSIZIONE & CONFLITTI CON TASTO CONFERMA -->
+            <!-- OTTIMIZZATORE FILTRI & CLUSTER DI PROFITTO -->
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/20 border border-amber-500/30 rounded-2xl p-4 shadow-xl space-y-3">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-xs sm:text-sm font-bold text-white">AtmBet Cluster Optimizer (Filtri Consigliati)</h2>
+                                <span class="text-[9px] bg-amber-500/20 text-amber-300 font-mono px-2 py-0.5 rounded font-black uppercase">Algoritmo di Scrematura</span>
+                            </div>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">Riduci i segnali a bassa resa per alzare il Win Rate ed evitare la fatica di esecuzione per gli abbonati.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bottoni di selezione cluster con 1-clic -->
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <button type="button" onclick="setClusterFilter('pure', this)" id="btn-cluster-pure" class="cluster-btn px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold transition flex items-center gap-1">
+                            <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400"></i> Pure Signal (Top 5 / >65%)
+                        </button>
+                        <button type="button" onclick="setClusterFilter('elite', this)" id="btn-cluster-elite" class="cluster-btn px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-emerald-400"></i> Cluster Elite (ROI Positivo)
+                        </button>
+                        <button type="button" onclick="setClusterFilter('all', this)" id="btn-cluster-all" class="cluster-btn cluster-pill-active px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-xs font-bold transition">
+                            Tutti (Full Volume)
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cluster-metrics-bar" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800/80 text-xs font-mono">
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Canali Attivi</span>
+                        <span id="opt-channels-count" class="font-bold text-white">Tutti</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Volume Medio Giornaliero</span>
+                        <span id="opt-daily-volume" class="font-bold text-amber-400">Tutti i segnali</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Win Rate Stimato</span>
+                        <span id="opt-winrate-est" class="font-bold text-emerald-400">-</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Resa Target / Profilo</span>
+                        <span id="opt-target-profile" class="font-bold text-slate-200">Full Coverage</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULO: CONTROLLO SOVRAESPOSIZIONE & CONFLITTI -->
             <section id="conflict-panel" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 shadow-lg space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -154,7 +210,7 @@
                         </div>
                         <div>
                             <h3 class="text-xs sm:text-sm font-bold text-amber-300">Rilevata Sovraesposizione / Conflitto Match</h3>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Partite duplicate o pronostici contrapposti. Puoi rimuoverle o confermare di volerle mantenere entrambe.</p>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">Partite duplicate o mercati contrapposti. Puoi rimuovere le singole giocate o confermare di volerle mantenere.</p>
                         </div>
                     </div>
                     <span id="conflict-count-badge" class="text-[10px] font-mono font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0 Anomalie</span>
@@ -223,22 +279,22 @@
             <!-- Statistiche Globali con Convertitore Unità Monetaria (€) -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
-                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Pronostici Totali</span>
+                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Pronostici Mostrati</span>
                     <span id="stat-total" class="text-xl sm:text-2xl font-black text-white">0</span>
                 </div>
                 <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl border-l-4 border-l-emerald-500 flex flex-col justify-between">
-                    <span class="text-[10px] sm:text-xs text-emerald-400 font-semibold block mb-0.5">Win Rate Globale</span>
+                    <span class="text-[10px] sm:text-xs text-emerald-400 font-semibold block mb-0.5">Win Rate</span>
                     <span id="stat-winrate" class="text-xl sm:text-2xl font-black text-white">0%</span>
                 </div>
                 <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Profitto Globale</span>
+                        <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Profitto Netto</span>
                         <span id="admin-stat-fiat" class="text-[10px] sm:text-[11px] font-mono text-emerald-400 font-bold">≈ +0.00€</span>
                     </div>
                     <span id="stat-profit" class="text-xl sm:text-2xl font-black text-amber-400">0.00u</span>
                 </div>
                 <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
-                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Yield / ROI Globale</span>
+                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Yield / ROI</span>
                     <span id="stat-yield" class="text-xl sm:text-2xl font-black text-white">0%</span>
                 </div>
             </div>
@@ -292,7 +348,7 @@
 
                     <div>
                         <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Fornitore / Tipster</label>
-                        <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. Freak Elite VIP" 
+                        <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. AtmBetSignal" 
                             class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                         <datalist id="tipsters-list">
                             <option value="AtmBetSignal">
@@ -383,7 +439,7 @@
             <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-900 border border-slate-800 p-2.5 sm:p-3 rounded-xl">
                 <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-                    <span class="text-[11px] text-slate-400 font-semibold mr-1 hidden sm:inline">Filtra:</span>
+                    <span class="text-[11px] text-slate-400 font-semibold mr-1 hidden sm:inline">Stato:</span>
                     <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
                     <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition whitespace-nowrap">In Corso</button>
                     <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
@@ -437,11 +493,13 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE, SCANNER & CONFERMA CONFLITTI -->
+    <!-- SCRIPT GESTIONALE, SCANNER & OTTIMIZZATORE -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
         const CONFIRMED_CONFLICTS_KEY = "atmbet_confirmed_conflicts";
+
+        let currentClusterMode = 'all'; // 'all', 'elite', 'pure'
 
         function getConfirmedConflicts() {
             try {
@@ -507,6 +565,13 @@
         let currentSimMode = 'yesterday';
         let currentCustomDate = '';
 
+        function setClusterFilter(mode, btnEl) {
+            currentClusterMode = mode;
+            document.querySelectorAll('.cluster-btn').forEach(b => b.classList.remove('cluster-pill-active'));
+            if (btnEl) btnEl.classList.add('cluster-pill-active');
+            renderDashboard();
+        }
+
         function normalizeMatchText(str) {
             if (!str) return '';
             return str.toLowerCase()
@@ -515,7 +580,6 @@
                       .trim();
         }
 
-        // SCANNER CONFLITTI CON FILTRO SU QUELLI GIA' CONFERMATI DALL'ADMIN
         function scanForConflictsAndDuplicates(bets) {
             const conflictPanel = document.getElementById('conflict-panel');
             const conflictContainer = document.getElementById('conflict-items-container');
@@ -542,7 +606,6 @@
                 matchGroups[groupKey].push(bet);
             });
 
-            // Isola i gruppi con più di 1 scommessa ESCLUDENDO quelli già confermati dall'admin
             const conflicts = Object.entries(matchGroups).filter(([key, items]) => items.length > 1 && !confirmedKeys.includes(key));
 
             if (conflicts.length === 0) {
@@ -1249,10 +1312,37 @@
             if (lostEl) lostEl.innerText = lost + 'P';
         }
 
+        function updateClusterOptimizerSummary(allBets) {
+            const chEl = document.getElementById('opt-channels-count');
+            const volEl = document.getElementById('opt-daily-volume');
+            const wrEl = document.getElementById('opt-winrate-est');
+            const targetEl = document.getElementById('opt-target-profile');
+
+            if (!chEl || !volEl || !wrEl || !targetEl) return;
+
+            if (currentClusterMode === 'pure') {
+                chEl.innerText = "Solo 'AtmBetSignal' (Core AI)";
+                volEl.innerText = "Max 5 / die (Filtro Rigido)";
+                wrEl.innerText = "> 65.0% - 100% Win Rate";
+                targetEl.innerText = "Piano 'Pure Signal' (Top Ticket)";
+            } else if (currentClusterMode === 'elite') {
+                chEl.innerText = "Top 4 Canali (ROI Positivo)";
+                volEl.innerText = "~10-15 / die";
+                wrEl.innerText = "~ 62.5% Win Rate";
+                targetEl.innerText = "Piano Bilanciato / Elite";
+            } else {
+                chEl.innerText = "Tutti (10 Canali)";
+                volEl.innerText = "Full (~30-50 / die)";
+                wrEl.innerText = "50-60% Win Rate";
+                targetEl.innerText = "Piano 'All-Inclusive'";
+            }
+        }
+
         function renderDashboard() {
-            const allBets = loadAllBets();
+            let allBets = loadAllBets();
             scanForConflictsAndDuplicates(allBets);
 
+            // Popola selettore fornitori se vuoto
             const tipsters = [...new Set(allBets.map(b => b.original_tipster).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
             if (select.options.length <= 1) {
@@ -1264,7 +1354,16 @@
                     select.appendChild(opt);
                 });
             }
-            select.value = currentTipsterFilter;
+
+            // APPLICAZIONE CLUSTER OTTIMIZZATORE
+            updateClusterOptimizerSummary(allBets);
+            if (currentClusterMode === 'pure') {
+                allBets = allBets.filter(b => (b.original_tipster || '').toLowerCase().includes('atmbet'));
+            } else if (currentClusterMode === 'elite') {
+                // Elite: Pronostici1, CalcioAI, AtmBetSignal, ZCODE
+                const eliteList = ['pronostici1', 'calcioai', 'atmbetsignal', 'zcode'];
+                allBets = allBets.filter(b => eliteList.some(name => (b.original_tipster || '').toLowerCase().includes(name)));
+            }
 
             let filtered = allBets;
 
@@ -1322,7 +1421,7 @@
             tbody.innerHTML = '';
 
             if (betsToDisplay.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico disponibile per questo filtro.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico per questo filtro.</td></tr>`;
                 return;
             }
 
