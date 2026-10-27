@@ -1,5 +1,44 @@
 [
   {
+    "id": "bet_1793126916860_2",
+    "event_date": "2026-10-27 20:00",
+    "match_name": "Shrewsbury - Everton U21",
+    "league": "EFL Trophy",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.9,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793126916860_1",
+    "event_date": "2026-10-27 20:00",
+    "match_name": "Roda - De Graafschap",
+    "league": "KNVB Beker",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.79,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793126916860_0",
+    "event_date": "2026-10-27 20:00",
+    "match_name": "Entella - Avellino",
+    "league": "Serie B",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 2.1,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1793124731518_3",
     "event_date": "2026-10-28 20:45",
     "match_name": "Genoa - Juventus",
