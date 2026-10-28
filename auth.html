@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="logo.png">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -146,10 +146,10 @@
                 </button>
             </form>
 
-            <!-- Box di Simulazione e Test Veloce (Utile per testare i 3 piani) -->
-            <div class="mt-6 pt-5 border-t border-slate-800/80">
-                <div class="text-[10px] font-mono text-slate-400 uppercase tracking-widest text-center mb-2 font-bold">
-                    Accesso Rapido di Test (Dev Console)
+            <!-- Box di Simulazione e Test Veloce (Visibile ESCLUSIVAMENTE all'Admin) -->
+            <div id="admin-dev-box" class="hidden mt-6 pt-5 border-t border-slate-800/80">
+                <div class="text-[10px] font-mono text-amber-400 uppercase tracking-widest text-center mb-2 font-bold flex items-center justify-center gap-1">
+                    <i data-lucide="shield" class="w-3 h-3"></i> Accesso Rapido di Test (Admin Only)
                 </div>
                 <div class="grid grid-cols-3 gap-1.5">
                     <button type="button" onclick="quickDevLogin('pure')" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 p-2 rounded-xl text-[10px] font-bold text-center transition">
@@ -175,8 +175,22 @@
     <script>
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
+        const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
 
         let currentAuthMode = 'login'; // 'login' oppure 'register'
+
+        function checkAdminDevVisibility() {
+            // Rende visibile il pannello dei 3 bottoni solo se l'utente ha fatto l'accesso in admin.html
+            const isAdmin = sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true";
+            const devBox = document.getElementById('admin-dev-box');
+            if (devBox) {
+                if (isAdmin) {
+                    devBox.classList.remove('hidden');
+                } else {
+                    devBox.classList.add('hidden');
+                }
+            }
+        }
 
         function getUsersDatabase() {
             const raw = localStorage.getItem(USERS_DB_KEY);
@@ -332,7 +346,7 @@
             }
         }
 
-        // Funzione per testare i 3 piani con 1 click
+        // Funzione rapida di test (riservata ad admin)
         function quickDevLogin(planType) {
             const now = new Date();
             const devUser = {
@@ -376,7 +390,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Controlla se la query string richiede la registrazione immediata
+            checkAdminDevVisibility();
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('mode') === 'register') {
                 switchAuthTab('register');
