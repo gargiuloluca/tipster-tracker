@@ -1,5 +1,57 @@
 [
   {
+    "id": "bet_1793183748437_3",
+    "event_date": "2026-10-28 17:50",
+    "match_name": "Al Shabab - Al Qadsia / Quick Boys - Eemdijk / Leverkusen - Nurnberg",
+    "league": "Mista",
+    "original_tipster": "Stats4Bets bollamaker",
+    "market": "Multipla",
+    "prediction": "Tripla: Al Qadsia 2 + Quick Boys 1 + Leverkusen 1",
+    "odds": 1.95,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793183748437_2",
+    "event_date": "2026-10-28 20:30",
+    "match_name": "Cieza - Granada",
+    "league": "Copa del Rey",
+    "original_tipster": "Stats4Bets bollamaker",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.47,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793183748437_1",
+    "event_date": "2026-10-28 20:45",
+    "match_name": "Fulham - Crystal Palace / Celtic - Dundee Utd / Excelsior M. - Heerenveen",
+    "league": "Mista",
+    "original_tipster": "Stats4Bets",
+    "market": "Multipla",
+    "prediction": "Tripla: Fulham 1X + Celtic 1 + Heerenveen 2",
+    "odds": 1.88,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793183748437_0",
+    "event_date": "2026-10-28 20:00",
+    "match_name": "VVV-Venlo - Vitesse",
+    "league": "Coppa d'Olanda",
+    "original_tipster": "Stats4Bets",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "odds": 1.46,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1793176959290_6",
     "event_date": "2026-10-31 15:00",
     "match_name": "Parma - Udinese",
