@@ -1,18 +1,5 @@
 [
   {
-    "id": "bet_1793176959290_5",
-    "event_date": "2026-10-31 18:00",
-    "match_name": "Genoa - Juventus",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 1.5 Gol",
-    "original_tipster": "AtmBetSignal",
-    "odds": 1.48,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
     "id": "bet_1793176959290_6",
     "event_date": "2026-10-31 15:00",
     "match_name": "Parma - Udinese",
