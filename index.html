@@ -90,6 +90,7 @@
             <div class="hidden md:flex items-center gap-3 lg:gap-6">
                 <a href="#metodo" class="text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
                 <a href="#simulatore" class="text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
+                <a href="#confronto-piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
                 <a href="#selezioni" class="text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici</a>
                 <a href="#storico" class="text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
                 <a href="#piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
@@ -254,6 +255,102 @@
             </div>
         </section>
 
+        <!-- 4.1 SIMULATORE COMPARATIVO PIANI (AtmBet Selection vs AtmBet Signal) -->
+        <section id="confronto-piani" class="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-7 text-white shadow-xl space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <h3 class="text-base sm:text-xl font-bold text-emerald-400 flex items-center gap-2">
+                        <i data-lucide="git-compare" class="w-5 h-5 text-emerald-400"></i> Confronto Performance: AtmBet Selection vs AtmBet Signal
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5">
+                        Confronta in tempo reale i risultati dello storico tra la selezione ristretta d'élite e il flusso completo di tutti i segnali.
+                    </p>
+                </div>
+                
+                <div class="flex items-center gap-2.5 bg-slate-950 p-2 rounded-xl border border-slate-800 self-stretch sm:self-auto justify-between sm:justify-start">
+                    <span class="text-xs text-slate-300 font-medium">Capitale Base (1u =):</span>
+                    <div class="flex items-center gap-1">
+                        <input type="number" id="simUnitValueInput" value="50" min="1" class="w-16 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-emerald-400 rounded-lg py-1 outline-none focus:border-emerald-500" oninput="syncUnitFromInput(this.value)">
+                        <span class="text-xs text-slate-400 font-bold">€</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cards Confronto Piani -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                
+                <!-- Box 1: AtmBet Selection (Max 5/die) -->
+                <div class="bg-slate-950/70 border-2 border-emerald-500/50 rounded-2xl p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
+                    <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[10px] font-black px-3 py-1 rounded-bl-xl tracking-wider uppercase shadow">
+                        Max 5 / Die • Consigliato
+                    </div>
+                    <div>
+                        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Ufficiale</div>
+                        <div class="text-lg font-black text-emerald-400 mb-1">AtmBet Selection</div>
+                        <div class="text-[11px] text-slate-400 mb-4">Algoritmo Signal PURE • Filtro matematico ad alta probabilità (&ge;65%)</div>
+
+                        <div class="grid grid-cols-2 gap-2.5 text-center mb-4">
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Win Rate</div>
+                                <div id="comp-pure-winrate" class="text-lg sm:text-xl font-mono font-black text-white">0.0%</div>
+                            </div>
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Yield / ROI</div>
+                                <div id="comp-pure-roi" class="text-lg sm:text-xl font-mono font-black text-emerald-400">+0.0%</div>
+                            </div>
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Profitto Unità</div>
+                                <div id="comp-pure-units" class="text-lg sm:text-xl font-mono font-black text-emerald-400">+0.00u</div>
+                            </div>
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Guadagno Reale</div>
+                                <div id="comp-pure-fiat" class="text-lg sm:text-xl font-mono font-black text-white">≈ +0.00 €</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+                        <span>Operazioni verificate: <strong id="comp-pure-count" class="text-white font-mono">0</strong></span>
+                        <span class="text-emerald-400 font-bold">Minimo Drawdown</span>
+                    </div>
+                </div>
+
+                <!-- Box 2: AtmBet Signal (Tutti i Tipster / Full Volume) -->
+                <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Globale</div>
+                        <div class="text-lg font-black text-blue-400 mb-1">AtmBet Signal</div>
+                        <div class="text-[11px] text-slate-400 mb-4">Flusso All-Inclusive • Aggregatore completo di tutti i canali e bot</div>
+
+                        <div class="grid grid-cols-2 gap-2.5 text-center mb-4">
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Win Rate</div>
+                                <div id="comp-full-winrate" class="text-lg sm:text-xl font-mono font-black text-white">0.0%</div>
+                            </div>
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Yield / ROI</div>
+                                <div id="comp-full-roi" class="text-lg sm:text-xl font-mono font-black text-blue-400">+0.0%</div>
+                            </div>
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Profitto Unità</div>
+                                <div id="comp-full-units" class="text-lg sm:text-xl font-mono font-black text-blue-400">+0.00u</div>
+                            </div>
+                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
+                                <div class="text-[10px] text-slate-400 uppercase font-mono">Guadagno Reale</div>
+                                <div id="comp-full-fiat" class="text-lg sm:text-xl font-mono font-black text-white">≈ +0.00 €</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
+                        <span>Operazioni verificate: <strong id="comp-full-count" class="text-white font-mono">0</strong></span>
+                        <span class="text-blue-400 font-bold">Alto Volume Operativo</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         <!-- 5. RENDICONTO GLOBALE & CONVERTITORE UNITA' (€) -->
         <section class="space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
@@ -348,7 +445,7 @@
             </div>
         </section>
 
-        <!-- 7. STORICO OTTIMIZZATO: CARDS VERTICALI SU MOBILE, TABELLA SU DESKTOP -->
+        <!-- 7. STORICO CON FILTRO PIANO AGGIUNTO (AtmBet Selection vs AtmBet Signal) -->
         <section id="storico" class="space-y-4 pt-4 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
@@ -358,10 +455,19 @@
                     <p class="text-[11px] sm:text-xs text-slate-400">Archivio certificato delle operazioni concluse.</p>
                 </div>
 
-                <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-900 p-1 rounded-xl border border-slate-800">
-                    <button type="button" onclick="filterPublicHistory('all', this)" id="btn-pubhist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
-                    <button type="button" onclick="filterPublicHistory('won', this)" id="btn-pubhist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
-                    <button type="button" onclick="filterPublicHistory('lost', this)" id="btn-pubhist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Filtro Fornitore/Piano Pubblico -->
+                    <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                        <button type="button" onclick="setTipsterPlanFilter('all', this)" id="btn-tipfilter-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-800 text-white border-slate-700">Tutti (AtmBet Signal)</button>
+                        <button type="button" onclick="setTipsterPlanFilter('pure', this)" id="btn-tipfilter-pure" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Solo AtmBet Selection</button>
+                    </div>
+
+                    <!-- Filtro Esito -->
+                    <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                        <button type="button" onclick="filterPublicHistory('all', this)" id="btn-pubhist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
+                        <button type="button" onclick="filterPublicHistory('won', this)" id="btn-pubhist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
+                        <button type="button" onclick="filterPublicHistory('lost', this)" id="btn-pubhist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
+                    </div>
                 </div>
             </div>
 
@@ -407,7 +513,7 @@
             </div>
         </section>
 
-        <!-- 8. SEZIONE PIANI & CREDITI: NUOVA ARCHITETTURA COMMERCIALE -->
+        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE -->
         <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-2xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Piani d'Abbonamento & Crediti</span>
@@ -441,7 +547,7 @@
                         <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Alto Volume</span>
                         <h3 class="text-base font-black text-white">VIP All-Inclusive</h3>
                         <div class="text-2xl font-black font-mono text-white">24,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
-                        <p class="text-[11px] text-slate-400">Tutti i pronostici generati da tutti i fornitori (30-50 giocate al giorno).</p>
+                        <p class="text-[11px] text-slate-400">Tutti i pronostici generati da tutti i fornitori (AtmBet Signal Full).</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i canali inclusi</li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Singole, doppie e multiple</li>
@@ -464,7 +570,7 @@
                         <div class="text-2xl font-black font-mono text-amber-400">39,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
                         <p class="text-[11px] text-slate-400">Solo i 5 migliori segnali del giorno con probabilità stimata > 65%.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Max 5 selezioni/giorno</strong></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Max 5 selezioni/giorno (AtmBet Selection)</strong></li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Filtro matematico > 65% Win Rate</strong></li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Zero fatica: copi tutto in 2 minuti</li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Minimo drawdown, massima resa</li>
@@ -511,7 +617,7 @@
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
                     </summary>
                     <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
-                        Il piano All-Inclusive è rivolto a chi vuole operare ad alto volume e ricevere tutte le 30-50 giocate giornaliere elaborate dagli algoritmi. Il piano <strong>Signal PURE</strong> effettua una scrematura ferrea, selezionando <strong>solo i 5 pronostici top</strong> con la percentuale di riuscita stimata più elevata (>65%), ideale per chi vuole investire senza dover seguire decine di partite al giorno.
+                        Il piano All-Inclusive è rivolto a chi vuole operare ad alto volume e ricevere tutte le giocate elaborate (flusso <strong>AtmBet Signal</strong>). Il piano <strong>Signal PURE</strong> effettua una scrematura ferrea, selezionando <strong>solo i 5 pronostici top</strong> con la percentuale di riuscita stimata più elevata (&gt;65%), visualizzati pubblicamente come <strong>AtmBet Selection</strong>.
                     </p>
                 </details>
 
@@ -567,6 +673,7 @@
         let currentSimMode = 'yesterday';
         let currentCustomDate = '';
         let currentPublicHistFilter = 'all';
+        let currentTipsterPlanFilter = 'all'; // 'all' (AtmBet Signal) oppure 'pure' (AtmBet Selection)
         let cachedAllBets = [];
         
         let historyDisplayLimit = 15;
@@ -668,27 +775,63 @@
                 } catch(e) {}
             }
 
-            return bets.map((b, idx) => ({
-                id: String(b.id || idx),
-                event_date: b.event_date || b.date || '',
-                league: b.league || 'Generale',
-                match_name: b.match_name || b.match || 'Evento',
-                market: b.market || 'Mercato',
-                prediction: b.prediction || b.pick || '-',
-                original_tipster: 'AtmBet Selection',
-                odds: parseFloat(b.odds || b.odd || 1.80),
-                stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
-                status: b.status || 'pending',
-                is_published: b.is_published !== undefined ? b.is_published : true
-            })).filter(b => b.is_published === true);
+            return bets.map((b, idx) => {
+                const rawTipster = (b.tipster || b.original_tipster || 'AtmBetSignal').trim();
+                const isPureCandidate = (
+                    b.isPure === true ||
+                    rawTipster === 'AtmBetSignal' || 
+                    rawTipster === 'AtmBet Selection' ||
+                    rawTipster === 'AtmBet' ||
+                    rawTipster.toLowerCase().includes('atmbetsignal')
+                );
+
+                return {
+                    id: String(b.id || idx),
+                    event_date: b.event_date || b.date || '',
+                    league: b.league || 'Generale',
+                    match_name: b.match_name || b.match || 'Evento',
+                    market: b.market || 'Mercato',
+                    prediction: b.prediction || b.pick || '-',
+                    original_tipster: rawTipster,
+                    is_pure: isPureCandidate,
+                    // Se fa parte del piano 5 segnali, mostriamo "AtmBet Selection", altrimenti "AtmBet Signal"
+                    public_brand: isPureCandidate ? 'AtmBet Selection' : 'AtmBet Signal',
+                    odds: parseFloat(b.odds || b.odd || 1.80),
+                    stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
+                    status: (b.status || 'pending').toLowerCase(),
+                    is_published: b.is_published !== undefined ? b.is_published : true
+                };
+            }).filter(b => b.is_published === true);
         }
 
         function setUnitValue(val, btnElement) {
             currentMultiplier = parseFloat(val);
+            const inputVal = document.getElementById('simUnitValueInput');
+            if (inputVal) inputVal.value = currentMultiplier;
+
             document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('unit-pill-active'));
             if (btnElement) btnElement.classList.add('unit-pill-active');
             updateMonetaryCalculations();
             calculateSimulationPerformance();
+            calculatePlansComparison();
+        }
+
+        function syncUnitFromInput(val) {
+            const parsed = parseFloat(val);
+            if (!isNaN(parsed) && parsed > 0) {
+                currentMultiplier = parsed;
+                document.querySelectorAll('.unit-btn').forEach(b => {
+                    const bVal = parseFloat(b.innerText.replace('€', ''));
+                    if (bVal === currentMultiplier) {
+                        b.classList.add('unit-pill-active');
+                    } else {
+                        b.classList.remove('unit-pill-active');
+                    }
+                });
+                updateMonetaryCalculations();
+                calculateSimulationPerformance();
+                calculatePlansComparison();
+            }
         }
 
         function updateMonetaryCalculations() {
@@ -793,18 +936,22 @@
             const fiatSimAmount = netProfit * currentMultiplier;
 
             const profitEl = document.getElementById('sim-profit-units');
-            profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
-            profitEl.className = `text-xl sm:text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            if (profitEl) {
+                profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+                profitEl.className = `text-xl sm:text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            }
 
             const fiatEl = document.getElementById('sim-profit-fiat');
-            fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
-            fiatEl.className = `text-[11px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
+                fiatEl.className = `text-[11px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            }
 
-            document.getElementById('sim-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
-            document.getElementById('sim-winrate').innerText = winRate + '%';
-            document.getElementById('sim-resolved-count').innerText = total;
-            document.getElementById('sim-won-count').innerText = won + 'V';
-            document.getElementById('sim-lost-count').innerText = lost + 'P';
+            if (document.getElementById('sim-roi')) document.getElementById('sim-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
+            if (document.getElementById('sim-winrate')) document.getElementById('sim-winrate').innerText = winRate + '%';
+            if (document.getElementById('sim-resolved-count')) document.getElementById('sim-resolved-count').innerText = total;
+            if (document.getElementById('sim-won-count')) document.getElementById('sim-won-count').innerText = won + 'V';
+            if (document.getElementById('sim-lost-count')) document.getElementById('sim-lost-count').innerText = lost + 'P';
         }
 
         function calculateGlobalPerformance() {
@@ -829,12 +976,86 @@
             globalNetProfitUnits = netProfit;
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
 
-            document.getElementById('stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
-            document.getElementById('stat-winrate').innerText = winRate + '%';
-            document.getElementById('stat-profit-units').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
-            document.getElementById('stat-total-resolved').innerText = total;
+            if (document.getElementById('stat-roi')) document.getElementById('stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
+            if (document.getElementById('stat-winrate')) document.getElementById('stat-winrate').innerText = winRate + '%';
+            if (document.getElementById('stat-profit-units')) document.getElementById('stat-profit-units').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+            if (document.getElementById('stat-total-resolved')) document.getElementById('stat-total-resolved').innerText = total;
 
             updateMonetaryCalculations();
+        }
+
+        function calculatePlansComparison() {
+            const completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
+
+            // 1. Gruppo AtmBet Selection (Signal PURE / Top 5)
+            const pureBets = completed.filter(b => b.is_pure === true);
+            let pureWins = 0, pureNetUnits = 0, pureStakeTotal = 0;
+            pureBets.forEach(b => {
+                const s = b.stake || 1.0;
+                pureStakeTotal += s;
+                if (b.status === 'won') {
+                    pureWins++;
+                    pureNetUnits += (b.odds - 1) * s;
+                } else if (b.status === 'lost') {
+                    pureNetUnits -= s;
+                }
+            });
+            const pureWR = pureBets.length > 0 ? ((pureWins / pureBets.length) * 100).toFixed(1) : '0.0';
+            const pureROI = pureStakeTotal > 0 ? ((pureNetUnits / pureStakeTotal) * 100).toFixed(1) : '0.0';
+            const pureFiat = pureNetUnits * currentMultiplier;
+
+            // 2. Gruppo AtmBet Signal (Tutti i Pronostici / Full Volume)
+            let fullWins = 0, fullNetUnits = 0, fullStakeTotal = 0;
+            completed.forEach(b => {
+                const s = b.stake || 1.0;
+                fullStakeTotal += s;
+                if (b.status === 'won') {
+                    fullWins++;
+                    fullNetUnits += (b.odds - 1) * s;
+                } else if (b.status === 'lost') {
+                    fullNetUnits -= s;
+                }
+            });
+            const fullWR = completed.length > 0 ? ((fullWins / completed.length) * 100).toFixed(1) : '0.0';
+            const fullROI = fullStakeTotal > 0 ? ((fullNetUnits / fullStakeTotal) * 100).toFixed(1) : '0.0';
+            const fullFiat = fullNetUnits * currentMultiplier;
+
+            // 3. Render Comparativo
+            const pureWREl = document.getElementById('comp-pure-winrate');
+            const pureROIEl = document.getElementById('comp-pure-roi');
+            const pureUnitsEl = document.getElementById('comp-pure-units');
+            const pureFiatEl = document.getElementById('comp-pure-fiat');
+            const pureCountEl = document.getElementById('comp-pure-count');
+
+            if (pureWREl) pureWREl.innerText = pureWR + '%';
+            if (pureROIEl) pureROIEl.innerText = (pureROI >= 0 ? '+' : '') + pureROI + '%';
+            if (pureUnitsEl) {
+                pureUnitsEl.innerText = (pureNetUnits >= 0 ? '+' : '') + pureNetUnits.toFixed(2) + 'u';
+                pureUnitsEl.className = `text-lg sm:text-xl font-mono font-black ${pureNetUnits >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            }
+            if (pureFiatEl) {
+                pureFiatEl.innerText = `≈ ${pureFiat >= 0 ? '+' : ''}${pureFiat.toFixed(2)} €`;
+                pureFiatEl.className = `text-lg sm:text-xl font-mono font-black ${pureFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
+            }
+            if (pureCountEl) pureCountEl.innerText = `${pureBets.length} (${pureWins}V - ${pureBets.length - pureWins}P)`;
+
+            const fullWREl = document.getElementById('comp-full-winrate');
+            const fullROIEl = document.getElementById('comp-full-roi');
+            const fullUnitsEl = document.getElementById('comp-full-units');
+            const fullFiatEl = document.getElementById('comp-full-fiat');
+            const fullCountEl = document.getElementById('comp-full-count');
+
+            if (fullWREl) fullWREl.innerText = fullWR + '%';
+            if (fullROIEl) fullROIEl.innerText = (fullROI >= 0 ? '+' : '') + fullROI + '%';
+            if (fullUnitsEl) {
+                fullUnitsEl.innerText = (fullNetUnits >= 0 ? '+' : '') + fullNetUnits.toFixed(2) + 'u';
+                fullUnitsEl.className = `text-lg sm:text-xl font-mono font-black ${fullNetUnits >= 0 ? 'text-blue-400' : 'text-rose-400'}`;
+            }
+            if (fullFiatEl) {
+                fullFiatEl.innerText = `≈ ${fullFiat >= 0 ? '+' : ''}${fullFiat.toFixed(2)} €`;
+                fullFiatEl.className = `text-lg sm:text-xl font-mono font-black ${fullFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
+            }
+            if (fullCountEl) fullCountEl.innerText = `${completed.length} (${fullWins}V - ${completed.length - fullWins}P)`;
         }
 
         window.togglePublicParlay = function(betId) {
@@ -859,6 +1080,7 @@
 
         function renderPublicCards() {
             const container = document.getElementById('public-bets-container');
+            if (!container) return;
             container.innerHTML = '';
 
             const todayStr = getLocalDateString(new Date());
@@ -928,7 +1150,9 @@
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">AtmBet Selection</span>
+                            <span class="${bet.is_pure ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-blue-400 bg-blue-500/10 border-blue-500/20'} font-bold uppercase text-[9px] px-1.5 py-0.5 rounded border truncate max-w-[125px] inline-block text-right">
+                                ${bet.public_brand}
+                            </span>
                         </div>
                     </div>
                 `;
@@ -936,6 +1160,24 @@
             });
 
             lucide.createIcons();
+        }
+
+        function setTipsterPlanFilter(type, element) {
+            currentTipsterPlanFilter = type;
+            historyDisplayLimit = 15;
+            
+            const btnAll = document.getElementById('btn-tipfilter-all');
+            const btnPure = document.getElementById('btn-tipfilter-pure');
+
+            if (type === 'all') {
+                if (btnAll) btnAll.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-800 text-white border-slate-700";
+                if (btnPure) btnPure.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
+            } else {
+                if (btnAll) btnAll.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
+                if (btnPure) btnPure.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
+            }
+
+            renderPublicHistory();
         }
 
         function filterPublicHistory(type, element) {
@@ -970,6 +1212,12 @@
 
             let completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
 
+            // Filtro tipster plan
+            if (currentTipsterPlanFilter === 'pure') {
+                completed = completed.filter(b => b.is_pure === true);
+            }
+
+            // Filtro esito
             if (currentPublicHistFilter === 'won') completed = completed.filter(b => b.status === 'won');
             if (currentPublicHistFilter === 'lost') completed = completed.filter(b => b.status === 'lost');
 
@@ -1021,8 +1269,12 @@
                         </div>
                     </div>
                     
-                    <div class="font-bold text-white text-xs leading-snug mb-2">
+                    <div class="font-bold text-white text-xs leading-snug mb-1">
                         ${bet.match_name}
+                    </div>
+
+                    <div class="text-[10px] mb-2">
+                        <span class="${bet.is_pure ? 'text-emerald-400' : 'text-blue-400'} font-bold">${bet.public_brand}</span>
                     </div>
 
                     <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800/80 flex items-center justify-between">
@@ -1049,7 +1301,7 @@
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
                     <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
                         <div class="break-words">${bet.match_name}</div>
-                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-emerald-400 font-semibold">AtmBet Selection</span></div>
+                        <div class="text-[9px] font-normal text-slate-500">${bet.league} • <span class="${bet.is_pure ? 'text-emerald-400 font-semibold' : 'text-blue-400 font-semibold'}">${bet.public_brand}</span></div>
                     </td>
                     <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
                         <div class="break-words">${bet.prediction}</div>
@@ -1075,6 +1327,7 @@
             cachedAllBets = await fetchAllBets();
             calculateGlobalPerformance();
             calculateSimulationPerformance();
+            calculatePlansComparison();
             renderPublicCards();
             renderPublicHistory();
             lucide.createIcons();
