@@ -151,7 +151,7 @@
                 </div>
             </section>
 
-            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM BOT -->
+            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM BOT (CAMPI PROTETTI/OSCURATI) -->
             <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 border border-blue-500/30 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
@@ -162,7 +162,7 @@
                             <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
                                 Dispatcher Canali Telegram (AtmBet Official)
                             </h2>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Invia con 1 click le selezioni PURE o il flusso completo direttamente ai rispettivi canali riservati con splitting automatico anti-lunghezza.</p>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">Credenziali salvate e protette. Invia con 1 click le selezioni PURE o il flusso completo ai rispettivi canali.</p>
                         </div>
                     </div>
                     <button type="button" onclick="saveTelegramConfig()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition self-start sm:self-auto flex items-center gap-1.5 shadow">
@@ -173,15 +173,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                     <div>
                         <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Bot Token API (@BotFather)</label>
-                        <input type="text" id="tg_token" placeholder="Es. 8398232140:AAGBk..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-blue-500">
+                        <input type="password" id="tg_token" placeholder="••••••••••••••••••••••••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-blue-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Chat ID Canale PURE (Top 5)</label>
-                        <input type="text" id="tg_channel_pure" placeholder="Es. -1004237267545" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-amber-500">
+                        <input type="password" id="tg_channel_pure" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-amber-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Chat ID Canale FULL (All-Inclusive)</label>
-                        <input type="text" id="tg_channel_full" placeholder="Es. -1004390945826" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-emerald-500">
+                        <input type="password" id="tg_channel_full" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
@@ -548,7 +548,7 @@
         const GH_TOKEN_KEY = 'atmbet_gh_token';
         const TG_CONF_KEY = 'atmbet_tg_config';
 
-        // Credenziali Telegram predefinite hardcoded
+        // Credenziali Telegram predefinite hardcoded (visibili solo internamente al codice)
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
             channel_pure: "-1004237267545",
@@ -630,8 +630,12 @@
             statusEl.innerText = "Invio in corso...";
 
             if (channelType === 'pure') {
-                // CANALE PURE: Max 5 Top selezioni
-                const toSend = pendings.filter(b => (b.original_tipster || '').toLowerCase().includes('atmbet')).slice(0, 5);
+                // CANALE PURE: Max 5 Top selezioni esclusive AtmBet
+                const toSend = pendings.filter(b => {
+                    const tip = (b.original_tipster || '').trim().toLowerCase();
+                    return tip === 'atmbetsignal' || tip === 'atmbet selection' || tip === 'atmbet';
+                }).slice(0, 5);
+
                 if (toSend.length === 0) {
                     alert("Nessuna selezione PURE trovata per oggi.");
                     statusEl.innerText = "";
@@ -660,7 +664,7 @@
                 }
 
             } else {
-                // CANALE ALL-INCLUSIVE: Suddivisione a batch per non eccedere il limite caratteri di Telegram
+                // CANALE ALL-INCLUSIVE: Suddivisione a lotti (batch da 8) per rispettare il limite di 4096 caratteri
                 const toSend = pendings;
                 const BATCH_SIZE = 8;
                 const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
@@ -697,7 +701,7 @@
                         return;
                     }
 
-                    // Pausa per rispettare le policy antispam di Telegram
+                    // Pausa tra messaggi antispam Telegram
                     await new Promise(resolve => setTimeout(resolve, 400));
                 }
 
@@ -1394,10 +1398,15 @@
                 const roi = t.totalStake > 0 ? ((t.netProfit / t.totalStake) * 100).toFixed(1) : 0;
                 const fiatProfit = t.netProfit * unitVal;
 
+                // Rank numerico di base
                 let rankBadge = `<span class="font-mono text-slate-400 font-bold">${index + 1}</span>`;
-                if (index === 0) rankBadge = `<span class="text-sm">🥇</span>`;
-                if (index === 1) rankBadge = `<span class="text-sm">🥈</span>`;
-                if (index === 2) rankBadge = `<span class="text-sm">🥉</span>`;
+
+                // Assegna medaglie sul podio ESCLUSIVAMENTE a chi ha un profitto netto reale (> 0u)
+                if (t.netProfit > 0) {
+                    if (index === 0) rankBadge = `<span class="text-sm">🥇</span>`;
+                    else if (index === 1) rankBadge = `<span class="text-sm">🥈</span>`;
+                    else if (index === 2) rankBadge = `<span class="text-sm">🥉</span>`;
+                }
 
                 const tr = document.createElement('tr');
                 tr.className = t.netProfit >= 0 
@@ -1409,7 +1418,7 @@
                     <td class="py-2.5 px-3">
                         <div class="font-bold text-white flex items-center gap-1.5">
                             <span>${t.name}</span>
-                            ${index === 0 ? '<span class="text-[8px] bg-amber-500/20 text-amber-400 px-1 py-0.2 rounded font-black uppercase tracking-wider">Top Performer</span>' : ''}
+                            ${(index === 0 && t.netProfit > 0) ? '<span class="text-[8px] bg-amber-500/20 text-amber-400 px-1 py-0.2 rounded font-black uppercase tracking-wider">Top Performer</span>' : ''}
                         </div>
                     </td>
                     <td class="py-2.5 px-3 text-center font-mono text-slate-300">
@@ -1556,11 +1565,16 @@
             }
 
             updateClusterOptimizerSummary(allBets);
+
+            // Filtro rigoroso per Pure Signal: include solo AtmBetSignal ufficiale, esclude AtmBetSignal XG
             if (currentClusterMode === 'pure') {
-                allBets = allBets.filter(b => (b.original_tipster || '').toLowerCase().includes('atmbet'));
+                allBets = allBets.filter(b => {
+                    const tip = (b.original_tipster || '').trim().toLowerCase();
+                    return tip === 'atmbetsignal' || tip === 'atmbet selection' || tip === 'atmbet';
+                });
             } else if (currentClusterMode === 'elite') {
                 const eliteList = ['pronostici1', 'calcioai', 'atmbetsignal', 'zcode'];
-                allBets = allBets.filter(b => eliteList.some(name => (b.original_tipster || '').toLowerCase().includes(name)));
+                allBets = allBets.filter(b => eliteList.some(name => (b.original_tipster || '').toLowerCase() === name));
             }
 
             let filtered = allBets;
