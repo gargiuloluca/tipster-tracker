@@ -6,7 +6,7 @@
     <title>AtmBet Console | Tipster Tracker & Direct GitHub Sync</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -213,7 +213,6 @@
                         </div>
                     </div>
 
-                    <!-- Bottoni di selezione cluster con 1-clic -->
                     <div class="flex flex-wrap items-center gap-1.5">
                         <button type="button" onclick="setClusterFilter('pure', this)" id="btn-cluster-pure" class="cluster-btn px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold transition flex items-center gap-1">
                             <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400"></i> Pure Signal (Top 5 / >65%)
@@ -549,6 +548,13 @@
         const GH_TOKEN_KEY = 'atmbet_gh_token';
         const TG_CONF_KEY = 'atmbet_tg_config';
 
+        // Credenziali Telegram predefinite hardcoded
+        const DEFAULT_TG_CONFIG = {
+            token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
+            channel_pure: "-1004237267545",
+            channel_full: "-1004390945826"
+        };
+
         let currentFilter = 'all';
         let currentTipsterFilter = 'all';
         let currentSimMode = 'yesterday';
@@ -558,17 +564,21 @@
         function loadTelegramConfig() {
             try {
                 const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
-                document.getElementById('tg_token').value = conf.token || '8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY';
-                document.getElementById('tg_channel_pure').value = conf.channel_pure || '-1004237267545';
-                document.getElementById('tg_channel_full').value = conf.channel_full || '-1004390945826';
-            } catch(e) {}
+                document.getElementById('tg_token').value = conf.token || DEFAULT_TG_CONFIG.token;
+                document.getElementById('tg_channel_pure').value = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+                document.getElementById('tg_channel_full').value = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+            } catch(e) {
+                document.getElementById('tg_token').value = DEFAULT_TG_CONFIG.token;
+                document.getElementById('tg_channel_pure').value = DEFAULT_TG_CONFIG.channel_pure;
+                document.getElementById('tg_channel_full').value = DEFAULT_TG_CONFIG.channel_full;
+            }
         }
 
         function saveTelegramConfig() {
             const conf = {
-                token: document.getElementById('tg_token').value.trim(),
-                channel_pure: document.getElementById('tg_channel_pure').value.trim(),
-                channel_full: document.getElementById('tg_channel_full').value.trim()
+                token: document.getElementById('tg_token').value.trim() || DEFAULT_TG_CONFIG.token,
+                channel_pure: document.getElementById('tg_channel_pure').value.trim() || DEFAULT_TG_CONFIG.channel_pure,
+                channel_full: document.getElementById('tg_channel_full').value.trim() || DEFAULT_TG_CONFIG.channel_full
             };
             localStorage.setItem(TG_CONF_KEY, JSON.stringify(conf));
             alert("Configurazione Telegram salvata nel browser!");
@@ -591,9 +601,9 @@
 
         async function dispatchTelegramSignals(channelType) {
             const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
-            const token = conf.token || '8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY';
-            const channelPure = conf.channel_pure || '-1004237267545';
-            const channelFull = conf.channel_full || '-1004390945826';
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
 
             if (!token) {
                 alert("Inserisci e salva prima il Bot Token di Telegram.");
