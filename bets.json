@@ -1,18 +1,5 @@
 [
   {
-    "id": "bet_1793200724442_0",
-    "event_date": "2026-10-28 18:30",
-    "match_name": "Inter Miami - FC Cincinnati",
-    "league": "MLS",
-    "original_tipster": "ZCODE",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.51,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
     "id": "bet_1793176959290_6",
     "event_date": "2026-10-31 15:00",
     "match_name": "Parma - Udinese",
@@ -325,6 +312,19 @@
     "is_published": true
   },
   {
+    "id": "bet_1793200724442_0",
+    "event_date": "2026-10-28 18:30",
+    "match_name": "Inter Miami - FC Cincinnati",
+    "league": "MLS",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "ZCODE",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1793185045124_3",
     "event_date": "2026-10-28 18:30",
     "match_name": "AC Milan - Bologna",
@@ -361,7 +361,7 @@
     "odds": 1.8,
     "stake": 1,
     "status": "pending",
-    "is_published": true
+    "is_published": false
   },
   {
     "id": "bet_1793168991492_12",
