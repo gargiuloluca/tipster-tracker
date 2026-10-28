@@ -1,5 +1,18 @@
 [
   {
+    "id": "bet_1793168131736_0",
+    "event_date": "2026-10-28 23:30",
+    "match_name": "Fluminense - Internacional",
+    "league": "Brazil Serie A",
+    "original_tipster": "BetMines PreMatch",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.85,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
     "id": "bet_1793124731518_3",
     "event_date": "2026-10-28 20:45",
     "match_name": "Genoa - Juventus",
