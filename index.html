@@ -976,12 +976,15 @@
 
             return bets.map((b, idx) => {
                 const rawTipster = (b.tipster || b.original_tipster || 'AtmBetSignal').trim();
-                const isPureCandidate = (
+                const rawLower = rawTipster.toLowerCase();
+
+                // Regola rigorosa: PURE include SOLO il canale principale AtmBetSignal / AtmBet Selection ed esclude AtmBetSignal XG
+                const isXG = rawLower.includes('xg');
+                const isPureCandidate = !isXG && (
                     b.isPure === true ||
-                    rawTipster === 'AtmBetSignal' || 
-                    rawTipster === 'AtmBet Selection' ||
-                    rawTipster === 'AtmBet' ||
-                    rawTipster.toLowerCase().includes('atmbetsignal')
+                    rawLower === 'atmbetsignal' || 
+                    rawLower === 'atmbet selection' ||
+                    rawLower === 'atmbet'
                 );
 
                 return {
@@ -993,6 +996,7 @@
                     prediction: b.prediction || b.pick || '-',
                     original_tipster: rawTipster,
                     is_pure: isPureCandidate,
+                    // Se fa parte del piano 5 segnali, mostriamo "AtmBet Selection", altrimenti "AtmBet Signal"
                     public_brand: isPureCandidate ? 'AtmBet Selection' : 'AtmBet Signal',
                     odds: parseFloat(b.odds || b.odd || 1.80),
                     stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
@@ -1185,7 +1189,7 @@
         function calculatePlansComparison() {
             const completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
 
-            // 1. Gruppo AtmBet Selection (Signal PURE / Top 5)
+            // 1. Gruppo AtmBet Selection (Signal PURE / Top 5 - Solo AtmBetSignal Ufficiale)
             const pureBets = completed.filter(b => b.is_pure === true);
             let pureWins = 0, pureNetUnits = 0, pureStakeTotal = 0;
             pureBets.forEach(b => {
@@ -1272,8 +1276,7 @@
         function scrollPublicCards(direction) {
             const container = document.getElementById('public-bets-container');
             if (!container) return;
-            const scrollAmount = direction === 'left' ? -320 : 320;
-            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            container.scrollBy({ left: direction === 'left' ? -320 : 320, behavior: 'smooth' });
         }
 
         function renderPublicCards() {
