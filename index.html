@@ -108,7 +108,7 @@
     </nav>
 
     <!-- MAIN BODY -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-12 sm:space-y-16 flex-1 w-full">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-10 sm:space-y-14 flex-1 w-full">
 
         <!-- 2. HERO SECTION -->
         <section class="text-center max-w-3xl mx-auto pt-2 pb-2 space-y-4">
@@ -138,6 +138,26 @@
                     </a>
                 </div>
             </div>
+        </section>
+
+        <!-- BANNER TELEGRAM DINAMICO IN BASE ALL'ABBONAMENTO -->
+        <section id="telegram-connect-box" class="bg-gradient-to-r from-blue-950/70 via-slate-900 to-slate-950 border border-blue-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div id="tg-banner-title" class="text-sm font-bold text-white flex items-center gap-2">
+                        Ricevi i Segnali su Telegram in Tempo Reale
+                    </div>
+                    <p id="tg-banner-desc" class="text-xs text-slate-400 mt-0.5">
+                        Accedi con il tuo account per collegare il Canale Telegram ufficiale dedicato al tuo piano.
+                    </p>
+                </div>
+            </div>
+            <a id="tg-action-btn" href="auth.html" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 shrink-0">
+                <i data-lucide="external-link" class="w-4 h-4"></i> <span id="tg-btn-label">Accedi per Collegare</span>
+            </a>
         </section>
 
         <!-- 3. SEZIONE METODO STRATEGICO -->
@@ -170,7 +190,7 @@
                         <i data-lucide="cpu" class="w-4 h-4"></i>
                     </div>
                     <h3 class="text-sm font-bold text-white">3. Risultati Certificati API</h3>
-                    <p class="text-slate-400 leading-relaxed">Al fischio finale dei match, i nostri bot GitHub Actions interrogano i feed mondiali ufficiali e certificano lo storico senza possibilità di alterazione.</p>
+                    <p class="text-slate-400 leading-relaxed">Al fischio finale dei match, i nostri bot interrogano i feed mondiali ufficiali e certificano lo storico senza possibilità di alterazione.</p>
                 </div>
             </div>
 
@@ -255,7 +275,7 @@
             </div>
         </section>
 
-        <!-- 4.1 SIMULATORE COMPARATIVO PIANI (AtmBet Selection vs AtmBet Signal) -->
+        <!-- 4.1 CONFRONTO PERFORMANCE: AtmBet Selection vs AtmBet Signal -->
         <section id="confronto-piani" class="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-7 text-white shadow-xl space-y-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
                 <div>
@@ -278,8 +298,7 @@
 
             <!-- Cards Confronto Piani -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                
-                <!-- Box 1: AtmBet Selection (Max 5/die) -->
+                <!-- Box 1: AtmBet Selection -->
                 <div class="bg-slate-950/70 border-2 border-emerald-500/50 rounded-2xl p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
                     <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[10px] font-black px-3 py-1 rounded-bl-xl tracking-wider uppercase shadow">
                         Max 5 / Die • Consigliato
@@ -315,7 +334,7 @@
                     </div>
                 </div>
 
-                <!-- Box 2: AtmBet Signal (Tutti i Tipster / Full Volume) -->
+                <!-- Box 2: AtmBet Signal -->
                 <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
                     <div>
                         <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Globale</div>
@@ -347,7 +366,6 @@
                         <span class="text-blue-400 font-bold">Alto Volume Operativo</span>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -472,11 +490,8 @@
             </div>
 
             <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-                
                 <!-- VISTA MOBILE: FEED A CARD VERTICALI -->
-                <div class="block md:hidden max-h-[500px] overflow-y-auto custom-scroll-box p-3 space-y-2.5" id="public-history-mobile-container">
-                    <!-- Popolato da JS -->
-                </div>
+                <div class="block md:hidden max-h-[500px] overflow-y-auto custom-scroll-box p-3 space-y-2.5" id="public-history-mobile-container"></div>
 
                 <!-- VISTA DESKTOP: TABELLA TRADIZIONALE -->
                 <div class="hidden md:block max-h-[460px] overflow-y-auto overflow-x-auto custom-scroll-box">
@@ -492,9 +507,7 @@
                                 <th class="py-2.5 px-3 text-right">P/L Netto</th>
                             </tr>
                         </thead>
-                        <tbody id="public-history-tbody" class="divide-y divide-slate-800/60 font-medium">
-                            <!-- Popolato da JS per desktop -->
-                        </tbody>
+                        <tbody id="public-history-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
                     </table>
                 </div>
 
@@ -550,8 +563,8 @@
                         <p class="text-[11px] text-slate-400">Tutti i pronostici generati da tutti i fornitori (AtmBet Signal Full).</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i canali inclusi</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Singole, doppie e multiple</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Ideale per chi fa alto turnover</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Canale Telegram Dedicato</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Ideale per alto turnover</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
@@ -571,7 +584,7 @@
                         <p class="text-[11px] text-slate-400">Solo i 5 migliori segnali del giorno con probabilità stimata > 65%.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Max 5 selezioni/giorno (AtmBet Selection)</strong></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Filtro matematico > 65% Win Rate</strong></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Canale Telegram Esclusivo PURE</strong></li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Zero fatica: copi tutto in 2 minuti</li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Minimo drawdown, massima resa</li>
                         </ul>
@@ -590,8 +603,8 @@
                         <p class="text-[11px] text-slate-400">Il ciclo ideale per massimizzare la crescita composta su base trimestrale.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i vantaggi di Signal PURE</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Canale Telegram Privato PURE</li>
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Risparmi oltre 30€ sul canone</li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Assistenza prioritaria dedicata</li>
                         </ul>
                     </div>
                     <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
@@ -617,7 +630,7 @@
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
                     </summary>
                     <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
-                        Il piano All-Inclusive è rivolto a chi vuole operare ad alto volume e ricevere tutte le giocate elaborate (flusso <strong>AtmBet Signal</strong>). Il piano <strong>Signal PURE</strong> effettua una scrematura ferrea, selezionando <strong>solo i 5 pronostici top</strong> con la percentuale di riuscita stimata più elevata (&gt;65%), visualizzati pubblicamente come <strong>AtmBet Selection</strong>.
+                        Il piano All-Inclusive è rivolto a chi vuole operare ad alto volume e ricevere tutte le giocate elaborate (flusso <strong>AtmBet Signal</strong>). Il piano <strong>Signal PURE</strong> effettua una scrematura ferrea, selezionando <strong>solo i 5 pronostici top</strong> con la percentuale di riuscita stimata più elevata (&gt;65%), visualizzati pubblicamente come <strong>AtmBet Selection</strong> e inviati su un canale Telegram dedicato.
                     </p>
                 </details>
 
@@ -637,7 +650,7 @@
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
                     </summary>
                     <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
-                        Sì. Tutte le quote e i match vengono inseriti a mercato aperto prima del calcio d'inizio. Al termine delle partite lo script automatico GitHub interroga API-Football e certifica l'esito reale nello storico.
+                        Sì. Tutte le quote e i match vengono inseriti a mercato aperto prima del calcio d'inizio. Al termine delle partite lo script interroga i dati ufficiali e certifica l'esito reale nello storico.
                     </p>
                 </details>
             </div>
@@ -663,12 +676,21 @@
         </div>
     </footer>
 
-    <!-- LOGICA JAVASCRIPT OTTIMIZZATA & CONTROLLO ACCESSI -->
+    <!-- LOGICA JAVASCRIPT OTTIMIZZATA, CONTROLLO ACCESSI & TELEGRAM BANNER -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
+
+        // =========================================================================
+        // CONFIGURAZIONE TELEGRAM: INCOLLA QUI I LINK INVITO DEI TUOI 2 CANALI
+        // =========================================================================
+        const TELEGRAM_CONFIG = {
+            pure_channel_invite: "https://t.me/+LINK_INVITO_PURE_QUI",  // Incolla link Canale PURE
+            full_channel_invite: "https://t.me/+LINK_INVITO_FULL_QUI",  // Incolla link Canale All-Inclusive
+            bot_username: "AtmBetOfficialBot"                           // Il tuo Bot Telegram
+        };
 
         let currentMultiplier = 50;
         let globalNetProfitUnits = 0;
@@ -678,7 +700,6 @@
         let currentTipsterPlanFilter = 'all'; // 'all' (AtmBet Signal) oppure 'pure' (AtmBet Selection)
         let cachedAllBets = [];
         let activeUser = null;
-        
         let historyDisplayLimit = 15;
 
         function getActiveUserSession() {
@@ -692,7 +713,6 @@
 
         function saveActiveUserSession(user) {
             localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(user));
-            // Sincronizza anche nel database utenti
             try {
                 const rawUsers = localStorage.getItem(USERS_DB_KEY);
                 if (rawUsers) {
@@ -704,6 +724,44 @@
                     }
                 }
             } catch(e) {}
+        }
+
+        function updateTelegramBanner() {
+            const user = getActiveUserSession();
+            const btn = document.getElementById('tg-action-btn');
+            const title = document.getElementById('tg-banner-title');
+            const desc = document.getElementById('tg-banner-desc');
+            const label = document.getElementById('tg-btn-label');
+            if (!btn || !title) return;
+
+            if (!user) {
+                title.innerHTML = "Ricevi i Segnali su Telegram in Tempo Reale";
+                desc.innerText = "Accedi o registrati per unirti al canale Telegram dedicato al tuo abbonamento.";
+                btn.href = "auth.html";
+                btn.removeAttribute('target');
+                label.innerText = "Accedi per Collegare";
+                return;
+            }
+
+            if (user.plan === 'pure') {
+                title.innerHTML = "⚡ Canale Esclusivo Telegram: AtmBet Selection (Signal PURE)";
+                desc.innerText = "Il tuo piano include i 5 segnali top del giorno inviati direttamente su Telegram prima dei match.";
+                btn.href = TELEGRAM_CONFIG.pure_channel_invite;
+                btn.target = "_blank";
+                label.innerText = "Entra nel Canale PURE";
+            } else if (user.plan === 'all_inclusive') {
+                title.innerHTML = "🌐 Canale VIP Telegram: AtmBet Signal All-Inclusive";
+                desc.innerText = "Accesso illimitato al flusso completo di tutti i segnali e campionati su Telegram.";
+                btn.href = TELEGRAM_CONFIG.full_channel_invite;
+                btn.target = "_blank";
+                label.innerText = "Entra nel Canale VIP";
+            } else {
+                title.innerHTML = "🎟️ Bot Ufficiale AtmBet";
+                desc.innerText = `Hai ${user.credits || 0} crediti disponibili. Usa il bot per ricevere gli avvisi operativi.`;
+                btn.href = `https://t.me/${TELEGRAM_CONFIG.bot_username}`;
+                btn.target = "_blank";
+                label.innerText = "Avvia Bot Ufficiale";
+            }
         }
 
         function renderNavbarUserStatus() {
@@ -756,6 +814,7 @@
             localStorage.removeItem(CURRENT_SESSION_KEY);
             activeUser = null;
             renderNavbarUserStatus();
+            updateTelegramBanner();
             renderPublicCards();
         };
 
@@ -814,6 +873,7 @@
 
             // Ridisegna immediatamente le selezioni e l'interfaccia
             renderNavbarUserStatus();
+            updateTelegramBanner();
             renderPublicCards();
         };
 
@@ -1514,6 +1574,7 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             renderNavbarUserStatus();
+            updateTelegramBanner();
             setupDynamicDatePresets();
             cachedAllBets = await fetchAllBets();
             calculateGlobalPerformance();
