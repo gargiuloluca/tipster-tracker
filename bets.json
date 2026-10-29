@@ -1,33 +1,5 @@
 [
   {
-    "id": "bet_1793281721182_1",
-    "event_date": "2026-10-30 02:00",
-    "match_name": "Alebrijes de Oaxaca - Mineros de Zacatecas",
-    "league": "Messico Liga de Expansion",
-    "original_tipster": "BetMines",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "odds": 1.53,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793281721182_0",
-    "event_date": "2026-10-30 12:30",
-    "match_name": "Sardarapat - Van",
-    "league": "Armenia Premier League",
-    "original_tipster": "BetMines",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.85,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
@@ -54,6 +26,34 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": false
+  },
+  {
+    "id": "bet_1793281721182_0",
+    "event_date": "2026-10-30 12:30",
+    "match_name": "Sardarapat - Van",
+    "league": "Armenia Premier League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetMines",
+    "odds": 1.85,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793281721182_1",
+    "event_date": "2026-10-30 02:00",
+    "match_name": "Alebrijes de Oaxaca - Mineros de Zacatecas",
+    "league": "Messico Liga de Expansion",
+    "market": "1X2 / Mercato",
+    "prediction": "Gol",
+    "original_tipster": "BetMines",
+    "odds": 1.53,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
   },
   {
     "id": "bet_1793269006994_1",
