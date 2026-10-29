@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793302264110_2",
-    "event_date": "2026-10-29 21:00",
-    "match_name": "Le Havre - Paris Saint Germain",
-    "league": "Ligue 1",
-    "original_tipster": "AtmBetSignal XG",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.0",
-    "odds": 1.95,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
@@ -82,6 +68,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793302264110_2",
+    "event_date": "2026-10-29 21:00",
+    "match_name": "Le Havre - Paris Saint Germain",
+    "league": "Ligue 1",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.0",
+    "original_tipster": "AtmBetSignal XG",
+    "odds": 1.95,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793269006994_1",
@@ -373,7 +373,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.4,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
