@@ -1,18 +1,5 @@
 [
   {
-    "id": "bet_1793257454611_0",
-    "event_date": "2026-10-29 11:00",
-    "match_name": "Gangwon - Kuching City FC",
-    "league": "AFC Champions League 2",
-    "original_tipster": "Infoland",
-    "market": "1X2 / Mercato",
-    "prediction": "1 + Multigoal 2-5",
-    "odds": 1.76,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
@@ -86,6 +73,19 @@
     "prediction": "1X",
     "original_tipster": "AtmBetSignal",
     "odds": 1.43,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793257454611_0",
+    "event_date": "2026-10-29 11:00",
+    "match_name": "Gangwon - Kuching City FC",
+    "league": "AFC Champions League 2",
+    "market": "1X2 / Mercato",
+    "prediction": "1 + Multigoal 2-5",
+    "original_tipster": "Infoland",
+    "odds": 1.76,
     "stake": 1,
     "status": "pending",
     "is_published": true
@@ -347,7 +347,7 @@
     "original_tipster": "ZCODE",
     "odds": 1.51,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true
   },
   {
