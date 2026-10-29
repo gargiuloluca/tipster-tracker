@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793275334130_0",
+    "event_date": "2026-10-29 13:15",
+    "match_name": "Shanghai Shenhua - Machida",
+    "league": "AFC Champions League 2",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.68,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
