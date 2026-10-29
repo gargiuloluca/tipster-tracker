@@ -1643,9 +1643,23 @@
             if (currentClusterMode === 'pure') {
                 allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
             } else if (currentClusterMode === 'elite') {
-                const eliteList = ['pronostici1', 'calcioai', 'atmbetsignal', 'zcode'];
-                allBets = allBets.filter(b => eliteList.includes(canonicalizeTipsterName(b.original_tipster).toLowerCase()));
-            }
+    // 1. Calcola il profitto netto reale per ogni fornitore sulle giocate già concluse
+    const tipsterNetProfits = {};
+    allBets.forEach(b => {
+        if (b.status === 'won' || b.status === 'lost') {
+            const name = canonicalizeTipsterName(b.original_tipster);
+            if (!tipsterNetProfits[name]) tipsterNetProfits[name] = 0;
+            const s = b.stake || 1.0;
+            tipsterNetProfits[name] += (b.status === 'won') ? ((b.odds - 1) * s) : -s;
+        }
+    });
+
+    // 2. Prende solo i fornitori che hanno un profitto netto strettamente positivo (> 0u)
+    const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
+
+    // 3. Filtra le giocate includendo solo i canali realmente in profitto
+    allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
+}
 
             let filtered = allBets;
 
