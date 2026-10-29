@@ -348,7 +348,7 @@
                     <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
                         <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> AI Parser & Gestione in Blocco
                     </h2>
-                    <span class="text-[10px] sm:text-[11px] text-slate-500">Con controllo duplicati e filtro quote (&ge;1.30)</span>
+                    <span class="text-[10px] sm:text-[11px] text-slate-500">Con controllo duplicati, filtro quote (&ge;1.30) e normalizzazione automatica</span>
                 </div>
                 <div class="space-y-2.5">
                     <textarea id="ai-input" rows="3" placeholder="Formato inserimento in blocco:&#10;DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;&#10;Oppure aggiorna esiti:&#10;Paju Frontier - Hwaseong - Esito: Persa"
@@ -396,17 +396,16 @@
                         <datalist id="tipsters-list">
                             <option value="AtmBetSignal">
                             <option value="AtmBetSignal XG">
-                            <option value="Freak Elite VIP">
-                            <option value="Stats4bets bollamaker">
-                            <option value="Stats4Bets Automatibet">
-                            <option value="BetMines">
-                            <option value="CalcioAI">
                             <option value="Pronostici1">
-                            <option value="Zcode System VIP">
+                            <option value="CalcioAI">
+                            <option value="BetMines">
                             <option value="ZCODE">
                             <option value="BetExpBot">
                             <option value="FootyStats">
                             <option value="Infoland">
+                            <option value="Freak Elite VIP">
+                            <option value="Stats4bets bollamaker">
+                            <option value="Stats4Bets Automatibet">
                         </datalist>
                     </div>
 
@@ -555,6 +554,28 @@
             channel_full: "-1004390945826"
         };
 
+        // NORMALIZZATORE DEI NOMI FORNITORI
+        function canonicalizeTipsterName(rawName) {
+            if (!rawName) return 'AtmBetSignal';
+            const clean = String(rawName).trim();
+            const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
+
+            if (lower.includes('xg')) return 'AtmBetSignal XG';
+            if (lower.includes('atmbet')) return 'AtmBetSignal';
+            if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
+            if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+            if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
+            if (lower.includes('zcode')) return 'ZCODE';
+            if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
+            if (lower.includes('footy')) return 'FootyStats';
+            if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
+            if (lower.includes('freak')) return 'Freak Elite VIP';
+            if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
+            if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
+
+            return clean;
+        }
+
         let currentFilter = 'all';
         let currentTipsterFilter = 'all';
         let currentSimMode = 'yesterday';
@@ -630,10 +651,10 @@
             statusEl.innerText = "Invio in corso...";
 
             if (channelType === 'pure') {
-                // CANALE PURE: Max 5 Top selezioni esclusive AtmBet
+                // CANALE PURE: Max 5 Top selezioni esclusive AtmBetSignal (senra XG)
                 const toSend = pendings.filter(b => {
-                    const tip = (b.original_tipster || '').trim().toLowerCase();
-                    return tip === 'atmbetsignal' || tip === 'atmbet selection' || tip === 'atmbet';
+                    const tip = canonicalizeTipsterName(b.original_tipster);
+                    return tip === 'AtmBetSignal';
                 }).slice(0, 5);
 
                 if (toSend.length === 0) {
@@ -701,7 +722,6 @@
                         return;
                     }
 
-                    // Pausa tra messaggi antispam Telegram
                     await new Promise(resolve => setTimeout(resolve, 400));
                 }
 
@@ -1125,6 +1145,8 @@
                 let cleanStake = parseFloat(b.stake || b.units || 1.0);
                 if (cleanStake > 10) cleanStake = 1.0;
 
+                const canonicalTipster = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
+
                 return {
                     id: b.id || ('b_' + idx + '_' + (b.event_date || Date.now())),
                     event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
@@ -1132,7 +1154,7 @@
                     league: b.league || b.competition || 'Generale',
                     market: b.market || b.type || 'Mercato',
                     prediction: b.prediction || b.pick || b.selection || '-',
-                    original_tipster: b.original_tipster || b.tipster || b.source || 'AtmBet Selection',
+                    original_tipster: canonicalTipster,
                     odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
                     stake: cleanStake,
                     status: b.status || b.result || 'pending',
@@ -1197,7 +1219,7 @@
                 match_name: matchName,
                 league: document.getElementById('league').value.trim() || 'Generale',
                 event_date: document.getElementById('event_date').value.replace('T', ' '),
-                original_tipster: document.getElementById('original_tipster').value.trim() || 'AtmBet Selection',
+                original_tipster: canonicalizeTipsterName(document.getElementById('original_tipster').value),
                 market: document.getElementById('market').value.trim(),
                 prediction: document.getElementById('prediction').value.trim(),
                 odds: parseFloat(document.getElementById('odds').value),
@@ -1261,7 +1283,7 @@
                         const matchPart = parts[1];
                         const predPart = parts[2];
                         const oddsPart = parseFloat(parts[3].replace(',', '.')) || 1.80;
-                        const tipsterPart = parts[4] || 'AtmBetSignal';
+                        const tipsterPart = canonicalizeTipsterName(parts[4]);
                         const leaguePart = parts[5] || 'Generale';
 
                         if (oddsPart < 1.30) return;
@@ -1366,7 +1388,7 @@
             const tipsterStats = {};
 
             resolvedBets.forEach(bet => {
-                const name = bet.original_tipster || 'AtmBet Selection';
+                const name = canonicalizeTipsterName(bet.original_tipster);
                 if (!tipsterStats[name]) {
                     tipsterStats[name] = {
                         name: name,
@@ -1398,10 +1420,10 @@
                 const roi = t.totalStake > 0 ? ((t.netProfit / t.totalStake) * 100).toFixed(1) : 0;
                 const fiatProfit = t.netProfit * unitVal;
 
-                // Rank numerico di base
+                // Rank numerico
                 let rankBadge = `<span class="font-mono text-slate-400 font-bold">${index + 1}</span>`;
 
-                // Assegna medaglie sul podio ESCLUSIVAMENTE a chi ha un profitto netto reale (> 0u)
+                // Assegna medaglie ESCLUSIVAMENTE se il profitto netto è strettamente positivo (> 0u)
                 if (t.netProfit > 0) {
                     if (index === 0) rankBadge = `<span class="text-sm">🥇</span>`;
                     else if (index === 1) rankBadge = `<span class="text-sm">🥈</span>`;
@@ -1552,7 +1574,7 @@
             let allBets = loadAllBets();
             scanForConflictsAndDuplicates(allBets);
 
-            const tipsters = [...new Set(allBets.map(b => b.original_tipster).filter(Boolean))];
+            const tipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
             if (select.options.length <= 1) {
                 select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
@@ -1566,15 +1588,12 @@
 
             updateClusterOptimizerSummary(allBets);
 
-            // Filtro rigoroso per Pure Signal: include solo AtmBetSignal ufficiale, esclude AtmBetSignal XG
+            // Filtro rigoroso: Pure Signal include ESCLUSIVAMENTE AtmBetSignal ed esclude AtmBetSignal XG
             if (currentClusterMode === 'pure') {
-                allBets = allBets.filter(b => {
-                    const tip = (b.original_tipster || '').trim().toLowerCase();
-                    return tip === 'atmbetsignal' || tip === 'atmbet selection' || tip === 'atmbet';
-                });
+                allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
             } else if (currentClusterMode === 'elite') {
                 const eliteList = ['pronostici1', 'calcioai', 'atmbetsignal', 'zcode'];
-                allBets = allBets.filter(b => eliteList.some(name => (b.original_tipster || '').toLowerCase() === name));
+                allBets = allBets.filter(b => eliteList.includes(canonicalizeTipsterName(b.original_tipster).toLowerCase()));
             }
 
             let filtered = allBets;
@@ -1586,7 +1605,7 @@
             }
 
             if (currentTipsterFilter !== 'all') {
-                filtered = filtered.filter(b => (b.original_tipster || '').toLowerCase() === currentTipsterFilter.toLowerCase());
+                filtered = filtered.filter(b => canonicalizeTipsterName(b.original_tipster).toLowerCase() === currentTipsterFilter.toLowerCase());
             }
 
             const total = filtered.length;
