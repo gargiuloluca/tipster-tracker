@@ -1610,7 +1610,7 @@
                 wrEl.innerText = "> 65.0% - 100% Win Rate";
                 targetEl.innerText = "Piano 'Pure Signal' (Top Ticket)";
             } else if (currentClusterMode === 'elite') {
-                chEl.innerText = "Top 4 Canali (ROI Positivo)";
+                chEl.innerText = "Top Fornitori (ROI Positivo)";
                 volEl.innerText = "~10-15 / die";
                 wrEl.innerText = "~ 62.5% Win Rate";
                 targetEl.innerText = "Piano Bilanciato / Elite";
@@ -1643,23 +1643,25 @@
             if (currentClusterMode === 'pure') {
                 allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
             } else if (currentClusterMode === 'elite') {
-    // 1. Calcola il profitto netto reale per ogni fornitore sulle giocate già concluse
-    const tipsterNetProfits = {};
-    allBets.forEach(b => {
-        if (b.status === 'won' || b.status === 'lost') {
-            const name = canonicalizeTipsterName(b.original_tipster);
-            if (!tipsterNetProfits[name]) tipsterNetProfits[name] = 0;
-            const s = b.stake || 1.0;
-            tipsterNetProfits[name] += (b.status === 'won') ? ((b.odds - 1) * s) : -s;
-        }
-    });
+                // 1. Calcola il profitto netto reale sui dati storici completi
+                const fullArchive = loadAllBets();
+                const tipsterNetProfits = {};
 
-    // 2. Prende solo i fornitori che hanno un profitto netto strettamente positivo (> 0u)
-    const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
+                fullArchive.forEach(b => {
+                    if (b.status === 'won' || b.status === 'lost') {
+                        const name = canonicalizeTipsterName(b.original_tipster);
+                        if (!tipsterNetProfits[name]) tipsterNetProfits[name] = 0;
+                        const s = b.stake || 1.0;
+                        tipsterNetProfits[name] += (b.status === 'won') ? ((b.odds - 1) * s) : -s;
+                    }
+                });
 
-    // 3. Filtra le giocate includendo solo i canali realmente in profitto
-    allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
-}
+                // 2. Prende solo i tipster con profitto netto strettamente positivo (> 0u)
+                const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
+
+                // 3. Filtra allBets includendo solo i canali in profitto
+                allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
+            }
 
             let filtered = allBets;
 
@@ -1789,7 +1791,6 @@
                     `;
                 }
 
-                // Controllo indicatore/tasto Telegram
                 let tgColumnHtml = '';
                 if (bet.tg_sent) {
                     tgColumnHtml = `
