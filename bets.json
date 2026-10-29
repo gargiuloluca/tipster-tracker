@@ -1,26 +1,13 @@
 [
   {
-    "id": "bet_1793269192191_1",
-    "event_date": "2026-10-29 19:00",
-    "match_name": "Al Nassr - Al Kholood / ACV - AFC / Benfica - Gil Vicente",
-    "league": "Multipla",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "Multipla",
-    "prediction": "1 / Over 1.5 / 1",
-    "odds": 1.92,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true
-  },
-  {
-    "id": "bet_1793269192191_0",
-    "event_date": "2026-10-29 20:45",
-    "match_name": "Fiorentina - Atalanta",
-    "league": "Serie A",
-    "original_tipster": "Stats4Bets Automatibet",
+    "id": "bet_1793273699218_0",
+    "event_date": "2026-10-29 18:10",
+    "match_name": "Tampa Bay Lightning - Winnipeg Jets",
+    "league": "NHL",
+    "original_tipster": "ZCODE",
     "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.65,
+    "prediction": "1",
+    "odds": 1.55,
     "stake": 1,
     "status": "pending",
     "is_published": true
@@ -99,6 +86,19 @@
     "prediction": "Under 3.5",
     "original_tipster": "Pronostici1",
     "odds": 1.44,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793269192191_0",
+    "event_date": "2026-10-29 20:45",
+    "match_name": "Fiorentina - Atalanta",
+    "league": "Serie A",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.65,
     "stake": 1,
     "status": "pending",
     "is_published": true
@@ -242,6 +242,19 @@
     "prediction": "No Gol",
     "original_tipster": "Pronostici1",
     "odds": 1.75,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true
+  },
+  {
+    "id": "bet_1793269192191_1",
+    "event_date": "2026-10-29 19:00",
+    "match_name": "Al Nassr - Al Kholood / ACV - AFC / Benfica - Gil Vicente",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "1 / Over 1.5 / 1",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.92,
     "stake": 1,
     "status": "pending",
     "is_published": true
