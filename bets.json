@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793290957374_0",
+    "event_date": "2026-10-31 11:00",
+    "match_name": "FC Yelimai - Okzhetpes",
+    "league": "Kazakistan Premier League",
+    "original_tipster": "Infoland",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 2.25,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
