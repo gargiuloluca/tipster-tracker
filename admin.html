@@ -151,7 +151,7 @@
                 </div>
             </section>
 
-            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM BOT (CAMPI PROTETTI/OSCURATI) -->
+            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM BOT -->
             <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 border border-blue-500/30 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
@@ -162,7 +162,7 @@
                             <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
                                 Dispatcher Canali Telegram (AtmBet Official)
                             </h2>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Credenziali salvate e protette. Invia con 1 click le selezioni PURE o il flusso completo ai rispettivi canali.</p>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">Credenziali protette. Invia automaticamente solo i nuovi segnali non ancora recapitati.</p>
                         </div>
                     </div>
                     <button type="button" onclick="saveTelegramConfig()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition self-start sm:self-auto flex items-center gap-1.5 shadow">
@@ -186,12 +186,12 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80">
-                    <span class="text-xs text-slate-400 font-bold mr-1">Invia Selezioni Odierne:</span>
+                    <span class="text-xs text-slate-400 font-bold mr-1">Invia Nuove Selezioni Odierne:</span>
                     <button type="button" onclick="dispatchTelegramSignals('pure')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-amber-500/10">
-                        <i data-lucide="send" class="w-3.5 h-3.5"></i> Invia Canale PURE (Max 5 Top)
+                        <i data-lucide="send" class="w-3.5 h-3.5"></i> Invia Canale PURE (Nuovi)
                     </button>
                     <button type="button" onclick="dispatchTelegramSignals('full')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-black px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-blue-500/10">
-                        <i data-lucide="send" class="w-3.5 h-3.5"></i> Invia Canale All-Inclusive (Tutti)
+                        <i data-lucide="send" class="w-3.5 h-3.5"></i> Invia Canale All-Inclusive (Nuovi)
                     </button>
                     <span id="tg_status_msg" class="text-xs font-mono text-emerald-400 ml-auto font-bold"></span>
                 </div>
@@ -525,6 +525,7 @@
                                 <th class="py-2.5 px-3">Fornitore</th>
                                 <th class="py-2.5 px-3 text-center">Vetrina</th>
                                 <th class="py-2.5 px-3">Stato & Azione Rapida</th>
+                                <th class="py-2.5 px-3 text-center">Telegram</th>
                                 <th class="py-2.5 px-3 text-right">Elimina</th>
                             </tr>
                         </thead>
@@ -620,6 +621,7 @@
             return res.json();
         }
 
+        // INVIO GLOBALE DEI SEGNALI (SOLO NUOVI NON ANCORA INVIATI)
         async function dispatchTelegramSignals(channelType) {
             const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
             const token = conf.token || DEFAULT_TG_CONFIG.token;
@@ -640,42 +642,42 @@
             const bets = loadAllBets();
             const todayStr = getLocalDateString(new Date());
 
-            // Filtra solo pronostici pendenti di oggi o futuri
-            const pendings = bets.filter(b => b.status === 'pending' && extractStandardDate(b.event_date) >= todayStr);
+            // FILTRO INTELLIGENTE: Solo pronostici pendenti di oggi che NON sono mai stati inviati (!b.tg_sent)
+            const pendings = bets.filter(b => b.status === 'pending' && extractStandardDate(b.event_date) >= todayStr && !b.tg_sent);
+            
             if (pendings.length === 0) {
-                alert("Nessun pronostico 'pending' da inviare per la data odierna.");
+                alert("Nessun NUOVO pronostico da inviare. Tutti i pronostici odierni sono già stati recapitati su Telegram!");
                 return;
             }
 
             const statusEl = document.getElementById('tg_status_msg');
-            statusEl.innerText = "Invio in corso...";
+            statusEl.innerText = "Invio in corso dei nuovi segnali...";
 
             if (channelType === 'pure') {
-                // CANALE PURE: Max 5 Top selezioni esclusive AtmBetSignal (senra XG)
-                const toSend = pendings.filter(b => {
-                    const tip = canonicalizeTipsterName(b.original_tipster);
-                    return tip === 'AtmBetSignal';
-                }).slice(0, 5);
+                const toSend = pendings.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal').slice(0, 5);
 
                 if (toSend.length === 0) {
-                    alert("Nessuna selezione PURE trovata per oggi.");
+                    alert("Nessun NUOVO segnale PURE da inviare per oggi.");
                     statusEl.innerText = "";
                     return;
                 }
 
-                let msg = `⚡ <b>ATMBET SELECTION | SIGNAL PURE</b> ⚡\n📅 <i>Sessione: ${todayStr}</i>\n🎯 <i>Top Selezioni ad Alto Valore Matematico (&ge;65% Prob.)</i>\n\n`;
+                let msg = `⚡ <b>ATMBET SELECTION | SIGNAL PURE (Nuovo Aggiornamento)</b> ⚡\n📅 <i>Sessione: ${todayStr}</i>\n🎯 <i>Top Selezioni ad Alto Valore Matematico</i>\n\n`;
                 toSend.forEach((b, i) => {
                     msg += `<b>${i+1}. ${b.match_name}</b>\n`;
                     msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
                     msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
                     msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
                 });
-                msg += `🔗 Verifica i risultati in tempo reale: <a href="https://giuloluca.github.io">AtmBet Web App</a>`;
+                msg += `🔗 Verifica in tempo reale: <a href="https://giuloluca.github.io">AtmBet Web App</a>`;
 
                 try {
                     const res = await sendTelegramMessage(token, chatId, msg);
                     if (res.ok) {
-                        statusEl.innerText = `Inviati con successo ${toSend.length} segnali a PURE!`;
+                        toSend.forEach(b => b.tg_sent = true);
+                        persistBets(bets);
+
+                        statusEl.innerText = `Inviati con successo ${toSend.length} nuovi segnali a PURE!`;
                         setTimeout(() => { statusEl.innerText = ""; }, 5000);
                     } else {
                         statusEl.innerText = `Errore Telegram: ${res.description}`;
@@ -685,7 +687,7 @@
                 }
 
             } else {
-                // CANALE ALL-INCLUSIVE: Suddivisione a lotti (batch da 8) per rispettare il limite di 4096 caratteri
+                // CANALE ALL-INCLUSIVE
                 const toSend = pendings;
                 const BATCH_SIZE = 8;
                 const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
@@ -693,7 +695,7 @@
 
                 for (let bIdx = 0; bIdx < totalBatches; bIdx++) {
                     const batch = toSend.slice(bIdx * BATCH_SIZE, (bIdx + 1) * BATCH_SIZE);
-                    let msg = `🌐 <b>ATMBET SIGNAL | ALL-INCLUSIVE (Parte ${bIdx + 1}/${totalBatches})</b> 🌐\n`;
+                    let msg = `🌐 <b>ATMBET SIGNAL | AGGIORNAMENTO SEGNALI (${bIdx + 1}/${totalBatches})</b> 🌐\n`;
                     msg += `📅 <i>Sessione: ${todayStr}</i>\n\n`;
 
                     batch.forEach((b, i) => {
@@ -711,10 +713,11 @@
                     try {
                         const res = await sendTelegramMessage(token, chatId, msg);
                         if (res.ok) {
+                            batch.forEach(b => b.tg_sent = true);
                             sentCount += batch.length;
                             statusEl.innerText = `Inviata parte ${bIdx + 1} di ${totalBatches}...`;
                         } else {
-                            statusEl.innerText = `Errore parte ${bIdx + 1}: ${res.description}`;
+                            statusEl.innerText = `Errore: ${res.description}`;
                             return;
                         }
                     } catch(e) {
@@ -725,8 +728,56 @@
                     await new Promise(resolve => setTimeout(resolve, 400));
                 }
 
-                statusEl.innerText = `Inviati tutti i ${sentCount} segnali ad All-Inclusive!`;
+                persistBets(bets);
+                statusEl.innerText = `Inviati con successo ${sentCount} nuovi segnali ad All-Inclusive!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
+            }
+        }
+
+        // INVIO RAPIDO DI UN SINGOLO PRONOSTICO AL RELATIVO CANALE TELEGRAM
+        async function sendSingleBetToTelegram(betId) {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(betId));
+            if (!b) return;
+
+            const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+
+            if (!token) {
+                alert("Configura prima il Bot Token di Telegram.");
+                return;
+            }
+
+            const isPure = canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal';
+            const chatId = isPure ? channelPure : channelFull;
+            const channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
+
+            if (!chatId) {
+                alert(`Chat ID mancante per il canale ${channelLabel}.`);
+                return;
+            }
+
+            let msg = `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA</b> ⚡\n`;
+            msg += `📅 <i>Data: ${b.event_date}</i>\n\n`;
+            msg += `<b>⚽ ${b.match_name}</b>\n`;
+            msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
+            msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
+            msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
+            msg += `🔗 <a href="https://giuloluca.github.io">AtmBet Web App</a>`;
+
+            try {
+                const res = await sendTelegramMessage(token, chatId, msg);
+                if (res.ok) {
+                    b.tg_sent = true;
+                    persistBets(bets);
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
+                } else {
+                    alert(`Errore invio Telegram: ${res.description}`);
+                }
+            } catch(e) {
+                alert(`Errore rete: ${e.message}`);
             }
         }
 
@@ -1158,7 +1209,8 @@
                     odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
                     stake: cleanStake,
                     status: b.status || b.result || 'pending',
-                    is_published: b.is_published !== undefined ? b.is_published : true
+                    is_published: b.is_published !== undefined ? b.is_published : true,
+                    tg_sent: b.tg_sent === true
                 };
             });
 
@@ -1225,7 +1277,8 @@
                 odds: parseFloat(document.getElementById('odds').value),
                 stake: parseFloat(document.getElementById('stake').value) || 1.0,
                 status: 'pending',
-                is_published: document.getElementById('is_published').checked
+                is_published: document.getElementById('is_published').checked,
+                tg_sent: false
             };
 
             bets.unshift(newBet);
@@ -1302,7 +1355,8 @@
                             odds: oddsPart,
                             stake: 1.0,
                             status: 'pending',
-                            is_published: true
+                            is_published: true,
+                            tg_sent: false
                         });
                         addedCount++;
                     }
@@ -1420,10 +1474,8 @@
                 const roi = t.totalStake > 0 ? ((t.netProfit / t.totalStake) * 100).toFixed(1) : 0;
                 const fiatProfit = t.netProfit * unitVal;
 
-                // Rank numerico
                 let rankBadge = `<span class="font-mono text-slate-400 font-bold">${index + 1}</span>`;
 
-                // Assegna medaglie ESCLUSIVAMENTE se il profitto netto è strettamente positivo (> 0u)
                 if (t.netProfit > 0) {
                     if (index === 0) rankBadge = `<span class="text-sm">🥇</span>`;
                     else if (index === 1) rankBadge = `<span class="text-sm">🥈</span>`;
@@ -1588,7 +1640,6 @@
 
             updateClusterOptimizerSummary(allBets);
 
-            // Filtro rigoroso: Pure Signal include ESCLUSIVAMENTE AtmBetSignal ed esclude AtmBetSignal XG
             if (currentClusterMode === 'pure') {
                 allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
             } else if (currentClusterMode === 'elite') {
@@ -1652,7 +1703,7 @@
             tbody.innerHTML = '';
 
             if (betsToDisplay.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico per questo filtro.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico per questo filtro.</td></tr>`;
                 return;
             }
 
@@ -1724,6 +1775,22 @@
                     `;
                 }
 
+                // Controllo indicatore/tasto Telegram
+                let tgColumnHtml = '';
+                if (bet.tg_sent) {
+                    tgColumnHtml = `
+                        <span title="Segnale già inviato su Telegram" class="inline-flex items-center gap-1 text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">
+                            <i data-lucide="check" class="w-3 h-3"></i> Inviato
+                        </span>
+                    `;
+                } else {
+                    tgColumnHtml = `
+                        <button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" title="Invia ora a Telegram" class="inline-flex items-center gap-1 text-[10px] font-bold font-mono text-blue-400 hover:text-white bg-blue-500/10 hover:bg-blue-600 border border-blue-500/30 px-2 py-1 rounded-lg transition shadow-sm active:scale-95">
+                            <i data-lucide="send" class="w-3 h-3"></i> TG
+                        </button>
+                    `;
+                }
+
                 tr.className = rowClass;
 
                 tr.innerHTML = `
@@ -1752,6 +1819,9 @@
                     </td>
                     <td class="py-2.5 px-3">
                         ${statusControlHtml}
+                    </td>
+                    <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                        ${tgColumnHtml}
                     </td>
                     <td class="py-2.5 px-3 text-right whitespace-nowrap">
                         <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
