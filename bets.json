@@ -350,6 +350,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793370196953_0",
+    "event_date": "2026-10-30 18:40",
+    "match_name": "Brooklyn Nets - Detroit Pistons",
+    "league": "NBA",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "ZCODE",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
     "id": "bet_1793340764007_14",
     "event_date": "2026-10-30 18:30",
     "match_name": "DSC Arminia Bielefeld - Eintracht Braunschweig / Le Havre - Paris Saint Germain",
