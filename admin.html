@@ -1857,9 +1857,38 @@
             if (dateInput) dateInput.value = now.toISOString().slice(0, 16);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+                        document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             checkAdminSession();
+
+            // UNIFICAZIONE AUTOMATICA STATS4BETS
+            (function mergeStats4bets() {
+                const PRIMARY_KEY = 'tipster_tracker_v1';
+                const ATMBET_KEY = 'atmbet_bets_data';
+
+                let bets = [];
+                try {
+                    bets = JSON.parse(localStorage.getItem(PRIMARY_KEY)) || JSON.parse(localStorage.getItem(ATMBET_KEY)) || [];
+                } catch(e) { return; }
+
+                let modifiedCount = 0;
+                bets.forEach(b => {
+                    const raw = (b.original_tipster || '').trim().toLowerCase();
+                    if ((raw === 'stats4bets' || raw.includes('automatibet')) && !raw.includes('bollamaker')) {
+                        if (b.original_tipster !== 'Stats4Bets Automatibet') {
+                            b.original_tipster = 'Stats4Bets Automatibet';
+                            modifiedCount++;
+                        }
+                    }
+                });
+
+                if (modifiedCount > 0) {
+                    localStorage.setItem(PRIMARY_KEY, JSON.stringify(bets));
+                    localStorage.setItem(ATMBET_KEY, JSON.stringify(bets));
+                    if (typeof renderDashboard === 'function') renderDashboard();
+                    if (typeof syncBetsToGitHub === 'function') syncBetsToGitHub(bets);
+                }
+                        })();
         });
     </script>
 </body>
