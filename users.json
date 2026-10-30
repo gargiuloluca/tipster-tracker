@@ -4,10 +4,10 @@
     "email": "admin@atmbet.com",
     "name": "Amministratore",
     "role": "admin",
-    "plan": "all_inclusive",
+    "plan": "full",
     "expires_at": "2099-12-31",
-    "credits": 9999,
-    "unlocked_bets": []
+    "telegram_link": "-",
+    "active": true
   },
   {
     "id": "usr_demo_vip",
@@ -16,7 +16,7 @@
     "role": "user",
     "plan": "pure",
     "expires_at": "2026-12-31",
-    "credits": 5,
-    "unlocked_bets": []
+    "telegram_link": "-",
+    "active": true
   }
 ]
