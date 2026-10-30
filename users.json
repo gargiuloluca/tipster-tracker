@@ -1,10 +1,22 @@
 [
   {
-    "access_code": "ATMBET-DEMO-2026",
+    "id": "usr_admin_01",
+    "email": "admin@atmbet.com",
+    "name": "Amministratore",
+    "role": "admin",
+    "plan": "all_inclusive",
+    "expires_at": "2099-12-31",
+    "credits": 9999,
+    "unlocked_bets": []
+  },
+  {
+    "id": "usr_demo_vip",
+    "email": "demo@atmbet.com",
+    "name": "Cliente Demo",
+    "role": "user",
     "plan": "pure",
-    "telegram_id": "",
-    "customer_email": "demo@atmbet.com",
-    "expires_at": "2027-12-31",
-    "is_active": true
+    "expires_at": "2026-12-31",
+    "credits": 5,
+    "unlocked_bets": []
   }
 ]
