@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793388767650_0",
+    "event_date": "2026-10-30 20:45",
+    "match_name": "Dundalk - Shamrock Rovers",
+    "league": "Premier Division",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.79,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
