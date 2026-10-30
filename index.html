@@ -117,7 +117,7 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-white">Attiva Codice Abbonamento</h3>
-                        <p class="text-[11px] text-slate-400">Ricevuto dopo il pagamento su Telegram o Stripe</p>
+                        <p class="text-[11px] text-slate-400">Ricevuto da un creator, Telegram o Stripe</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeLicenseModal()" class="text-slate-500 hover:text-white">
@@ -127,8 +127,8 @@
 
             <form onsubmit="handleVerifyLicense(event)" class="space-y-3">
                 <div>
-                    <label class="block text-slate-400 mb-1 text-[11px]">Codice Personale (es. ATM-XXXXXX)</label>
-                    <input type="text" id="user-license-code" required placeholder="ATM-XXXXXX"
+                    <label class="block text-slate-400 mb-1 text-[11px]">Codice Personale o Promo Creator</label>
+                    <input type="text" id="user-license-code" required placeholder="ES. MARIOVIP / ATM-XXXXXX"
                         class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white text-center tracking-widest uppercase font-mono focus:outline-none focus:border-emerald-500">
                 </div>
                 <div id="license-error-msg" class="text-[11px] font-bold text-rose-400 hidden text-center">Codice inesistente o scaduto.</div>
@@ -778,31 +778,52 @@
                 }
 
                 const todayStr = getLocalDateString(new Date());
+                
+                // Ricerca per codice accesso (es. MARIOVIP, ATM-XXXXXX) o per email
                 const match = users.find(u => {
                     const uCode = (u.access_code || u.code || '').trim().toUpperCase();
-                    const uEmail = (u.email || u.identifier || '').trim().toUpperCase();
+                    const uEmail = (u.identifier || u.email || '').trim().toUpperCase();
                     return uCode === typedCode || uEmail === typedCode;
                 });
 
                 if (match) {
-                    const exp = match.expires_at || match.expiration;
-                    if (exp && exp !== '-' && exp < todayStr) {
-                        errEl.innerText = "Abbonamento scaduto il " + exp;
+                    // 1. Controllo se il codice è attivo
+                    if (match.status && match.status !== 'active') {
+                        errEl.innerText = "Questo codice promozionale è disattivato.";
                         errEl.classList.remove('hidden');
                         return;
                     }
 
+                    // 2. Controllo data di scadenza
+                    const exp = match.expires_at || match.expiration;
+                    if (exp && exp !== '-' && exp < todayStr) {
+                        errEl.innerText = "Codice promo scaduto il " + exp;
+                        errEl.classList.remove('hidden');
+                        return;
+                    }
+
+                    // 3. Controllo limite utilizzi (per campagne promo/Creator)
+                    if (match.max_uses && (match.used_count || 0) >= match.max_uses) {
+                        errEl.innerText = "Codice promo esaurito (raggiunto il limite massimo di attivazioni).";
+                        errEl.classList.remove('hidden');
+                        return;
+                    }
+
+                    // 4. Mappatura piano
+                    const planType = match.plan === 'pure' ? 'pure' : (match.plan === 'full' ? 'all_inclusive' : 'elite');
+
                     const sessionData = {
-                        name: match.name || (match.identifier ? match.identifier.split('@')[0] : (match.email ? match.email.split('@')[0] : 'Abbonato VIP')),
-                        email: match.email || match.identifier || 'abbonato@atmbet.com',
-                        role: match.role || 'user',
-                        plan: match.plan === 'pure' ? 'pure' : (match.plan === 'full' ? 'all_inclusive' : 'elite'),
-                        access_code: match.access_code || match.code || typedCode,
+                        name: match.identifier ? match.identifier.split('@')[0] : 'Ospite VIP',
+                        email: match.identifier || `${typedCode.toLowerCase()}@promo.atmbet`,
+                        role: 'user',
+                        plan: planType,
+                        access_code: typedCode,
                         expires_at: exp || '2099-12-31',
                         credits: match.credits || 99
                     };
 
                     saveActiveUserSession(sessionData);
+                    succEl.innerText = `Licenza ${planType.toUpperCase()} sbloccata con successo!`;
                     succEl.classList.remove('hidden');
 
                     setTimeout(() => {
@@ -810,9 +831,9 @@
                         renderNavbarUserStatus();
                         updateTelegramBanner();
                         renderPublicCards();
-                    }, 1200);
+                    }, 1000);
                 } else {
-                    errEl.innerText = "Codice non trovato. Verifica il testo digitato.";
+                    errEl.innerText = "Codice non valido. Verifica il testo digitato.";
                     errEl.classList.remove('hidden');
                 }
             } catch(err) {
