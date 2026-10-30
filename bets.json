@@ -2240,20 +2240,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1792930352002_0",
-    "event_date": "2026-10-25 22:00",
-    "match_name": "FC Barcellona vs Real Madrid",
-    "league": "La Liga",
-    "market": "1X2 / Mercato",
-    "prediction": "1 + Over 2.5",
-    "original_tipster": "Freak Elite VIP",
-    "odds": 1.79,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1792941943332_2",
     "event_date": "2026-10-25 19:30",
     "match_name": "Gent vs Anderlecht",
@@ -2264,20 +2250,6 @@
     "odds": 1.41,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1792934519439_1",
-    "event_date": "2026-10-25 18:15",
-    "match_name": "Marsiglia vs Le Havre / Gent vs Anderlecht",
-    "league": "Ligue 1 / Jupiler League",
-    "market": "Multipla",
-    "prediction": "Doppia (Segno 1 / Goal)",
-    "original_tipster": "Freak Elite VIP",
-    "odds": 2.55,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
