@@ -1,33 +1,5 @@
 [
   {
-    "id": "bet_1793360187503_1",
-    "event_date": "2026-10-30 19:30",
-    "match_name": "Rapid Bucuresti - Csikszereda / Atletico Madrid II - Alcorcon",
-    "league": "Multipla",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "Multipla",
-    "prediction": "1 / Over 1.5",
-    "odds": 1.55,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793360187503_0",
-    "event_date": "2026-10-30 21:00",
-    "match_name": "Villarreal - Espanyol",
-    "league": "La Liga",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
@@ -84,6 +56,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793360187503_0",
+    "event_date": "2026-10-30 21:00",
+    "match_name": "Villarreal - Espanyol",
+    "league": "La Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.5,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793360016669_7",
     "event_date": "2026-10-30 21:00",
     "match_name": "Villarreal - Espanyol",
@@ -95,7 +81,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793360016669_5",
@@ -109,7 +95,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793360016668_2",
@@ -274,6 +260,20 @@
     "prediction": "Gol",
     "original_tipster": "BetMines",
     "odds": 1.4,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793360187503_1",
+    "event_date": "2026-10-30 19:30",
+    "match_name": "Rapid Bucuresti - Csikszereda / Atletico Madrid II - Alcorcon",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "1 / Over 1.5",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.55,
     "stake": 1,
     "status": "pending",
     "is_published": true,
