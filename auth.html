@@ -67,10 +67,10 @@
                     <i data-lucide="shield-check" class="w-6 h-6 sm:w-7 sm:h-7"></i>
                 </div>
                 <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Accedi all'Area Riservata</h1>
-                <p class="text-xs text-slate-400 mt-1">Inserisci l'email utilizzata su Stripe o il tuo codice licenza per entrare nel cruscotto.</p>
+                <p class="text-xs text-slate-400 mt-1">Accesso rapido verificato per gli abbonati della piattaforma.</p>
             </div>
 
-            <!-- Form di Accesso Pulito -->
+            <!-- Form di Accesso con Sola Email -->
             <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 
                 <!-- Email -->
@@ -81,18 +81,13 @@
                         <input type="email" id="user-email" required placeholder="tua@email.com"
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                     </div>
-                </div>
-
-                <!-- Password / Codice -->
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-[11px] font-semibold text-slate-400">Password o Codice Licenza</label>
-                        <span class="text-[10px] text-slate-500 font-mono">es. ATM-XXXXXX</span>
-                    </div>
-                    <div class="relative">
-                        <i data-lucide="key" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                        <input type="password" id="user-password" required placeholder="••••••••"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
+                    
+                    <!-- Istruzioni Chiare sotto il campo Email -->
+                    <div class="mt-2.5 p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
+                        <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                        <span>
+                            Inserisci l'<strong>indirizzo email</strong> utilizzato durante l'acquisto o l'attivazione della prova su Stripe. Non serve alcuna password: il sistema riconoscerà automaticamente la tua licenza attiva.
+                        </span>
                     </div>
                 </div>
 
@@ -100,7 +95,7 @@
                 <div id="auth-alert" class="hidden text-xs p-2.5 rounded-lg font-medium text-center"></div>
 
                 <!-- Pulsante Submit -->
-                <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10 mt-2">
+                <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10 mt-1">
                     <span>Entra nel Cruscotto VIP</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
@@ -133,13 +128,13 @@
             </div>
 
             <div class="mt-5 text-center text-[11px] text-slate-500">
-                AtmBet &copy; 2026. Accesso protetto con verifica diretta Stripe & GitHub.
+                AtmBet &copy; 2026. Accesso istantaneo sincronizzato con Stripe & GitHub.
             </div>
 
         </div>
     </main>
 
-    <!-- LOGICA AUTENTICAZIONE SINCRONIZZATA CON users.json -->
+    <!-- LOGICA AUTENTICAZIONE PASSWORDLESS VIA EMAIL -->
     <script>
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
@@ -184,19 +179,18 @@
         async function handleAuthSubmit(e) {
             e.preventDefault();
             const emailInput = document.getElementById('user-email').value.trim().toLowerCase();
-            const passwordInput = document.getElementById('user-password').value.trim();
 
-            if (!emailInput || !passwordInput) {
-                showAlert("Inserisci email e password o codice licenza.", "error");
+            if (!emailInput) {
+                showAlert("Inserisci la tua email per accedere.", "error");
                 return;
             }
 
-            showAlert("Verifica licenza in corso...", "info");
+            showAlert("Verifica abbonamento in corso...", "info");
 
             const users = await fetchLiveUsers();
             const todayStr = getLocalDateString(new Date());
 
-            // Ricerca utente per email o per codice licenza/identificativo
+            // Controllo email su users.json (o identifier)
             const user = users.find(u => {
                 const uEmail = (u.email || u.identifier || '').trim().toLowerCase();
                 const uCode = (u.access_code || u.code || '').trim().toLowerCase();
@@ -204,18 +198,18 @@
             });
 
             if (!user) {
-                showAlert("Nessun abbonamento trovato per questa email. Attiva un piano.", "error");
+                showAlert("Nessun abbonamento attivo trovato per questa email. Verifica l'indirizzo o attiva un piano.", "error");
                 return;
             }
 
-            // Verifica scadenza licenza
+            // Controllo scadenza
             const exp = user.expires_at || user.expiration || user.plan_expires;
             if (exp && exp !== '-' && exp < todayStr) {
                 showAlert("Il tuo abbonamento è scaduto il " + exp + ". Rinnovalo per continuare.", "error");
                 return;
             }
 
-            // Mappatura piano
+            // Normalizzazione piano
             let mappedPlan = 'all_inclusive';
             if (user.plan === 'pure') mappedPlan = 'pure';
             else if (user.plan === 'full' || user.plan === 'all_inclusive') mappedPlan = 'all_inclusive';
@@ -233,17 +227,16 @@
                 unlocked_bets: user.unlocked_bets || []
             };
 
-            // Salva sessione attiva per index.html
+            // Salva sessione attiva per navigare su index.html
             localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(sessionData));
 
-            showAlert("Accesso autorizzato! Reindirizzamento al cruscotto...", "success");
+            showAlert("Abbonamento verificato con successo! Reindirizzamento...", "success");
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 800);
         }
 
         function quickDevLogin(planType) {
-            const now = new Date();
             const devUser = {
                 id: 'usr_dev_' + planType,
                 name: 'Tester ' + planType.toUpperCase(),
