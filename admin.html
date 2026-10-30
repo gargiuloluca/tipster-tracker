@@ -126,7 +126,7 @@
 
         <div class="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-4 sm:space-y-6">
 
-            <!-- BOX CONNESSIONE DIRETTA GITHUB API (BETS & USERS) -->
+            <!-- BOX CONNESSIONE DIRETTA GITHUB API -->
             <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-lg">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center gap-2.5">
@@ -177,7 +177,7 @@
                     </div>
                 </div>
 
-                <!-- FORM AGGIUNTA MANUALE UTENTE (COMPATTABILE) -->
+                <!-- FORM AGGIUNTA MANUALE UTENTE -->
                 <div id="add-user-panel" class="hidden bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-3">
                     <div class="text-xs font-bold text-white flex items-center gap-1.5">
                         <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Inserisci Nuovo Abbonamento
@@ -237,7 +237,7 @@
                             <tr>
                                 <th class="py-2.5 px-3">Utente / Email</th>
                                 <th class="py-2.5 px-3">Piano</th>
-                                <th class="py-2.5 px-3">Telegram ID</th>
+                                <th class="py-2.5 px-3">Telegram ID / Link</th>
                                 <th class="py-2.5 px-3">Codice Accesso Web</th>
                                 <th class="py-2.5 px-3 text-center">Scadenza</th>
                                 <th class="py-2.5 px-3 text-center">Stato</th>
@@ -361,7 +361,7 @@
                 <div id="conflict-items-container" class="space-y-2 pt-1"></div>
             </section>
 
-            <!-- SIMULATORE TEMPORALE DINAMICO IN ADMIN -->
+            <!-- FILTRO TEMPORALE & ANALISI RENDIMENTO DATA (SINCRONIZZATO) -->
             <section class="bg-slate-900 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-4 shadow-xl">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                     <div>
@@ -369,16 +369,16 @@
                             <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
                                 <i data-lucide="calendar-clock" class="w-4 h-4"></i>
                             </span>
-                            <h2 class="text-xs sm:text-sm font-bold text-white">Analisi Rendimento per Data (Admin Inspector)</h2>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Filtro Risultati per Data</h2>
                         </div>
-                        <p class="text-[10px] sm:text-[11px] text-slate-400">Verifica i risultati filtrando per giorno specifico o intervalli dinamici.</p>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Seleziona un giorno esatto o usa i pulsanti rapidi per visualizzare e ricalcolare l'intera console.</p>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2">
                         <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-                            <span class="text-[10px] text-slate-400 font-semibold">Data:</span>
+                            <span class="text-[10px] text-slate-400 font-semibold">Giorno Selezionato:</span>
                             <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)"
-                                class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
+                                class="bg-transparent text-xs text-emerald-400 font-mono font-bold focus:outline-none cursor-pointer">
                         </div>
 
                         <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
@@ -417,7 +417,7 @@
                 </div>
             </section>
 
-            <!-- Statistiche Globali con Convertitore Unità Monetaria (€) -->
+            <!-- Statistiche Globali filtrate per Data e Categoria -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
                     <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Pronostici Mostrati</span>
@@ -647,14 +647,12 @@
         const GH_TOKEN_KEY = 'atmbet_gh_token';
         const TG_CONF_KEY = 'atmbet_tg_config';
 
-        // Credenziali Telegram predefinite hardcoded
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
             channel_pure: "-1004237267545",
             channel_full: "-1004390945826"
         };
 
-        // NORMALIZZATORE DEI NOMI FORNITORI
         function canonicalizeTipsterName(rawName) {
             if (!rawName) return 'AtmBetSignal';
             const clean = String(rawName).trim();
@@ -678,7 +676,7 @@
 
         let currentFilter = 'all';
         let currentTipsterFilter = 'all';
-        let currentSimMode = 'yesterday';
+        let currentSimMode = 'today';
         let currentCustomDate = '';
         let currentClusterMode = 'all';
 
@@ -720,6 +718,7 @@
             users.unshift({
                 id: 'u_' + Date.now(),
                 identifier: ident,
+                email: ident,
                 telegram_id: tgId || '-',
                 plan: plan,
                 access_code: accessCode,
@@ -739,7 +738,7 @@
             const u = users.find(x => String(x.id) === String(userId));
             if (!u) return;
 
-            let curExp = new Date(u.expires_at);
+            let curExp = new Date(u.expires_at || Date.now());
             if (isNaN(curExp.getTime()) || curExp < new Date()) {
                 curExp = new Date();
             }
@@ -776,14 +775,19 @@
             }
 
             users.forEach(u => {
-                const isExpired = u.expires_at < todayStr;
+                const userIdent = u.identifier || u.email || u.customer_email || 'Utente';
+                const accessCode = u.access_code || u.code || (u.telegram_link ? 'Link Telegram' : '-');
+                const expDate = u.expires_at || u.expiration || '-';
+                const isExpired = expDate !== '-' && expDate < todayStr;
+
                 if (isExpired) expiredCount++; else activeCount++;
 
-                planFreq[u.plan] = (planFreq[u.plan] || 0) + 1;
+                const userPlan = (u.plan || 'trial').toLowerCase();
+                planFreq[userPlan] = (planFreq[userPlan] || 0) + 1;
 
-                const planBadge = u.plan === 'pure' 
+                const planBadge = userPlan === 'pure' 
                     ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
-                    : (u.plan === 'elite' 
+                    : (userPlan === 'elite' 
                         ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
                         : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ALL-INCLUSIVE</span>`);
 
@@ -796,13 +800,13 @@
 
                 tr.innerHTML = `
                     <td class="py-2.5 px-3 font-bold text-white">
-                        <div>${u.identifier}</div>
+                        <div>${userIdent}</div>
                         <div class="text-[9px] text-slate-500 font-mono">Iscritto il ${u.created_at || '-'}</div>
                     </td>
                     <td class="py-2.5 px-3">${planBadge}</td>
-                    <td class="py-2.5 px-3 font-mono text-slate-300 text-[11px]">${u.telegram_id || '-'}</td>
-                    <td class="py-2.5 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer" title="Clicca per selezionare il codice">${u.access_code}</td>
-                    <td class="py-2.5 px-3 text-center font-mono text-slate-300">${u.expires_at}</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-300 text-[11px]">${u.telegram_id || u.telegram_link || '-'}</td>
+                    <td class="py-2.5 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer" title="Codice">${accessCode}</td>
+                    <td class="py-2.5 px-3 text-center font-mono text-slate-300">${expDate}</td>
                     <td class="py-2.5 px-3 text-center">${statusBadge}</td>
                     <td class="py-2.5 px-3 text-right">
                         <div class="flex items-center justify-end gap-1.5">
@@ -906,7 +910,7 @@
                         alert(`Caricati ${parsed.length} abbonati aggiornati da users.json su GitHub!`);
                     }
                 } else {
-                    alert("File users.json non trovato su GitHub. Salva un utente per crearlo automaticamente.");
+                    alert("File users.json non trovato su GitHub.");
                 }
             } catch(err) {
                 alert("Errore lettura users.json da GitHub: " + err.message);
@@ -975,7 +979,7 @@
             const pendings = bets.filter(b => b.status === 'pending' && extractStandardDate(b.event_date) >= todayStr && !b.tg_sent);
             
             if (pendings.length === 0) {
-                alert("Nessun NUOVO pronostico da inviare. Tutti i pronostici odierni sono già stati recapitati su Telegram!");
+                alert("Nessun NUOVO pronostico da inviare. Tutti i pronostici odierni sono già stati recapitati!");
                 return;
             }
 
@@ -998,7 +1002,7 @@
                     msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
                     msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
                 });
-                msg += `🔗 Verifica in tempo reale: <a href="https://giuloluca.github.io">AtmBet Web App</a>`;
+                msg += `🔗 Verifica in tempo reale: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
 
                 try {
                     const res = await sendTelegramMessage(token, chatId, msg);
@@ -1035,7 +1039,7 @@
                     });
 
                     if (bIdx === totalBatches - 1) {
-                        msg += `🔗 Dashboard Completa: <a href="https://giuloluca.github.io">AtmBet Web App</a>`;
+                        msg += `🔗 Dashboard Completa: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
                     }
 
                     try {
@@ -1092,7 +1096,7 @@
             msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
             msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
             msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
-            msg += `🔗 <a href="https://giuloluca.github.io">AtmBet Web App</a>`;
+            msg += `🔗 <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
 
             try {
                 const res = await sendTelegramMessage(token, chatId, msg);
@@ -1327,22 +1331,24 @@
             if (btnToday) btnToday.innerText = todayLabel;
             if (btnYesterday) btnYesterday.innerText = yesterdayLabel;
 
-            const yesterdayStr = getLocalDateString(yesterday);
+            const todayStr = getLocalDateString(today);
             if (dateInput) {
-                dateInput.value = yesterdayStr;
-                dateInput.max = getLocalDateString(today);
+                dateInput.value = todayStr;
+                dateInput.max = todayStr;
             }
             
-            currentSimMode = 'yesterday';
-            currentCustomDate = yesterdayStr;
+            currentSimMode = 'today';
+            currentCustomDate = todayStr;
 
-            if (btnYesterday) {
+            if (btnToday) {
                 document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
-                btnYesterday.classList.add('sim-pill-active');
+                btnToday.classList.add('sim-pill-active');
             }
         }
 
+        // AGGIORNATO: applica il filtro SOLO a quella precisa data
         function applyCustomCalendarDate(dateStr) {
+            if (!dateStr) return;
             currentSimMode = 'custom';
             currentCustomDate = dateStr;
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
@@ -1375,7 +1381,8 @@
                 if (dateInput) dateInput.value = d7Str;
                 currentCustomDate = d7Str;
             } else if (type === 'all') {
-                currentCustomDate = '2020-01-01';
+                currentCustomDate = '';
+                if (dateInput) dateInput.value = '';
             }
 
             renderDashboard();
@@ -1834,6 +1841,7 @@
             });
         }
 
+        // AGGIORNATO: calcolo metriche temporali con filtro preciso sul giorno
         function calculateSimulationInAdmin(allBets, unitVal) {
             const today = new Date();
             const todayStr = getLocalDateString(today);
@@ -1861,7 +1869,8 @@
                 } else if (currentSimMode === 'all') {
                     return true;
                 } else if (currentSimMode === 'custom') {
-                    return bDate >= currentCustomDate;
+                    // CONFRONTO ESATTO: solo quel giorno
+                    return bDate === currentCustomDate;
                 }
                 return true;
             });
@@ -1941,6 +1950,7 @@
             }
         }
 
+        // AGGIORNATO: renderizza statistiche e tabella sincronizzati col filtro data scelto
         function renderDashboard() {
             let allBets = loadAllBets();
             scanForConflictsAndDuplicates(allBets);
@@ -1959,6 +1969,7 @@
 
             updateClusterOptimizerSummary(allBets);
 
+            // Filtro Cluster
             if (currentClusterMode === 'pure') {
                 allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
             } else if (currentClusterMode === 'elite') {
@@ -1978,14 +1989,45 @@
                 allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
             }
 
-            let filtered = allBets;
+            // Calcolo del simulatore su allBets
+            const unitMultiplierEl = document.getElementById('admin-unit-multiplier');
+            const unitVal = parseFloat(unitMultiplierEl ? unitMultiplierEl.value : 10) || 10;
+            calculateSimulationInAdmin(allBets, unitVal);
+            renderAdminTipstersLeaderboard(allBets, unitVal);
 
+            // FILTRO DATA SINCRONIZZATO SU TUTTA LA DASHBOARD
+            let filtered = allBets;
+            const today = new Date();
+            const todayStr = getLocalDateString(today);
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
+            const d7 = new Date();
+            d7.setDate(today.getDate() - 7);
+            const d7Str = getLocalDateString(d7);
+
+            if (currentSimMode === 'today') {
+                filtered = filtered.filter(b => extractStandardDate(b.event_date) === todayStr);
+            } else if (currentSimMode === 'yesterday') {
+                filtered = filtered.filter(b => extractStandardDate(b.event_date) === yesterdayStr);
+            } else if (currentSimMode === '7days') {
+                filtered = filtered.filter(b => {
+                    const d = extractStandardDate(b.event_date);
+                    return d >= d7Str && d <= todayStr;
+                });
+            } else if (currentSimMode === 'custom') {
+                // Filtra solo il giorno selezionato nel calendario
+                filtered = filtered.filter(b => extractStandardDate(b.event_date) === currentCustomDate);
+            }
+
+            // Filtro Stato (In Corso / Chiusi)
             if (currentFilter === 'pending') {
                 filtered = filtered.filter(b => b.status === 'pending');
             } else if (currentFilter === 'resolved') {
                 filtered = filtered.filter(b => b.status === 'won' || b.status === 'lost' || b.status === 'void');
             }
 
+            // Filtro Tipster
             if (currentTipsterFilter !== 'all') {
                 filtered = filtered.filter(b => canonicalizeTipsterName(b.original_tipster).toLowerCase() === currentTipsterFilter.toLowerCase());
             }
@@ -2009,9 +2051,6 @@
             });
 
             const yieldVal = totalResolvedStake > 0 ? ((netProfit / totalResolvedStake) * 100).toFixed(1) : 0;
-
-            const unitMultiplierEl = document.getElementById('admin-unit-multiplier');
-            const unitVal = parseFloat(unitMultiplierEl ? unitMultiplierEl.value : 10) || 10;
             const fiatProfit = netProfit * unitVal;
             const fiatEl = document.getElementById('admin-stat-fiat');
             if (fiatEl) {
@@ -2024,8 +2063,6 @@
             document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
             document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
 
-            calculateSimulationInAdmin(allBets, unitVal);
-            renderAdminTipstersLeaderboard(allBets, unitVal);
             renderTable(filtered);
         }
 
@@ -2034,7 +2071,7 @@
             tbody.innerHTML = '';
 
             if (betsToDisplay.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico per questo filtro.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico trovato per la data o i filtri selezionati.</td></tr>`;
                 return;
             }
 
