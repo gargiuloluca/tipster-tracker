@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793386040805_0",
-    "event_date": "2026-10-31 08:00",
-    "match_name": "Eastern District - Shatin",
-    "league": "Hong Kong Premier League",
-    "original_tipster": "BetMines",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793202470616_3",
     "event_date": "2026-10-31 18:00",
     "match_name": "Genoa - Juventus",
@@ -54,6 +40,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793386040805_0",
+    "event_date": "2026-10-31 08:00",
+    "match_name": "Eastern District - Shatin",
+    "league": "Hong Kong Premier League",
+    "market": "1X2 / Mercato",
+    "prediction": "Gol",
+    "original_tipster": "BetMines",
+    "odds": 1.5,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793340764005_1",
@@ -471,7 +471,7 @@
     "original_tipster": "BetMines",
     "odds": 1.85,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
