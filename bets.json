@@ -2240,20 +2240,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1792934519439_0",
-    "event_date": "2026-10-25 22:30",
-    "match_name": "Sporting CP vs Académico de Viseu",
-    "league": "Primeira Liga",
-    "market": "1X2 / Mercato",
-    "prediction": "Sporting Handicap -1.5",
-    "original_tipster": "Freak Elite VIP",
-    "odds": 1.65,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1792930352002_0",
     "event_date": "2026-10-25 22:00",
     "match_name": "FC Barcellona vs Real Madrid",
