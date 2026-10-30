@@ -1415,20 +1415,46 @@
             if (!container) return;
             container.innerHTML = '';
 
+            activeUser = getActiveUserSession();
             const todayStr = getLocalDateString(new Date());
 
-            const pendingBetsToday = cachedAllBets.filter(b => {
+            // 1. Filtro base per data odierna
+            let pendingBetsToday = cachedAllBets.filter(b => {
                 if (b.status !== 'pending') return false;
                 const bDate = extractStandardDate(b.event_date);
                 return bDate >= todayStr;
             });
 
-            if (pendingBetsToday.length === 0) {
-                container.innerHTML = `<div class="w-full text-center py-6 text-slate-500 font-medium text-xs">Nessuna selezione aperta per la giornata odierna. Nuovi segnali in arrivo prima dei match.</div>`;
-                return;
+            // 2. Controllo piano utente
+            const isUserPure = activeUser && activeUser.plan === 'pure';
+            const isUserAllInclusive = activeUser && (activeUser.plan === 'all_inclusive' || activeUser.role === 'admin' || activeUser.plan === 'elite');
+
+            // Se l'utente ha il piano PURE, mostra SOLO le selezioni ufficiali (Max 5)
+            if (isUserPure) {
+                pendingBetsToday = pendingBetsToday.filter(b => b.is_pure === true);
             }
 
-            activeUser = getActiveUserSession();
+            // Aggiorna il sottotitolo della sezione pronostici
+            const subtitleEl = document.querySelector('#selezioni p');
+            if (subtitleEl) {
+                if (isUserPure) {
+                    subtitleEl.innerHTML = `<span class="text-amber-400 font-semibold">⚡ Vista VIP PURE attiva:</span> visualizzi solo le tue selezioni d'élite ad alta probabilità (&ge;65%).`;
+                } else if (isUserAllInclusive) {
+                    subtitleEl.innerHTML = `<span class="text-blue-400 font-semibold">🌐 Vista VIP All-Inclusive:</span> visualizzi il flusso completo di tutti i canali e mercati.`;
+                } else if (activeUser && activeUser.credits > 0) {
+                    subtitleEl.innerHTML = `<span class="text-emerald-400 font-semibold">🎟️ Pacchetto Crediti:</span> hai <strong class="text-white">${activeUser.credits} crediti</strong> disponibili. Sblocca solo i match che ti interessano.`;
+                } else {
+                    subtitleEl.innerText = "Pronostici della giornata odierna attualmente in corso o in attesa di inizio.";
+                }
+            }
+
+            if (pendingBetsToday.length === 0) {
+                const emptyMsg = isUserPure
+                    ? "Nessuna selezione PURE aperta al momento. I segnali filtrati verranno pubblicati prima del calcio d'inizio."
+                    : "Nessuna selezione aperta per la giornata odierna. Nuovi segnali in arrivo prima dei match.";
+                container.innerHTML = `<div class="w-full text-center py-6 text-slate-500 font-medium text-xs">${emptyMsg}</div>`;
+                return;
+            }
 
             pendingBetsToday.forEach(bet => {
                 const card = document.createElement('div');
