@@ -317,7 +317,7 @@
     "original_tipster": "CalcioAI",
     "odds": 1.75,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
@@ -2306,34 +2306,6 @@
     "odds": 1.4,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1792930352002_1",
-    "event_date": "2026-10-25 16:00",
-    "match_name": "Crystal Palace vs Newcastle / Hull City vs Brentford",
-    "league": "Premier League",
-    "market": "1X2 / Mercato",
-    "prediction": "Doppia (GG / Over 1.5 Ospite)",
-    "original_tipster": "Freak Elite VIP",
-    "odds": 2.34,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1792932562965_1",
-    "event_date": "2026-10-25 15:30",
-    "match_name": "PSV vs Feyenoord / Friburgo vs Bayern Monaco",
-    "league": "Eredivisie / Bundesliga",
-    "market": "Multipla",
-    "prediction": "Doppia (Over 3.0 / Segno 2)",
-    "original_tipster": "Freak Elite VIP",
-    "odds": 2.16,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
