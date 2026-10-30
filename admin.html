@@ -103,11 +103,11 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-1.5 sm:space-x-2">
-                    <button type="button" onclick="exportBackupJSON()" title="Scarica backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                    <button type="button" onclick="exportBackupJSON()" title="Scarica backup pronostici" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
                         <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
                         <span class="hidden sm:inline">Esporta</span>
                     </button>
-                    <label for="import-backup-file" title="Ripristina backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
+                    <label for="import-backup-file" title="Ripristina backup pronostici" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
                         <i data-lucide="upload" class="w-3.5 h-3.5 text-amber-400"></i>
                         <span class="hidden sm:inline">Importa</span>
                         <input type="file" id="import-backup-file" class="hidden" accept=".json" onchange="importBackupJSON(event)">
@@ -126,14 +126,14 @@
 
         <div class="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-4 sm:space-y-6">
 
-            <!-- BOX CONNESSIONE DIRETTA GITHUB API -->
+            <!-- BOX CONNESSIONE DIRETTA GITHUB API (BETS & USERS) -->
             <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-lg">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center gap-2.5">
                         <div id="sync-status-icon" class="w-3 h-3 rounded-full bg-slate-500 shrink-0"></div>
                         <div>
                             <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione Diretta GitHub API
+                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione Diretta GitHub API (bets.json & users.json)
                             </div>
                             <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">Non configurata.</div>
                         </div>
@@ -148,6 +148,104 @@
                             Salva
                         </button>
                     </div>
+                </div>
+            </section>
+
+            <!-- SEZIONE: GESTIONE ABBONATI & LICENZE (users.json) -->
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/20 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-xs sm:text-sm font-bold text-white">Gestione Abbonati & Licenze (users.json)</h2>
+                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-2 py-0.5 rounded font-black uppercase">Stripe / Make Sync</span>
+                            </div>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">Monitora gli accessi sbloccati su Telegram e abilita manualmente nuovi codici d'accesso al sito web.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="toggleAddUserModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow">
+                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Nuovo Abbonato
+                        </button>
+                        <button type="button" onclick="syncUsersFromGitHub()" title="Ricarica users.json da GitHub" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-blue-400"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FORM AGGIUNTA MANUALE UTENTE (COMPATTABILE) -->
+                <div id="add-user-panel" class="hidden bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-3">
+                    <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                        <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Inserisci Nuovo Abbonamento
+                    </div>
+                    <form onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
+                        <div>
+                            <label class="block text-slate-400 mb-1 text-[11px]">Riferimento / Nome / Email</label>
+                            <input type="text" id="new_user_ident" required placeholder="Es. mario.rossi@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 text-[11px]">ID Utente Telegram</label>
+                            <input type="text" id="new_user_tgid" placeholder="Es. 123456789" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 text-[11px]">Piano Sottoscritto</label>
+                            <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                                <option value="pure">Pure Signal (Top Ticket)</option>
+                                <option value="elite" selected>Cluster Elite (Bilanciato)</option>
+                                <option value="full">All-Inclusive (Tutti)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 text-[11px]">Durata (Giorni)</label>
+                            <input type="number" id="new_user_days" value="30" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                        </div>
+                        <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
+                            <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
+                            <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-lg transition">Salva & Sblocca</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- METRICHE ABBONATI -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Abbonati Attivi</span>
+                        <span id="usr-active-count" class="text-base font-bold text-emerald-400">0</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Abbonati Scaduti</span>
+                        <span id="usr-expired-count" class="text-base font-bold text-rose-400">0</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Piano Più Scelto</span>
+                        <span id="usr-top-plan" class="text-base font-bold text-amber-400">-</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Stato users.json</span>
+                        <span id="usr-sync-status" class="text-base font-bold text-slate-300">Locale / Sincro</span>
+                    </div>
+                </div>
+
+                <!-- TABELLA UTENTI -->
+                <div class="overflow-x-auto rounded-xl border border-slate-800">
+                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
+                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                            <tr>
+                                <th class="py-2.5 px-3">Utente / Email</th>
+                                <th class="py-2.5 px-3">Piano</th>
+                                <th class="py-2.5 px-3">Telegram ID</th>
+                                <th class="py-2.5 px-3">Codice Accesso Web</th>
+                                <th class="py-2.5 px-3 text-center">Scadenza</th>
+                                <th class="py-2.5 px-3 text-center">Stato</th>
+                                <th class="py-2.5 px-3 text-right">Azioni Rapide</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                    </table>
                 </div>
             </section>
 
@@ -537,18 +635,19 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE, SCANNER, OTTIMIZZATORE & DISPATCHER TELEGRAM -->
+    <!-- SCRIPT GESTIONALE, SCANNER, USERS SYNC & DISPATCHER TELEGRAM -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
         const CONFIRMED_CONFLICTS_KEY = "atmbet_confirmed_conflicts";
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
+        const USERS_LOCAL_KEY = 'atmbet_users_accounts';
         const GH_REPO_KEY = 'atmbet_gh_repo';
         const GH_TOKEN_KEY = 'atmbet_gh_token';
         const TG_CONF_KEY = 'atmbet_tg_config';
 
-        // Credenziali Telegram predefinite hardcoded (visibili solo internamente al codice)
+        // Credenziali Telegram predefinite hardcoded
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
             channel_pure: "-1004237267545",
@@ -583,6 +682,238 @@
         let currentCustomDate = '';
         let currentClusterMode = 'all';
 
+        // ==================== SEZIONE GESTIONE UTENTI (users.json) ====================
+        function loadAllUsers() {
+            try {
+                const raw = localStorage.getItem(USERS_LOCAL_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function persistUsers(users) {
+            localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(users));
+            renderUsersTable();
+            syncUsersToGitHub(users);
+        }
+
+        function toggleAddUserModal() {
+            const panel = document.getElementById('add-user-panel');
+            if (panel) panel.classList.toggle('hidden');
+        }
+
+        function handleManualCreateUser(e) {
+            e.preventDefault();
+            const ident = document.getElementById('new_user_ident').value.trim();
+            const tgId = document.getElementById('new_user_tgid').value.trim();
+            const plan = document.getElementById('new_user_plan').value;
+            const days = parseInt(document.getElementById('new_user_days').value) || 30;
+
+            const expDate = new Date();
+            expDate.setDate(expDate.getDate() + days);
+            const expDateStr = getLocalDateString(expDate);
+
+            const accessCode = 'ATM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+            const users = loadAllUsers();
+            users.unshift({
+                id: 'u_' + Date.now(),
+                identifier: ident,
+                telegram_id: tgId || '-',
+                plan: plan,
+                access_code: accessCode,
+                created_at: getLocalDateString(new Date()),
+                expires_at: expDateStr,
+                status: 'active'
+            });
+
+            persistUsers(users);
+            e.target.reset();
+            toggleAddUserModal();
+            alert(`Abbonato salvato con successo! Codice Web generato: ${accessCode}`);
+        }
+
+        function extendUserDays(userId, daysToAdd) {
+            const users = loadAllUsers();
+            const u = users.find(x => String(x.id) === String(userId));
+            if (!u) return;
+
+            let curExp = new Date(u.expires_at);
+            if (isNaN(curExp.getTime()) || curExp < new Date()) {
+                curExp = new Date();
+            }
+            curExp.setDate(curExp.getDate() + daysToAdd);
+            u.expires_at = getLocalDateString(curExp);
+            u.status = 'active';
+
+            persistUsers(users);
+            alert(`Abbonamento prolungato di ${daysToAdd} giorni fino al ${u.expires_at}`);
+        }
+
+        function deleteUser(userId) {
+            if (confirm("Revocare e rimuovere questo utente dall'archivio?")) {
+                let users = loadAllUsers();
+                users = users.filter(x => String(x.id) !== String(userId));
+                persistUsers(users);
+            }
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('users-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const users = loadAllUsers();
+            const todayStr = getLocalDateString(new Date());
+
+            let activeCount = 0;
+            let expiredCount = 0;
+            const planFreq = {};
+
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun abbonato presente in users.json. Inserisci il primo per iniziare.</td></tr>`;
+            }
+
+            users.forEach(u => {
+                const isExpired = u.expires_at < todayStr;
+                if (isExpired) expiredCount++; else activeCount++;
+
+                planFreq[u.plan] = (planFreq[u.plan] || 0) + 1;
+
+                const planBadge = u.plan === 'pure' 
+                    ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
+                    : (u.plan === 'elite' 
+                        ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
+                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ALL-INCLUSIVE</span>`);
+
+                const statusBadge = !isExpired
+                    ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono text-[9px] font-bold">ATTIVO</span>`
+                    : `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded font-mono text-[9px] font-bold">SCADUTO</span>`;
+
+                const tr = document.createElement('tr');
+                tr.className = isExpired ? "hover:bg-rose-500/[0.03]" : "hover:bg-emerald-500/[0.03]";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 font-bold text-white">
+                        <div>${u.identifier}</div>
+                        <div class="text-[9px] text-slate-500 font-mono">Iscritto il ${u.created_at || '-'}</div>
+                    </td>
+                    <td class="py-2.5 px-3">${planBadge}</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-300 text-[11px]">${u.telegram_id || '-'}</td>
+                    <td class="py-2.5 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer" title="Clicca per selezionare il codice">${u.access_code}</td>
+                    <td class="py-2.5 px-3 text-center font-mono text-slate-300">${u.expires_at}</td>
+                    <td class="py-2.5 px-3 text-center">${statusBadge}</td>
+                    <td class="py-2.5 px-3 text-right">
+                        <div class="flex items-center justify-end gap-1.5">
+                            <button type="button" onclick="extendUserDays('${u.id}', 30)" title="Aggiungi 30 giorni di abbonamento" class="text-xs bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-2 py-1 rounded font-bold transition">
+                                +30gg
+                            </button>
+                            <button type="button" onclick="deleteUser('${u.id}')" title="Rimuovi utente" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const activeEl = document.getElementById('usr-active-count');
+            const expiredEl = document.getElementById('usr-expired-count');
+            const topPlanEl = document.getElementById('usr-top-plan');
+
+            if (activeEl) activeEl.innerText = activeCount;
+            if (expiredEl) expiredEl.innerText = expiredCount;
+            if (topPlanEl) {
+                const topKey = Object.keys(planFreq).sort((a,b) => planFreq[b] - planFreq[a])[0];
+                topPlanEl.innerText = topKey ? topKey.toUpperCase() : '-';
+            }
+            lucide.createIcons();
+        }
+
+        async function syncUsersToGitHub(users) {
+            const repo = localStorage.getItem(GH_REPO_KEY);
+            const token = localStorage.getItem(GH_TOKEN_KEY);
+            if (!repo || !token) return;
+
+            try {
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json`;
+                let currentSha = null;
+
+                const getRes = await fetch(getFileUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    currentSha = fileData.sha;
+                }
+
+                const jsonString = JSON.stringify(users, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+
+                const bodyPayload = {
+                    message: `Aggiornamento automatico users.json [${new Date().toISOString()}]`,
+                    content: base64Content
+                };
+                if (currentSha) bodyPayload.sha = currentSha;
+
+                const putRes = await fetch(getFileUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+
+                const syncEl = document.getElementById('usr-sync-status');
+                if (syncEl) syncEl.innerText = putRes.ok ? "Sincronizzato" : "Errore Sincro";
+            } catch(e) {
+                const syncEl = document.getElementById('usr-sync-status');
+                if (syncEl) syncEl.innerText = "Offline";
+            }
+        }
+
+        async function syncUsersFromGitHub() {
+            const repo = localStorage.getItem(GH_REPO_KEY);
+            const token = localStorage.getItem(GH_TOKEN_KEY);
+            if (!repo || !token) {
+                alert("Configura prima Repository e GitHub Token in alto.");
+                return;
+            }
+
+            try {
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json`;
+                const getRes = await fetch(getFileUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    const content = decodeURIComponent(escape(atob(fileData.content)));
+                    const parsed = JSON.parse(content);
+                    if (Array.isArray(parsed)) {
+                        localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(parsed));
+                        renderUsersTable();
+                        alert(`Caricati ${parsed.length} abbonati aggiornati da users.json su GitHub!`);
+                    }
+                } else {
+                    alert("File users.json non trovato su GitHub. Salva un utente per crearlo automaticamente.");
+                }
+            } catch(err) {
+                alert("Errore lettura users.json da GitHub: " + err.message);
+            }
+        }
+
+        // ==================== CONFIGURAZIONE E DISPATCHER TELEGRAM ====================
         function loadTelegramConfig() {
             try {
                 const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
@@ -621,7 +952,6 @@
             return res.json();
         }
 
-        // INVIO GLOBALE DEI SEGNALI (SOLO NUOVI NON ANCORA INVIATI)
         async function dispatchTelegramSignals(channelType) {
             const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
             const token = conf.token || DEFAULT_TG_CONFIG.token;
@@ -642,7 +972,6 @@
             const bets = loadAllBets();
             const todayStr = getLocalDateString(new Date());
 
-            // FILTRO INTELLIGENTE: Solo pronostici pendenti di oggi che NON sono mai stati inviati (!b.tg_sent)
             const pendings = bets.filter(b => b.status === 'pending' && extractStandardDate(b.event_date) >= todayStr && !b.tg_sent);
             
             if (pendings.length === 0) {
@@ -687,7 +1016,6 @@
                 }
 
             } else {
-                // CANALE ALL-INCLUSIVE
                 const toSend = pendings;
                 const BATCH_SIZE = 8;
                 const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
@@ -734,7 +1062,6 @@
             }
         }
 
-        // INVIO RAPIDO DI UN SINGOLO PRONOSTICO AL RELATIVO CANALE TELEGRAM
         async function sendSingleBetToTelegram(betId) {
             const bets = loadAllBets();
             const b = bets.find(x => String(x.id) === String(betId));
@@ -819,6 +1146,7 @@
             loadGitHubSettings();
             loadTelegramConfig();
             resetDate();
+            renderUsersTable();
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
             renderDashboard();
@@ -1080,6 +1408,7 @@
             updateSyncBadge('ready');
             alert("Credenziali salvate!");
             syncBetsToGitHub(loadAllBets());
+            syncUsersToGitHub(loadAllUsers());
         }
 
         function updateSyncBadge(status, message) {
@@ -1089,7 +1418,7 @@
 
             if (status === 'ready') {
                 icon.className = 'w-3 h-3 rounded-full bg-emerald-500 shrink-0 animate-pulse';
-                text.innerText = 'Pronto. I commit automatici su bets.json sono attivi.';
+                text.innerText = 'Pronto. I commit automatici su bets.json e users.json sono attivi.';
                 text.className = 'text-[10px] text-emerald-400 font-mono';
             } else if (status === 'syncing') {
                 icon.className = 'w-3 h-3 rounded-full bg-amber-500 shrink-0 animate-ping';
@@ -1113,7 +1442,6 @@
         async function syncBetsToGitHub(bets) {
             const repo = localStorage.getItem(GH_REPO_KEY);
             const token = localStorage.getItem(GH_TOKEN_KEY);
-
             if (!repo || !token) return;
 
             updateSyncBadge('syncing');
@@ -1141,9 +1469,7 @@
                     message: `Aggiornamento automatico bets.json da AtmBet Console [${new Date().toISOString()}]`,
                     content: base64Content
                 };
-                if (currentSha) {
-                    bodyPayload.sha = currentSha;
-                }
+                if (currentSha) bodyPayload.sha = currentSha;
 
                 const putRes = await fetch(getFileUrl, {
                     method: 'PUT',
@@ -1155,9 +1481,8 @@
                     body: JSON.stringify(bodyPayload)
                 });
 
-                if (putRes.ok) {
-                    updateSyncBadge('success');
-                } else {
+                if (putRes.ok) updateSyncBadge('success');
+                else {
                     const errData = await putRes.json();
                     updateSyncBadge('error', errData.message || 'Errore commit');
                 }
@@ -1398,14 +1723,8 @@
 
         function setFilter(filterType, element) {
             currentFilter = filterType;
-
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('filter-btn-active');
-            });
-            if (element) {
-                element.classList.add('filter-btn-active');
-            }
-
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('filter-btn-active'));
+            if (element) element.classList.add('filter-btn-active');
             renderDashboard();
         }
 
@@ -1643,7 +1962,6 @@
             if (currentClusterMode === 'pure') {
                 allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
             } else if (currentClusterMode === 'elite') {
-                // 1. Calcola il profitto netto reale sui dati storici completi
                 const fullArchive = loadAllBets();
                 const tipsterNetProfits = {};
 
@@ -1656,10 +1974,7 @@
                     }
                 });
 
-                // 2. Prende solo i tipster con profitto netto strettamente positivo (> 0u)
                 const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
-
-                // 3. Filtra allBets includendo solo i canali in profitto
                 allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
             }
 
@@ -1857,38 +2172,9 @@
             if (dateInput) dateInput.value = now.toISOString().slice(0, 16);
         }
 
-                        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             checkAdminSession();
-
-            // UNIFICAZIONE AUTOMATICA STATS4BETS
-            (function mergeStats4bets() {
-                const PRIMARY_KEY = 'tipster_tracker_v1';
-                const ATMBET_KEY = 'atmbet_bets_data';
-
-                let bets = [];
-                try {
-                    bets = JSON.parse(localStorage.getItem(PRIMARY_KEY)) || JSON.parse(localStorage.getItem(ATMBET_KEY)) || [];
-                } catch(e) { return; }
-
-                let modifiedCount = 0;
-                bets.forEach(b => {
-                    const raw = (b.original_tipster || '').trim().toLowerCase();
-                    if ((raw === 'stats4bets' || raw.includes('automatibet')) && !raw.includes('bollamaker')) {
-                        if (b.original_tipster !== 'Stats4Bets Automatibet') {
-                            b.original_tipster = 'Stats4Bets Automatibet';
-                            modifiedCount++;
-                        }
-                    }
-                });
-
-                if (modifiedCount > 0) {
-                    localStorage.setItem(PRIMARY_KEY, JSON.stringify(bets));
-                    localStorage.setItem(ATMBET_KEY, JSON.stringify(bets));
-                    if (typeof renderDashboard === 'function') renderDashboard();
-                    if (typeof syncBetsToGitHub === 'function') syncBetsToGitHub(bets);
-                }
-                        })();
         });
     </script>
 </body>
