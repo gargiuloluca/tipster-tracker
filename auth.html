@@ -52,7 +52,7 @@
                 <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
             </a>
             <a href="index.html" class="text-xs text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition">
-                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Vetrina Pubblica
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Torna alla Vetrina
             </a>
         </div>
     </header>
@@ -62,63 +62,20 @@
         <div class="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative backdrop-blur-xl">
             
             <!-- Logo e Intestazione Card -->
-            <div class="text-center mb-5 sm:mb-6">
+            <div class="text-center mb-6">
                 <div class="inline-flex p-2.5 sm:p-3 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 mb-3 shadow-lg shadow-emerald-500/10">
                     <i data-lucide="shield-check" class="w-6 h-6 sm:w-7 sm:h-7"></i>
                 </div>
-                <h1 id="auth-title" class="text-xl sm:text-2xl font-black text-white tracking-tight">Accedi all'Area Riservata</h1>
-                <p id="auth-subtitle" class="text-xs text-slate-400 mt-1">Inserisci le tue credenziali per accedere al tuo cruscotto operativo.</p>
+                <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Accedi all'Area Riservata</h1>
+                <p class="text-xs text-slate-400 mt-1">Inserisci l'email utilizzata su Stripe o il tuo codice licenza per entrare nel cruscotto.</p>
             </div>
 
-            <!-- Banner Promozione Prova Gratuita (Visibile su Registrati) -->
-            <div id="trial-badge-box" class="hidden mb-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-slate-200">
-                <div class="flex items-center gap-2 font-bold text-emerald-400 mb-0.5">
-                    <i data-lucide="sparkles" class="w-4 h-4 shrink-0"></i> 7 Giorni VIP + 5 Crediti Gratuiti
-                </div>
-                <p class="text-[11px] text-slate-400 leading-relaxed">
-                    Nessuna carta richiesta. Ricevi 5 crediti per sbloccare i pronostici e scopri il metodo quantitativo.
-                </p>
-            </div>
-
-            <!-- Tab Switcher Touch (Accedi / Registrati) -->
-            <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 mb-5">
-                <button type="button" onclick="switchAuthTab('login')" id="tab-login" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950 shadow">
-                    Accedi
-                </button>
-                <button type="button" onclick="switchAuthTab('register')" id="tab-register" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
-                    Registrati VIP
-                </button>
-            </div>
-
-            <!-- Form Unificato -->
-            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-3.5">
+            <!-- Form di Accesso Pulito -->
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 
-                <!-- Nome (Solo su Registrazione) -->
-                <div id="field-name" class="hidden">
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nome o Pseudonimo</label>
-                    <div class="relative">
-                        <i data-lucide="user" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                        <input type="text" id="user-name" placeholder="Es. Mario Rossi"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
-                    </div>
-                </div>
-
-                <!-- Selezione Piano (Solo su Registrazione) -->
-                <div id="field-plan-select" class="hidden">
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Seleziona Tipologia Iniziale</label>
-                    <div class="relative">
-                        <select id="user-plan-choice" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 transition">
-                            <option value="trial_vip">🎁 Prova Gratuita (7 Giorni VIP + 5 Crediti)</option>
-                            <option value="pure">⚡ AtmBet Signal PURE (Max 5/die - 39.90€/m)</option>
-                            <option value="all_inclusive">🌐 VIP All-Inclusive (Full Volume - 24.90€/m)</option>
-                            <option value="credits">🎟️ Pacchetto 10 Crediti (9.90€)</option>
-                        </select>
-                    </div>
-                </div>
-
                 <!-- Email -->
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Indirizzo Email</label>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Indirizzo Email Abbonato</label>
                     <div class="relative">
                         <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         <input type="email" id="user-email" required placeholder="tua@email.com"
@@ -126,9 +83,12 @@
                     </div>
                 </div>
 
-                <!-- Password -->
+                <!-- Password / Codice -->
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Password</label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-[11px] font-semibold text-slate-400">Password o Codice Licenza</label>
+                        <span class="text-[10px] text-slate-500 font-mono">es. ATM-XXXXXX</span>
+                    </div>
                     <div class="relative">
                         <i data-lucide="key" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         <input type="password" id="user-password" required placeholder="••••••••"
@@ -141,10 +101,18 @@
 
                 <!-- Pulsante Submit -->
                 <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10 mt-2">
-                    <span id="submit-btn-text">Entra nel Cruscotto</span>
+                    <span>Entra nel Cruscotto VIP</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </form>
+
+            <!-- Link di supporto se non ha ancora il piano -->
+            <div class="mt-5 pt-4 border-t border-slate-800 text-center text-xs text-slate-400">
+                Non possiedi ancora un abbonamento attivo? 
+                <a href="index.html#piani" class="text-emerald-400 font-bold hover:underline block sm:inline mt-1 sm:mt-0 ml-1">
+                    Scegli un Piano o Prova 7 Giorni &rarr;
+                </a>
+            </div>
 
             <!-- Box di Simulazione e Test Veloce (Visibile ESCLUSIVAMENTE all'Admin) -->
             <div id="admin-dev-box" class="hidden mt-6 pt-5 border-t border-slate-800/80">
@@ -165,22 +133,19 @@
             </div>
 
             <div class="mt-5 text-center text-[11px] text-slate-500">
-                AtmBet &copy; 2026. Accesso protetto con persistenza certificata.
+                AtmBet &copy; 2026. Accesso protetto con verifica diretta Stripe & GitHub.
             </div>
 
         </div>
     </main>
 
-    <!-- LOGICA AUTENTICAZIONE LOCALSTORAGE -->
+    <!-- LOGICA AUTENTICAZIONE SINCRONIZZATA CON users.json -->
     <script>
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
 
-        let currentAuthMode = 'login'; // 'login' oppure 'register'
-
         function checkAdminDevVisibility() {
-            // Rende visibile il pannello dei 3 bottoni solo se l'utente ha fatto l'accesso in admin.html
             const isAdmin = sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true";
             const devBox = document.getElementById('admin-dev-box');
             if (devBox) {
@@ -192,186 +157,105 @@
             }
         }
 
-        function getUsersDatabase() {
-            const raw = localStorage.getItem(USERS_DB_KEY);
-            if (!raw) return [];
+        async function fetchLiveUsers() {
             try {
-                return JSON.parse(raw);
-            } catch(e) {
-                return [];
-            }
+                const res = await fetch('users.json?_t=' + Date.now(), { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) return data;
+                }
+            } catch(e) {}
+
+            try {
+                const localRaw = localStorage.getItem(USERS_DB_KEY);
+                if (localRaw) return JSON.parse(localRaw);
+            } catch(e) {}
+
+            return [];
         }
 
-        function saveUsersDatabase(users) {
-            localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+        function getLocalDateString(d) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
 
-        function switchAuthTab(mode) {
-            currentAuthMode = mode;
-            const tabLogin = document.getElementById('tab-login');
-            const tabRegister = document.getElementById('tab-register');
-            const fieldName = document.getElementById('field-name');
-            const fieldPlanSelect = document.getElementById('field-plan-select');
-            const title = document.getElementById('auth-title');
-            const subtitle = document.getElementById('auth-subtitle');
-            const btnText = document.getElementById('submit-btn-text');
-            const trialBadge = document.getElementById('trial-badge-box');
-            const alertBox = document.getElementById('auth-alert');
-
-            alertBox.className = "hidden text-xs p-2.5 rounded-lg font-medium text-center";
-
-            if (mode === 'register') {
-                tabRegister.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950 shadow";
-                tabLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
-                fieldName.classList.remove('hidden');
-                fieldPlanSelect.classList.remove('hidden');
-                trialBadge.classList.remove('hidden');
-                title.innerText = "Crea il Tuo Account VIP";
-                subtitle.innerText = "Configura il tuo profilo e accedi alle selezioni certificate.";
-                btnText.innerText = "Registrati e Ricevi l'Accesso";
-            } else {
-                tabLogin.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-emerald-500 text-slate-950 shadow";
-                tabRegister.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
-                fieldName.classList.add('hidden');
-                fieldPlanSelect.classList.add('hidden');
-                trialBadge.classList.add('hidden');
-                title.innerText = "Accedi all'Area Riservata";
-                subtitle.innerText = "Inserisci le tue credenziali per accedere al tuo cruscotto.";
-                btnText.innerText = "Entra nel Cruscotto";
-            }
-            lucide.createIcons();
-        }
-
-        function handleAuthSubmit(e) {
+        async function handleAuthSubmit(e) {
             e.preventDefault();
-            const email = document.getElementById('user-email').value.trim().toLowerCase();
-            const password = document.getElementById('user-password').value;
-            const alertBox = document.getElementById('auth-alert');
+            const emailInput = document.getElementById('user-email').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('user-password').value.trim();
 
-            if (!email || !password) {
-                showAlert("Inserisci email e password per continuare.", "error");
+            if (!emailInput || !passwordInput) {
+                showAlert("Inserisci email e password o codice licenza.", "error");
                 return;
             }
 
-            const users = getUsersDatabase();
+            showAlert("Verifica licenza in corso...", "info");
 
-            if (currentAuthMode === 'register') {
-                const name = document.getElementById('user-name').value.trim() || 'Investitore';
-                const chosenPlan = document.getElementById('user-plan-choice').value || 'trial_vip';
-                const exists = users.find(u => u.email === email);
+            const users = await fetchLiveUsers();
+            const todayStr = getLocalDateString(new Date());
 
-                if (exists) {
-                    showAlert("Esiste già un account con questa email. Accedi.", "error");
-                    return;
-                }
+            // Ricerca utente per email o per codice licenza/identificativo
+            const user = users.find(u => {
+                const uEmail = (u.email || u.identifier || '').trim().toLowerCase();
+                const uCode = (u.access_code || u.code || '').trim().toLowerCase();
+                return uEmail === emailInput || uCode === emailInput;
+            });
 
-                const now = new Date();
-                let initialCredits = 5;
-                let trialExpiry = null;
-                let planExpires = null;
-
-                if (chosenPlan === 'trial_vip') {
-                    trialExpiry = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
-                    initialCredits = 5;
-                } else if (chosenPlan === 'credits') {
-                    initialCredits = 10;
-                } else {
-                    // PURE o ALL_INCLUSIVE: 30 giorni
-                    planExpires = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
-                }
-
-                const newUser = {
-                    id: 'usr_' + Date.now(),
-                    name: name,
-                    email: email,
-                    password: password,
-                    created_at: now.toISOString(),
-                    plan: chosenPlan,
-                    plan_expires: planExpires,
-                    trial_expiry: trialExpiry,
-                    credits: initialCredits,
-                    unlocked_bets: []
-                };
-
-                users.push(newUser);
-                saveUsersDatabase(users);
-
-                // Salva sessione attiva
-                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(newUser));
-
-                showAlert("Account creato con successo! Attivazione completata...", "success");
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-
-            } else {
-                // Modalità LOGIN
-                const user = users.find(u => u.email === email && u.password === password);
-
-                if (!user) {
-                    // Creazione demo primo utente se DB vuoto
-                    if (users.length === 0) {
-                        const now = new Date();
-                        const firstUser = {
-                            id: 'usr_' + Date.now(),
-                            name: email.split('@')[0],
-                            email: email,
-                            password: password,
-                            created_at: now.toISOString(),
-                            plan: 'pure',
-                            plan_expires: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                            trial_expiry: null,
-                            credits: 10,
-                            unlocked_bets: []
-                        };
-                        users.push(firstUser);
-                        saveUsersDatabase(users);
-                        localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(firstUser));
-                        showAlert("Primo accesso rilevato: account creato e piano attivo!", "success");
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 1000);
-                        return;
-                    }
-
-                    showAlert("Credenziali non valide. Verifica email e password o registrati.", "error");
-                    return;
-                }
-
-                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(user));
-                showAlert("Accesso autorizzato. Reindirizzamento...", "success");
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 800);
+            if (!user) {
+                showAlert("Nessun abbonamento trovato per questa email. Attiva un piano.", "error");
+                return;
             }
+
+            // Verifica scadenza licenza
+            const exp = user.expires_at || user.expiration || user.plan_expires;
+            if (exp && exp !== '-' && exp < todayStr) {
+                showAlert("Il tuo abbonamento è scaduto il " + exp + ". Rinnovalo per continuare.", "error");
+                return;
+            }
+
+            // Mappatura piano
+            let mappedPlan = 'all_inclusive';
+            if (user.plan === 'pure') mappedPlan = 'pure';
+            else if (user.plan === 'full' || user.plan === 'all_inclusive') mappedPlan = 'all_inclusive';
+            else if (user.plan === 'credits') mappedPlan = 'credits';
+            else if (user.plan === 'trial' || user.plan === 'trial_vip') mappedPlan = 'trial_vip';
+
+            const sessionData = {
+                id: user.id || ('usr_' + Date.now()),
+                name: user.name || emailInput.split('@')[0],
+                email: user.email || emailInput,
+                role: user.role || 'user',
+                plan: mappedPlan,
+                expires_at: exp || '2099-12-31',
+                credits: user.credits !== undefined ? user.credits : 5,
+                unlocked_bets: user.unlocked_bets || []
+            };
+
+            // Salva sessione attiva per index.html
+            localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(sessionData));
+
+            showAlert("Accesso autorizzato! Reindirizzamento al cruscotto...", "success");
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 800);
         }
 
-        // Funzione rapida di test (riservata ad admin)
         function quickDevLogin(planType) {
             const now = new Date();
             const devUser = {
                 id: 'usr_dev_' + planType,
                 name: 'Tester ' + planType.toUpperCase(),
                 email: planType + '@atmbet.local',
-                password: 'password123',
-                created_at: now.toISOString(),
+                role: 'user',
                 plan: planType,
-                plan_expires: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-                trial_expiry: null,
-                credits: planType === 'credits' ? 10 : (planType === 'pure' ? 5 : 0),
+                expires_at: '2099-12-31',
+                credits: planType === 'credits' ? 10 : 5,
                 unlocked_bets: []
             };
 
-            const users = getUsersDatabase();
-            const idx = users.findIndex(u => u.email === devUser.email);
-            if (idx >= 0) {
-                users[idx] = devUser;
-            } else {
-                users.push(devUser);
-            }
-            saveUsersDatabase(users);
             localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(devUser));
-
             showAlert(`Loggato come account di test: ${planType.toUpperCase()}`, "success");
             setTimeout(() => {
                 window.location.href = 'index.html';
@@ -384,6 +268,8 @@
             alertBox.classList.remove('hidden');
             if (type === 'error') {
                 alertBox.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-rose-500/10 text-rose-400 border border-rose-500/30";
+            } else if (type === 'info') {
+                alertBox.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-blue-500/10 text-blue-400 border border-blue-500/30";
             } else {
                 alertBox.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
             }
@@ -391,10 +277,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             checkAdminDevVisibility();
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('mode') === 'register') {
-                switchAuthTab('register');
-            }
             lucide.createIcons();
         });
     </script>
