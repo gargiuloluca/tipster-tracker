@@ -1,0 +1,10 @@
+[
+  {
+    "access_code": "ATMBET-DEMO-2026",
+    "plan": "pure",
+    "telegram_id": "",
+    "customer_email": "demo@atmbet.com",
+    "expires_at": "2027-12-31",
+    "is_active": true
+  }
+]
