@@ -97,8 +97,11 @@
                 <a href="#faq" class="text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
             </div>
 
-            <!-- CONTENITORE DINAMICO ACCEDI / PROFILO UTENTE -->
+            <!-- CONTENITORE DINAMICO ACCEDI / PROFILO UTENTE / SBLOCCO CODICE -->
             <div id="nav-user-area" class="flex items-center gap-2 sm:gap-3">
+                <button type="button" onclick="openLicenseModal()" class="text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 px-2 py-1.5 transition flex items-center gap-1">
+                    <i data-lucide="key" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Codice</span> Sblocco
+                </button>
                 <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition">Accedi</a>
                 <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Registrati</span> VIP
@@ -106,6 +109,43 @@
             </div>
         </div>
     </nav>
+
+    <!-- MODALE DI VERIFICA CODICE LICENZA (users.json) -->
+    <div id="license-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9999] hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-7 rounded-3xl max-w-sm w-full shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
+                        <i data-lucide="key" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Attiva Codice Abbonamento</h3>
+                        <p class="text-[11px] text-slate-400">Ricevuto dopo il pagamento su Telegram o Stripe</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeLicenseModal()" class="text-slate-500 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleVerifyLicense(event)" class="space-y-3">
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[11px]">Codice Personale (es. ATM-XXXXXX)</label>
+                    <input type="text" id="user-license-code" required placeholder="ATM-XXXXXX"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white text-center tracking-widest uppercase font-mono focus:outline-none focus:border-emerald-500">
+                </div>
+                <div id="license-error-msg" class="text-[11px] font-bold text-rose-400 hidden text-center">Codice inesistente o scaduto.</div>
+                <div id="license-success-msg" class="text-[11px] font-bold text-emerald-400 hidden text-center">Licenza sbloccata con successo!</div>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
+                    Sblocca Vetrina & VIP
+                </button>
+            </form>
+
+            <div class="text-[10px] text-slate-500 text-center font-sans">
+                Non possiedi un codice? Scegli un piano nella sezione sottostante.
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN BODY -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-10 sm:space-y-14 flex-1 w-full">
@@ -133,9 +173,14 @@
                     </div>
                     <div class="text-base sm:text-lg font-black text-white text-left mb-1 relative z-10">7 Giorni VIP + 5 Crediti Omaggio</div>
                     <p class="text-[11px] text-slate-400 text-left mb-3.5 relative z-10">Registrati gratuitamente per sbloccare le quote reali, i mercati e le analisi dettagliate nel tuo cruscotto personale.</p>
-                    <a href="auth.html?mode=register" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 relative z-10">
-                        Crea Account Gratuito <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
+                    <div class="flex items-center gap-2 relative z-10">
+                        <a href="auth.html?mode=register" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20">
+                            Crea Account <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                        <button type="button" onclick="openLicenseModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                            <i data-lucide="key" class="w-3.5 h-3.5"></i> Riscatta
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -151,7 +196,7 @@
                         Ricevi i Segnali su Telegram in Tempo Reale
                     </div>
                     <p id="tg-banner-desc" class="text-xs text-slate-400 mt-0.5">
-                        Accedi con il tuo account per collegare il Canale Telegram ufficiale dedicato al tuo piano.
+                        Accedi con il tuo account o sblocca la tua licenza per collegare il Canale Telegram ufficiale dedicato al tuo piano.
                     </p>
                 </div>
             </div>
@@ -549,8 +594,9 @@
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Zero canoni o rinnovi</li>
                         </ul>
                     </div>
-                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
-                        Acquista Crediti
+                    <!-- LINK PAGAMENTO STRIPE/BOT CREDITI -->
+                    <a href="https://t.me/AtmBetOfficialBot?start=buy_credits_10" target="_blank" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
+                        <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i> Acquista Crediti
                     </a>
                 </div>
 
@@ -567,8 +613,9 @@
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Ideale per alto turnover</li>
                         </ul>
                     </div>
-                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
-                        Attiva All-Inclusive
+                    <!-- LINK PAGAMENTO STRIPE/BOT ALL-INCLUSIVE -->
+                    <a href="https://t.me/AtmBetOfficialBot?start=subscribe_full" target="_blank" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Attiva All-Inclusive
                     </a>
                 </div>
 
@@ -589,8 +636,9 @@
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Minimo drawdown, massima resa</li>
                         </ul>
                     </div>
-                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-500/20">
-                        Abbonati a Signal PURE
+                    <!-- LINK PAGAMENTO STRIPE/BOT PURE -->
+                    <a href="https://t.me/AtmBetOfficialBot?start=subscribe_pure" target="_blank" class="mt-6 w-full text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-1.5">
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Abbonati a Signal PURE
                     </a>
                 </div>
 
@@ -607,8 +655,9 @@
                             <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Risparmi oltre 30€ sul canone</li>
                         </ul>
                     </div>
-                    <a href="auth.html?mode=register" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700">
-                        Scegli Trimestrale
+                    <!-- LINK PAGAMENTO STRIPE/BOT TRIMESTRALE -->
+                    <a href="https://t.me/AtmBetOfficialBot?start=subscribe_pure_trim" target="_blank" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Scegli Trimestrale
                     </a>
                 </div>
 
@@ -676,7 +725,7 @@
         </div>
     </footer>
 
-    <!-- LOGICA JAVASCRIPT OTTIMIZZATA, CONTROLLO ACCESSI & TELEGRAM BANNER -->
+    <!-- LOGICA JAVASCRIPT OTTIMIZZATA, CONTROLLO ACCESSI, LICENZE & TELEGRAM BANNER -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -702,6 +751,85 @@
         let activeUser = null;
         let historyDisplayLimit = 15;
 
+        // ==================== CONTROLLO LICENZE ESTERNE (users.json) ====================
+        function openLicenseModal() {
+            const m = document.getElementById('license-modal');
+            if (m) m.classList.remove('hidden');
+        }
+
+        function closeLicenseModal() {
+            const m = document.getElementById('license-modal');
+            if (m) {
+                m.classList.add('hidden');
+                document.getElementById('license-error-msg').classList.add('hidden');
+                document.getElementById('license-success-msg').classList.add('hidden');
+            }
+        }
+
+        async function handleVerifyLicense(e) {
+            e.preventDefault();
+            const typedCode = document.getElementById('user-license-code').value.trim().toUpperCase();
+            const errEl = document.getElementById('license-error-msg');
+            const succEl = document.getElementById('license-success-msg');
+
+            errEl.classList.add('hidden');
+            succEl.classList.add('hidden');
+
+            try {
+                let users = [];
+                try {
+                    const res = await fetch('users.json?_t=' + Date.now(), { cache: 'no-store' });
+                    if (res.ok) users = await res.json();
+                } catch(netErr) {}
+
+                if (!Array.isArray(users) || users.length === 0) {
+                    const localRaw = localStorage.getItem(USERS_DB_KEY);
+                    if (localRaw) users = JSON.parse(localRaw);
+                }
+
+                const todayStr = getLocalDateString(new Date());
+                const match = users.find(u => {
+                    const uCode = (u.access_code || u.code || '').trim().toUpperCase();
+                    return uCode === typedCode;
+                });
+
+                if (match) {
+                    if (match.expires_at && match.expires_at < todayStr) {
+                        errEl.innerText = "Abbonamento scaduto il " + match.expires_at;
+                        errEl.classList.remove('hidden');
+                        return;
+                    }
+
+                    // Crea o sovrascrive sessione attiva
+                    const sessionData = {
+                        name: match.identifier ? match.identifier.split('@')[0] : 'Abbonato VIP',
+                        email: match.identifier || 'abbonato@atmbet.com',
+                        role: 'user',
+                        plan: match.plan === 'pure' ? 'pure' : (match.plan === 'full' ? 'all_inclusive' : 'elite'),
+                        access_code: match.access_code,
+                        expires_at: match.expires_at,
+                        credits: 99
+                    };
+
+                    saveActiveUserSession(sessionData);
+                    succEl.classList.remove('hidden');
+
+                    setTimeout(() => {
+                        closeLicenseModal();
+                        renderNavbarUserStatus();
+                        updateTelegramBanner();
+                        renderPublicCards();
+                    }, 1200);
+                } else {
+                    errEl.innerText = "Codice non trovato. Verifica il testo digitato.";
+                    errEl.classList.remove('hidden');
+                }
+            } catch(err) {
+                errEl.innerText = "Errore durante la verifica. Riprova.";
+                errEl.classList.remove('hidden');
+            }
+        }
+
         function getActiveUserSession() {
             try {
                 const raw = localStorage.getItem(CURRENT_SESSION_KEY);
@@ -717,9 +845,9 @@
                 const rawUsers = localStorage.getItem(USERS_DB_KEY);
                 if (rawUsers) {
                     const users = JSON.parse(rawUsers);
-                    const idx = users.findIndex(u => u.email === user.email);
+                    const idx = users.findIndex(u => u.email === user.email || u.access_code === user.access_code);
                     if (idx >= 0) {
-                        users[idx] = user;
+                        users[idx] = Object.assign({}, users[idx], user);
                         localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
                     }
                 }
@@ -736,7 +864,7 @@
 
             if (!user) {
                 title.innerHTML = "Ricevi i Segnali su Telegram in Tempo Reale";
-                desc.innerText = "Accedi o registrati per unirti al canale Telegram dedicato al tuo abbonamento.";
+                desc.innerText = "Accedi o sblocca la tua licenza per unirti al canale Telegram dedicato al tuo abbonamento.";
                 btn.href = "auth.html";
                 btn.removeAttribute('target');
                 label.innerText = "Accedi per Collegare";
@@ -749,7 +877,7 @@
                 btn.href = TELEGRAM_CONFIG.pure_channel_invite;
                 btn.target = "_blank";
                 label.innerText = "Entra nel Canale PURE";
-            } else if (user.plan === 'all_inclusive') {
+            } else if (user.plan === 'all_inclusive' || user.plan === 'elite') {
                 title.innerHTML = "🌐 Canale VIP Telegram: AtmBet Signal All-Inclusive";
                 desc.innerText = "Accesso illimitato al flusso completo di tutti i segnali e campionati su Telegram.";
                 btn.href = TELEGRAM_CONFIG.full_channel_invite;
@@ -772,6 +900,9 @@
 
             if (!activeUser) {
                 container.innerHTML = `
+                    <button type="button" onclick="openLicenseModal()" class="text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 px-2 py-1.5 transition flex items-center gap-1">
+                        <i data-lucide="key" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Codice</span> Sblocco
+                    </button>
                     <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition">Accedi</a>
                     <a href="auth.html?mode=register" class="text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black flex items-center gap-1.5 transition shadow-lg shadow-emerald-500/10">
                         <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Registrati</span> VIP
@@ -787,6 +918,9 @@
                 } else if (activeUser.plan === 'all_inclusive') {
                     badgeLabel = '🌐 All-Inclusive';
                     badgeClass = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+                } else if (activeUser.plan === 'elite') {
+                    badgeLabel = '🛡️ Cluster Elite';
+                    badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
                 } else if (activeUser.plan === 'credits') {
                     badgeLabel = `🎟️ ${activeUser.credits || 0} Crediti`;
                     badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
@@ -863,15 +997,12 @@
                 return;
             }
 
-            // Scala 1 credito
             activeUser.credits -= 1;
             if (!activeUser.unlocked_bets) activeUser.unlocked_bets = [];
             activeUser.unlocked_bets.push(String(betId));
 
-            // Salva sessione aggiornata
             saveActiveUserSession(activeUser);
 
-            // Ridisegna immediatamente le selezioni e l'interfaccia
             renderNavbarUserStatus();
             updateTelegramBanner();
             renderPublicCards();
@@ -978,7 +1109,6 @@
                 const rawTipster = (b.tipster || b.original_tipster || 'AtmBetSignal').trim();
                 const rawLower = rawTipster.toLowerCase();
 
-                // Regola rigorosa: PURE include SOLO il canale principale AtmBetSignal / AtmBet Selection ed esclude AtmBetSignal XG
                 const isXG = rawLower.includes('xg');
                 const isPureCandidate = !isXG && (
                     b.isPure === true ||
@@ -996,7 +1126,6 @@
                     prediction: b.prediction || b.pick || '-',
                     original_tipster: rawTipster,
                     is_pure: isPureCandidate,
-                    // Se fa parte del piano 5 segnali, mostriamo "AtmBet Selection", altrimenti "AtmBet Signal"
                     public_brand: isPureCandidate ? 'AtmBet Selection' : 'AtmBet Signal',
                     odds: parseFloat(b.odds || b.odd || 1.80),
                     stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
@@ -1324,12 +1453,10 @@
                     `;
                 }
 
-                // CONTROLLO DEI PERMESSI SUL PRONOSTICO
                 const access = getBetAccessState(activeUser, bet);
                 let signalDetailsHtml = '';
 
                 if (access.canView) {
-                    // Pronostico visibile in chiaro
                     signalDetailsHtml = `
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-emerald-500/30 my-2.5">
                             <div class="flex items-center justify-between mb-1">
@@ -1345,7 +1472,6 @@
                         </div>
                     `;
                 } else if (access.reason === "CAN_UNLOCK_CREDIT") {
-                    // Utente ha crediti e può sbloccare con 1 click
                     signalDetailsHtml = `
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-amber-500/30 my-2.5 text-center space-y-2">
                             <div class="flex items-center justify-center gap-1 text-[11px] text-amber-400 font-bold">
@@ -1357,7 +1483,6 @@
                         </div>
                     `;
                 } else if (access.reason === "UPGRADE_ALL_INCLUSIVE") {
-                    // Utente PURE che vede match di altri tipster
                     signalDetailsHtml = `
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800 my-2.5 text-center space-y-1.5">
                             <div class="text-[11px] text-slate-400 font-semibold flex items-center justify-center gap-1">
@@ -1369,7 +1494,6 @@
                         </div>
                     `;
                 } else {
-                    // Non loggato o senza crediti
                     signalDetailsHtml = `
                         <div class="bg-slate-950/80 rounded-xl p-2.5 border border-slate-800/80 my-2.5">
                             <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">Dettagli Segnale:</div>
@@ -1377,9 +1501,14 @@
                                 <span class="text-xs text-slate-400 flex items-center gap-1.5">
                                     <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i> Riservato
                                 </span>
-                                <a href="auth.html?mode=register" class="text-[10px] bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-1 rounded-lg font-bold transition">
-                                    Sblocca VIP
-                                </a>
+                                <div class="flex items-center gap-1">
+                                    <button type="button" onclick="openLicenseModal()" class="text-[10px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2 py-1 rounded-lg font-bold transition">
+                                        Codice
+                                    </button>
+                                    <a href="auth.html?mode=register" class="text-[10px] bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-1 rounded-lg font-bold transition">
+                                        Sblocca VIP
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -1465,12 +1594,10 @@
 
             let completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
 
-            // Filtro tipster plan
             if (currentTipsterPlanFilter === 'pure') {
                 completed = completed.filter(b => b.is_pure === true);
             }
 
-            // Filtro esito
             if (currentPublicHistFilter === 'won') completed = completed.filter(b => b.status === 'won');
             if (currentPublicHistFilter === 'lost') completed = completed.filter(b => b.status === 'lost');
 
