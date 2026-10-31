@@ -79,7 +79,7 @@
     "original_tipster": "Stats4Bets Automatibet",
     "odds": 1.5,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
@@ -247,7 +247,7 @@
     "original_tipster": "BetMines",
     "odds": 1.57,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
