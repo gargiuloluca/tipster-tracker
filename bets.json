@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793430039419_2",
+    "event_date": "2026-10-30 21:00",
+    "match_name": "Villarreal - Espanyol",
+    "league": "La Liga",
+    "original_tipster": "AtmBetSignal",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "odds": 1.72,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793419950637_5",
     "event_date": "2026-11-01 02:00",
     "match_name": "Cancun - Jaiba Brava",
