@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793453646281_0",
+    "event_date": "2026-11-01 14:30",
+    "match_name": "FC Emmen - FC Den Bosch",
+    "league": "Eerste Divisie",
+    "original_tipster": "BetMines",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.83,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793441571388_3",
     "event_date": "2026-11-01 16:15",
     "match_name": "Racing Santander - Real Madrid",
