@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1793422350111_1",
+    "event_date": "2026-10-31 16:00",
+    "match_name": "Crewe Alexandra - Barnet / Middlesbrough - Charlton / Stockport County - AFC Wimbledon",
+    "league": "Multipla",
+    "original_tipster": "Stats4bets bollamaker",
+    "market": "Multipla",
+    "prediction": "Over 1.5 / 1 / 1",
+    "odds": 1.89,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793422350111_0",
+    "event_date": "2026-10-31 14:00",
+    "match_name": "Levante - Atletico Madrid",
+    "league": "La Liga",
+    "original_tipster": "Stats4bets bollamaker",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.6,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793419950637_5",
     "event_date": "2026-11-01 02:00",
     "match_name": "Cancun - Jaiba Brava",
@@ -3468,34 +3496,6 @@
     "odds": 1.63,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": 3,
-    "event_date": "2026-10-24 14:15",
-    "match_name": "S. Lamens vs E. Jacquemot",
-    "league": "ITF W100",
-    "market": "Testa a Testa",
-    "prediction": "Vince Lamens (1)",
-    "original_tipster": "TennisAI",
-    "odds": 1.87,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": 4,
-    "event_date": "2026-10-24 14:15",
-    "match_name": "Lamens vs Jacquemot / Baez vs Perricard",
-    "league": "Multiplo Tennis",
-    "market": "Multipla Doppia",
-    "prediction": "Doppia (1 / 1)",
-    "original_tipster": "TennisAI",
-    "odds": 4.45,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
