@@ -549,14 +549,14 @@
                 </form>
             </section>
 
-            <!-- CLASSIFICA RENDIMENTO FORNITORI -->
+            <!-- CLASSIFICA RENDIMENTO FORNITORI CON ELIMINAZIONE DIRETTA -->
             <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
                     <div>
                         <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
                             <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Classifica Rendimento Fornitori / Tipster
                         </h2>
-                        <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra vinta netta in Euro per ciascun canale.</p>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra netta. Puoi eliminare un fornitore e tutte le sue giocate con un clic.</p>
                     </div>
                     <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold uppercase">Uso Riservato Admin</span>
                 </div>
@@ -572,6 +572,7 @@
                                 <th class="py-2.5 px-3 text-center">Yield / ROI</th>
                                 <th class="py-2.5 px-3 text-right">Profitto (Unità)</th>
                                 <th class="py-2.5 px-3 text-right">Cifra Guadagnata (€)</th>
+                                <th class="py-2.5 px-3 text-center">Rimuovi Fornitore</th>
                             </tr>
                         </thead>
                         <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
@@ -1346,7 +1347,6 @@
             }
         }
 
-        // AGGIORNATO: applica il filtro SOLO a quella precisa data
         function applyCustomCalendarDate(dateStr) {
             if (!dateStr) return;
             currentSimMode = 'custom';
@@ -1728,6 +1728,37 @@
             }
         }
 
+        // ==================== ELIMINAZIONE A CASCATA FORNITORE ====================
+        function deleteTipsterAndBets(tipsterName) {
+            if (!tipsterName) return;
+
+            const canonical = canonicalizeTipsterName(tipsterName);
+            const confirmed = confirm(
+                `ATTENZIONE: Eliminare definitivamente il fornitore "${canonical}"?\n\n` +
+                `Verranno cancellati dall'archivio TUTTI i suoi pronostici (in corso e chiusi) ` +
+                `e verrà sincronizzato subito su GitHub (bets.json).`
+            );
+
+            if (!confirmed) return;
+
+            const allBets = loadAllBets();
+            const beforeCount = allBets.length;
+
+            const remainingBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) !== canonical);
+            const deletedCount = beforeCount - remainingBets.length;
+
+            persistBets(remainingBets);
+
+            // Resetta il filtro se era selezionato proprio questo fornitore
+            if (currentTipsterFilter.toLowerCase() === canonical.toLowerCase()) {
+                currentTipsterFilter = 'all';
+                const select = document.getElementById('tipster-select-filter');
+                if (select) select.value = 'all';
+            }
+
+            alert(`Fornitore "${canonical}" rimosso con successo!\nCancellati ${deletedCount} pronostici correlati.`);
+        }
+
         function setFilter(filterType, element) {
             currentFilter = filterType;
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('filter-btn-active'));
@@ -1758,38 +1789,42 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            const resolvedBets = allBets.filter(b => b.status === 'won' || b.status === 'lost');
+            // Estrae TUTTI i fornitori presenti nell'archivio (anche con sole giocate pending)
+            const allTipsterNames = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
 
-            if (resolvedBets.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun dato fornitore disponibile.</td></tr>`;
+            if (allTipsterNames.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun dato fornitore disponibile.</td></tr>`;
                 return;
             }
 
             const tipsterStats = {};
+            allTipsterNames.forEach(name => {
+                tipsterStats[name] = {
+                    name: name,
+                    total: 0,
+                    won: 0,
+                    lost: 0,
+                    netProfit: 0,
+                    totalStake: 0
+                };
+            });
+
+            const resolvedBets = allBets.filter(b => b.status === 'won' || b.status === 'lost');
 
             resolvedBets.forEach(bet => {
                 const name = canonicalizeTipsterName(bet.original_tipster);
-                if (!tipsterStats[name]) {
-                    tipsterStats[name] = {
-                        name: name,
-                        total: 0,
-                        won: 0,
-                        lost: 0,
-                        netProfit: 0,
-                        totalStake: 0
-                    };
-                }
+                if (tipsterStats[name]) {
+                    const s = bet.stake || 1.0;
+                    tipsterStats[name].total += 1;
+                    tipsterStats[name].totalStake += s;
 
-                const s = bet.stake || 1.0;
-                tipsterStats[name].total += 1;
-                tipsterStats[name].totalStake += s;
-
-                if (bet.status === 'won') {
-                    tipsterStats[name].won += 1;
-                    tipsterStats[name].netProfit += (bet.odds - 1) * s;
-                } else if (bet.status === 'lost') {
-                    tipsterStats[name].lost += 1;
-                    tipsterStats[name].netProfit -= s;
+                    if (bet.status === 'won') {
+                        tipsterStats[name].won += 1;
+                        tipsterStats[name].netProfit += (bet.odds - 1) * s;
+                    } else if (bet.status === 'lost') {
+                        tipsterStats[name].lost += 1;
+                        tipsterStats[name].netProfit -= s;
+                    }
                 }
             });
 
@@ -1807,6 +1842,9 @@
                     else if (index === 1) rankBadge = `<span class="text-sm">🥈</span>`;
                     else if (index === 2) rankBadge = `<span class="text-sm">🥉</span>`;
                 }
+
+                // Escape del nome per l'attributo onclick
+                const escapedName = t.name.replace(/'/g, "\\'");
 
                 const tr = document.createElement('tr');
                 tr.className = t.netProfit >= 0 
@@ -1836,12 +1874,17 @@
                     <td class="py-2.5 px-3 text-right font-mono font-black ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
                         ${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €
                     </td>
+                    <td class="py-2.5 px-3 text-center">
+                        <button type="button" onclick="deleteTipsterAndBets('${escapedName}')" title="Elimina '${t.name}' e tutti i suoi pronostici" class="p-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
+            lucide.createIcons();
         }
 
-        // AGGIORNATO: calcolo metriche temporali con filtro preciso sul giorno
         function calculateSimulationInAdmin(allBets, unitVal) {
             const today = new Date();
             const todayStr = getLocalDateString(today);
@@ -1869,7 +1912,6 @@
                 } else if (currentSimMode === 'all') {
                     return true;
                 } else if (currentSimMode === 'custom') {
-                    // CONFRONTO ESATTO: solo quel giorno
                     return bDate === currentCustomDate;
                 }
                 return true;
@@ -1950,22 +1992,23 @@
             }
         }
 
-        // AGGIORNATO: renderizza statistiche e tabella sincronizzati col filtro data scelto
         function renderDashboard() {
             let allBets = loadAllBets();
             scanForConflictsAndDuplicates(allBets);
 
             const tipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
-            if (select.options.length <= 1) {
-                select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
-                tipsters.forEach(t => {
-                    const opt = document.createElement('option');
-                    opt.value = t;
-                    opt.innerText = t;
-                    select.appendChild(opt);
-                });
-            }
+            
+            // Ricostruisce il menu mantenendo la selezione corrente
+            const previousVal = select.value || currentTipsterFilter;
+            select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
+            tipsters.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.innerText = t;
+                if (t === previousVal) opt.selected = true;
+                select.appendChild(opt);
+            });
 
             updateClusterOptimizerSummary(allBets);
 
@@ -1989,13 +2032,12 @@
                 allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
             }
 
-            // Calcolo del simulatore su allBets
             const unitMultiplierEl = document.getElementById('admin-unit-multiplier');
             const unitVal = parseFloat(unitMultiplierEl ? unitMultiplierEl.value : 10) || 10;
             calculateSimulationInAdmin(allBets, unitVal);
             renderAdminTipstersLeaderboard(allBets, unitVal);
 
-            // FILTRO DATA SINCRONIZZATO SU TUTTA LA DASHBOARD
+            // Filtro Data sincronizzato
             let filtered = allBets;
             const today = new Date();
             const todayStr = getLocalDateString(today);
@@ -2016,11 +2058,10 @@
                     return d >= d7Str && d <= todayStr;
                 });
             } else if (currentSimMode === 'custom') {
-                // Filtra solo il giorno selezionato nel calendario
                 filtered = filtered.filter(b => extractStandardDate(b.event_date) === currentCustomDate);
             }
 
-            // Filtro Stato (In Corso / Chiusi)
+            // Filtro Stato
             if (currentFilter === 'pending') {
                 filtered = filtered.filter(b => b.status === 'pending');
             } else if (currentFilter === 'resolved') {
