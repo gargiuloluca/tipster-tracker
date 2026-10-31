@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793458863204_0",
-    "event_date": "2026-10-31 16:00",
-    "match_name": "Oldham - Crawley",
-    "league": "League Two",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.62,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793441571388_3",
     "event_date": "2026-11-01 16:15",
     "match_name": "Racing Santander - Real Madrid",
@@ -448,6 +434,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793458863204_0",
+    "event_date": "2026-10-31 16:00",
+    "match_name": "Oldham - Crawley",
+    "league": "League Two",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 1.62,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793458719186_0",
     "event_date": "2026-10-31 16:00",
     "match_name": "Fredrikstad - Rosenborg",
@@ -835,7 +835,7 @@
     "original_tipster": "Brunetti Vip",
     "odds": 1.74,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
