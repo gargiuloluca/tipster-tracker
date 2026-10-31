@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793446390847_0",
-    "event_date": "2026-10-31 13:00",
-    "match_name": "New York City - Montreal Impact",
-    "league": "MLS",
-    "original_tipster": "ZCODE",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.54,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793441571388_3",
     "event_date": "2026-11-01 16:15",
     "match_name": "Racing Santander - Real Madrid",
@@ -784,6 +770,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793446390847_0",
+    "event_date": "2026-10-31 13:00",
+    "match_name": "New York City - Montreal Impact",
+    "league": "MLS",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "ZCODE",
+    "odds": 1.54,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793441456182_0",
     "event_date": "2026-10-31 13:00",
     "match_name": "Lokomotiv Plovdiv - Ludogorets",
@@ -1311,7 +1311,7 @@
     "original_tipster": "AtmBetSignal",
     "odds": 1.45,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
