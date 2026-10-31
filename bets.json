@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793458719186_0",
+    "event_date": "2026-10-31 16:00",
+    "match_name": "Fredrikstad - Rosenborg",
+    "league": "Eliteserien",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793441571388_3",
     "event_date": "2026-11-01 16:15",
     "match_name": "Racing Santander - Real Madrid",
