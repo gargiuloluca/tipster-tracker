@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "id": "usr_admin_01",
+    "email": "admin@atmbet.com",
+    "name": "Amministratore",
+    "role": "admin",
+    "plan": "full",
+    "expires_at": "2099-12-31",
+    "telegram_link": "-",
+    "active": true
+  },
+  {
+    "id": "usr_demo_vip",
+    "identifier": "demo@atmbet.com",
+    "email": "demo@atmbet.com",
+    "name": "Cliente Demo",
+    "role": "user",
+    "plan": "pure",
+    "expires_at": "2026-12-31",
+    "telegram_link": "-",
+    "status": "active",
+    "active": true
+  },
+  {
+    "id": "usr_promo_creator",
+    "identifier": "promo_lancio_creator",
+    "access_code": "CREATORVIP",
+    "name": "Campagna Creator VIP",
+    "role": "user",
+    "plan": "pure",
+    "expires_at": "2026-12-31",
+    "max_uses": 50,
+    "used_count": 0,
+    "status": "active",
+    "active": true
+  }
+]
