@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793476372809_0",
-    "event_date": "2026-10-31 21:00",
-    "match_name": "Aston Villa - Fulham",
-    "league": "Premier League",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.9,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793441571388_3",
     "event_date": "2026-11-01 16:15",
     "match_name": "Racing Santander - Real Madrid",
@@ -92,6 +78,20 @@
     "prediction": "1X",
     "original_tipster": "Pronostici1",
     "odds": 1.53,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793476372809_0",
+    "event_date": "2026-10-31 21:00",
+    "match_name": "Aston Villa - Fulham",
+    "league": "Premier League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 1.9,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -877,7 +877,7 @@
     "original_tipster": "ZCODE",
     "odds": 1.54,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
