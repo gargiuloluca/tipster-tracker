@@ -23,13 +23,15 @@
     "id": "usr_promo_creator",
     "identifier": "promo_lancio_creator",
     "access_code": "CREATORVIP",
-    "name": "Campagna Creator VIP",
+    "name": "promo_lancio_creator",
     "role": "user",
     "plan": "pure",
     "expires_at": "2026-12-31",
     "max_uses": 50,
     "used_count": 0,
     "status": "active",
-    "active": true
+    "active": true,
+    "email": "promo_lancio_creator",
+    "credits": 99
   }
 ]
