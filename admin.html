@@ -89,6 +89,38 @@
         </div>
     </div>
 
+    <!-- MODALE VERIFICA RISULTATI API -->
+    <div id="results-verify-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9998] hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-3xl max-w-lg w-full shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                        <i data-lucide="check-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Controllo Risultati Automatico</h3>
+                        <p class="text-[11px] text-slate-400">Verifica giocate terminate e refertazione automatica</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeResultsModal()" class="text-slate-500 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Lista Partite in Corso da Verificare -->
+            <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="pending-verification-list">
+                <!-- Popolato da JS -->
+            </div>
+
+            <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+                <span id="verify-summary-badge" class="text-[11px] font-mono text-slate-400">0 giocate da refertare</span>
+                <button type="button" onclick="applyVerifiedResults()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1.5">
+                    <i data-lucide="save" class="w-4 h-4"></i> Salva Esiti & Sincronizza GitHub
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- CONTENUTO AMMINISTRATIVO -->
     <div id="admin-main-content" class="hidden">
 
@@ -103,6 +135,12 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-1.5 sm:space-x-2">
+                    <!-- TASTO CONTROLLO RISULTATI -->
+                    <button type="button" onclick="openResultsModal()" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-lg font-black flex items-center gap-1.5 transition shadow shadow-emerald-500/10">
+                        <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                        <span>Verifica Risultati</span>
+                    </button>
+
                     <button type="button" onclick="exportBackupJSON()" title="Scarica backup pronostici" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
                         <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
                         <span class="hidden sm:inline">Esporta</span>
@@ -459,96 +497,6 @@
                 </div>
             </section>
 
-            <!-- FORM DI INSERIMENTO MANUALE -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
-                <h2 class="text-xs sm:text-sm font-bold text-white mb-3 flex items-center gap-2">
-                    <i data-lucide="plus-circle" class="text-emerald-400 w-4 h-4"></i> Inserimento Manuale Pronostico
-                </h2>
-
-                <form id="bet-form" onsubmit="saveBet(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3">
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Partita / Evento</label>
-                        <input type="text" id="match_name" required placeholder="Es. Inter - Milan" oninput="checkMatchDuplicateWarning(this.value)"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        <div id="live-dup-warning" class="text-[10px] text-amber-400 font-bold mt-1 hidden flex items-center gap-1">
-                            <i data-lucide="alert-circle" class="w-3 h-3"></i> Partita già presente in archivio!
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Campionato</label>
-                        <input type="text" id="league" placeholder="Es. Serie A" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Data e Ora</label>
-                        <input type="datetime-local" id="event_date" required 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Fornitore / Tipster</label>
-                        <input type="text" id="original_tipster" list="tipsters-list" required placeholder="Es. AtmBetSignal" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        <datalist id="tipsters-list">
-                            <option value="AtmBetSignal">
-                            <option value="AtmBetSignal XG">
-                            <option value="Pronostici1">
-                            <option value="CalcioAI">
-                            <option value="BetMines">
-                            <option value="ZCODE">
-                            <option value="BetExpBot">
-                            <option value="FootyStats">
-                            <option value="Infoland">
-                            <option value="Freak Elite VIP">
-                            <option value="Stats4bets bollamaker">
-                            <option value="Stats4Bets Automatibet">
-                        </datalist>
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Mercato</label>
-                        <input type="text" id="market" required placeholder="Es. 1X2, Multipla" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Pronostico Esatto</label>
-                        <input type="text" id="prediction" required placeholder="Es. 1 + Over 2.5" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Quota Decimale</label>
-                        <input type="number" step="0.01" min="1.01" id="odds" required placeholder="1.85" 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-[10px] sm:text-[11px] text-slate-400 mb-1">Stake (Unità)</label>
-                        <input type="number" step="0.25" min="0.25" max="10" id="stake" value="1.0" required 
-                            class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 sm:py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div class="sm:col-span-2 md:col-span-3 flex items-center pt-1 sm:pt-2">
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" id="is_published" checked class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                            <span class="ml-2.5 text-[11px] sm:text-xs font-bold text-white flex items-center gap-1">
-                                <span class="text-emerald-400">★ Pubblica in Vetrina</span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="flex justify-end pt-1 sm:pt-2">
-                        <button type="submit" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-5 py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Salva Pronostico
-                        </button>
-                    </div>
-                </form>
-            </section>
-
             <!-- CLASSIFICA RENDIMENTO FORNITORI CON ELIMINAZIONE DIRETTA -->
             <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
@@ -636,7 +584,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE, SCANNER, USERS SYNC & DISPATCHER TELEGRAM -->
+    <!-- SCRIPT GESTIONALE, SCANNER, USERS SYNC, RISULTATI & TELEGRAM -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
@@ -680,8 +628,191 @@
         let currentSimMode = 'today';
         let currentCustomDate = '';
         let currentClusterMode = 'all';
+        let stagedVerificationResults = {};
 
-        // ==================== SEZIONE GESTIONE UTENTI (users.json) ====================
+        // ==================== MOTORE VERIFICA RISULTATI DETERMINISTICO ====================
+        function evaluatePickOutcome(predictionStr, homeScore, awayScore) {
+            const h = parseInt(homeScore);
+            const a = parseInt(awayScore);
+            if (isNaN(h) || isNaN(a)) return null;
+
+            const totalGoals = h + a;
+            const pred = predictionStr.trim().toUpperCase().replace(/\s+/g, ' ');
+
+            // 1. Esiti 1X2
+            if (pred === '1') return h > a ? 'won' : 'lost';
+            if (pred === 'X') return h === a ? 'won' : 'lost';
+            if (pred === '2') return a > h ? 'won' : 'lost';
+
+            // 2. Doppia Chance
+            if (pred === '1X') return (h >= a) ? 'won' : 'lost';
+            if (pred === 'X2') return (a >= h) ? 'won' : 'lost';
+            if (pred === '12') return (h !== a) ? 'won' : 'lost';
+
+            // 3. Goal / No Goal
+            if (pred === 'GG' || pred === 'GOAL' || pred === 'GOL') return (h > 0 && a > 0) ? 'won' : 'lost';
+            if (pred === 'NG' || pred === 'NO GOAL' || pred === 'NO GOL') return (h === 0 || a === 0) ? 'won' : 'lost';
+
+            // 4. Under / Over Gol
+            const overMatch = pred.match(/OVER\s*(\d+(?:\.\d+)?)/i);
+            if (overMatch) {
+                const threshold = parseFloat(overMatch[1]);
+                return totalGoals > threshold ? 'won' : 'lost';
+            }
+
+            const underMatch = pred.match(/UNDER\s*(\d+(?:\.\d+)?)/i);
+            if (underMatch) {
+                const threshold = parseFloat(underMatch[1]);
+                return totalGoals < threshold ? 'won' : 'lost';
+            }
+
+            // 5. Combo Semplici (es. 1 + Over 1.5, 1X + Under 3.5)
+            if (pred.includes('+')) {
+                const parts = pred.split('+').map(p => p.trim());
+                const res1 = evaluatePickOutcome(parts[0], h, a);
+                const res2 = evaluatePickOutcome(parts[1], h, a);
+                if (res1 && res2) {
+                    return (res1 === 'won' && res2 === 'won') ? 'won' : 'lost';
+                }
+            }
+
+            return null; // Mercato speciale da valutare con esito manuale
+        }
+
+        function openResultsModal() {
+            const modal = document.getElementById('results-verify-modal');
+            const listEl = document.getElementById('pending-verification-list');
+            const badgeEl = document.getElementById('verify-summary-badge');
+            if (!modal || !listEl) return;
+
+            stagedVerificationResults = {};
+            const bets = loadAllBets();
+            const pendingBets = bets.filter(b => b.status === 'pending');
+
+            if (pendingBets.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs font-medium">Nessun pronostico in stato "In Corso" da verificare.</div>`;
+                if (badgeEl) badgeEl.innerText = "0 giocate in attesa";
+                modal.classList.remove('hidden');
+                return;
+            }
+
+            if (badgeEl) badgeEl.innerText = `${pendingBets.length} giocate in attesa di verifica`;
+            listEl.innerHTML = '';
+
+            pendingBets.forEach(bet => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2 text-xs";
+                card.id = `verify-row-${bet.id}`;
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between text-slate-400 text-[10px]">
+                        <span class="font-mono">${bet.event_date}</span>
+                        <span class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-slate-300 font-semibold">${bet.league}</span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <div class="font-bold text-white text-xs">${bet.match_name}</div>
+                            <div class="text-[11px] text-emerald-400 font-semibold mt-0.5">
+                                Pick: <strong class="text-white">${bet.prediction}</strong> @ ${parseFloat(bet.odds).toFixed(2)} (${bet.original_tipster})
+                            </div>
+                        </div>
+
+                        <!-- Inserimento Risultato Finale -->
+                        <div class="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
+                            <span class="text-[10px] text-slate-400">Score:</span>
+                            <input type="number" min="0" max="25" placeholder="H" id="score-h-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
+                                class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-white rounded-lg py-1 outline-none focus:border-emerald-500">
+                            <span class="text-slate-500">-</span>
+                            <input type="number" min="0" max="25" placeholder="A" id="score-a-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
+                                class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-white rounded-lg py-1 outline-none focus:border-emerald-500">
+                            
+                            <!-- Badge Esito Calcolato Dinamicamente -->
+                            <div id="eval-badge-${bet.id}" class="min-w-[65px] text-center">
+                                <span class="text-[9px] text-slate-500 font-mono italic">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeResultsModal() {
+            const modal = document.getElementById('results-verify-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function handleScoreInput(betId, predictionStr) {
+            const inputH = document.getElementById(`score-h-${betId}`);
+            const inputA = document.getElementById(`score-a-${betId}`);
+            const badgeEl = document.getElementById(`eval-badge-${betId}`);
+            if (!inputH || !inputA || !badgeEl) return;
+
+            const hVal = inputH.value.trim();
+            const aVal = inputA.value.trim();
+
+            if (hVal === '' || aVal === '') {
+                delete stagedVerificationResults[betId];
+                badgeEl.innerHTML = `<span class="text-[9px] text-slate-500 font-mono italic">In attesa</span>`;
+                return;
+            }
+
+            const evaluated = evaluatePickOutcome(predictionStr, parseInt(hVal), parseInt(aVal));
+
+            if (evaluated === 'won') {
+                stagedVerificationResults[betId] = 'won';
+                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`;
+            } else if (evaluated === 'lost') {
+                stagedVerificationResults[betId] = 'lost';
+                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
+            } else {
+                // Mercato non standardizzato: permette scelta rapida con pulsanti
+                badgeEl.innerHTML = `
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="setStagedManual('${betId}', 'won')" class="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[9px] font-bold border border-emerald-500/30">V</button>
+                        <button type="button" onclick="setStagedManual('${betId}', 'lost')" class="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[9px] font-bold border border-rose-500/30">P</button>
+                    </div>
+                `;
+            }
+        }
+
+        function setStagedManual(betId, status) {
+            stagedVerificationResults[betId] = status;
+            const badgeEl = document.getElementById(`eval-badge-${betId}`);
+            if (badgeEl) {
+                badgeEl.innerHTML = status === 'won'
+                    ? `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`
+                    : `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
+            }
+        }
+
+        function applyVerifiedResults() {
+            const countToApply = Object.keys(stagedVerificationResults).length;
+            if (countToApply === 0) {
+                alert("Nessun risultato inserito da applicare.");
+                return;
+            }
+
+            const bets = loadAllBets();
+            let appliedCount = 0;
+
+            bets.forEach(b => {
+                if (stagedVerificationResults[b.id]) {
+                    b.status = stagedVerificationResults[b.id];
+                    appliedCount++;
+                }
+            });
+
+            persistBets(bets);
+            closeResultsModal();
+            alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati su GitHub.`);
+        }
+
+        // ==================== GESTIONE ABBONATI (users.json) ====================
         function loadAllUsers() {
             try {
                 const raw = localStorage.getItem(USERS_LOCAL_KEY);
@@ -1150,7 +1281,6 @@
             setupDynamicDatePresets();
             loadGitHubSettings();
             loadTelegramConfig();
-            resetDate();
             renderUsersTable();
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
@@ -1264,31 +1394,6 @@
             });
 
             lucide.createIcons();
-        }
-
-        function checkMatchDuplicateWarning(typedName) {
-            const warningEl = document.getElementById('live-dup-warning');
-            if (!typedName || typedName.trim().length < 3) {
-                if (warningEl) warningEl.classList.add('hidden');
-                return;
-            }
-
-            const bets = loadAllBets().filter(b => b.status === 'pending');
-            const normTyped = normalizeMatchText(typedName);
-            const typedWords = normTyped.split(' ').filter(w => w.length > 2);
-
-            const isDuplicate = bets.some(b => {
-                const normB = normalizeMatchText(b.match_name);
-                const bWords = normB.split(' ').filter(w => w.length > 2);
-                const inter = typedWords.filter(w => bWords.includes(w));
-                return inter.length >= 2;
-            });
-
-            if (isDuplicate) {
-                if (warningEl) warningEl.classList.remove('hidden');
-            } else {
-                if (warningEl) warningEl.classList.add('hidden');
-            }
         }
 
         function extractStandardDate(rawDateStr) {
@@ -1593,36 +1698,6 @@
             event.target.value = '';
         }
 
-        function saveBet(e) {
-            e.preventDefault();
-            const bets = loadAllBets();
-            const matchName = document.getElementById('match_name').value.trim();
-
-            const newBet = {
-                id: 'bet_' + Date.now(),
-                match_name: matchName,
-                league: document.getElementById('league').value.trim() || 'Generale',
-                event_date: document.getElementById('event_date').value.replace('T', ' '),
-                original_tipster: canonicalizeTipsterName(document.getElementById('original_tipster').value),
-                market: document.getElementById('market').value.trim(),
-                prediction: document.getElementById('prediction').value.trim(),
-                odds: parseFloat(document.getElementById('odds').value),
-                stake: parseFloat(document.getElementById('stake').value) || 1.0,
-                status: 'pending',
-                is_published: document.getElementById('is_published').checked,
-                tg_sent: false
-            };
-
-            bets.unshift(newBet);
-            persistBets(bets);
-
-            document.getElementById('bet-form').reset();
-            document.getElementById('stake').value = '1.0';
-            document.getElementById('is_published').checked = true;
-            document.getElementById('live-dup-warning').classList.add('hidden');
-            resetDate();
-        }
-
         function parseAIText() {
             const text = document.getElementById('ai-input').value.trim();
             if (!text) {
@@ -1711,6 +1786,15 @@
             }
         }
 
+        function updateBetTipster(id, newTipster) {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(id));
+            if (b) {
+                b.original_tipster = canonicalizeTipsterName(newTipster);
+                persistBets(bets);
+            }
+        }
+
         function togglePublish(id) {
             const bets = loadAllBets();
             const b = bets.find(x => String(x.id) === String(id));
@@ -1728,7 +1812,6 @@
             }
         }
 
-        // ==================== ELIMINAZIONE A CASCATA FORNITORE ====================
         function deleteTipsterAndBets(tipsterName) {
             if (!tipsterName) return;
 
@@ -1749,7 +1832,6 @@
 
             persistBets(remainingBets);
 
-            // Resetta il filtro se era selezionato proprio questo fornitore
             if (currentTipsterFilter.toLowerCase() === canonical.toLowerCase()) {
                 currentTipsterFilter = 'all';
                 const select = document.getElementById('tipster-select-filter');
@@ -1789,7 +1871,6 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            // Estrae TUTTI i fornitori presenti nell'archivio (anche con sole giocate pending)
             const allTipsterNames = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
 
             if (allTipsterNames.length === 0) {
@@ -1843,7 +1924,6 @@
                     else if (index === 2) rankBadge = `<span class="text-sm">🥉</span>`;
                 }
 
-                // Escape del nome per l'attributo onclick
                 const escapedName = t.name.replace(/'/g, "\\'");
 
                 const tr = document.createElement('tr');
@@ -1999,7 +2079,6 @@
             const tipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
             
-            // Ricostruisce il menu mantenendo la selezione corrente
             const previousVal = select.value || currentTipsterFilter;
             select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
             tipsters.forEach(t => {
@@ -2012,7 +2091,6 @@
 
             updateClusterOptimizerSummary(allBets);
 
-            // Filtro Cluster
             if (currentClusterMode === 'pure') {
                 allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
             } else if (currentClusterMode === 'elite') {
@@ -2037,7 +2115,6 @@
             calculateSimulationInAdmin(allBets, unitVal);
             renderAdminTipstersLeaderboard(allBets, unitVal);
 
-            // Filtro Data sincronizzato
             let filtered = allBets;
             const today = new Date();
             const todayStr = getLocalDateString(today);
@@ -2061,14 +2138,12 @@
                 filtered = filtered.filter(b => extractStandardDate(b.event_date) === currentCustomDate);
             }
 
-            // Filtro Stato
             if (currentFilter === 'pending') {
                 filtered = filtered.filter(b => b.status === 'pending');
             } else if (currentFilter === 'resolved') {
                 filtered = filtered.filter(b => b.status === 'won' || b.status === 'lost' || b.status === 'void');
             }
 
-            // Filtro Tipster
             if (currentTipsterFilter !== 'all') {
                 filtered = filtered.filter(b => canonicalizeTipsterName(b.original_tipster).toLowerCase() === currentTipsterFilter.toLowerCase());
             }
@@ -2218,7 +2293,21 @@
                         <span class="text-slate-500 text-[10px] font-mono">(${bet.stake.toFixed(1)}u)</span>
                     </td>
                     <td class="py-2.5 px-3 whitespace-nowrap">
-                        <span class="bg-slate-800 border border-slate-700 px-1.5 py-0.5 rounded text-[10px] text-slate-300 font-medium">${bet.original_tipster}</span>
+                        <select onchange="updateBetTipster('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-1 text-[10px] text-slate-300 focus:outline-none focus:border-emerald-500 font-medium">
+                            <option value="AtmBetSignal" ${bet.original_tipster === 'AtmBetSignal' ? 'selected' : ''}>AtmBetSignal</option>
+                            <option value="AtmBetSignal XG" ${bet.original_tipster === 'AtmBetSignal XG' ? 'selected' : ''}>AtmBetSignal XG</option>
+                            <option value="Pronostici1" ${bet.original_tipster === 'Pronostici1' ? 'selected' : ''}>Pronostici1</option>
+                            <option value="CalcioAI" ${bet.original_tipster === 'CalcioAI' ? 'selected' : ''}>CalcioAI</option>
+                            <option value="BetMines" ${bet.original_tipster === 'BetMines' ? 'selected' : ''}>BetMines</option>
+                            <option value="ZCODE" ${bet.original_tipster === 'ZCODE' ? 'selected' : ''}>ZCODE</option>
+                            <option value="BetExpBot" ${bet.original_tipster === 'BetExpBot' ? 'selected' : ''}>BetExpBot</option>
+                            <option value="FootyStats" ${bet.original_tipster === 'FootyStats' ? 'selected' : ''}>FootyStats</option>
+                            <option value="Infoland" ${bet.original_tipster === 'Infoland' ? 'selected' : ''}>Infoland</option>
+                            <option value="Freak Elite VIP" ${bet.original_tipster === 'Freak Elite VIP' ? 'selected' : ''}>Freak Elite VIP</option>
+                            <option value="Stats4bets bollamaker" ${bet.original_tipster === 'Stats4bets bollamaker' ? 'selected' : ''}>Stats4bets bollamaker</option>
+                            <option value="Stats4Bets Automatibet" ${bet.original_tipster === 'Stats4Bets Automatibet' ? 'selected' : ''}>Stats4Bets Automatibet</option>
+                            ${!['AtmBetSignal','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
+                        </select>
                     </td>
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">
                         <button type="button" onclick="togglePublish('${bet.id}')" class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
@@ -2241,13 +2330,6 @@
             });
 
             lucide.createIcons();
-        }
-
-        function resetDate() {
-            const now = new Date();
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            const dateInput = document.getElementById('event_date');
-            if (dateInput) dateInput.value = now.toISOString().slice(0, 16);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
