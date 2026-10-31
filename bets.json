@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793461165826_0",
+    "event_date": "2026-10-31 18:00",
+    "match_name": "Rumilly Vallieres - Istres",
+    "league": "National 2 - Group C",
+    "original_tipster": "Brunetti Vip",
+    "market": "1X2 / Mercato",
+    "prediction": "NoGol o Under 2.5",
+    "odds": 1.72,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793441571388_3",
     "event_date": "2026-11-01 16:15",
     "match_name": "Racing Santander - Real Madrid",
