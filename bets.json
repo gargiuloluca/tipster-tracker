@@ -149,7 +149,7 @@
     "original_tipster": "AtmBetSignal",
     "odds": 1.68,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
@@ -261,8 +261,8 @@
     "original_tipster": "BetExpBot",
     "odds": 1.8,
     "stake": 1,
-    "status": "pending",
-    "is_published": false,
+    "status": "won",
+    "is_published": true,
     "tg_sent": false
   },
   {
