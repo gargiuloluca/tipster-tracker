@@ -1,5 +1,47 @@
 [
   {
+    "id": "bet_1793430853792_4",
+    "event_date": "2026-10-30 18:00",
+    "match_name": "Elversberg - Mainz",
+    "league": "Bundesliga",
+    "original_tipster": "AtmBetSignal",
+    "market": "1X2 / Mercato",
+    "prediction": "X2",
+    "odds": 1.45,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793430853792_1",
+    "event_date": "2026-10-31 20:45",
+    "match_name": "Standard Liege - Kortrijk",
+    "league": "Jupiler Pro League",
+    "original_tipster": "AtmBetSignal",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.68,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793430853791_0",
+    "event_date": "2026-10-31 20:45",
+    "match_name": "Bologna - Monza",
+    "league": "Serie A",
+    "original_tipster": "AtmBetSignal",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.69,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793419950637_5",
     "event_date": "2026-11-01 02:00",
     "match_name": "Cancun - Jaiba Brava",
