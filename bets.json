@@ -877,7 +877,7 @@
     "original_tipster": "ZCODE",
     "odds": 1.54,
     "stake": 1,
-    "status": "won",
+    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
