@@ -262,7 +262,7 @@
     "odds": 1.8,
     "stake": 1,
     "status": "pending",
-    "is_published": true,
+    "is_published": false,
     "tg_sent": false
   },
   {
