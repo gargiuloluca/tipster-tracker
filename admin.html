@@ -89,38 +89,6 @@
         </div>
     </div>
 
-    <!-- MODALE VERIFICA RISULTATI API -->
-    <div id="results-verify-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9998] hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-3xl max-w-lg w-full shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div class="flex items-center gap-2">
-                    <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
-                        <i data-lucide="check-check" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-white">Controllo Risultati Automatico</h3>
-                        <p class="text-[11px] text-slate-400">Verifica giocate terminate e refertazione automatica</p>
-                    </div>
-                </div>
-                <button type="button" onclick="closeResultsModal()" class="text-slate-500 hover:text-white">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <!-- Lista Partite in Corso da Verificare -->
-            <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="pending-verification-list">
-                <!-- Popolato da JS -->
-            </div>
-
-            <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
-                <span id="verify-summary-badge" class="text-[11px] font-mono text-slate-400">0 giocate da refertare</span>
-                <button type="button" onclick="applyVerifiedResults()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1.5">
-                    <i data-lucide="save" class="w-4 h-4"></i> Salva Esiti & Sincronizza GitHub
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- CONTENUTO AMMINISTRATIVO -->
     <div id="admin-main-content" class="hidden">
 
@@ -135,10 +103,10 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-1.5 sm:space-x-2">
-                    <!-- TASTO CONTROLLO RISULTATI -->
-                    <button type="button" onclick="openResultsModal()" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-lg font-black flex items-center gap-1.5 transition shadow shadow-emerald-500/10">
-                        <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-                        <span>Verifica Risultati</span>
+                    <!-- TASTO CONTROLLO RISULTATI AUTOMATICO -->
+                    <button type="button" onclick="runFullyAutomatedResultsCheck()" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-lg font-black flex items-center gap-1.5 transition shadow shadow-emerald-500/20">
+                        <i data-lucide="check-check" class="w-4 h-4"></i>
+                        <span>Verifica Risultati API</span>
                     </button>
 
                     <button type="button" onclick="exportBackupJSON()" title="Scarica backup pronostici" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
@@ -164,26 +132,28 @@
 
         <div class="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-4 sm:space-y-6">
 
-            <!-- BOX CONNESSIONE DIRETTA GITHUB API -->
+            <!-- BOX CONNESSIONE DIRETTA GITHUB API & API-FOOTBALL -->
             <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-lg">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                     <div class="flex items-center gap-2.5">
                         <div id="sync-status-icon" class="w-3 h-3 rounded-full bg-slate-500 shrink-0"></div>
                         <div>
                             <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione Diretta GitHub API (bets.json & users.json)
+                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione GitHub API & API-Football
                             </div>
-                            <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">Non configurata.</div>
+                            <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">Configura credenziali per rendere automatici i salvataggi.</div>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:flex items-center gap-2 w-full lg:w-auto">
                         <input type="text" id="gh-repo" placeholder="username/repository" 
-                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-44">
+                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-36">
                         <input type="password" id="gh-token" placeholder="GitHub Token (ghp_...)" 
-                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-44">
-                        <button type="button" onclick="saveGitHubSettings()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-3 py-1 rounded-lg transition whitespace-nowrap">
-                            Salva
+                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-36">
+                        <input type="password" id="football-api-key" placeholder="API-Football Key" 
+                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-36">
+                        <button type="button" onclick="saveGitHubSettings()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-3 py-1 rounded-lg transition whitespace-nowrap sm:col-span-3 lg:col-span-1">
+                            Salva Impostazioni
                         </button>
                     </div>
                 </div>
@@ -595,6 +565,7 @@
         const GH_REPO_KEY = 'atmbet_gh_repo';
         const GH_TOKEN_KEY = 'atmbet_gh_token';
         const TG_CONF_KEY = 'atmbet_tg_config';
+        const FOOTBALL_API_KEY_STORAGE = 'atmbet_football_api_key';
 
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
@@ -628,7 +599,22 @@
         let currentSimMode = 'today';
         let currentCustomDate = '';
         let currentClusterMode = 'all';
-        let stagedVerificationResults = {};
+
+        // ==================== CALCOLO SOMIGLIANZA NOMI SQUADRE ====================
+        function calculateStringSimilarity(str1, str2) {
+            const s1 = String(str1 || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const s2 = String(str2 || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (s1 === s2) return 1.0;
+            if (s1.length < 2 || s2.length < 2) return 0.0;
+
+            const bigrams1 = new Set();
+            for (let i = 0; i < s1.length - 1; i++) bigrams1.add(s1.substring(i, i + 2));
+            let matches = 0;
+            for (let i = 0; i < s2.length - 1; i++) {
+                if (bigrams1.has(s2.substring(i, i + 2))) matches++;
+            }
+            return (2.0 * matches) / (s1.length - 1 + s2.length - 1);
+        }
 
         // ==================== MOTORE VERIFICA RISULTATI DETERMINISTICO ====================
         function evaluatePickOutcome(predictionStr, homeScore, awayScore) {
@@ -637,7 +623,7 @@
             if (isNaN(h) || isNaN(a)) return null;
 
             const totalGoals = h + a;
-            const pred = predictionStr.trim().toUpperCase().replace(/\s+/g, ' ');
+            const pred = String(predictionStr || '').trim().toUpperCase().replace(/\s+/g, ' ');
 
             // 1. Esiti 1X2
             if (pred === '1') return h > a ? 'won' : 'lost';
@@ -676,140 +662,113 @@
                 }
             }
 
-            return null; // Mercato speciale da valutare con esito manuale
+            return null; // Mercato non supportato da lasciare inalterato
         }
 
-        function openResultsModal() {
-            const modal = document.getElementById('results-verify-modal');
-            const listEl = document.getElementById('pending-verification-list');
-            const badgeEl = document.getElementById('verify-summary-badge');
-            if (!modal || !listEl) return;
+        // ==================== SCANSIONE RISULTATI COMPLETAMENTE AUTOMATICA ====================
+        async function runFullyAutomatedResultsCheck() {
+            const apiKey = localStorage.getItem(FOOTBALL_API_KEY_STORAGE) || 
+                          (document.getElementById('football-api-key') ? document.getElementById('football-api-key').value.trim() : '');
+            
+            if (!apiKey) {
+                alert("Inserisci e salva prima la tua API Key di API-Football nel box impostazioni in alto!");
+                return;
+            }
 
-            stagedVerificationResults = {};
             const bets = loadAllBets();
             const pendingBets = bets.filter(b => b.status === 'pending');
 
             if (pendingBets.length === 0) {
-                listEl.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs font-medium">Nessun pronostico in stato "In Corso" da verificare.</div>`;
-                if (badgeEl) badgeEl.innerText = "0 giocate in attesa";
-                modal.classList.remove('hidden');
+                alert("Nessun pronostico in stato 'In Corso' da verificare.");
                 return;
             }
 
-            if (badgeEl) badgeEl.innerText = `${pendingBets.length} giocate in attesa di verifica`;
-            listEl.innerHTML = '';
+            const datesToQuery = [...new Set(pendingBets.map(b => extractStandardDate(b.event_date)).filter(Boolean))];
+            
+            updateSyncBadge('syncing', 'Interrogazione API-Football...');
 
-            pendingBets.forEach(bet => {
-                const card = document.createElement('div');
-                card.className = "bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2 text-xs";
-                card.id = `verify-row-${bet.id}`;
+            let resolvedCount = 0;
+            let skippedCount = 0;
+            const fixturesCache = {};
 
-                card.innerHTML = `
-                    <div class="flex items-center justify-between text-slate-400 text-[10px]">
-                        <span class="font-mono">${bet.event_date}</span>
-                        <span class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-slate-300 font-semibold">${bet.league}</span>
-                    </div>
+            try {
+                // Esegue una richiesta API per ogni data con match in corso
+                for (const dateStr of datesToQuery) {
+                    const url = `https://v3.football.api-sports.io/fixtures?date=${dateStr}&status=FT-AET-PEN`;
+                    const res = await fetch(url, {
+                        method: 'GET',
+                        headers: {
+                            'x-apisports-key': apiKey
+                        }
+                    });
 
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <div>
-                            <div class="font-bold text-white text-xs">${bet.match_name}</div>
-                            <div class="text-[11px] text-emerald-400 font-semibold mt-0.5">
-                                Pick: <strong class="text-white">${bet.prediction}</strong> @ ${parseFloat(bet.odds).toFixed(2)} (${bet.original_tipster})
-                            </div>
-                        </div>
-
-                        <!-- Inserimento Risultato Finale -->
-                        <div class="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
-                            <span class="text-[10px] text-slate-400">Score:</span>
-                            <input type="number" min="0" max="25" placeholder="H" id="score-h-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
-                                class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-white rounded-lg py-1 outline-none focus:border-emerald-500">
-                            <span class="text-slate-500">-</span>
-                            <input type="number" min="0" max="25" placeholder="A" id="score-a-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
-                                class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-white rounded-lg py-1 outline-none focus:border-emerald-500">
-                            
-                            <!-- Badge Esito Calcolato Dinamicamente -->
-                            <div id="eval-badge-${bet.id}" class="min-w-[65px] text-center">
-                                <span class="text-[9px] text-slate-500 font-mono italic">In attesa</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                listEl.appendChild(card);
-            });
-
-            modal.classList.remove('hidden');
-            lucide.createIcons();
-        }
-
-        function closeResultsModal() {
-            const modal = document.getElementById('results-verify-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        function handleScoreInput(betId, predictionStr) {
-            const inputH = document.getElementById(`score-h-${betId}`);
-            const inputA = document.getElementById(`score-a-${betId}`);
-            const badgeEl = document.getElementById(`eval-badge-${betId}`);
-            if (!inputH || !inputA || !badgeEl) return;
-
-            const hVal = inputH.value.trim();
-            const aVal = inputA.value.trim();
-
-            if (hVal === '' || aVal === '') {
-                delete stagedVerificationResults[betId];
-                badgeEl.innerHTML = `<span class="text-[9px] text-slate-500 font-mono italic">In attesa</span>`;
-                return;
-            }
-
-            const evaluated = evaluatePickOutcome(predictionStr, parseInt(hVal), parseInt(aVal));
-
-            if (evaluated === 'won') {
-                stagedVerificationResults[betId] = 'won';
-                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`;
-            } else if (evaluated === 'lost') {
-                stagedVerificationResults[betId] = 'lost';
-                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
-            } else {
-                // Mercato non standardizzato: permette scelta rapida con pulsanti
-                badgeEl.innerHTML = `
-                    <div class="flex items-center gap-1">
-                        <button type="button" onclick="setStagedManual('${betId}', 'won')" class="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[9px] font-bold border border-emerald-500/30">V</button>
-                        <button type="button" onclick="setStagedManual('${betId}', 'lost')" class="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[9px] font-bold border border-rose-500/30">P</button>
-                    </div>
-                `;
-            }
-        }
-
-        function setStagedManual(betId, status) {
-            stagedVerificationResults[betId] = status;
-            const badgeEl = document.getElementById(`eval-badge-${betId}`);
-            if (badgeEl) {
-                badgeEl.innerHTML = status === 'won'
-                    ? `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`
-                    : `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
-            }
-        }
-
-        function applyVerifiedResults() {
-            const countToApply = Object.keys(stagedVerificationResults).length;
-            if (countToApply === 0) {
-                alert("Nessun risultato inserito da applicare.");
-                return;
-            }
-
-            const bets = loadAllBets();
-            let appliedCount = 0;
-
-            bets.forEach(b => {
-                if (stagedVerificationResults[b.id]) {
-                    b.status = stagedVerificationResults[b.id];
-                    appliedCount++;
+                    if (res.ok) {
+                        const data = await res.json();
+                        fixturesCache[dateStr] = data.response || [];
+                    }
                 }
-            });
 
-            persistBets(bets);
-            closeResultsModal();
-            alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati su GitHub.`);
+                // Valutazione per ciascun pronostico aperto
+                pendingBets.forEach(bet => {
+                    const betDate = extractStandardDate(bet.event_date);
+                    const fixtures = fixturesCache[betDate] || [];
+
+                    // Estrae squadre (es. "Inter - Milan", "Arsenal vs Chelsea")
+                    const teams = bet.match_name.split(/[-–—vs]/i).map(t => t.trim()).filter(Boolean);
+                    if (teams.length < 2) {
+                        skippedCount++;
+                        return; // Formato match non standard, lo lascia pending
+                    }
+
+                    const homeTarget = teams[0];
+                    const awayTarget = teams[1];
+
+                    let bestMatch = null;
+                    let highestScore = 0;
+
+                    fixtures.forEach(fix => {
+                        const fixHome = fix.teams.home.name;
+                        const fixAway = fix.teams.away.name;
+
+                        const scoreHome = calculateStringSimilarity(homeTarget, fixHome);
+                        const scoreAway = calculateStringSimilarity(awayTarget, fixAway);
+                        const combinedScore = (scoreHome + scoreAway) / 2;
+
+                        if (combinedScore > highestScore) {
+                            highestScore = combinedScore;
+                            bestMatch = fix;
+                        }
+                    });
+
+                    // SOGLIA DI SICUREZZA 70%: se non è certo al 100%, rimane pending
+                    if (bestMatch && highestScore >= 0.70) {
+                        const goalsH = bestMatch.goals.home;
+                        const goalsA = bestMatch.goals.away;
+
+                        if (goalsH !== null && goalsA !== null) {
+                            const outcome = evaluatePickOutcome(bet.prediction, goalsH, goalsA);
+                            if (outcome) {
+                                bet.status = outcome;
+                                resolvedCount++;
+                                return;
+                            }
+                        }
+                    }
+
+                    skippedCount++;
+                });
+
+                if (resolvedCount > 0) {
+                    persistBets(bets);
+                    alert(`Verifica completata con successo!\n\n✓ Risolti in automatico: ${resolvedCount}\n⏳ Lasciati in sospeso (non finiti o non riconosciuti): ${skippedCount}`);
+                } else {
+                    alert(`Nessuna nuova partita terminata riconosciuta con certezza.\nLe giocate (${skippedCount}) rimangono in corso.`);
+                    updateSyncBadge('ready');
+                }
+            } catch (err) {
+                updateSyncBadge('error', err.message);
+                alert("Errore durante l'interrogazione delle API: " + err.message);
+            }
         }
 
         // ==================== GESTIONE ABBONATI (users.json) ====================
@@ -1496,12 +1455,15 @@
         function loadGitHubSettings() {
             const savedRepo = localStorage.getItem(GH_REPO_KEY) || '';
             const savedToken = localStorage.getItem(GH_TOKEN_KEY) || '';
+            const savedFootballKey = localStorage.getItem(FOOTBALL_API_KEY_STORAGE) || '';
 
             const repoInput = document.getElementById('gh-repo');
             const tokenInput = document.getElementById('gh-token');
+            const footballKeyInput = document.getElementById('football-api-key');
 
             if (repoInput && savedRepo) repoInput.value = savedRepo;
             if (tokenInput && savedToken) tokenInput.value = savedToken;
+            if (footballKeyInput && savedFootballKey) footballKeyInput.value = savedFootballKey;
 
             updateSyncBadge(savedRepo && savedToken ? 'ready' : 'empty');
         }
@@ -1509,16 +1471,19 @@
         function saveGitHubSettings() {
             const repo = document.getElementById('gh-repo').value.trim();
             const token = document.getElementById('gh-token').value.trim();
+            const footballKey = document.getElementById('football-api-key').value.trim();
 
             if (!repo || !token) {
-                alert("Inserisci repository e token.");
+                alert("Inserisci repository e token GitHub.");
                 return;
             }
 
             localStorage.setItem(GH_REPO_KEY, repo);
             localStorage.setItem(GH_TOKEN_KEY, token);
+            if (footballKey) localStorage.setItem(FOOTBALL_API_KEY_STORAGE, footballKey);
+
             updateSyncBadge('ready');
-            alert("Credenziali salvate!");
+            alert("Credenziali salvate con successo!");
             syncBetsToGitHub(loadAllBets());
             syncUsersToGitHub(loadAllUsers());
         }
@@ -1534,15 +1499,15 @@
                 text.className = 'text-[10px] text-emerald-400 font-mono';
             } else if (status === 'syncing') {
                 icon.className = 'w-3 h-3 rounded-full bg-amber-500 shrink-0 animate-ping';
-                text.innerText = 'Invio aggiornamento a GitHub in corso...';
+                text.innerText = message || 'Elaborazione in corso...';
                 text.className = 'text-[10px] text-amber-400 font-mono';
             } else if (status === 'success') {
                 icon.className = 'w-3 h-3 rounded-full bg-emerald-500 shrink-0';
-                text.innerText = `Sincronizzato con successo su GitHub (${new Date().toLocaleTimeString()}). Tutto il sito è aggiornato!`;
+                text.innerText = `Sincronizzato con successo (${new Date().toLocaleTimeString()}). Archivio aggiornato!`;
                 text.className = 'text-[10px] text-emerald-400 font-mono font-bold';
             } else if (status === 'error') {
                 icon.className = 'w-3 h-3 rounded-full bg-rose-500 shrink-0';
-                text.innerText = 'Errore sincronizzazione: ' + (message || 'Verifica dati.');
+                text.innerText = 'Errore: ' + (message || 'Verifica dati.');
                 text.className = 'text-[10px] text-rose-400 font-mono font-bold';
             } else {
                 icon.className = 'w-3 h-3 rounded-full bg-slate-500 shrink-0';
@@ -1556,7 +1521,7 @@
             const token = localStorage.getItem(GH_TOKEN_KEY);
             if (!repo || !token) return;
 
-            updateSyncBadge('syncing');
+            updateSyncBadge('syncing', 'Invio aggiornamento a GitHub...');
 
             try {
                 const getFileUrl = `https://api.github.com/repos/${repo}/contents/bets.json`;
