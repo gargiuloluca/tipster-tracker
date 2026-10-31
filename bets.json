@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793430039419_2",
-    "event_date": "2026-10-30 21:00",
-    "match_name": "Villarreal - Espanyol",
-    "league": "La Liga",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.5",
-    "odds": 1.72,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793419950637_5",
     "event_date": "2026-11-01 02:00",
     "match_name": "Cancun - Jaiba Brava",
@@ -248,20 +234,6 @@
     "odds": 1.63,
     "stake": 1,
     "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793202470616_3",
-    "event_date": "2026-10-31 18:00",
-    "match_name": "Genoa - Juventus",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.76,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
@@ -756,6 +728,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793430039419_2",
+    "event_date": "2026-10-30 21:00",
+    "match_name": "Villarreal - Espanyol",
+    "league": "La Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.72,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793360187503_0",
     "event_date": "2026-10-30 21:00",
     "match_name": "Villarreal - Espanyol",
@@ -791,20 +777,6 @@
     "market": "1X2 / Mercato",
     "prediction": "Under 3.5",
     "original_tipster": "AtmBetSignal",
-    "odds": 2.38,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793360016668_2",
-    "event_date": "2026-10-30 21:00",
-    "match_name": "Barcelona - Alaves",
-    "league": "La Liga",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.0",
-    "original_tipster": "AtmBetSignal XG",
     "odds": 2.38,
     "stake": 1,
     "status": "pending",
@@ -882,48 +854,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793360016669_4",
-    "event_date": "2026-10-30 20:45",
-    "match_name": "Standard Liege - Kortrijk",
-    "league": "Jupiler Pro League",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal",
-    "odds": 1.68,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793360016668_3",
-    "event_date": "2026-10-30 20:45",
-    "match_name": "Stockport County - Wimbledon",
-    "league": "League One",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.5",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.66,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793360016668_1",
-    "event_date": "2026-10-30 20:45",
-    "match_name": "Bologna - Monza",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal",
-    "odds": 1.69,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793350619022_1",
     "event_date": "2026-10-30 20:45",
     "match_name": "Briton Ferry - Llandudno",
@@ -948,20 +878,6 @@
     "odds": 1.7,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793360016668_0",
-    "event_date": "2026-10-30 20:30",
-    "match_name": "Bayer Leverkusen - VfB Stuttgart",
-    "league": "Bundesliga",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.77,
-    "stake": 1,
-    "status": "pending",
     "is_published": true,
     "tg_sent": true
   },
@@ -1288,20 +1204,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793202470616_1",
-    "event_date": "2026-10-29 20:45",
-    "match_name": "Frosinone - Lecce",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.66,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793176959290_4",
     "event_date": "2026-10-29 20:45",
     "match_name": "Frosinone - Lecce",
@@ -1512,20 +1414,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793269006994_9",
-    "event_date": "2026-10-29 18:00",
-    "match_name": "Elversberg - Mainz",
-    "league": "Germania",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.44,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793257898794_7",
     "event_date": "2026-10-29 18:00",
     "match_name": "Tirana - Dinamo Tirana",
@@ -1634,48 +1522,6 @@
     "odds": 1.85,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793202470616_4",
-    "event_date": "2026-10-28 20:45",
-    "match_name": "Fulham - Crystal Palace",
-    "league": "EFL Cup",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.75,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793202470616_2",
-    "event_date": "2026-10-28 20:45",
-    "match_name": "Monza - Napoli",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.73,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793202470615_0",
-    "event_date": "2026-10-28 20:45",
-    "match_name": "Manchester City - Brighton and Hove Albion",
-    "league": "EFL Cup",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.68,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
