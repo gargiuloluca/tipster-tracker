@@ -107,10 +107,7 @@
                 </button>
             </div>
 
-            <!-- Lista Partite in Corso da Verificare -->
-            <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="pending-verification-list">
-                <!-- Popolato da JS -->
-            </div>
+            <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="pending-verification-list"></div>
 
             <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
                 <span id="verify-summary-badge" class="text-[11px] font-mono text-slate-400">0 giocate da refertare</span>
@@ -135,7 +132,6 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-1.5 sm:space-x-2">
-                    <!-- TASTO CONTROLLO RISULTATI -->
                     <button type="button" onclick="openResultsModal()" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-lg font-black flex items-center gap-1.5 transition shadow shadow-emerald-500/10">
                         <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
                         <span>Verifica Risultati</span>
@@ -287,7 +283,7 @@
                 </div>
             </section>
 
-            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM BOT -->
+            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM BOT (CON SELETTORE FORNITORI PURE) -->
             <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 border border-blue-500/30 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
@@ -312,12 +308,26 @@
                         <input type="password" id="tg_token" placeholder="••••••••••••••••••••••••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Chat ID Canale PURE (Top 5)</label>
+                        <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Chat ID Canale PURE (Top Selezioni)</label>
                         <input type="password" id="tg_channel_pure" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-amber-500">
                     </div>
                     <div>
                         <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Chat ID Canale FULL (All-Inclusive)</label>
                         <input type="password" id="tg_channel_full" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <!-- SELETTORE DINAMICO FORNITORI ABILITATI PER IL CANALE PURE -->
+                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
+                            <i data-lucide="check-square" class="w-3.5 h-3.5 text-amber-400"></i>
+                            Fornitori Inclusi nel Canale PURE:
+                        </span>
+                        <span class="text-[9px] text-slate-400 font-mono">Spunta i tipster che vuoi trasmettere nel canale PURE</span>
+                    </div>
+                    <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-2 pt-1">
+                        <!-- Popolato dinamicamente da JS -->
                     </div>
                 </div>
 
@@ -595,6 +605,7 @@
         const GH_REPO_KEY = 'atmbet_gh_repo';
         const GH_TOKEN_KEY = 'atmbet_gh_token';
         const TG_CONF_KEY = 'atmbet_tg_config';
+        const PURE_TIPSTERS_KEY = 'atmbet_pure_selected_tipsters';
 
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
@@ -608,6 +619,7 @@
             const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
 
             if (lower.includes('xg')) return 'AtmBetSignal XG';
+            if (lower.includes('atmbet safe') || lower.includes('safe')) return 'AtmBet Safe';
             if (lower.includes('atmbet')) return 'AtmBetSignal';
             if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
             if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
@@ -630,6 +642,66 @@
         let currentClusterMode = 'all';
         let stagedVerificationResults = {};
 
+        // ==================== GESTIONE FORNITORI ABILITATI CANALE PURE ====================
+        function getPureSelectedTipsters() {
+            try {
+                const raw = localStorage.getItem(PURE_TIPSTERS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            // Valori predefiniti se non configurati
+            return ['AtmBetSignal', 'AtmBet Safe'];
+        }
+
+        function savePureSelectedTipsters(list) {
+            localStorage.setItem(PURE_TIPSTERS_KEY, JSON.stringify(list));
+        }
+
+        function togglePureTipster(tipsterName, isChecked) {
+            let current = getPureSelectedTipsters();
+            const canonical = canonicalizeTipsterName(tipsterName);
+
+            if (isChecked) {
+                if (!current.includes(canonical)) current.push(canonical);
+            } else {
+                current = current.filter(t => t !== canonical);
+            }
+
+            savePureSelectedTipsters(current);
+            renderDashboard();
+        }
+
+        function renderPureTipstersSelector() {
+            const container = document.getElementById('pure-tipsters-checkboxes');
+            if (!container) return;
+
+            const allBets = loadAllBets();
+            const existingTipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+            
+            // Assicura la presenza almeno di AtmBetSignal e AtmBet Safe
+            const guaranteed = ['AtmBetSignal', 'AtmBet Safe'];
+            guaranteed.forEach(g => {
+                if (!existingTipsters.includes(g)) existingTipsters.push(g);
+            });
+
+            const selected = getPureSelectedTipsters();
+            container.innerHTML = '';
+
+            existingTipsters.sort().forEach(t => {
+                const isChecked = selected.includes(t);
+                const label = document.createElement('label');
+                label.className = `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs cursor-pointer select-none transition ${isChecked ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'}`;
+
+                label.innerHTML = `
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="togglePureTipster('${t.replace(/'/g, "\\'")}', this.checked)" class="accent-amber-500 rounded cursor-pointer">
+                    <span>${t}</span>
+                `;
+                container.appendChild(label);
+            });
+        }
+
         // ==================== MOTORE VERIFICA RISULTATI DETERMINISTICO ====================
         function evaluatePickOutcome(predictionStr, homeScore, awayScore) {
             const h = parseInt(homeScore);
@@ -639,21 +711,17 @@
             const totalGoals = h + a;
             const pred = predictionStr.trim().toUpperCase().replace(/\s+/g, ' ');
 
-            // 1. Esiti 1X2
             if (pred === '1') return h > a ? 'won' : 'lost';
             if (pred === 'X') return h === a ? 'won' : 'lost';
             if (pred === '2') return a > h ? 'won' : 'lost';
 
-            // 2. Doppia Chance
             if (pred === '1X') return (h >= a) ? 'won' : 'lost';
             if (pred === 'X2') return (a >= h) ? 'won' : 'lost';
             if (pred === '12') return (h !== a) ? 'won' : 'lost';
 
-            // 3. Goal / No Goal
             if (pred === 'GG' || pred === 'GOAL' || pred === 'GOL') return (h > 0 && a > 0) ? 'won' : 'lost';
             if (pred === 'NG' || pred === 'NO GOAL' || pred === 'NO GOL') return (h === 0 || a === 0) ? 'won' : 'lost';
 
-            // 4. Under / Over Gol
             const overMatch = pred.match(/OVER\s*(\d+(?:\.\d+)?)/i);
             if (overMatch) {
                 const threshold = parseFloat(overMatch[1]);
@@ -666,7 +734,6 @@
                 return totalGoals < threshold ? 'won' : 'lost';
             }
 
-            // 5. Combo Semplici (es. 1 + Over 1.5, 1X + Under 3.5)
             if (pred.includes('+')) {
                 const parts = pred.split('+').map(p => p.trim());
                 const res1 = evaluatePickOutcome(parts[0], h, a);
@@ -676,7 +743,7 @@
                 }
             }
 
-            return null; // Mercato speciale da valutare con esito manuale
+            return null;
         }
 
         function openResultsModal() {
@@ -718,7 +785,6 @@
                             </div>
                         </div>
 
-                        <!-- Inserimento Risultato Finale -->
                         <div class="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
                             <span class="text-[10px] text-slate-400">Score:</span>
                             <input type="number" min="0" max="25" placeholder="H" id="score-h-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
@@ -727,7 +793,6 @@
                             <input type="number" min="0" max="25" placeholder="A" id="score-a-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
                                 class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-white rounded-lg py-1 outline-none focus:border-emerald-500">
                             
-                            <!-- Badge Esito Calcolato Dinamicamente -->
                             <div id="eval-badge-${bet.id}" class="min-w-[65px] text-center">
                                 <span class="text-[9px] text-slate-500 font-mono italic">In attesa</span>
                             </div>
@@ -770,7 +835,6 @@
                 stagedVerificationResults[betId] = 'lost';
                 badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
             } else {
-                // Mercato non standardizzato: permette scelta rapida con pulsanti
                 badgeEl.innerHTML = `
                     <div class="flex items-center gap-1">
                         <button type="button" onclick="setStagedManual('${betId}', 'won')" class="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[9px] font-bold border border-emerald-500/30">V</button>
@@ -973,7 +1037,7 @@
             if (!repo || !token) return;
 
             try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json`;
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json?_nocache=${Date.now()}`;
                 let currentSha = null;
 
                 const getRes = await fetch(getFileUrl, {
@@ -1024,7 +1088,7 @@
             }
 
             try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json`;
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json?_nocache=${Date.now()}`;
                 const getRes = await fetch(getFileUrl, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -1119,10 +1183,16 @@
             statusEl.innerText = "Invio in corso dei nuovi segnali...";
 
             if (channelType === 'pure') {
-                const toSend = pendings.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal').slice(0, 5);
+                // Prende i fornitori abilitati selezionati dalle checkbox
+                const allowedPureTipsters = getPureSelectedTipsters();
+
+                const toSend = pendings.filter(b => {
+                    const norm = canonicalizeTipsterName(b.original_tipster);
+                    return allowedPureTipsters.includes(norm);
+                }).slice(0, 7);
 
                 if (toSend.length === 0) {
-                    alert("Nessun NUOVO segnale PURE da inviare per oggi.");
+                    alert(`Nessun NUOVO segnale PURE da inviare per oggi dai fornitori abilitati (${allowedPureTipsters.join(', ')}).`);
                     statusEl.innerText = "";
                     return;
                 }
@@ -1213,7 +1283,8 @@
                 return;
             }
 
-            const isPure = canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal';
+            const allowedPure = getPureSelectedTipsters();
+            const isPure = allowedPure.includes(canonicalizeTipsterName(b.original_tipster));
             const chatId = isPure ? channelPure : channelFull;
             const channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
 
@@ -1282,6 +1353,7 @@
             loadGitHubSettings();
             loadTelegramConfig();
             renderUsersTable();
+            renderPureTipstersSelector();
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
             renderDashboard();
@@ -1559,7 +1631,7 @@
             updateSyncBadge('syncing');
 
             try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/bets.json`;
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/bets.json?_nocache=${Date.now()}`;
                 let currentSha = null;
 
                 const getRes = await fetch(getFileUrl, {
@@ -1662,6 +1734,7 @@
             localStorage.setItem(PRIMARY_KEY, JSON.stringify(bets));
             localStorage.setItem(ATMBET_KEY, JSON.stringify(bets));
             renderDashboard();
+            renderPureTipstersSelector();
             syncBetsToGitHub(bets);
         }
 
@@ -2295,6 +2368,7 @@
                     <td class="py-2.5 px-3 whitespace-nowrap">
                         <select onchange="updateBetTipster('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-1 text-[10px] text-slate-300 focus:outline-none focus:border-emerald-500 font-medium">
                             <option value="AtmBetSignal" ${bet.original_tipster === 'AtmBetSignal' ? 'selected' : ''}>AtmBetSignal</option>
+                            <option value="AtmBet Safe" ${bet.original_tipster === 'AtmBet Safe' ? 'selected' : ''}>AtmBet Safe</option>
                             <option value="AtmBetSignal XG" ${bet.original_tipster === 'AtmBetSignal XG' ? 'selected' : ''}>AtmBetSignal XG</option>
                             <option value="Pronostici1" ${bet.original_tipster === 'Pronostici1' ? 'selected' : ''}>Pronostici1</option>
                             <option value="CalcioAI" ${bet.original_tipster === 'CalcioAI' ? 'selected' : ''}>CalcioAI</option>
@@ -2306,7 +2380,7 @@
                             <option value="Freak Elite VIP" ${bet.original_tipster === 'Freak Elite VIP' ? 'selected' : ''}>Freak Elite VIP</option>
                             <option value="Stats4bets bollamaker" ${bet.original_tipster === 'Stats4bets bollamaker' ? 'selected' : ''}>Stats4bets bollamaker</option>
                             <option value="Stats4Bets Automatibet" ${bet.original_tipster === 'Stats4Bets Automatibet' ? 'selected' : ''}>Stats4Bets Automatibet</option>
-                            ${!['AtmBetSignal','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
+                            ${!['AtmBetSignal','AtmBet Safe','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
                         </select>
                     </td>
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">
