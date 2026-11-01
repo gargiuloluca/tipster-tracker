@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793520069259_0",
-    "event_date": "2026-11-01 15:00",
-    "match_name": "Squadra Test A - Squadra Test B",
-    "league": "Test",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.85,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793484243797_0",
     "event_date": "2026-11-01 23:00",
     "match_name": "Walter Ferreti - San Marcos",
