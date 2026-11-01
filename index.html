@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AtmBet | Algoritmi Quantitativi & Tipster Tracking Certificato</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png?v=2">
+    <link rel="apple-touch-icon" href="logo.png?v=2">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -724,12 +726,24 @@
         const ATMBET_KEY = 'atmbet_bets_data';
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
+        const PURE_TIPSTERS_KEY = 'atmbet_pure_selected_tipsters';
 
         const TELEGRAM_CONFIG = {
             pure_channel_invite: "https://t.me/+oV3ACyZlYjg1MjQ0",
             full_channel_invite: "https://t.me/+8YvUiLUVLI04NmRk",
             bot_username: "AtmBetOfficialBot"
         };
+
+        function getActivePureTipsters() {
+            try {
+                const raw = localStorage.getItem(PURE_TIPSTERS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            return ['AtmBetSignal', 'AtmBet Safe', 'Safe80'];
+        }
 
         let currentMultiplier = 50;
         let globalNetProfitUnits = 0;
@@ -1110,15 +1124,22 @@
                 } catch(e) {}
             }
 
+            const pureTipstersList = getActivePureTipsters().map(t => t.toLowerCase().trim());
+
             return bets.map((b, idx) => {
                 const rawTipster = (b.tipster || b.original_tipster || 'AtmBetSignal').trim();
                 const rawLower = rawTipster.toLowerCase();
 
                 const isXG = rawLower.includes('xg');
-                // Riconosce sia AtmBetSignal sia AtmBet Safe (o esplicito isPure) come selezioni PURE
+                
+                // Verifica di appartenenza dinamica al piano PURE
+                const isInSelectedPure = pureTipstersList.some(pt => rawLower === pt || rawLower.includes(pt));
+                
                 const isPureCandidate = !isXG && (
                     b.isPure === true ||
+                    isInSelectedPure ||
                     rawLower.includes('safe') ||
+                    rawLower.includes('safe80') ||
                     rawLower === 'atmbetsignal' || 
                     rawLower === 'atmbet selection' ||
                     rawLower === 'atmbet'
