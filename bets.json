@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793535478155_0",
-    "event_date": "2026-11-01 14:00",
-    "match_name": "Vendsyssel FF - Vejle",
-    "league": "1. Division",
-    "original_tipster": "Brunetti Vip",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.73,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793532519429_0",
     "event_date": "2026-11-02 00:30",
     "match_name": "Universitario de Vinto - Always Ready",
@@ -834,6 +820,20 @@
     "prediction": "1",
     "original_tipster": "Pronostici1",
     "odds": 1.52,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793535478155_0",
+    "event_date": "2026-11-01 14:00",
+    "match_name": "Vendsyssel FF - Vejle",
+    "league": "1. Division",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "Brunetti Vip",
+    "odds": 1.73,
     "stake": 1,
     "status": "pending",
     "is_published": true,
