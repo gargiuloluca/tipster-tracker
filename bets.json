@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793545410335_0",
-    "event_date": "2026-11-01 17:00",
-    "match_name": "Soroksar - Kozarmisleny FC",
-    "league": "NB II",
-    "original_tipster": "Brunetti Vip",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.72,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793532519429_0",
     "event_date": "2026-11-02 00:30",
     "match_name": "Universitario de Vinto - Always Ready",
@@ -344,6 +330,20 @@
     "prediction": "Over 2.5",
     "original_tipster": "Pronostici1",
     "odds": 1.83,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793545410335_0",
+    "event_date": "2026-11-01 17:00",
+    "match_name": "Soroksar - Kozarmisleny FC",
+    "league": "NB II",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Brunetti Vip",
+    "odds": 1.72,
     "stake": 1,
     "status": "pending",
     "is_published": true,
