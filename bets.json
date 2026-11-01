@@ -588,20 +588,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793518387222_0",
-    "event_date": "2026-11-01 15:00",
-    "match_name": "Strasburgo - Auxerre / Lione - Angers / Academico de Viseu FC - Rio Ave",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "DNB 1 / 1 / DNB 1",
-    "original_tipster": "AtmBetSignal",
-    "odds": 2.7,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793515893485_26",
     "event_date": "2026-11-01 15:00",
     "match_name": "Paris FC - Monaco",
