@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793516598447_0",
+    "event_date": "2026-11-01 13:30",
+    "match_name": "Amedspor - Eyupspor / Trabzonspor - Gaziantep / Racing Santander - Real Madrid",
+    "league": "Multipla",
+    "original_tipster": "King",
+    "market": "Multipla",
+    "prediction": "1 / 1 / 2",
+    "odds": 1.88,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793484243797_0",
     "event_date": "2026-11-01 23:00",
     "match_name": "Walter Ferreti - San Marcos",
