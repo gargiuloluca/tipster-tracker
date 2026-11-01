@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793546384081_0",
-    "event_date": "2026-11-01 16:30",
-    "match_name": "Lausanne - Thun",
-    "league": "Super League",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 2.41,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793532519429_0",
     "event_date": "2026-11-02 00:30",
     "match_name": "Universitario de Vinto - Always Ready",
@@ -107,7 +93,7 @@
     "original_tipster": "AtmBet Safe",
     "odds": 1.44,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
@@ -488,6 +474,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793546384081_0",
+    "event_date": "2026-11-01 16:30",
+    "match_name": "Lausanne - Thun",
+    "league": "Super League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 2.41,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793527656138_4",
