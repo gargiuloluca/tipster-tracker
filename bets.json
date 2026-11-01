@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793518387222_0",
-    "event_date": "2026-11-01 15:00",
-    "match_name": "Strasburgo - Auxerre / Lione - Angers / Academico de Viseu FC - Rio Ave",
-    "league": "Multipla",
-    "original_tipster": "AtmBetSignal",
-    "market": "Multipla",
-    "prediction": "DNB 1 / 1 / DNB 1",
-    "odds": 2.7,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793484243797_0",
     "event_date": "2026-11-01 23:00",
     "match_name": "Walter Ferreti - San Marcos",
@@ -602,14 +588,14 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793517399336_0",
+    "id": "bet_1793518387222_0",
     "event_date": "2026-11-01 15:00",
-    "match_name": "Sheffield Wednesday - Blackpool / Arouca - Nacional / Groningen - Sparta Rotterdam",
+    "match_name": "Strasburgo - Auxerre / Lione - Angers / Academico de Viseu FC - Rio Ave",
     "league": "Multipla",
     "market": "Multipla",
-    "prediction": "DNB 1 / DNB 1 / DNB 1",
+    "prediction": "DNB 1 / 1 / DNB 1",
     "original_tipster": "AtmBetSignal",
-    "odds": 2.35,
+    "odds": 2.7,
     "stake": 1,
     "status": "pending",
     "is_published": true,
