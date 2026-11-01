@@ -1,47 +1,5 @@
 [
   {
-    "id": "bet_1793516264285_2",
-    "event_date": "2026-11-01 11:30",
-    "match_name": "Amed SK - Eyupspor / Trabzonspor - Gaziantep F.K. / Young Boys - Zurich",
-    "league": "Multipla",
-    "original_tipster": "Stats4bets bollamaker",
-    "market": "Multipla",
-    "prediction": "1 / 1 / 1",
-    "odds": 2.07,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793516264284_1",
-    "event_date": "2026-11-01 16:15",
-    "match_name": "Racing Santander - Real Madrid / Partizan - Zemun",
-    "league": "Multipla",
-    "original_tipster": "Stats4bets bollamaker",
-    "market": "Multipla",
-    "prediction": "2 / 1",
-    "odds": 1.49,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793516264284_0",
-    "event_date": "2026-11-01 11:30",
-    "match_name": "Nomme Kalju - Kuressaare",
-    "league": "Meistriliiga",
-    "original_tipster": "Stats4bets bollamaker",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.51,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793484243797_0",
     "event_date": "2026-11-01 23:00",
     "match_name": "Walter Ferreti - San Marcos",
@@ -476,6 +434,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793516264284_1",
+    "event_date": "2026-11-01 16:15",
+    "match_name": "Racing Santander - Real Madrid / Partizan - Zemun",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "2 / 1",
+    "original_tipster": "Stats4bets bollamaker",
+    "odds": 1.49,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793516003571_0",
     "event_date": "2026-11-01 16:15",
     "match_name": "Racing Santander - Real Madrid / Hodd - Bryne",
@@ -812,6 +784,34 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793516264285_2",
+    "event_date": "2026-11-01 11:30",
+    "match_name": "Amed SK - Eyupspor / Trabzonspor - Gaziantep F.K. / Young Boys - Zurich",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "1 / 1 / 1",
+    "original_tipster": "Stats4bets bollamaker",
+    "odds": 2.07,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793516264284_0",
+    "event_date": "2026-11-01 11:30",
+    "match_name": "Nomme Kalju - Kuressaare",
+    "league": "Meistriliiga",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "Stats4bets bollamaker",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793516145030_0",
     "event_date": "2026-11-01 08:00",
     "match_name": "Machida - Gamba Osaka",
@@ -849,7 +849,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.92,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
