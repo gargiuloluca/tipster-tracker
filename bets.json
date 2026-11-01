@@ -107,7 +107,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.66,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
@@ -667,7 +667,7 @@
     "original_tipster": "CalcioAI",
     "odds": 2.65,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
