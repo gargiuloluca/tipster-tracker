@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793532519429_0",
+    "event_date": "2026-11-02 00:30",
+    "match_name": "Universitario de Vinto - Always Ready",
+    "league": "Division Profesional",
+    "original_tipster": "BetMines",
+    "market": "1X2 / Mercato",
+    "prediction": "Gol",
+    "odds": 1.44,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793484243797_0",
     "event_date": "2026-11-01 23:00",
     "match_name": "Walter Ferreti - San Marcos",
