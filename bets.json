@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793535394803_0",
-    "event_date": "2026-11-01 13:30",
-    "match_name": "Hannover - SG Dynamo Dresden",
-    "league": "2. Bundesliga",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.95,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793532519429_0",
     "event_date": "2026-11-02 00:30",
     "match_name": "Universitario de Vinto - Always Ready",
@@ -890,6 +876,20 @@
     "prediction": "NoGol",
     "original_tipster": "Pronostici1",
     "odds": 1.62,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793535394803_0",
+    "event_date": "2026-11-01 13:30",
+    "match_name": "Hannover - SG Dynamo Dresden",
+    "league": "2. Bundesliga",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 1.95,
     "stake": 1,
     "status": "pending",
     "is_published": true,
