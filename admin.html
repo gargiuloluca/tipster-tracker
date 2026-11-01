@@ -322,13 +322,11 @@
                     <div class="flex items-center justify-between">
                         <span class="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
                             <i data-lucide="check-square" class="w-3.5 h-3.5 text-amber-400"></i>
-                            Fornitori Inclusi nel Canale PURE:
+                            Fornitori Inclusi nel Canale PURE & Storico PURE:
                         </span>
-                        <span class="text-[9px] text-slate-400 font-mono">Spunta i tipster che vuoi trasmettere nel canale PURE</span>
+                        <span class="text-[9px] text-slate-400 font-mono">Spunta i tipster abilitati al flusso PURE</span>
                     </div>
-                    <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-2 pt-1">
-                        <!-- Popolato dinamicamente da JS -->
-                    </div>
+                    <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-2 pt-1"></div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80">
@@ -361,7 +359,7 @@
 
                     <div class="flex flex-wrap items-center gap-1.5">
                         <button type="button" onclick="setClusterFilter('pure', this)" id="btn-cluster-pure" class="cluster-btn px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold transition flex items-center gap-1">
-                            <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400"></i> Pure Signal (Top 5 / >65%)
+                            <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400"></i> Pure Signal (Canali Selezionati)
                         </button>
                         <button type="button" onclick="setClusterFilter('elite', this)" id="btn-cluster-elite" class="cluster-btn px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1">
                             <i data-lucide="zap" class="w-3.5 h-3.5 text-emerald-400"></i> Cluster Elite (ROI Positivo)
@@ -651,7 +649,6 @@
                     if (Array.isArray(parsed) && parsed.length > 0) return parsed;
                 }
             } catch(e) {}
-            // Valori predefiniti se non configurati
             return ['AtmBetSignal', 'AtmBet Safe'];
         }
 
@@ -680,7 +677,6 @@
             const allBets = loadAllBets();
             const existingTipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
             
-            // Assicura la presenza almeno di AtmBetSignal e AtmBet Safe
             const guaranteed = ['AtmBetSignal', 'AtmBet Safe'];
             guaranteed.forEach(g => {
                 if (!existingTipsters.includes(g)) existingTipsters.push(g);
@@ -1183,13 +1179,12 @@
             statusEl.innerText = "Invio in corso dei nuovi segnali...";
 
             if (channelType === 'pure') {
-                // Prende i fornitori abilitati selezionati dalle checkbox
                 const allowedPureTipsters = getPureSelectedTipsters();
 
                 const toSend = pendings.filter(b => {
                     const norm = canonicalizeTipsterName(b.original_tipster);
                     return allowedPureTipsters.includes(norm);
-                }).slice(0, 7);
+                });
 
                 if (toSend.length === 0) {
                     alert(`Nessun NUOVO segnale PURE da inviare per oggi dai fornitori abilitati (${allowedPureTipsters.join(', ')}).`);
@@ -2128,9 +2123,10 @@
             if (!chEl || !volEl || !wrEl || !targetEl) return;
 
             if (currentClusterMode === 'pure') {
-                chEl.innerText = "Solo 'AtmBetSignal' (Core AI)";
-                volEl.innerText = "Max 5 / die (Filtro Rigido)";
-                wrEl.innerText = "> 65.0% - 100% Win Rate";
+                const pureTipsters = getPureSelectedTipsters();
+                chEl.innerText = pureTipsters.length > 0 ? pureTipsters.join(', ') : "Canali Pure Selezionati";
+                volEl.innerText = "Top Selezioni Filtrate";
+                wrEl.innerText = "> 65.0% Win Rate Target";
                 targetEl.innerText = "Piano 'Pure Signal' (Top Ticket)";
             } else if (currentClusterMode === 'elite') {
                 chEl.innerText = "Top Fornitori (ROI Positivo)";
@@ -2138,7 +2134,7 @@
                 wrEl.innerText = "~ 62.5% Win Rate";
                 targetEl.innerText = "Piano Bilanciato / Elite";
             } else {
-                chEl.innerText = "Tutti (10 Canali)";
+                chEl.innerText = "Tutti (Canali Connessi)";
                 volEl.innerText = "Full (~30-50 / die)";
                 wrEl.innerText = "50-60% Win Rate";
                 targetEl.innerText = "Piano 'All-Inclusive'";
@@ -2164,8 +2160,10 @@
 
             updateClusterOptimizerSummary(allBets);
 
+            // Filtro PURE dinamico basato sui fornitori attivi nelle checkbox
             if (currentClusterMode === 'pure') {
-                allBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) === 'AtmBetSignal');
+                const allowedPure = getPureSelectedTipsters();
+                allBets = allBets.filter(b => allowedPure.includes(canonicalizeTipsterName(b.original_tipster)));
             } else if (currentClusterMode === 'elite') {
                 const fullArchive = loadAllBets();
                 const tipsterNetProfits = {};
