@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1793527971399_1",
+    "event_date": "2026-11-01 17:30",
+    "match_name": "Liverpool - Arsenal / Lazio - Cagliari",
+    "league": "Multipla",
+    "original_tipster": "Brunetti Vip",
+    "market": "Multipla",
+    "prediction": "Over 10.5 tiri Liverpool / 12 + Over 1.5",
+    "odds": 1.93,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793527971399_0",
+    "event_date": "2026-11-01 12:00",
+    "match_name": "UD Logrones B - Espanyol B",
+    "league": "Segunda RFEF",
+    "original_tipster": "Brunetti Vip",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.71,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793484243797_0",
     "event_date": "2026-11-01 23:00",
     "match_name": "Walter Ferreti - San Marcos",
