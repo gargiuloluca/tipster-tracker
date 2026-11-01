@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793564167997_0",
+    "event_date": "2026-11-01 21:30",
+    "match_name": "Vancouver Whitecaps - Seattle Sounders",
+    "league": "MLS",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.9,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793562128180_0",
     "event_date": "2026-11-02 20:45",
     "match_name": "Reims - Sochaux",
