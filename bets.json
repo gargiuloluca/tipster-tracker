@@ -387,7 +387,7 @@
     "original_tipster": "King",
     "odds": 2.29,
     "stake": 1,
-    "status": "won",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
