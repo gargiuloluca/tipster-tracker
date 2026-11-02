@@ -273,13 +273,13 @@
                         </span>
                         <h2 class="text-sm sm:text-base font-black text-white">Simulatore di Rendimento nel Tempo</h2>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Verifica i guadagni simulando la partenza da una data specifica.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Verifica i guadagni selezionando un giorno esatto o un intervallo rapido.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Data:</span>
-                        <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)"
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Giorno:</span>
+                        <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)" oninput="applyCustomCalendarDate(this.value)"
                             class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
                     </div>
 
@@ -1081,7 +1081,6 @@
         async function fetchAllBets() {
             let bets = [];
 
-            // 1. Prova prima a recuperare da bets.json su GitHub
             try {
                 const timestamp = new Date().getTime();
                 const res = await fetch(`bets.json?_nocache=${timestamp}`, {
@@ -1098,7 +1097,6 @@
                 }
             } catch(e) {}
 
-            // 2. Fallback su localStorage (se l'utente è l'admin o ha dati locali più recenti)
             const rawV1 = localStorage.getItem(PRIMARY_KEY) || localStorage.getItem(ATMBET_KEY);
             if (rawV1) {
                 try {
@@ -1140,7 +1138,6 @@
                     rawLower === 'atmbet'
                 );
 
-                // Normalizzazione dell'esito da qualsiasi campo possibile (status, result, outcome)
                 let rawStatus = String(b.status || b.result || b.outcome || 'pending').toLowerCase().trim();
                 if (rawStatus.includes('vin') || rawStatus === 'win' || rawStatus === 'won') rawStatus = 'won';
                 else if (rawStatus.includes('per') || rawStatus === 'loss' || rawStatus === 'lost') rawStatus = 'lost';
@@ -1162,7 +1159,7 @@
                     odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
                     stake: parseFloat(b.stake || b.units || 1.0) > 10 ? 1.0 : parseFloat(b.stake || b.units || 1.0),
                     status: rawStatus,
-                    is_published: b.is_published !== false // Se non specificato, è pubblico di default
+                    is_published: b.is_published !== false
                 };
             }).filter(b => b.is_published === true);
         }
@@ -1207,8 +1204,9 @@
         }
 
         function applyCustomCalendarDate(dateStr) {
+            if (!dateStr) return;
             currentSimMode = 'custom';
-            currentCustomDate = dateStr;
+            currentCustomDate = extractStandardDate(dateStr);
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             calculateSimulationPerformance();
         }
@@ -1239,7 +1237,7 @@
                 if (dateInput) dateInput.value = d7Str;
                 currentCustomDate = d7Str;
             } else if (type === 'all') {
-                currentCustomDate = '2020-01-01';
+                currentCustomDate = '';
                 if (dateInput) dateInput.value = '';
             }
 
@@ -1273,7 +1271,7 @@
                 } else if (currentSimMode === 'all') {
                     return true;
                 } else if (currentSimMode === 'custom') {
-                    return bDate >= currentCustomDate;
+                    return bDate === currentCustomDate;
                 }
                 return true;
             });
