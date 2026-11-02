@@ -2,31 +2,106 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pagamento Riuscito | AtmBet</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#070a10',
+                            card: '#0e1522',
+                            border: '#1e293b',
+                            gold: '#fbbf24'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-[#070a10] text-slate-100 min-h-screen flex items-center justify-center p-4 font-sans">
-    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center space-y-6 shadow-2xl">
-        <div class="w-16 h-16 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 flex items-center justify-center mx-auto">
-            <i data-lucide="check-circle" class="w-8 h-8"></i>
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col items-center justify-center font-sans antialiased selection:bg-emerald-500 selection:text-black p-4 relative overflow-hidden">
+
+    <!-- Effetti luce di sfondo stile AtmBet -->
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-md w-full space-y-6 relative z-10">
+        <!-- Logo Header -->
+        <div class="text-center space-y-2">
+            <a href="index.html" class="inline-flex items-center gap-2">
+                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-10 w-auto mx-auto">
+            </a>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono uppercase tracking-wider font-bold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Transazione Verificata
+            </div>
         </div>
-        <div class="space-y-2">
-            <h1 class="text-2xl font-black text-white">Pagamento Completato!</h1>
-            <p class="text-xs text-slate-400 leading-relaxed">
-                Il tuo ordine è andato a buon fine. Il sistema sta registrando la tua licenza.
-            </p>
+
+        <!-- Card Principale -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-md">
+            <div class="w-16 h-16 bg-emerald-500/15 text-emerald-400 rounded-2xl border border-emerald-500/30 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
+                <i data-lucide="check-circle-2" class="w-9 h-9"></i>
+            </div>
+
+            <div class="text-center space-y-2">
+                <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Pagamento Completato!</h1>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Il tuo ordine è andato a buon fine. Il sistema ha registrato con successo la transazione.
+                </p>
+            </div>
+
+            <!-- Box Email Rilevata (se passata da Stripe) -->
+            <div id="email-box" class="hidden bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center space-y-1">
+                <span class="text-[10px] text-slate-500 font-mono uppercase tracking-wider block">Email associata all'ordine</span>
+                <span id="display-email" class="text-xs font-mono font-bold text-emerald-400"></span>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800/80 space-y-2.5 text-xs text-slate-300">
+                <div class="font-bold text-white flex items-center gap-1.5">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Come procedere adesso:
+                </div>
+                <p class="text-slate-400 leading-relaxed">1. Clicca sul tasto sottostante per tornare alla dashboard principale.</p>
+                <p class="text-slate-400 leading-relaxed">2. Clicca su <strong>"Codice Sblocco"</strong> o <strong>"Accedi"</strong> in alto a destra e inserisci la tua email o il codice per attivare la tua area riservata.</p>
+            </div>
+
+            <a href="index.html" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                <span>Accedi alla Dashboard Operativa</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
         </div>
-        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-left space-y-2 text-xs text-slate-300">
-            <div class="font-bold text-emerald-400">Come procedere adesso:</div>
-            <p>1. Clicca sul tasto sottostante per tornare alla vetrina.</p>
-            <p>2. Clicca su <strong>"Codice Sblocco"</strong> o <strong>"Accedi"</strong> e inserisci la tua email o il tuo codice.</p>
+
+        <div class="text-center text-[11px] text-slate-500 font-mono">
+            AtmBet &copy; 2026 • Analisi Quantitativa Certificata
         </div>
-        <a href="index.html" class="block w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-3 rounded-xl transition shadow-lg shadow-emerald-500/20">
-            Accedi subito alla Dashboard &rarr;
-        </a>
     </div>
-    <script>lucide.createIcons();</script>
+
+    <script>
+        lucide.createIcons();
+
+        // Estrae l'email passata da Stripe via parametro URL (?email=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const userEmail = urlParams.get('email');
+        
+        if (userEmail && userEmail.includes('@')) {
+            const emailBox = document.getElementById('email-box');
+            const displayEmail = document.getElementById('display-email');
+            if (emailBox && displayEmail) {
+                displayEmail.innerText = userEmail;
+                emailBox.classList.remove('hidden');
+            }
+        }
+    </script>
 </body>
 </html>
