@@ -623,6 +623,10 @@
             if (lower.includes('atmbet')) return 'AtmBetSignal';
             if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
             if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+            
+            // Regola prioritaria per Valuebet: non viene catturata dalle altre regole BetMines
+            if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
+            
             if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
             if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
             if (lower.includes('zcode')) return 'ZCODE';
@@ -1707,7 +1711,8 @@
                 let canonicalTipster = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
 
                 // Separazione automatica BetMines: PreMatch per singole, BetMines per multiple (con '/')
-                if (canonicalTipster.toLowerCase().includes('betmines')) {
+                // I pronostici BetMines Valuebet non vengono alterati
+                if (canonicalTipster.toLowerCase().includes('betmines') && !canonicalTipster.toLowerCase().includes('valuebet')) {
                     const isParlay = matchText.includes('/');
                     canonicalTipster = isParlay ? 'BetMines' : 'BetMines PreMatch';
                 }
@@ -1827,7 +1832,8 @@
                         if (oddsPart < 1.30) return;
 
                         // Riconoscimento automatico BetMines: PreMatch (singole) vs BetMines (multiple)
-                        if (tipsterPart.toLowerCase().includes('betmines')) {
+                        // Rimangono invariate le Valuebet
+                        if (tipsterPart.toLowerCase().includes('betmines') && !tipsterPart.toLowerCase().includes('valuebet')) {
                             tipsterPart = matchPart.includes('/') ? 'BetMines' : 'BetMines PreMatch';
                         }
 
@@ -2387,6 +2393,7 @@
                             <option value="CalcioAI" ${bet.original_tipster === 'CalcioAI' ? 'selected' : ''}>CalcioAI</option>
                             <option value="BetMines" ${bet.original_tipster === 'BetMines' ? 'selected' : ''}>BetMines (Multiple)</option>
                             <option value="BetMines PreMatch" ${bet.original_tipster === 'BetMines PreMatch' ? 'selected' : ''}>BetMines PreMatch (Singole)</option>
+                            <option value="BetMines Valuebet" ${bet.original_tipster === 'BetMines Valuebet' ? 'selected' : ''}>BetMines Valuebet</option>
                             <option value="ZCODE" ${bet.original_tipster === 'ZCODE' ? 'selected' : ''}>ZCODE</option>
                             <option value="BetExpBot" ${bet.original_tipster === 'BetExpBot' ? 'selected' : ''}>BetExpBot</option>
                             <option value="FootyStats" ${bet.original_tipster === 'FootyStats' ? 'selected' : ''}>FootyStats</option>
@@ -2394,7 +2401,7 @@
                             <option value="Freak Elite VIP" ${bet.original_tipster === 'Freak Elite VIP' ? 'selected' : ''}>Freak Elite VIP</option>
                             <option value="Stats4bets bollamaker" ${bet.original_tipster === 'Stats4bets bollamaker' ? 'selected' : ''}>Stats4bets bollamaker</option>
                             <option value="Stats4Bets Automatibet" ${bet.original_tipster === 'Stats4Bets Automatibet' ? 'selected' : ''}>Stats4Bets Automatibet</option>
-                            ${!['AtmBetSignal','AtmBet Safe','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','BetMines PreMatch','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
+                            ${!['AtmBetSignal','AtmBet Safe','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','BetMines PreMatch','BetMines Valuebet','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
                         </select>
                     </td>
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">
