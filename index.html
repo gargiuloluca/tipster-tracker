@@ -1033,8 +1033,25 @@
                         </a>
                     </div>
                 `;
+            } else if (user.plan === 'credits' || user.plan === 'trial_vip') {
+                // Vista Utente a Crediti: Niente Telegram, ma invito ad acquistare altri crediti
+                box.className = "bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
+                box.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+                            <i data-lucide="coins" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-white flex items-center gap-2">Gestione Crediti Operativi (${user.credits || 0} disp.)</div>
+                            <p class="text-xs text-slate-400 mt-0.5">I crediti ti permettono di sbloccare le singole selezioni d'élite direttamente qui in vetrina.</p>
+                        </div>
+                    </div>
+                    <a href="#piani" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 shrink-0">
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i> <span>Acquista Altri Crediti</span>
+                    </a>
+                `;
             } else {
-                // Vista Abbonato: Mostra il pulsante diretto per entrare nel canale Telegram
+                // Vista Abbonato VIP (Pure o All-Inclusive): Mostra il pulsante diretto per entrare nel canale Telegram
                 let channelUrl = TELEGRAM_CONFIG.full_channel_invite;
                 let channelTitle = "🌐 Canale VIP Telegram: AtmBet Signal All-Inclusive";
                 let channelDesc = "Accesso illimitato al flusso completo di tutti i segnali su Telegram.";
