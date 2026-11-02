@@ -211,24 +211,29 @@
             </div>
         </section>
 
-        <!-- BANNER TELEGRAM DINAMICO -->
-        <section id="telegram-connect-box" class="bg-gradient-to-r from-blue-950/70 via-slate-900 to-slate-950 border border-blue-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <!-- BANNER GUIDA ACCESSO TELEGRAM PER VISITATORI -->
+        <section id="telegram-connect-box" class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-                    <i data-lucide="send" class="w-5 h-5"></i>
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
+                    <i data-lucide="info" class="w-5 h-5"></i>
                 </div>
                 <div>
                     <div id="tg-banner-title" class="text-sm font-bold text-white flex items-center gap-2">
-                        Ricevi i Segnali su Telegram in Tempo Reale
+                        Sei già abbonato o hai un codice?
                     </div>
                     <p id="tg-banner-desc" class="text-xs text-slate-400 mt-0.5">
-                        Accedi con il tuo account o sblocca la tua licenza per collegare il Canale Telegram ufficiale dedicato al tuo piano.
+                        Clicca su <strong class="text-amber-400">"Codice Sblocco"</strong> o <strong class="text-white">"Accedi"</strong> in alto a destra per attivare subito il tuo accesso Telegram VIP.
                     </p>
                 </div>
             </div>
-            <a id="tg-action-btn" href="#piani" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 shrink-0">
-                <i data-lucide="arrow-down" class="w-4 h-4"></i> <span id="tg-btn-label">Attiva Piano per Collegare</span>
-            </a>
+            <div class="flex items-center gap-2 w-full sm:w-auto shrink-0" id="tg-action-btn-container">
+                <button type="button" onclick="openLicenseModal()" class="flex-1 sm:flex-initial bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/10">
+                    <i data-lucide="key" class="w-3.5 h-3.5"></i> Inserisci Codice
+                </button>
+                <a href="auth.html" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5">
+                    Accedi
+                </a>
+            </div>
         </section>
 
         <!-- 6. SELEZIONI APERTE (GRIGLIA ORDINATA PER VIP) -->
@@ -724,7 +729,7 @@
     <!-- 10. FOOTER -->
     <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
         <div>
-            AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per el Betting Sportivo.
+            AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
         </div>
         <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500">
             <a href="index.html" class="hover:text-slate-400 transition">Home</a>
@@ -965,7 +970,6 @@
                     }, 800);
                 } else {
                     errEl.innerText = "Codice non valido. Verifica il testo digitato.";
-                    errEl.classList.add('hidden'); // Fix hidden display
                     errEl.classList.remove('hidden');
                 }
             } catch(err) {
@@ -1000,40 +1004,66 @@
 
         function updateTelegramBanner() {
             const user = getActiveUserSession();
-            const btn = document.getElementById('tg-action-btn');
-            const title = document.getElementById('tg-banner-title');
-            const desc = document.getElementById('tg-banner-desc');
-            const label = document.getElementById('tg-btn-label');
-            if (!btn || !title) return;
+            const box = document.getElementById('telegram-connect-box');
+            if (!box) return;
 
             if (!user) {
-                title.innerHTML = "Ricevi i Segnali su Telegram in Tempo Reale";
-                desc.innerText = "Attiva un abbonamento o sblocca la tua licenza per unirti al canale Telegram ufficiale.";
-                btn.href = "#piani";
-                btn.removeAttribute('target');
-                label.innerText = "Attiva Piano per Collegare";
-                return;
-            }
-
-            if (user.plan === 'pure') {
-                title.innerHTML = "⚡ Canale Esclusivo Telegram: AtmBet Selection (Signal PURE)";
-                desc.innerText = "Le selezioni top del giorno inviate direttamente su Telegram prima dei match.";
-                btn.href = TELEGRAM_CONFIG.pure_channel_invite;
-                btn.target = "_blank";
-                label.innerText = "Entra nel Canale PURE";
-            } else if (user.plan === 'all_inclusive' || user.plan === 'elite') {
-                title.innerHTML = "🌐 Canale VIP Telegram: AtmBet Signal All-Inclusive";
-                desc.innerText = "Accesso illimitato al flusso completo di tutti i segnali e campionati su Telegram.";
-                btn.href = TELEGRAM_CONFIG.full_channel_invite;
-                btn.target = "_blank";
-                label.innerText = "Entra nel Canale VIP";
+                // Vista Visitatore: Mostra il banner guida
+                box.className = "bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
+                box.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/20">
+                            <i data-lucide="info" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-white flex items-center gap-2">
+                                Sei già abbonato o hai un codice?
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">
+                                Clicca su <strong class="text-amber-400">"Codice Sblocco"</strong> o <strong class="text-white">"Accedi"</strong> in alto a destra per attivare subito il tuo accesso Telegram VIP.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto shrink-0">
+                        <button type="button" onclick="openLicenseModal()" class="flex-1 sm:flex-initial bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/10">
+                            <i data-lucide="key" class="w-3.5 h-3.5"></i> Inserisci Codice
+                        </button>
+                        <a href="auth.html" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5">
+                            Accedi
+                        </a>
+                    </div>
+                `;
             } else {
-                title.innerHTML = "🎟️ Bot Ufficiale AtmBet";
-                desc.innerText = `Hai ${user.credits || 0} crediti disponibili. Usa il bot per ricevere gli avvisi operativi.`;
-                btn.href = `https://t.me/${TELEGRAM_CONFIG.bot_username}`;
-                btn.target = "_blank";
-                label.innerText = "Avvia Bot Ufficiale";
+                // Vista Abbonato: Mostra il pulsante diretto per entrare nel canale Telegram
+                let channelUrl = TELEGRAM_CONFIG.full_channel_invite;
+                let channelTitle = "🌐 Canale VIP Telegram: AtmBet Signal All-Inclusive";
+                let channelDesc = "Accesso illimitato al flusso completo di tutti i segnali su Telegram.";
+                let btnText = "Entra nel Canale VIP";
+
+                if (user.plan === 'pure') {
+                    channelUrl = TELEGRAM_CONFIG.pure_channel_invite;
+                    channelTitle = "⚡ Canale Esclusivo Telegram: AtmBet Selection (Signal PURE)";
+                    channelDesc = "Le selezioni top del giorno inviate direttamente su Telegram prima dei match.";
+                    btnText = "Entra nel Canale PURE";
+                }
+
+                box.className = "bg-gradient-to-r from-blue-950/70 via-slate-900 to-slate-950 border border-blue-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
+                box.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-white flex items-center gap-2">${channelTitle}</div>
+                            <p class="text-xs text-slate-400 mt-0.5">${channelDesc}</p>
+                        </div>
+                    </div>
+                    <a href="${channelUrl}" target="_blank" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 shrink-0">
+                        <i data-lucide="send" class="w-4 h-4"></i> <span>${btnText}</span>
+                    </a>
+                `;
             }
+            lucide.createIcons();
         }
 
         function renderNavbarUserStatus() {
