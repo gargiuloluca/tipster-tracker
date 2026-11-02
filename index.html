@@ -734,6 +734,30 @@
             bot_username: "AtmBetOfficialBot"
         };
 
+        function canonicalizeTipsterName(rawName) {
+            if (!rawName) return 'AtmBetSignal';
+            const clean = String(rawName).trim();
+            const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
+
+            if (lower.includes('xg')) return 'AtmBetSignal XG';
+            if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
+            if (lower.includes('atmbet')) return 'AtmBetSignal';
+            if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
+            if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+            if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
+            if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
+            if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
+            if (lower.includes('zcode')) return 'ZCODE';
+            if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
+            if (lower.includes('footy')) return 'FootyStats';
+            if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
+            if (lower.includes('freak')) return 'Freak Elite VIP';
+            if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
+            if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
+
+            return clean;
+        }
+
         function getActivePureTipsters() {
             try {
                 const raw = localStorage.getItem(PURE_TIPSTERS_KEY);
@@ -742,7 +766,7 @@
                     if (Array.isArray(parsed) && parsed.length > 0) return parsed;
                 }
             } catch(e) {}
-            return ['AtmBetSignal', 'AtmBet Safe', 'Safe80'];
+            return ['AtmBetSignal', 'AtmBet Safe'];
         }
 
         let currentMultiplier = 50;
@@ -1136,23 +1160,19 @@
                 } catch(e) {}
             }
 
-            const pureTipstersList = getActivePureTipsters().map(t => t.toLowerCase().trim());
+            const pureTipstersList = getActivePureTipsters().map(t => canonicalizeTipsterName(t));
 
             return bets.map((b, idx) => {
                 const rawTipster = (b.original_tipster || b.tipster || b.source || 'AtmBetSignal').trim();
-                const rawLower = rawTipster.toLowerCase();
+                const canonTipster = canonicalizeTipsterName(rawTipster);
+                const isXG = canonTipster.toLowerCase().includes('xg');
 
-                const isXG = rawLower.includes('xg');
-                const isInSelectedPure = pureTipstersList.some(pt => rawLower === pt || rawLower.includes(pt));
-                
+                // Criterio rigoroso: fa fede b.isPure o l'appartenenza canonica esatta
                 const isPureCandidate = !isXG && (
                     b.isPure === true ||
-                    isInSelectedPure ||
-                    rawLower.includes('safe') ||
-                    rawLower.includes('safe80') ||
-                    rawLower === 'atmbetsignal' || 
-                    rawLower === 'atmbet selection' ||
-                    rawLower === 'atmbet'
+                    pureTipstersList.includes(canonTipster) ||
+                    canonTipster === 'AtmBet Safe' ||
+                    canonTipster === 'AtmBetSignal'
                 );
 
                 let rawStatus = String(b.status || b.result || b.outcome || 'pending').toLowerCase().trim();
@@ -1170,7 +1190,7 @@
                     match_name: matchTitle,
                     market: b.market || b.type || 'Mercato',
                     prediction: b.prediction || b.pick || b.selection || '-',
-                    original_tipster: rawTipster,
+                    original_tipster: canonTipster,
                     is_pure: isPureCandidate,
                     public_brand: isPureCandidate ? 'AtmBet Selection' : 'AtmBet Signal',
                     odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
