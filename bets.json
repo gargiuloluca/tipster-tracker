@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793628951159_0",
-    "event_date": "2026-11-02 16:15",
-    "match_name": "Oviedo - Las Palmas",
-    "league": "Segunda Division",
-    "original_tipster": "Brunetti Vip",
-    "market": "1X2 / Mercato",
-    "prediction": "Casa Segna 1°T",
-    "odds": 1.7,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793609437845_11",
     "event_date": "2026-11-04 21:00",
     "match_name": "Viking - Sabah",
@@ -582,6 +568,20 @@
     "prediction": "1 + Over 1.5 / 1 / 2 + Over 1.5",
     "original_tipster": "CalcioAI",
     "odds": 4.01,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793628951159_0",
+    "event_date": "2026-11-02 16:15",
+    "match_name": "Oviedo - Las Palmas",
+    "league": "Segunda Division",
+    "market": "1X2 / Mercato",
+    "prediction": "Casa Segna 1°T",
+    "original_tipster": "Brunetti Vip",
+    "odds": 1.7,
     "stake": 1,
     "status": "pending",
     "is_published": true,
