@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793600739092_0",
-    "event_date": "2026-11-02 19:15",
-    "match_name": "Al Ittihad - Al Ain",
-    "league": "AFC Champions League Elite",
-    "original_tipster": "BetMines PreMatch",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "odds": 1.61,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793598050965_1",
     "event_date": "2026-11-03 06:00",
     "match_name": "Tegevajaro Miyazaki - Tochigi City",
@@ -24,7 +10,7 @@
     "odds": 1.83,
     "stake": 1,
     "status": "pending",
-    "is_published": true,
+    "is_published": false,
     "tg_sent": false
   },
   {
@@ -246,6 +232,20 @@
     "prediction": "1",
     "original_tipster": "BetMines PreMatch",
     "odds": 1.66,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793600739092_0",
+    "event_date": "2026-11-02 19:15",
+    "match_name": "Al Ittihad - Al Ain",
+    "league": "AFC Champions League Elite",
+    "market": "1X2 / Mercato",
+    "prediction": "Gol",
+    "original_tipster": "BetMines PreMatch",
+    "odds": 1.61,
     "stake": 1,
     "status": "pending",
     "is_published": true,
