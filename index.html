@@ -89,14 +89,14 @@
             </div>
 
             <!-- LINK NAVIGAZIONE DESKTOP -->
-            <div class="hidden md:flex items-center gap-3 lg:gap-6">
-                <a href="#metodo" class="text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
+            <div class="hidden md:flex items-center gap-3 lg:gap-6" id="desktop-nav-links">
+                <a href="#selezioni" class="text-xs font-bold text-emerald-400 hover:text-white transition">Pronostici Oggi</a>
                 <a href="#simulatore" class="text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
                 <a href="#confronto-piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
-                <a href="#selezioni" class="text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici</a>
                 <a href="#storico" class="text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
-                <a href="#piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
-                <a href="#faq" class="text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+                <a href="#metodo" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
+                <a href="#piani" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
+                <a href="#faq" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
             </div>
 
             <!-- CONTENITORE DINAMICO ACCEDI / SBLOCCO CODICE -->
@@ -147,10 +147,32 @@
     </div>
 
     <!-- MAIN BODY -->
-    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-10 sm:space-y-14 flex-1 w-full">
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-12 flex-1 w-full">
 
-        <!-- 2. HERO SECTION -->
-        <section class="text-center max-w-3xl mx-auto pt-2 pb-2 space-y-4">
+        <!-- HEADER OPERATIVO VIP (Visibile solo per utenti con sessione attiva) -->
+        <section id="vip-user-header" class="hidden bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/30 border border-emerald-500/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">Dashboard Operativa Abbonato</span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl font-black text-white" id="vip-welcome-name">Bentornato, Abbonato VIP</h1>
+                    <p class="text-xs text-slate-400" id="vip-status-desc">Area operativa per consultare e copiare i segnali attivi del tuo piano.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <a id="vip-direct-tg-btn" href="#" target="_blank" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-lg shadow-blue-600/20">
+                        <i data-lucide="send" class="w-4 h-4"></i> <span id="vip-tg-label">Canale Telegram</span>
+                    </a>
+                    <button type="button" onclick="togglePublicMarketingView()" id="btn-toggle-public-view" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-semibold text-xs px-3 py-2.5 rounded-xl transition flex items-center gap-1.5">
+                        <i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i> Mostra Vetrina Pubblica
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. HERO SECTION (Nascosta automaticamente agli abbonati loggati) -->
+        <section class="public-marketing-element text-center max-w-3xl mx-auto pt-2 pb-2 space-y-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verifica Risultati Ufficiale via API-Football
             </div>
@@ -204,61 +226,35 @@
             </a>
         </section>
 
-        <!-- 3. SEZIONE METODO STRATEGICO -->
-        <section id="metodo" class="bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6">
-            <div class="text-center max-w-2xl mx-auto space-y-1.5">
-                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
-                <h2 class="text-xl sm:text-2xl font-black text-white">Perché il Nostro Metodo Funziona nel Lungo Termine</h2>
-                <p class="text-xs text-slate-400">Il 97% degli scommettitori perde perché gioca per sensazione. Il betting quantitativo opera come un fondo d'investimento.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
-                    <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
-                        <i data-lucide="calculator" class="w-4 h-4"></i>
-                    </div>
-                    <h3 class="text-sm font-bold text-white">1. Expected Value (+EV)</h3>
-                    <p class="text-slate-400 leading-relaxed">Confrontiamo le quote dei bookmaker con distribuzioni Poisson proprietarie: giochiamo solo quando la quota offerta è superiore alla probabilità reale calcolata.</p>
+        <!-- 6. SELEZIONI APERTE (PRIORITA' IN ALTO: Griglia Pulita per Abbonati) -->
+        <section id="selezioni" class="space-y-4 pt-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+                <div>
+                    <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> Selezioni Operative di Oggi
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Pronostici della giornata odierna attualmente in corso o in attesa di inizio.</p>
                 </div>
-                
-                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
-                    <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
-                        <i data-lucide="shield" class="w-4 h-4"></i>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-bold">Verifica Automatica Attiva</span>
+                    <div id="cards-scroll-arrows" class="hidden items-center gap-1">
+                        <button onclick="scrollPublicCards('left')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="scrollPublicCards('right')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
                     </div>
-                    <h3 class="text-sm font-bold text-white">2. Money Management Ferreo</h3>
-                    <p class="text-slate-400 leading-relaxed">Puntate rigorose basate su Unità Fisse (1.0u standard). Nessun azzardo a recupero o raddoppio: preservare il capitale è la regola numero uno.</p>
-                </div>
-                
-                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
-                    <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
-                        <i data-lucide="cpu" class="w-4 h-4"></i>
-                    </div>
-                    <h3 class="text-sm font-bold text-white">3. Risultati Certificati API</h3>
-                    <p class="text-slate-400 leading-relaxed">Al fischio finale dei match, i nostri bot interrogano i feed mondiali ufficiali e certificano lo storico senza possibilità di alterazione.</p>
                 </div>
             </div>
 
-            <div class="mt-6 pt-6 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div class="bg-rose-500/[0.04] border border-rose-500/20 p-4 rounded-xl space-y-2">
-                    <div class="text-rose-400 font-bold flex items-center gap-1.5 text-xs">
-                        <i data-lucide="x-circle" class="w-4 h-4"></i> Lo Scommettitore Tradizionale
-                    </div>
-                    <ul class="text-slate-400 space-y-1.5 text-[11px]">
-                        <li>• Scommette a simpatia o intuito senza modelli statistici</li>
-                        <li>• Raddoppia lo stake dopo una giocata persa bruciando la cassa</li>
-                        <li>• Gioca multiple infinite con quote ingannevoli</li>
-                    </ul>
+            <!-- Contenitore Pronostici (Dinamico: Griglia per VIP, Scroll per Pubblico) -->
+            <div class="relative">
+                <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory">
+                    <!-- Popolato dinamicamente da JS -->
                 </div>
-
-                <div class="bg-emerald-500/[0.04] border border-emerald-500/20 p-4 rounded-xl space-y-2">
-                    <div class="text-emerald-400 font-bold flex items-center gap-1.5 text-xs">
-                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> L'Investitore AtmBet
-                    </div>
-                    <ul class="text-slate-300 space-y-1.5 text-[11px]">
-                        <li>• Sfrutta solo anomalie numeriche con vantaggio sul banco (+EV)</li>
-                        <li>• Stake disciplinato in unità percentuali fisse (1 Unità)</li>
-                        <li>• Storico consultabile e verificato al 100% via feed ufficiali</li>
-                    </ul>
+                <div id="cards-mobile-scroll-hint" class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
+                    Scorri lateralmente per vedere tutti i match &rarr;
                 </div>
             </div>
         </section>
@@ -475,38 +471,6 @@
             </div>
         </section>
 
-        <!-- 6. SELEZIONI APERTE (SOLO OGGI, SCROLL ORIZZONTALE) -->
-        <section id="selezioni" class="space-y-3 pt-2">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                    <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni Aperte di Oggi
-                    </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Pronostici della giornata odierna attualmente in corso o in attesa di inizio.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">Verifica Automatica Attiva</span>
-                    <div class="hidden sm:flex items-center gap-1">
-                        <button onclick="scrollPublicCards('left')" class="p-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
-                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="scrollPublicCards('right')" class="p-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
-                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative">
-                <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory">
-                    <!-- Popolato da JS -->
-                </div>
-                <div class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
-                    Scorri lateralmente per vedere tutti i match &rarr;
-                </div>
-            </div>
-        </section>
-
         <!-- 7. STORICO CON FILTRO PIANO -->
         <section id="storico" class="space-y-4 pt-4 border-t border-slate-800/80">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
@@ -570,8 +534,67 @@
             </div>
         </section>
 
-        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE -->
-        <section id="piani" class="space-y-6 pt-6 border-t border-slate-800/80">
+        <!-- 3. SEZIONE METODO STRATEGICO (Solo Visitatori / Vetrina) -->
+        <section id="metodo" class="public-marketing-element bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="text-center max-w-2xl mx-auto space-y-1.5">
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
+                <h2 class="text-xl sm:text-2xl font-black text-white">Perché il Nostro Metodo Funziona nel Lungo Termine</h2>
+                <p class="text-xs text-slate-400">Il 97% degli scommettitori perde perché gioca per sensazione. Il betting quantitativo opera come un fondo d'investimento.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+                        <i data-lucide="calculator" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">1. Expected Value (+EV)</h3>
+                    <p class="text-slate-400 leading-relaxed">Confrontiamo le quote dei bookmaker con distribuzioni Poisson proprietarie: giochiamo solo quando la quota offerta è superiore alla probabilità reale calcolata.</p>
+                </div>
+                
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
+                        <i data-lucide="shield" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">2. Money Management Ferreo</h3>
+                    <p class="text-slate-400 leading-relaxed">Puntate rigorose basate su Unità Fisse (1.0u standard). Nessun azzardo a recupero o raddoppio: preservare il capitale è la regola numero uno.</p>
+                </div>
+                
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-2">
+                    <div class="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+                        <i data-lucide="cpu" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-white">3. Risultati Certificati API</h3>
+                    <p class="text-slate-400 leading-relaxed">Al fischio finale dei match, i nostri bot interrogano i feed mondiali ufficiali e certificano lo storico senza possibilità di alterazione.</p>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div class="bg-rose-500/[0.04] border border-rose-500/20 p-4 rounded-xl space-y-2">
+                    <div class="text-rose-400 font-bold flex items-center gap-1.5 text-xs">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i> Lo Scommettitore Tradizionale
+                    </div>
+                    <ul class="text-slate-400 space-y-1.5 text-[11px]">
+                        <li>• Scommette a simpatia o intuito senza modelli statistici</li>
+                        <li>• Raddoppia lo stake dopo una giocata persa bruciando la cassa</li>
+                        <li>• Gioca multiple infinite con quote ingannevoli</li>
+                    </ul>
+                </div>
+
+                <div class="bg-emerald-500/[0.04] border border-emerald-500/20 p-4 rounded-xl space-y-2">
+                    <div class="text-emerald-400 font-bold flex items-center gap-1.5 text-xs">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> L'Investitore AtmBet
+                    </div>
+                    <ul class="text-slate-300 space-y-1.5 text-[11px]">
+                        <li>• Sfrutta solo anomalie numeriche con vantaggio sul banco (+EV)</li>
+                        <li>• Stake disciplinato in unità percentuali fisse (1 Unità)</li>
+                        <li>• Storico consultabile e verificato al 100% via feed ufficiali</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE (Solo Visitatori / Vetrina) -->
+        <section id="piani" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-2xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Piani d'Abbonamento & Crediti</span>
                 <h2 class="text-2xl sm:text-3xl font-black text-white">Scegli la Strategia Più Adatta al Tuo Capitale</h2>
@@ -659,8 +682,8 @@
             </div>
         </section>
 
-        <!-- 9. SEZIONE FAQ -->
-        <section id="faq" class="space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
+        <!-- 9. SEZIONE FAQ (Solo Visitatori / Vetrina) -->
+        <section id="faq" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
             <div class="text-center space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
                 <h2 class="text-2xl font-black text-white">Tutto Quello che Devi Sapere</h2>
@@ -779,8 +802,87 @@
         let activeUser = null;
         let historyDisplayLimit = 15;
         let firstServiceDate = '';
+        let showMarketingForVip = false;
 
-        // ==================== CONTROLLO LICENZE ESTERNE (users.json) ====================
+        // CONTROLLO VISTA PER ABBONATI (Nasconde il marketing commerciale se loggato)
+        function applyUserExperienceMode() {
+            activeUser = getActiveUserSession();
+            const marketingEls = document.querySelectorAll('.public-marketing-element');
+            const vipHeader = document.getElementById('vip-user-header');
+            const betsContainer = document.getElementById('public-bets-container');
+            const scrollArrows = document.getElementById('cards-scroll-arrows');
+            const mobileScrollHint = document.getElementById('cards-mobile-scroll-hint');
+
+            const isSubscribed = activeUser && (
+                activeUser.plan === 'pure' || 
+                activeUser.plan === 'all_inclusive' || 
+                activeUser.plan === 'elite' || 
+                (activeUser.credits && activeUser.credits > 0)
+            );
+
+            if (isSubscribed && !showMarketingForVip) {
+                // Modalità Web App per Abbonati
+                marketingEls.forEach(el => el.classList.add('hidden'));
+                if (vipHeader) {
+                    vipHeader.classList.remove('hidden');
+                    
+                    const nameEl = document.getElementById('vip-welcome-name');
+                    const descEl = document.getElementById('vip-status-desc');
+                    const tgBtn = document.getElementById('vip-direct-tg-btn');
+                    const tgLabel = document.getElementById('vip-tg-label');
+                    const planBadge = activeUser.plan ? activeUser.plan.toUpperCase() : 'VIP';
+
+                    if (nameEl) nameEl.innerText = `Area Riservata | Piano ${planBadge}`;
+                    if (descEl) {
+                        descEl.innerText = activeUser.expires_at 
+                            ? `Abbonamento attivo fino al ${activeUser.expires_at}. Selezioni pronte per essere giocate.`
+                            : `Hai ${activeUser.credits || 0} crediti operativi disponibili.`;
+                    }
+                    if (tgBtn && tgLabel) {
+                        if (activeUser.plan === 'pure') {
+                            tgBtn.href = TELEGRAM_CONFIG.pure_channel_invite;
+                            tgLabel.innerText = "Canale Telegram PURE";
+                        } else {
+                            tgBtn.href = TELEGRAM_CONFIG.full_channel_invite;
+                            tgLabel.innerText = "Canale Telegram VIP";
+                        }
+                    }
+                }
+
+                // Trasforma il contenitore pronostici in comoda griglia verticale/ordinata
+                if (betsContainer) {
+                    betsContainer.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1";
+                }
+                if (scrollArrows) scrollArrows.classList.add('hidden');
+                if (mobileScrollHint) mobileScrollHint.classList.add('hidden');
+
+            } else {
+                // Modalità Vetrina Pubblica Completa
+                marketingEls.forEach(el => el.classList.remove('hidden'));
+                if (vipHeader) vipHeader.classList.add('hidden');
+
+                if (betsContainer) {
+                    betsContainer.className = "flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory";
+                }
+                if (scrollArrows) scrollArrows.classList.remove('hidden');
+                if (mobileScrollHint) mobileScrollHint.classList.remove('hidden');
+            }
+        }
+
+        window.togglePublicMarketingView = function() {
+            showMarketingForVip = !showMarketingForVip;
+            const btn = document.getElementById('btn-toggle-public-view');
+            if (btn) {
+                btn.innerHTML = showMarketingForVip 
+                    ? `<i data-lucide="eye-off" class="w-3.5 h-3.5 text-emerald-400"></i> Ritorna a Vista Operativa`
+                    : `<i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i> Mostra Vetrina Pubblica`;
+            }
+            applyUserExperienceMode();
+            renderPublicCards();
+            lucide.createIcons();
+        };
+
+        // GESTIONE LICENZE (users.json)
         function openLicenseModal() {
             const m = document.getElementById('license-modal');
             if (m) m.classList.remove('hidden');
@@ -839,7 +941,7 @@
                     }
 
                     if (match.max_uses && (match.used_count || 0) >= match.max_uses) {
-                        errEl.innerText = "Codice promo esaurito (raggiunto il limite massimo di attivazioni).";
+                        errEl.innerText = "Codice promo esaurito.";
                         errEl.classList.remove('hidden');
                         return;
                     }
@@ -857,15 +959,16 @@
                     };
 
                     saveActiveUserSession(sessionData);
-                    succEl.innerText = `Licenza ${planType.toUpperCase()} sbloccata con successo!`;
+                    succEl.innerText = `Licenza ${planType.toUpperCase()} sbloccata!`;
                     succEl.classList.remove('hidden');
 
                     setTimeout(() => {
                         closeLicenseModal();
                         renderNavbarUserStatus();
+                        applyUserExperienceMode();
                         updateTelegramBanner();
                         renderPublicCards();
-                    }, 1000);
+                    }, 800);
                 } else {
                     errEl.innerText = "Codice non valido. Verifica il testo digitato.";
                     errEl.classList.remove('hidden');
@@ -919,7 +1022,7 @@
 
             if (user.plan === 'pure') {
                 title.innerHTML = "⚡ Canale Esclusivo Telegram: AtmBet Selection (Signal PURE)";
-                desc.innerText = "Il tuo piano include le selezioni top del giorno inviate direttamente su Telegram prima dei match.";
+                desc.innerText = "Le selezioni top del giorno inviate direttamente su Telegram prima dei match.";
                 btn.href = TELEGRAM_CONFIG.pure_channel_invite;
                 btn.target = "_blank";
                 label.innerText = "Entra nel Canale PURE";
@@ -990,7 +1093,9 @@
         window.logoutUser = function() {
             localStorage.removeItem(CURRENT_SESSION_KEY);
             activeUser = null;
+            showMarketingForVip = false;
             renderNavbarUserStatus();
+            applyUserExperienceMode();
             updateTelegramBanner();
             renderPublicCards();
         };
@@ -1031,7 +1136,7 @@
             }
 
             if (!activeUser.credits || activeUser.credits <= 0) {
-                alert("Non hai crediti sufficienti. Ricarica il tuo pacchetto o passa a un piano VIP.");
+                alert("Non hai crediti sufficienti.");
                 window.location.href = 'index.html#piani';
                 return;
             }
@@ -1077,16 +1182,12 @@
             yesterday.setDate(today.getDate() - 1);
 
             const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
-            
-            const todayLabel = `Oggi (${today.getDate()} ${monthNames[today.getMonth()]})`;
-            const yesterdayLabel = `Ieri (${yesterday.getDate()} ${monthNames[yesterday.getMonth()]})`;
-
             const btnToday = document.getElementById('btn-preset-today');
             const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
 
-            if (btnToday) btnToday.innerText = todayLabel;
-            if (btnYesterday) btnYesterday.innerText = yesterdayLabel;
+            if (btnToday) btnToday.innerText = `Oggi (${today.getDate()})`;
+            if (btnYesterday) btnYesterday.innerText = `Ieri (${yesterday.getDate()})`;
 
             const yesterdayStr = getLocalDateString(yesterday);
             if (dateInput) {
@@ -1167,7 +1268,7 @@
                 const canonTipster = canonicalizeTipsterName(rawTipster);
                 const isXG = canonTipster.toLowerCase().includes('xg');
 
-                // Criterio rigoroso: fa fede b.isPure o l'appartenenza canonica esatta
+                // Riconoscimento PURE rigoroso al 100%: uguaglianza esatta dei fornitori
                 const isPureCandidate = !isXG && (
                     b.isPure === true ||
                     pureTipstersList.includes(canonTipster) ||
@@ -1265,7 +1366,6 @@
 
             const today = new Date();
             const todayStr = getLocalDateString(today);
-
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
             const yesterdayStr = getLocalDateString(yesterday);
@@ -1293,11 +1393,9 @@
         function calculateSimulationPerformance() {
             const today = new Date();
             const todayStr = getLocalDateString(today);
-
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
             const yesterdayStr = getLocalDateString(yesterday);
-
             const d7 = new Date();
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
@@ -1308,17 +1406,11 @@
 
                 const bDate = extractStandardDate(b.event_date);
 
-                if (currentSimMode === 'today') {
-                    return bDate === todayStr;
-                } else if (currentSimMode === 'yesterday') {
-                    return bDate === yesterdayStr;
-                } else if (currentSimMode === '7days') {
-                    return bDate >= d7Str && bDate <= todayStr;
-                } else if (currentSimMode === 'all') {
-                    return true;
-                } else if (currentSimMode === 'custom') {
-                    return bDate === currentCustomDate;
-                }
+                if (currentSimMode === 'today') return bDate === todayStr;
+                if (currentSimMode === 'yesterday') return bDate === yesterdayStr;
+                if (currentSimMode === '7days') return bDate >= d7Str && bDate <= todayStr;
+                if (currentSimMode === 'all') return true;
+                if (currentSimMode === 'custom') return bDate === currentCustomDate;
                 return true;
             });
 
@@ -1361,11 +1453,8 @@
 
             simBets.forEach(b => {
                 const s = b.stake || 1.0;
-                if (b.status === 'won') {
-                    netProfit += (b.odds - 1) * s;
-                } else if (b.status === 'lost') {
-                    netProfit -= s;
-                }
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
                 totalStake += s;
             });
 
@@ -1402,11 +1491,8 @@
 
             completed.forEach(b => {
                 const s = b.stake || 1.0;
-                if (b.status === 'won') {
-                    netProfit += (b.odds - 1) * s;
-                } else if (b.status === 'lost') {
-                    netProfit -= s;
-                }
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
                 totalStake += s;
             });
 
@@ -1528,6 +1614,7 @@
             const isUserPure = activeUser && activeUser.plan === 'pure';
             const isUserAllInclusive = activeUser && (activeUser.plan === 'all_inclusive' || activeUser.role === 'admin' || activeUser.plan === 'elite');
 
+            // Filtra rigorosamente solo i pronostici PURE per gli abbonati Pure
             if (isUserPure) {
                 pendingBetsToday = pendingBetsToday.filter(b => b.is_pure === true);
             }
@@ -1535,11 +1622,11 @@
             const subtitleEl = document.querySelector('#selezioni p');
             if (subtitleEl) {
                 if (isUserPure) {
-                    subtitleEl.innerHTML = `<span class="text-amber-400 font-semibold">⚡ Vista VIP PURE attiva:</span> visualizzi le selezioni d'élite ad alta probabilità (&ge;65%).`;
+                    subtitleEl.innerHTML = `<span class="text-amber-400 font-semibold">⚡ Canale PURE attivo:</span> stai visualizzando le <strong>${pendingBetsToday.length} selezioni d'élite</strong> ad alta probabilità (&ge;65%).`;
                 } else if (isUserAllInclusive) {
-                    subtitleEl.innerHTML = `<span class="text-blue-400 font-semibold">🌐 Vista VIP All-Inclusive:</span> visualizzi il flusso completo di tutti i canali e mercati.`;
+                    subtitleEl.innerHTML = `<span class="text-blue-400 font-semibold">🌐 Canale All-Inclusive attivo:</span> visualizzi tutti i <strong>${pendingBetsToday.length} segnali</strong> di tutti i mercati e campionati.`;
                 } else if (activeUser && activeUser.credits > 0) {
-                    subtitleEl.innerHTML = `<span class="text-emerald-400 font-semibold">🎟️ Pacchetto Crediti:</span> hai <strong class="text-white">${activeUser.credits} crediti</strong> disponibili. Sblocca solo i match che ti interessano.`;
+                    subtitleEl.innerHTML = `<span class="text-emerald-400 font-semibold">🎟️ Crediti Disponibili:</span> hai <strong>${activeUser.credits} crediti</strong> per sbloccare le quote.`;
                 } else {
                     subtitleEl.innerText = "Pronostici della giornata odierna attualmente in corso o in attesa di inizio.";
                 }
@@ -1549,13 +1636,20 @@
                 const emptyMsg = isUserPure
                     ? "Nessuna selezione PURE aperta al momento. I segnali filtrati verranno pubblicati prima del calcio d'inizio."
                     : "Nessuna selezione aperta per la giornata odierna. Nuovi segnali in arrivo prima dei match.";
-                container.innerHTML = `<div class="w-full text-center py-6 text-slate-500 font-medium text-xs">${emptyMsg}</div>`;
+                container.innerHTML = `<div class="w-full text-center py-8 text-slate-500 font-medium text-xs bg-slate-900/60 border border-slate-800 rounded-2xl col-span-full">${emptyMsg}</div>`;
                 return;
             }
 
             pendingBetsToday.forEach(bet => {
                 const card = document.createElement('div');
-                card.className = "min-w-[280px] sm:min-w-[320px] max-w-[340px] bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg snap-start shrink-0 hover:border-slate-700 transition";
+                const isUserSubscribed = activeUser && (isUserPure || isUserAllInclusive);
+                
+                // Su Desktop/Mobile abbonati la card si adatta alla griglia; per i visitatori mantiene la dimensione scrollabile
+                const sizingClass = isUserSubscribed 
+                    ? "w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg hover:border-slate-700 transition" 
+                    : "min-w-[280px] sm:min-w-[320px] max-w-[340px] bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg snap-start shrink-0 hover:border-slate-700 transition";
+
+                card.className = sizingClass;
 
                 let submatchesHtml = '';
                 let toggleBtnHtml = '';
@@ -1586,7 +1680,7 @@
                         <div class="bg-slate-950/80 rounded-xl p-3 border border-emerald-500/30 my-2.5">
                             <div class="flex items-center justify-between mb-1">
                                 <span class="text-[9px] uppercase font-mono tracking-widest text-emerald-400 font-bold flex items-center gap-1">
-                                    <i data-lucide="check-circle" class="w-3 hot-3"></i> Segnale Attivo
+                                    <i data-lucide="check-circle" class="w-3 h-3"></i> Segnale Attivo
                                 </span>
                                 <span class="text-xs font-mono font-bold text-white bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
                                     @ ${parseFloat(bet.odds).toFixed(2)}
@@ -1829,10 +1923,11 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             renderNavbarUserStatus();
-            updateTelegramBanner();
             setupDynamicDatePresets();
             cachedAllBets = await fetchAllBets();
             initServiceStartDate();
+            applyUserExperienceMode();
+            updateTelegramBanner();
             calculateGlobalPerformance();
             calculateSimulationPerformance();
             calculatePlansComparison();
