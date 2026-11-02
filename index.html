@@ -302,13 +302,13 @@
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
                     <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Yield / ROI</span>
                     <div id="sim-roi" class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">0.0%</div>
-                    <span class="text-[9px] text-slate-500">Giocate chiuse</span>
+                    <span id="sim-roi-sub" class="text-[9px] text-slate-500">Giocate chiuse</span>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
                     <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
                     <div id="sim-winrate" class="text-xl sm:text-2xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
-                    <span class="text-[9px] text-slate-500">Accuratezza esiti</span>
+                    <span id="sim-winrate-sub" class="text-[9px] text-slate-500">Accuratezza esiti</span>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
@@ -754,6 +754,7 @@
         let cachedAllBets = [];
         let activeUser = null;
         let historyDisplayLimit = 15;
+        let firstServiceDate = '';
 
         // ==================== CONTROLLO LICENZE ESTERNE (users.json) ====================
         function openLicenseModal() {
@@ -1078,6 +1079,22 @@
             }
         }
 
+        function initServiceStartDate() {
+            const dateInput = document.getElementById('sim-start-date');
+            if (!dateInput || cachedAllBets.length === 0) return;
+
+            const dates = cachedAllBets
+                .map(b => extractStandardDate(b.event_date))
+                .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
+                .sort();
+
+            if (dates.length > 0) {
+                firstServiceDate = dates[0];
+                dateInput.min = firstServiceDate;
+            }
+            dateInput.max = getLocalDateString(new Date());
+        }
+
         async function fetchAllBets() {
             let bets = [];
 
@@ -1205,8 +1222,17 @@
 
         function applyCustomCalendarDate(dateStr) {
             if (!dateStr) return;
+            const stdDate = extractStandardDate(dateStr);
+
+            if (firstServiceDate && stdDate < firstServiceDate) {
+                const dateInput = document.getElementById('sim-start-date');
+                if (dateInput) dateInput.value = firstServiceDate;
+                currentCustomDate = firstServiceDate;
+            } else {
+                currentCustomDate = stdDate;
+            }
+
             currentSimMode = 'custom';
-            currentCustomDate = extractStandardDate(dateStr);
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             calculateSimulationPerformance();
         }
@@ -1279,8 +1305,37 @@
             const total = simBets.length;
             const won = simBets.filter(b => b.status === 'won').length;
             const lost = simBets.filter(b => b.status === 'lost').length;
-            const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
 
+            const profitEl = document.getElementById('sim-profit-units');
+            const fiatEl = document.getElementById('sim-profit-fiat');
+            const roiEl = document.getElementById('sim-roi');
+            const roiSubEl = document.getElementById('sim-roi-sub');
+            const winEl = document.getElementById('sim-winrate');
+            const winSubEl = document.getElementById('sim-winrate-sub');
+            const countEl = document.getElementById('sim-resolved-count');
+            const wonEl = document.getElementById('sim-won-count');
+            const lostEl = document.getElementById('sim-lost-count');
+
+            if (total === 0) {
+                if (profitEl) {
+                    profitEl.innerText = 'NO BET';
+                    profitEl.className = 'text-xl sm:text-2xl font-mono font-black text-slate-400 mt-0.5';
+                }
+                if (fiatEl) {
+                    fiatEl.innerText = 'Nessuna operazione';
+                    fiatEl.className = 'text-[11px] font-mono font-semibold text-slate-500 mt-0.5';
+                }
+                if (roiEl) roiEl.innerText = '-';
+                if (roiSubEl) roiSubEl.innerText = 'Nessun match';
+                if (winEl) winEl.innerText = '-';
+                if (winSubEl) winSubEl.innerText = 'Nessuna giocata';
+                if (countEl) countEl.innerText = '0';
+                if (wonEl) wonEl.innerText = '0V';
+                if (lostEl) lostEl.innerText = '0P';
+                return;
+            }
+
+            const winRate = ((won / total) * 100).toFixed(1);
             let netProfit = 0;
             let totalStake = 0;
 
@@ -1297,23 +1352,23 @@
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
             const fiatSimAmount = netProfit * currentMultiplier;
 
-            const profitEl = document.getElementById('sim-profit-units');
             if (profitEl) {
                 profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
                 profitEl.className = `text-xl sm:text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
             }
 
-            const fiatEl = document.getElementById('sim-profit-fiat');
             if (fiatEl) {
                 fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
                 fiatEl.className = `text-[11px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
             }
 
-            if (document.getElementById('sim-roi')) document.getElementById('sim-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
-            if (document.getElementById('sim-winrate')) document.getElementById('sim-winrate').innerText = winRate + '%';
-            if (document.getElementById('sim-resolved-count')) document.getElementById('sim-resolved-count').innerText = total;
-            if (document.getElementById('sim-won-count')) document.getElementById('sim-won-count').innerText = won + 'V';
-            if (document.getElementById('sim-lost-count')) document.getElementById('sim-lost-count').innerText = lost + 'P';
+            if (roiEl) roiEl.innerText = (roi >= 0 ? '+' : '') + roi + '%';
+            if (roiSubEl) roiSubEl.innerText = 'Giocate chiuse';
+            if (winEl) winEl.innerText = winRate + '%';
+            if (winSubEl) winSubEl.innerText = 'Accuratezza esiti';
+            if (countEl) countEl.innerText = total;
+            if (wonEl) wonEl.innerText = won + 'V';
+            if (lostEl) lostEl.innerText = lost + 'P';
         }
 
         function calculateGlobalPerformance() {
@@ -1757,6 +1812,7 @@
             updateTelegramBanner();
             setupDynamicDatePresets();
             cachedAllBets = await fetchAllBets();
+            initServiceStartDate();
             calculateGlobalPerformance();
             calculateSimulationPerformance();
             calculatePlansComparison();
