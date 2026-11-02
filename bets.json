@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793652527799_0",
-    "event_date": "2026-11-02 22:05",
-    "match_name": "Aguilas - Fortaleza CEIF",
-    "league": "Primera A Colombia",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.86,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793639426600_0",
     "event_date": "2026-11-04 21:00",
     "match_name": "Slavia Praha - Arsenal",
@@ -190,6 +176,20 @@
     "prediction": "Over 2.5",
     "original_tipster": "BetMines PreMatch",
     "odds": 1.63,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793652527799_0",
+    "event_date": "2026-11-02 22:05",
+    "match_name": "Aguilas - Fortaleza CEIF",
+    "league": "Primera A Colombia",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 1.86,
     "stake": 1,
     "status": "pending",
     "is_published": true,
