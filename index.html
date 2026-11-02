@@ -149,7 +149,7 @@
     <!-- MAIN BODY -->
     <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-8 sm:space-y-12 flex-1 w-full">
 
-        <!-- HEADER OPERATIVO VIP (Visibile solo per utenti con sessione attiva) -->
+        <!-- HEADER OPERATIVO VIP -->
         <section id="vip-user-header" class="hidden bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/30 border border-emerald-500/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="space-y-1">
@@ -171,7 +171,7 @@
             </div>
         </section>
 
-        <!-- 2. HERO SECTION (Nascosta automaticamente agli abbonati loggati) -->
+        <!-- 2. HERO SECTION -->
         <section class="public-marketing-element text-center max-w-3xl mx-auto pt-2 pb-2 space-y-4">
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verifica Risultati Ufficiale via API-Football
@@ -206,7 +206,7 @@
             </div>
         </section>
 
-        <!-- BANNER TELEGRAM DINAMICO IN BASE ALL'ABBONAMENTO -->
+        <!-- BANNER TELEGRAM DINAMICO -->
         <section id="telegram-connect-box" class="bg-gradient-to-r from-blue-950/70 via-slate-900 to-slate-950 border border-blue-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
@@ -226,7 +226,7 @@
             </a>
         </section>
 
-        <!-- 6. SELEZIONI APERTE (PRIORITA' IN ALTO: Griglia Pulita per Abbonati) -->
+        <!-- 6. SELEZIONI APERTE (GRIGLIA ORDINATA PER VIP) -->
         <section id="selezioni" class="space-y-4 pt-2">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
                 <div>
@@ -248,11 +248,8 @@
                 </div>
             </div>
 
-            <!-- Contenitore Pronostici (Dinamico: Griglia per VIP, Scroll per Pubblico) -->
             <div class="relative">
-                <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory">
-                    <!-- Popolato dinamicamente da JS -->
-                </div>
+                <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory"></div>
                 <div id="cards-mobile-scroll-hint" class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
                     Scorri lateralmente per vedere tutti i match &rarr;
                 </div>
@@ -416,7 +413,7 @@
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
                         <i data-lucide="activity" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Performance Globale Certificata
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Dati cumulativi di tutto l'archivio verificato.</p>
+                    <p id="stat-global-subtitle" class="text-[11px] sm:text-xs text-slate-400">Dati cumulativi di tutto l'archivio verificato.</p>
                 </div>
 
                 <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
@@ -534,7 +531,7 @@
             </div>
         </section>
 
-        <!-- 3. SEZIONE METODO STRATEGICO (Solo Visitatori / Vetrina) -->
+        <!-- 3. SEZIONE METODO STRATEGICO (Solo Vetrina) -->
         <section id="metodo" class="public-marketing-element bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6">
             <div class="text-center max-w-2xl mx-auto space-y-1.5">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
@@ -593,7 +590,7 @@
             </div>
         </section>
 
-        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE (Solo Visitatori / Vetrina) -->
+        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE (Solo Vetrina) -->
         <section id="piani" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-2xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Piani d'Abbonamento & Crediti</span>
@@ -602,8 +599,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 pt-2">
-                
-                <!-- 1. Pacchetto Crediti -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Flessibile</span>
@@ -621,7 +616,6 @@
                     </a>
                 </div>
 
-                <!-- 2. VIP All-Inclusive (Full Volume) -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Alto Volume</span>
@@ -639,7 +633,6 @@
                     </a>
                 </div>
 
-                <!-- 3. TOP DI GAMMA: AtmBet Signal PURE (Top Selection, >65% WR) -->
                 <div class="bg-gradient-to-b from-slate-900 via-slate-950 to-amber-950/20 border-2 border-amber-500 rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative">
                     <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[9px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
                         Top Performer ★
@@ -661,7 +654,6 @@
                     </a>
                 </div>
 
-                <!-- 4. Trimestrale PURE (Miglior Risparmio) -->
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
                         <span class="text-[10px] font-mono uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/20">Risparmio 25%</span>
@@ -678,11 +670,10 @@
                         <i data-lucide="zap" class="w-3.5 h-3.5"></i> Scegli Trimestrale
                     </a>
                 </div>
-
             </div>
         </section>
 
-        <!-- 9. SEZIONE FAQ (Solo Visitatori / Vetrina) -->
+        <!-- 9. SEZIONE FAQ (Solo Vetrina) -->
         <section id="faq" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
             <div class="text-center space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
@@ -804,7 +795,6 @@
         let firstServiceDate = '';
         let showMarketingForVip = false;
 
-        // CONTROLLO VISTA PER ABBONATI (Nasconde il marketing commerciale se loggato)
         function applyUserExperienceMode() {
             activeUser = getActiveUserSession();
             const marketingEls = document.querySelectorAll('.public-marketing-element');
@@ -821,11 +811,9 @@
             );
 
             if (isSubscribed && !showMarketingForVip) {
-                // Modalità Web App per Abbonati
                 marketingEls.forEach(el => el.classList.add('hidden'));
                 if (vipHeader) {
                     vipHeader.classList.remove('hidden');
-                    
                     const nameEl = document.getElementById('vip-welcome-name');
                     const descEl = document.getElementById('vip-status-desc');
                     const tgBtn = document.getElementById('vip-direct-tg-btn');
@@ -849,7 +837,6 @@
                     }
                 }
 
-                // Trasforma il contenitore pronostici in comoda griglia verticale/ordinata
                 if (betsContainer) {
                     betsContainer.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1";
                 }
@@ -857,7 +844,6 @@
                 if (mobileScrollHint) mobileScrollHint.classList.add('hidden');
 
             } else {
-                // Modalità Vetrina Pubblica Completa
                 marketingEls.forEach(el => el.classList.remove('hidden'));
                 if (vipHeader) vipHeader.classList.add('hidden');
 
@@ -882,7 +868,6 @@
             lucide.createIcons();
         };
 
-        // GESTIONE LICENZE (users.json)
         function openLicenseModal() {
             const m = document.getElementById('license-modal');
             if (m) m.classList.remove('hidden');
@@ -967,7 +952,9 @@
                         renderNavbarUserStatus();
                         applyUserExperienceMode();
                         updateTelegramBanner();
+                        calculateGlobalPerformance();
                         renderPublicCards();
+                        renderPublicHistory();
                     }, 800);
                 } else {
                     errEl.innerText = "Codice non valido. Verifica il testo digitato.";
@@ -1094,10 +1081,13 @@
             localStorage.removeItem(CURRENT_SESSION_KEY);
             activeUser = null;
             showMarketingForVip = false;
+            currentTipsterPlanFilter = 'all';
             renderNavbarUserStatus();
             applyUserExperienceMode();
             updateTelegramBanner();
+            calculateGlobalPerformance();
             renderPublicCards();
+            renderPublicHistory();
         };
 
         function getBetAccessState(user, bet) {
@@ -1181,7 +1171,6 @@
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
 
-            const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
             const btnToday = document.getElementById('btn-preset-today');
             const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
@@ -1268,7 +1257,7 @@
                 const canonTipster = canonicalizeTipsterName(rawTipster);
                 const isXG = canonTipster.toLowerCase().includes('xg');
 
-                // Riconoscimento PURE rigoroso al 100%: uguaglianza esatta dei fornitori
+                // Riconoscimento PURE rigoroso al 100%: uguaglianza esatta
                 const isPureCandidate = !isXG && (
                     b.isPure === true ||
                     pureTipstersList.includes(canonTipster) ||
@@ -1312,6 +1301,7 @@
             updateMonetaryCalculations();
             calculateSimulationPerformance();
             calculatePlansComparison();
+            calculateGlobalPerformance();
         }
 
         function syncUnitFromInput(val) {
@@ -1329,6 +1319,7 @@
                 updateMonetaryCalculations();
                 calculateSimulationPerformance();
                 calculatePlansComparison();
+                calculateGlobalPerformance();
             }
         }
 
@@ -1400,9 +1391,15 @@
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
 
+            activeUser = getActiveUserSession();
+            const isUserPure = activeUser && activeUser.plan === 'pure';
+
             const simBets = cachedAllBets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
+
+                // Se l'utente è abbonato Pure, calcola il simulatore sulle sue giocate Pure
+                if (isUserPure && b.is_pure !== true) return false;
 
                 const bDate = extractStandardDate(b.event_date);
 
@@ -1480,8 +1477,26 @@
             if (lostEl) lostEl.innerText = lost + 'P';
         }
 
+        // RENDICONTO GLOBALE DINAMICO IN BASE AL PIANO DELL'UTENTE
         function calculateGlobalPerformance() {
-            const completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
+            activeUser = getActiveUserSession();
+            const isUserPure = activeUser && activeUser.plan === 'pure';
+
+            let completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
+            const subTitleEl = document.getElementById('stat-global-subtitle');
+
+            // Se l'utente è abbonato PURE, la sezione "Performance Globale" mostra le sue metriche PURE reali
+            if (isUserPure) {
+                completed = completed.filter(b => b.is_pure === true);
+                if (subTitleEl) {
+                    subTitleEl.innerHTML = `<span class="text-amber-400 font-semibold">⚡ Archivio Pure Signal (AtmBet Selection):</span> performance certificate delle tue selezioni d'élite.`;
+                }
+            } else {
+                if (subTitleEl) {
+                    subTitleEl.innerText = "Dati cumulativi di tutto l'archivio verificato.";
+                }
+            }
+
             const total = completed.length;
             const won = completed.filter(b => b.status === 'won').length;
             const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
@@ -1614,7 +1629,6 @@
             const isUserPure = activeUser && activeUser.plan === 'pure';
             const isUserAllInclusive = activeUser && (activeUser.plan === 'all_inclusive' || activeUser.role === 'admin' || activeUser.plan === 'elite');
 
-            // Filtra rigorosamente solo i pronostici PURE per gli abbonati Pure
             if (isUserPure) {
                 pendingBetsToday = pendingBetsToday.filter(b => b.is_pure === true);
             }
@@ -1644,7 +1658,6 @@
                 const card = document.createElement('div');
                 const isUserSubscribed = activeUser && (isUserPure || isUserAllInclusive);
                 
-                // Su Desktop/Mobile abbonati la card si adatta alla griglia; per i visitatori mantiene la dimensione scrollabile
                 const sizingClass = isUserSubscribed 
                     ? "w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg hover:border-slate-700 transition" 
                     : "min-w-[280px] sm:min-w-[320px] max-w-[340px] bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between shadow-lg snap-start shrink-0 hover:border-slate-700 transition";
@@ -1926,6 +1939,17 @@
             setupDynamicDatePresets();
             cachedAllBets = await fetchAllBets();
             initServiceStartDate();
+            
+            // Imposta automaticamente il filtro storico predefinito su Pure se l'utente è abbonato Pure
+            activeUser = getActiveUserSession();
+            if (activeUser && activeUser.plan === 'pure') {
+                currentTipsterPlanFilter = 'pure';
+                const btnAll = document.getElementById('btn-tipfilter-all');
+                const btnPure = document.getElementById('btn-tipfilter-pure');
+                if (btnAll) btnAll.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
+                if (btnPure) btnPure.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
+            }
+
             applyUserExperienceMode();
             updateTelegramBanner();
             calculateGlobalPerformance();
