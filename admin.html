@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AtmBet Console | Tipster Tracker & Direct GitHub Sync</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png?v=2">
+    <link rel="apple-touch-icon" href="logo.png?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
@@ -617,10 +619,11 @@
             const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
 
             if (lower.includes('xg')) return 'AtmBetSignal XG';
-            if (lower.includes('atmbet safe') || lower.includes('safe')) return 'AtmBet Safe';
+            if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
             if (lower.includes('atmbet')) return 'AtmBetSignal';
             if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
             if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+            if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
             if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
             if (lower.includes('zcode')) return 'ZCODE';
             if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
@@ -1700,12 +1703,19 @@
                 let cleanStake = parseFloat(b.stake || b.units || 1.0);
                 if (cleanStake > 10) cleanStake = 1.0;
 
-                const canonicalTipster = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
+                const matchText = String(b.match_name || b.match || b.teams || 'Evento');
+                let canonicalTipster = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
+
+                // Separazione automatica BetMines: PreMatch per singole, BetMines per multiple (con '/')
+                if (canonicalTipster.toLowerCase().includes('betmines')) {
+                    const isParlay = matchText.includes('/');
+                    canonicalTipster = isParlay ? 'BetMines' : 'BetMines PreMatch';
+                }
 
                 return {
                     id: b.id || ('b_' + idx + '_' + (b.event_date || Date.now())),
                     event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
-                    match_name: b.match_name || b.match || b.teams || 'Evento',
+                    match_name: matchText,
                     league: b.league || b.competition || 'Generale',
                     market: b.market || b.type || 'Mercato',
                     prediction: b.prediction || b.pick || b.selection || '-',
@@ -1811,10 +1821,15 @@
                         const matchPart = parts[1];
                         const predPart = parts[2];
                         const oddsPart = parseFloat(parts[3].replace(',', '.')) || 1.80;
-                        const tipsterPart = canonicalizeTipsterName(parts[4]);
+                        let tipsterPart = canonicalizeTipsterName(parts[4]);
                         const leaguePart = parts[5] || 'Generale';
 
                         if (oddsPart < 1.30) return;
+
+                        // Riconoscimento automatico BetMines: PreMatch (singole) vs BetMines (multiple)
+                        if (tipsterPart.toLowerCase().includes('betmines')) {
+                            tipsterPart = matchPart.includes('/') ? 'BetMines' : 'BetMines PreMatch';
+                        }
 
                         const exists = bets.some(b => b.match_name.toLowerCase() === matchPart.toLowerCase() && b.prediction.toLowerCase() === predPart.toLowerCase());
                         if (exists) return;
@@ -2370,7 +2385,8 @@
                             <option value="AtmBetSignal XG" ${bet.original_tipster === 'AtmBetSignal XG' ? 'selected' : ''}>AtmBetSignal XG</option>
                             <option value="Pronostici1" ${bet.original_tipster === 'Pronostici1' ? 'selected' : ''}>Pronostici1</option>
                             <option value="CalcioAI" ${bet.original_tipster === 'CalcioAI' ? 'selected' : ''}>CalcioAI</option>
-                            <option value="BetMines" ${bet.original_tipster === 'BetMines' ? 'selected' : ''}>BetMines</option>
+                            <option value="BetMines" ${bet.original_tipster === 'BetMines' ? 'selected' : ''}>BetMines (Multiple)</option>
+                            <option value="BetMines PreMatch" ${bet.original_tipster === 'BetMines PreMatch' ? 'selected' : ''}>BetMines PreMatch (Singole)</option>
                             <option value="ZCODE" ${bet.original_tipster === 'ZCODE' ? 'selected' : ''}>ZCODE</option>
                             <option value="BetExpBot" ${bet.original_tipster === 'BetExpBot' ? 'selected' : ''}>BetExpBot</option>
                             <option value="FootyStats" ${bet.original_tipster === 'FootyStats' ? 'selected' : ''}>FootyStats</option>
@@ -2378,7 +2394,7 @@
                             <option value="Freak Elite VIP" ${bet.original_tipster === 'Freak Elite VIP' ? 'selected' : ''}>Freak Elite VIP</option>
                             <option value="Stats4bets bollamaker" ${bet.original_tipster === 'Stats4bets bollamaker' ? 'selected' : ''}>Stats4bets bollamaker</option>
                             <option value="Stats4Bets Automatibet" ${bet.original_tipster === 'Stats4Bets Automatibet' ? 'selected' : ''}>Stats4Bets Automatibet</option>
-                            ${!['AtmBetSignal','AtmBet Safe','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
+                            ${!['AtmBetSignal','AtmBet Safe','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','BetMines PreMatch','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
                         </select>
                     </td>
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">
