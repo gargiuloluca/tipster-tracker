@@ -33,53 +33,59 @@
         }
     </script>
 </head>
-<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col items-center justify-center font-sans antialiased selection:bg-emerald-500 selection:text-black p-4 relative overflow-hidden">
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col items-center justify-center font-sans antialiased selection:bg-emerald-500 selection:text-black p-4 sm:p-6 relative overflow-x-hidden">
 
-    <!-- Effetti luce di sfondo stile AtmBet -->
+    <!-- Effetti luce di sfondo -->
     <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="max-w-md w-full space-y-6 relative z-10">
+    <div class="max-w-xl w-full space-y-6 relative z-10">
         <!-- Logo Header -->
         <div class="text-center space-y-2">
             <a href="index.html" class="inline-flex items-center gap-2">
                 <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-10 w-auto mx-auto">
             </a>
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono uppercase tracking-wider font-bold">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Transazione Verificata
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Transazione Verificata & Sicura
             </div>
         </div>
 
-        <!-- Card Principale -->
-        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-md">
+        <!-- Card Principale (Allargata per PC e bilanciata su mobile) -->
+        <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6 backdrop-blur-md">
             <div class="w-16 h-16 bg-emerald-500/15 text-emerald-400 rounded-2xl border border-emerald-500/30 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
                 <i data-lucide="check-circle-2" class="w-9 h-9"></i>
             </div>
 
             <div class="text-center space-y-2">
-                <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Pagamento Completato!</h1>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Il tuo ordine è andato a buon fine. Il sistema ha registrato con successo la transazione.
+                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Pagamento Completato con Successo!</h1>
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md mx-auto">
+                    Grazie per aver scelto AtmBet. Per completare l'attivazione ed entrare nei canali ufficiali, inserisci i tuoi dati qui sotto.
                 </p>
             </div>
 
-            <!-- Box Email Rilevata (se passata da Stripe) -->
-            <div id="email-box" class="hidden bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center space-y-1">
-                <span class="text-[10px] text-slate-500 font-mono uppercase tracking-wider block">Email associata all'ordine</span>
-                <span id="display-email" class="text-xs font-mono font-bold text-emerald-400"></span>
-            </div>
-
-            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800/80 space-y-2.5 text-xs text-slate-300">
-                <div class="font-bold text-white flex items-center gap-1.5">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Come procedere adesso:
+            <!-- Form di associazione rapida (Email + Telegram) -->
+            <form onsubmit="handleActivation(event)" class="space-y-4 bg-slate-950 p-4 sm:p-6 rounded-2xl border border-slate-800">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-400 mb-1.5 text-[11px] font-semibold">Tua Email (da Stripe)</label>
+                        <input type="email5" id="success-email" required placeholder="tua@email.it"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1.5 text-[11px] font-semibold">Tua Username Telegram</label>
+                        <input type="text" id="success-telegram" required placeholder="@TuaUsername"
+                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                    </div>
                 </div>
-                <p class="text-slate-400 leading-relaxed">1. Clicca sul tasto sottostante per tornare alla dashboard principale.</p>
-                <p class="text-slate-400 leading-relaxed">2. Clicca su <strong>"Codice Sblocco"</strong> o <strong>"Accedi"</strong> in alto a destra e inserisci la tua email o il codice per attivare la tua area riservata.</p>
-            </div>
 
-            <a href="index.html" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-                <span>Accedi alla Dashboard Operativa</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
+                <div class="text-[11px] text-slate-400 leading-relaxed pt-1">
+                    💡 <em>Inserendo la tua username Telegram, il gestore potrà abilitare all'istante il tuo accesso al canale VIP riservato.</em>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
+                    <span>Attiva Account & Entra in Dashboard</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </form>
         </div>
 
         <div class="text-center text-[11px] text-slate-500 font-mono">
@@ -90,17 +96,34 @@
     <script>
         lucide.createIcons();
 
-        // Estrae l'email passata da Stripe via parametro URL (?email=...)
+        // Legge l'email passata da Stripe nella URL (?email=...) e la pre-compila
         const urlParams = new URLSearchParams(window.location.search);
         const userEmail = urlParams.get('email');
-        
         if (userEmail && userEmail.includes('@')) {
-            const emailBox = document.getElementById('email-box');
-            const displayEmail = document.getElementById('display-email');
-            if (emailBox && displayEmail) {
-                displayEmail.innerText = userEmail;
-                emailBox.classList.remove('hidden');
-            }
+            const emailInput = document.getElementById('success-email');
+            if (emailInput) emailInput.value = userEmail;
+        }
+
+        async function handleActivation(e) {
+            e.preventDefault();
+            const email = document.getElementById('success-email').value.trim();
+            const telegram = document.getElementById('success-telegram').value.trim();
+
+            // Crea la sessione locale per evitare di dover rifare il login
+            const sessionData = {
+                name: email.split('@')[0],
+                email: email,
+                telegram_username: telegram,
+                role: 'user',
+                plan: 'all_inclusive', // Oppure gestito dai crediti a seconda dell'ordine
+                expires_at: '2099-12-31',
+                credits: 10
+            };
+
+            localStorage.setItem('atmbet_active_user_session', JSON.stringify(sessionData));
+
+            // Reindirizza alla Home/Dashboard operativa
+            window.location.href = 'index.html';
         }
     </script>
 </body>
