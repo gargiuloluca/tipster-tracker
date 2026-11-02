@@ -33,65 +33,76 @@
         }
     </script>
 </head>
-<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col items-center justify-center font-sans antialiased selection:bg-emerald-500 selection:text-black p-4 sm:p-6 relative overflow-x-hidden">
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col justify-between font-sans antialiased selection:bg-emerald-500 selection:text-black p-4 sm:p-8 relative overflow-x-hidden">
 
     <!-- Effetti luce di sfondo -->
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-    <div class="max-w-xl w-full space-y-6 relative z-10">
-        <!-- Logo Header -->
-        <div class="text-center space-y-2">
-            <a href="index.html" class="inline-flex items-center gap-2">
-                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-10 w-auto mx-auto">
-            </a>
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono uppercase tracking-wider font-bold">
+    <!-- Header / Logo -->
+    <header class="w-full max-w-3xl mx-auto flex items-center justify-center pt-4 relative z-10">
+        <a href="index.html" class="flex items-center gap-2">
+            <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-10 sm:h-12 w-auto">
+        </a>
+    </header>
+
+    <!-- Contenitore Principale Espanso -->
+    <main class="w-full max-w-2xl mx-auto space-y-6 relative z-10 my-auto py-8">
+        
+        <div class="text-center space-y-3">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono uppercase tracking-wider font-bold">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Transazione Verificata & Sicura
             </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Pagamento Completato!</h1>
+            <p class="text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg mx-auto">
+                Grazie per la fiducia. Per completare l'attivazione immediata del tuo profilo e sbloccare l'accesso ai canali, inserisci i dati richiesti.
+            </p>
         </div>
 
-        <!-- Card Principale (Allargata per PC e bilanciata su mobile) -->
+        <!-- Card Ampia -->
         <div class="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6 backdrop-blur-md">
-            <div class="w-16 h-16 bg-emerald-500/15 text-emerald-400 rounded-2xl border border-emerald-500/30 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
-                <i data-lucide="check-circle-2" class="w-9 h-9"></i>
+            
+            <div class="flex items-center gap-4 bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-2xl">
+                <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center shrink-0">
+                    <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-white uppercase tracking-wider">Stato Ordine</div>
+                    <div class="text-xs text-emerald-400 font-medium">Pagamento registrato correttamente su Stripe.</div>
+                </div>
             </div>
 
-            <div class="text-center space-y-2">
-                <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Pagamento Completato con Successo!</h1>
-                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md mx-auto">
-                    Grazie per aver scelto AtmBet. Per completare l'attivazione ed entrare nei canali ufficiali, inserisci i tuoi dati qui sotto.
-                </p>
-            </div>
-
-            <!-- Form di associazione rapida (Email + Telegram) -->
-            <form onsubmit="handleActivation(event)" class="space-y-4 bg-slate-950 p-4 sm:p-6 rounded-2xl border border-slate-800">
+            <!-- Form di associazione rapida -->
+            <form onsubmit="handleActivation(event)" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-slate-400 mb-1.5 text-[11px] font-semibold">Tua Email (da Stripe)</label>
+                    <div class="space-y-1.5">
+                        <label class="block text-slate-300 text-xs font-bold">Tua Email (da Stripe)</label>
                         <input type="email5" id="success-email" required placeholder="tua@email.it"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-emerald-500">
                     </div>
-                    <div>
-                        <label class="block text-slate-400 mb-1.5 text-[11px] font-semibold">Tua Username Telegram</label>
+                    <div class="space-y-1.5">
+                        <label class="block text-slate-300 text-xs font-bold">Tua Username Telegram</label>
                         <input type="text" id="success-telegram" required placeholder="@TuaUsername"
-                            class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-emerald-500">
+                            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
-                <div class="text-[11px] text-slate-400 leading-relaxed pt-1">
-                    💡 <em>Inserendo la tua username Telegram, il gestore potrà abilitare all'istante il tuo accesso al canale VIP riservato.</em>
+                <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 space-y-1">
+                    <span class="text-amber-400 font-bold block">💡 Nota Importante:</span>
+                    <span>La username Telegram ci permette di abilitare istantaneamente il tuo profilo e sbloccare l'accesso al canale VIP associato al tuo piano.</span>
                 </div>
 
-                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20">
-                    <span>Attiva Account & Entra in Dashboard</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm py-4 rounded-xl transition flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20">
+                    <span>Attiva Account & Entra in Dashboard</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </button>
             </form>
         </div>
+    </main>
 
-        <div class="text-center text-[11px] text-slate-500 font-mono">
-            AtmBet &copy; 2026 • Analisi Quantitativa Certificata
-        </div>
-    </div>
+    <!-- Footer -->
+    <footer class="w-full max-w-3xl mx-auto text-center text-xs text-slate-500 font-mono pb-4 relative z-10">
+        AtmBet &copy; 2026 • Analisi Quantitativa Certificata
+    </footer>
 
     <script>
         lucide.createIcons();
@@ -109,20 +120,17 @@
             const email = document.getElementById('success-email').value.trim();
             const telegram = document.getElementById('success-telegram').value.trim();
 
-            // Crea la sessione locale per evitare di dover rifare il login
             const sessionData = {
                 name: email.split('@')[0],
                 email: email,
                 telegram_username: telegram,
                 role: 'user',
-                plan: 'all_inclusive', // Oppure gestito dai crediti a seconda dell'ordine
+                plan: 'all_inclusive',
                 expires_at: '2099-12-31',
                 credits: 10
             };
 
             localStorage.setItem('atmbet_active_user_session', JSON.stringify(sessionData));
-
-            // Reindirizza alla Home/Dashboard operativa
             window.location.href = 'index.html';
         }
     </script>
