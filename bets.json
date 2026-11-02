@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793628846107_0",
-    "event_date": "2026-11-03 21:00",
-    "match_name": "Manchester United - Roma",
-    "league": "Champions League",
-    "original_tipster": "BetMines Valuebet",
+    "id": "bet_1793628951159_0",
+    "event_date": "2026-11-02 16:15",
+    "match_name": "Oviedo - Las Palmas",
+    "league": "Segunda Division",
+    "original_tipster": "Brunetti Vip",
     "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "odds": 1.63,
+    "prediction": "Casa Segna 1°T",
+    "odds": 1.7,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -68,6 +68,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793628846107_0",
+    "event_date": "2026-11-03 21:00",
+    "match_name": "Manchester United - Roma",
+    "league": "Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "X2",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.63,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793614017309_0",
