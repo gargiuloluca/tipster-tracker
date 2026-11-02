@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="logo.png?v=2">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -793,7 +793,6 @@
 
                 const todayStr = getLocalDateString(new Date());
                 
-                // Ricerca per codice accesso (es. MARIOVIP, ATM-XXXXXX) o per email
                 const match = users.find(u => {
                     const uCode = (u.access_code || u.code || '').trim().toUpperCase();
                     const uEmail = (u.identifier || u.email || '').trim().toUpperCase();
@@ -801,14 +800,12 @@
                 });
 
                 if (match) {
-                    // 1. Controllo se il codice è attivo
                     if (match.status && match.status !== 'active') {
                         errEl.innerText = "Questo codice promozionale è disattivato.";
                         errEl.classList.remove('hidden');
                         return;
                     }
 
-                    // 2. Controllo data di scadenza
                     const exp = match.expires_at || match.expiration;
                     if (exp && exp !== '-' && exp < todayStr) {
                         errEl.innerText = "Codice promo scaduto il " + exp;
@@ -816,14 +813,12 @@
                         return;
                     }
 
-                    // 3. Controllo limite utilizzi (per campagne promo/Creator)
                     if (match.max_uses && (match.used_count || 0) >= match.max_uses) {
                         errEl.innerText = "Codice promo esaurito (raggiunto il limite massimo di attivazioni).";
                         errEl.classList.remove('hidden');
                         return;
                     }
 
-                    // 4. Mappatura piano
                     const planType = match.plan === 'pure' ? 'pure' : (match.plan === 'full' ? 'all_inclusive' : 'elite');
 
                     const sessionData = {
@@ -1086,6 +1081,7 @@
         async function fetchAllBets() {
             let bets = [];
 
+            // 1. Prova prima a recuperare da bets.json su GitHub
             try {
                 const timestamp = new Date().getTime();
                 const res = await fetch(`bets.json?_nocache=${timestamp}`, {
@@ -1102,7 +1098,8 @@
                 }
             } catch(e) {}
 
-            const rawV1 = localStorage.getItem(PRIMARY_KEY);
+            // 2. Fallback su localStorage (se l'utente è l'admin o ha dati locali più recenti)
+            const rawV1 = localStorage.getItem(PRIMARY_KEY) || localStorage.getItem(ATMBET_KEY);
             if (rawV1) {
                 try {
                     const localBets = JSON.parse(rawV1);
@@ -1110,11 +1107,11 @@
                         if (bets.length === 0) {
                             bets = localBets;
                         } else {
-                            const localMap = new Map(localBets.map(b => [String(b.id || b.match_name), b]));
+                            const localMap = new Map(localBets.map(b => [String(b.id || b.match_name || b.match), b]));
                             bets = bets.map(remoteBet => {
-                                const key = String(remoteBet.id || remoteBet.match_name);
+                                const key = String(remoteBet.id || remoteBet.match_name || remoteBet.match);
                                 const localVersion = localMap.get(key);
-                                if (localVersion && localVersion.status !== 'pending' && remoteBet.status === 'pending') {
+                                if (localVersion && (localVersion.status !== 'pending' && (remoteBet.status === 'pending' || !remoteBet.status))) {
                                     return localVersion;
                                 }
                                 return remoteBet;
@@ -1127,12 +1124,10 @@
             const pureTipstersList = getActivePureTipsters().map(t => t.toLowerCase().trim());
 
             return bets.map((b, idx) => {
-                const rawTipster = (b.tipster || b.original_tipster || 'AtmBetSignal').trim();
+                const rawTipster = (b.original_tipster || b.tipster || b.source || 'AtmBetSignal').trim();
                 const rawLower = rawTipster.toLowerCase();
 
                 const isXG = rawLower.includes('xg');
-                
-                // Verifica di appartenenza dinamica al piano PURE
                 const isInSelectedPure = pureTipstersList.some(pt => rawLower === pt || rawLower.includes(pt));
                 
                 const isPureCandidate = !isXG && (
@@ -1145,20 +1140,29 @@
                     rawLower === 'atmbet'
                 );
 
+                // Normalizzazione dell'esito da qualsiasi campo possibile (status, result, outcome)
+                let rawStatus = String(b.status || b.result || b.outcome || 'pending').toLowerCase().trim();
+                if (rawStatus.includes('vin') || rawStatus === 'win' || rawStatus === 'won') rawStatus = 'won';
+                else if (rawStatus.includes('per') || rawStatus === 'loss' || rawStatus === 'lost') rawStatus = 'lost';
+                else if (rawStatus.includes('void') || rawStatus.includes('annull')) rawStatus = 'void';
+                else rawStatus = 'pending';
+
+                const matchTitle = b.match_name || b.match || b.teams || 'Evento';
+
                 return {
                     id: String(b.id || idx),
-                    event_date: b.event_date || b.date || '',
-                    league: b.league || 'Generale',
-                    match_name: b.match_name || b.match || 'Evento',
-                    market: b.market || 'Mercato',
-                    prediction: b.prediction || b.pick || '-',
+                    event_date: b.event_date || b.date || b.dateTime || '',
+                    league: b.league || b.competition || 'Generale',
+                    match_name: matchTitle,
+                    market: b.market || b.type || 'Mercato',
+                    prediction: b.prediction || b.pick || b.selection || '-',
                     original_tipster: rawTipster,
                     is_pure: isPureCandidate,
                     public_brand: isPureCandidate ? 'AtmBet Selection' : 'AtmBet Signal',
-                    odds: parseFloat(b.odds || b.odd || 1.80),
-                    stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
-                    status: (b.status || 'pending').toLowerCase(),
-                    is_published: b.is_published !== undefined ? b.is_published : true
+                    odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
+                    stake: parseFloat(b.stake || b.units || 1.0) > 10 ? 1.0 : parseFloat(b.stake || b.units || 1.0),
+                    status: rawStatus,
+                    is_published: b.is_published !== false // Se non specificato, è pubblico di default
                 };
             }).filter(b => b.is_published === true);
         }
@@ -1236,6 +1240,7 @@
                 currentCustomDate = d7Str;
             } else if (type === 'all') {
                 currentCustomDate = '2020-01-01';
+                if (dateInput) dateInput.value = '';
             }
 
             calculateSimulationPerformance();
@@ -1441,23 +1446,19 @@
             activeUser = getActiveUserSession();
             const todayStr = getLocalDateString(new Date());
 
-            // 1. Filtro base per data odierna
             let pendingBetsToday = cachedAllBets.filter(b => {
                 if (b.status !== 'pending') return false;
                 const bDate = extractStandardDate(b.event_date);
                 return bDate >= todayStr;
             });
 
-            // 2. Controllo piano utente
             const isUserPure = activeUser && activeUser.plan === 'pure';
             const isUserAllInclusive = activeUser && (activeUser.plan === 'all_inclusive' || activeUser.role === 'admin' || activeUser.plan === 'elite');
 
-            // Se l'utente ha il piano PURE, mostra tutte le selezioni autorizzate (AtmBet Selection: Safe & Pure Signal)
             if (isUserPure) {
                 pendingBetsToday = pendingBetsToday.filter(b => b.is_pure === true);
             }
 
-            // Aggiorna il sottotitolo della sezione pronostici
             const subtitleEl = document.querySelector('#selezioni p');
             if (subtitleEl) {
                 if (isUserPure) {
