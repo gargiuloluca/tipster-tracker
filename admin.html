@@ -64,6 +64,17 @@
         .row-pending {
             border-left: 4px solid #475569 !important;
         }
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #0b0f17;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
         * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
@@ -93,28 +104,28 @@
 
     <!-- MODALE VERIFICA RISULTATI API -->
     <div id="results-verify-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9998] hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-3xl max-w-lg w-full shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+        <div class="bg-slate-900 border border-slate-800 p-4 sm:p-6 rounded-3xl max-w-lg w-full shadow-2xl space-y-3 max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div class="flex items-center gap-2">
                     <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
                         <i data-lucide="check-check" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Controllo Risultati Automatico</h3>
-                        <p class="text-[11px] text-slate-400">Verifica giocate terminate e refertazione automatica</p>
+                        <h3 class="text-xs sm:text-sm font-bold text-white">Controllo Risultati Automatico</h3>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Verifica giocate terminate e refertazione</p>
                     </div>
                 </div>
-                <button type="button" onclick="closeResultsModal()" class="text-slate-500 hover:text-white">
+                <button type="button" onclick="closeResultsModal()" class="text-slate-500 hover:text-white p-1">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="pending-verification-list"></div>
+            <div class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scroll" id="pending-verification-list"></div>
 
-            <div class="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
-                <span id="verify-summary-badge" class="text-[11px] font-mono text-slate-400">0 giocate da refertare</span>
-                <button type="button" onclick="applyVerifiedResults()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1.5">
-                    <i data-lucide="save" class="w-4 h-4"></i> Salva Esiti & Sincronizza GitHub
+            <div class="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2">
+                <span id="verify-summary-badge" class="text-[10px] sm:text-[11px] font-mono text-slate-400">0 giocate da refertare</span>
+                <button type="button" onclick="applyVerifiedResults()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition shadow flex items-center justify-center gap-1.5">
+                    <i data-lucide="save" class="w-4 h-4"></i> Salva & Sincronizza
                 </button>
             </div>
         </div>
@@ -123,64 +134,63 @@
     <!-- CONTENUTO AMMINISTRATIVO -->
     <div id="admin-main-content" class="hidden">
 
-        <!-- Top Navbar Admin -->
+        <!-- Top Navbar Admin (Mobile Ready) -->
         <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur">
-            <div class="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between">
-                <div class="flex items-center space-x-2 sm:space-x-3">
-                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
+                <div class="flex items-center space-x-2">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-9 w-auto">
                     <div>
-                        <span class="text-lg sm:text-xl font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
-                        <span class="ml-1.5 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded font-bold uppercase tracking-wider">Console Admin</span>
+                        <span class="text-base sm:text-lg font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
+                        <span class="hidden sm:inline-block ml-1 text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.2 rounded font-bold uppercase">Admin</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-1.5 sm:space-x-2">
-                    <button type="button" onclick="openResultsModal()" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3 py-1.5 rounded-lg font-black flex items-center gap-1.5 transition shadow shadow-emerald-500/10">
+                <div class="flex items-center space-x-1 sm:space-x-2">
+                    <button type="button" onclick="openResultsModal()" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2.5 py-1.5 rounded-lg font-black flex items-center gap-1 transition shadow shadow-emerald-500/10">
                         <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-                        <span>Verifica Risultati</span>
+                        <span class="hidden sm:inline">Verifica Risultati</span>
                     </button>
 
-                    <button type="button" onclick="exportBackupJSON()" title="Scarica backup pronostici" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                    <button type="button" onclick="exportBackupJSON()" title="Scarica backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
                         <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
-                        <span class="hidden sm:inline">Esporta</span>
+                        <span class="hidden md:inline">Esporta</span>
                     </button>
-                    <label for="import-backup-file" title="Ripristina backup pronostici" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
+                    <label for="import-backup-file" title="Ripristina backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
                         <i data-lucide="upload" class="w-3.5 h-3.5 text-amber-400"></i>
-                        <span class="hidden sm:inline">Importa</span>
+                        <span class="hidden md:inline">Importa</span>
                         <input type="file" id="import-backup-file" class="hidden" accept=".json" onchange="importBackupJSON(event)">
                     </label>
-                    <a href="index.html" target="_blank" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3.5 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                    <a href="index.html" target="_blank" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 p-2 sm:px-3 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                         <span class="hidden sm:inline">Vetrina</span>
                     </a>
-                    <button type="button" onclick="lockAdminConsole()" title="Blocca console" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2.5 py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                    <button type="button" onclick="lockAdminConsole()" title="Blocca console" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
                         <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-                        <span class="hidden sm:inline">Esci</span>
                     </button>
                 </div>
             </div>
         </header>
 
-        <div class="max-w-7xl mx-auto px-3 sm:px-4 pt-4 sm:pt-6 space-y-4 sm:space-y-6">
+        <div class="max-w-7xl mx-auto px-2.5 sm:px-4 pt-3 sm:pt-6 space-y-4 sm:space-y-6">
 
             <!-- BOX CONNESSIONE DIRETTA GITHUB API -->
             <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-lg">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <div class="flex items-center gap-2.5">
-                        <div id="sync-status-icon" class="w-3 h-3 rounded-full bg-slate-500 shrink-0"></div>
+                        <div id="sync-status-icon" class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0"></div>
                         <div>
                             <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione Diretta GitHub API (bets.json & users.json)
+                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> GitHub API Direct Sync
                             </div>
                             <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">Non configurata.</div>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full md:w-auto">
                         <input type="text" id="gh-repo" placeholder="username/repository" 
-                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-44">
-                        <input type="password" id="gh-token" placeholder="GitHub Token (ghp_...)" 
-                            class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:w-44">
-                        <button type="button" onclick="saveGitHubSettings()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-3 py-1 rounded-lg transition whitespace-nowrap">
+                            class="bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono w-full">
+                        <input type="password" id="gh-token" placeholder="Token ghp_..." 
+                            class="bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono w-full">
+                        <button type="button" onclick="saveGitHubSettings()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-1.5 rounded-xl transition w-full">
                             Salva
                         </button>
                     </div>
@@ -188,60 +198,60 @@
             </section>
 
             <!-- SEZIONE: GESTIONE ABBONATI & LICENZE (users.json) -->
-            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/20 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/20 border border-emerald-500/30 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
-                        <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                        <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20 shrink-0">
                             <i data-lucide="users" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h2 class="text-xs sm:text-sm font-bold text-white">Gestione Abbonati & Licenze (users.json)</h2>
-                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-2 py-0.5 rounded font-black uppercase">Stripe / Make Sync</span>
+                            <div class="flex items-center gap-1.5">
+                                <h2 class="text-xs sm:text-sm font-bold text-white">Abbonati & Licenze</h2>
+                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-1.5 py-0.2 rounded font-black uppercase">users.json</span>
                             </div>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Monitora gli accessi sbloccati su Telegram e abilita manualmente nuovi codici d'accesso al sito web.</p>
+                            <p class="text-[10px] text-slate-400">Codici e scadenze account</p>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="toggleAddUserModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow">
-                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Nuovo Abbonato
+                    <div class="flex items-center gap-2 self-end sm:self-auto">
+                        <button type="button" onclick="toggleAddUserModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow">
+                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Nuovo
                         </button>
-                        <button type="button" onclick="syncUsersFromGitHub()" title="Ricarica users.json da GitHub" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                        <button type="button" onclick="syncUsersFromGitHub()" title="Ricarica da GitHub" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold p-2 sm:px-2.5 sm:py-1.5 rounded-xl transition flex items-center gap-1">
                             <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-blue-400"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- FORM AGGIUNTA MANUALE UTENTE -->
-                <div id="add-user-panel" class="hidden bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-3">
+                <div id="add-user-panel" class="hidden bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 space-y-3">
                     <div class="text-xs font-bold text-white flex items-center gap-1.5">
                         <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Inserisci Nuovo Abbonamento
                     </div>
-                    <form onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 text-xs">
+                    <form onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                         <div>
-                            <label class="block text-slate-400 mb-1 text-[11px]">Riferimento / Nome / Email</label>
-                            <input type="text" id="new_user_ident" required placeholder="Es. mario.rossi@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                            <label class="block text-slate-400 mb-1 text-[10px]">Nome o Email</label>
+                            <input type="text" id="new_user_ident" required placeholder="mario@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
-                            <label class="block text-slate-400 mb-1 text-[11px]">ID Utente Telegram</label>
-                            <input type="text" id="new_user_tgid" placeholder="Es. 123456789" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <label class="block text-slate-400 mb-1 text-[10px]">Telegram ID</label>
+                            <input type="text" id="new_user_tgid" placeholder="123456789" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div>
-                            <label class="block text-slate-400 mb-1 text-[11px]">Piano Sottoscritto</label>
-                            <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                            <label class="block text-slate-400 mb-1 text-[10px]">Piano Sottoscritto</label>
+                            <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
                                 <option value="pure">Pure Signal (Top Ticket)</option>
                                 <option value="elite" selected>Cluster Elite (Bilanciato)</option>
                                 <option value="full">All-Inclusive (Tutti)</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-slate-400 mb-1 text-[11px]">Durata (Giorni)</label>
-                            <input type="number" id="new_user_days" value="30" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <label class="block text-slate-400 mb-1 text-[10px]">Durata (Giorni)</label>
+                            <input type="number" id="new_user_days" value="30" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
                             <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
-                            <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-lg transition">Salva & Sblocca</button>
+                            <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">Salva & Sblocca</button>
                         </div>
                     </form>
                 </div>
@@ -249,35 +259,34 @@
                 <!-- METRICHE ABBONATI -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
                     <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Abbonati Attivi</span>
-                        <span id="usr-active-count" class="text-base font-bold text-emerald-400">0</span>
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Attivi</span>
+                        <span id="usr-active-count" class="text-sm sm:text-base font-bold text-emerald-400">0</span>
                     </div>
                     <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Abbonati Scaduti</span>
-                        <span id="usr-expired-count" class="text-base font-bold text-rose-400">0</span>
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Scaduti</span>
+                        <span id="usr-expired-count" class="text-sm sm:text-base font-bold text-rose-400">0</span>
                     </div>
                     <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Piano Più Scelto</span>
-                        <span id="usr-top-plan" class="text-base font-bold text-amber-400">-</span>
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Top Piano</span>
+                        <span id="usr-top-plan" class="text-sm sm:text-base font-bold text-amber-400">-</span>
                     </div>
                     <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Stato users.json</span>
-                        <span id="usr-sync-status" class="text-base font-bold text-slate-300">Locale / Sincro</span>
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Sincro</span>
+                        <span id="usr-sync-status" class="text-xs sm:text-sm font-bold text-slate-300">Locale</span>
                     </div>
                 </div>
 
                 <!-- TABELLA UTENTI -->
-                <div class="overflow-x-auto rounded-xl border border-slate-800">
-                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
-                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
+                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[600px]">
+                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
                             <tr>
-                                <th class="py-2.5 px-3">Utente / Email</th>
+                                <th class="py-2.5 px-3">Utente</th>
                                 <th class="py-2.5 px-3">Piano</th>
-                                <th class="py-2.5 px-3">Telegram ID / Link</th>
-                                <th class="py-2.5 px-3">Codice Accesso Web</th>
+                                <th class="py-2.5 px-3">Codice Accesso</th>
                                 <th class="py-2.5 px-3 text-center">Scadenza</th>
                                 <th class="py-2.5 px-3 text-center">Stato</th>
-                                <th class="py-2.5 px-3 text-right">Azioni Rapide</th>
+                                <th class="py-2.5 px-3 text-right">Azioni</th>
                             </tr>
                         </thead>
                         <tbody id="users-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
@@ -285,252 +294,235 @@
                 </div>
             </section>
 
-            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM BOT (CON SELETTORE FORNITORI PURE) -->
-            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 border border-blue-500/30 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
+            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM -->
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 border border-blue-500/30 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-3 sm:space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
-                        <div class="p-2 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
+                        <div class="p-2 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20 shrink-0">
                             <i data-lucide="bot" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                                Dispatcher Canali Telegram (AtmBet Official)
-                            </h2>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Credenziali protette. Invia automaticamente solo i nuovi segnali non ancora recapitati.</p>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Dispatcher Telegram</h2>
+                            <p class="text-[10px] text-slate-400">Invio automatico delle nuove selezioni</p>
                         </div>
                     </div>
-                    <button type="button" onclick="saveTelegramConfig()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition self-start sm:self-auto flex items-center gap-1.5 shadow">
-                        <i data-lucide="save" class="w-3.5 h-3.5"></i> Salva Configurazione
+                    <button type="button" onclick="saveTelegramConfig()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition self-end sm:self-auto flex items-center gap-1.5 shadow">
+                        <i data-lucide="save" class="w-3.5 h-3.5"></i> Salva
                     </button>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 text-xs">
                     <div>
-                        <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Bot Token API (@BotFather)</label>
-                        <input type="password" id="tg_token" placeholder="••••••••••••••••••••••••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-blue-500">
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Bot Token API (@BotFather)</label>
+                        <input type="password" id="tg_token" placeholder="••••••••••••••••••••••••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-blue-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Chat ID Canale PURE (Top Selezioni)</label>
-                        <input type="password" id="tg_channel_pure" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-amber-500">
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Chat ID Canale PURE</label>
+                        <input type="password" id="tg_channel_pure" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-amber-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1 font-semibold text-[11px]">Chat ID Canale FULL (All-Inclusive)</label>
-                        <input type="password" id="tg_channel_full" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-emerald-500">
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Chat ID Canale FULL</label>
+                        <input type="password" id="tg_channel_full" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
-                <!-- SELETTORE DINAMICO FORNITORI ABILITATI PER IL CANALE PURE -->
-                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
+                <!-- SELETTORE FORNITORI PURE -->
+                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-1.5">
                     <div class="flex items-center justify-between">
-                        <span class="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
-                            <i data-lucide="check-square" class="w-3.5 h-3.5 text-amber-400"></i>
-                            Fornitori Inclusi nel Canale PURE & Storico PURE:
+                        <span class="text-[10px] sm:text-[11px] font-bold text-amber-300 flex items-center gap-1">
+                            <i data-lucide="check-square" class="w-3.5 h-3.5 text-amber-400"></i> Tipster Canale PURE:
                         </span>
-                        <span class="text-[9px] text-slate-400 font-mono">Spunta i tipster abilitati al flusso PURE</span>
+                        <span class="text-[9px] text-slate-500 font-mono">Filtro automatico</span>
                     </div>
-                    <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-2 pt-1"></div>
+                    <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-1.5 pt-1"></div>
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800/80">
-                    <span class="text-xs text-slate-400 font-bold mr-1">Invia Nuove Selezioni Odierne:</span>
-                    <button type="button" onclick="dispatchTelegramSignals('pure')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-amber-500/10">
-                        <i data-lucide="send" class="w-3.5 h-3.5"></i> Invia Canale PURE (Nuovi)
-                    </button>
-                    <button type="button" onclick="dispatchTelegramSignals('full')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-black px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-blue-500/10">
-                        <i data-lucide="send" class="w-3.5 h-3.5"></i> Invia Canale All-Inclusive (Nuovi)
-                    </button>
-                    <span id="tg_status_msg" class="text-xs font-mono text-emerald-400 ml-auto font-bold"></span>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+                    <div class="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                        <button type="button" onclick="dispatchTelegramSignals('pure')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i> Canale PURE
+                        </button>
+                        <button type="button" onclick="dispatchTelegramSignals('full')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
+                            <i data-lucide="send" class="w-3.5 h-3.5"></i> All-Inclusive
+                        </button>
+                    </div>
+                    <span id="tg_status_msg" class="text-[11px] font-mono text-emerald-400 font-bold text-center sm:text-right"></span>
                 </div>
             </section>
 
-            <!-- OTTIMIZZATORE FILTRI & CLUSTER DI PROFITTO -->
-            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/20 border border-amber-500/30 rounded-2xl p-4 shadow-xl space-y-3">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="p-2 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20">
-                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <!-- CLUSTER OPTIMIZER -->
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/20 border border-amber-500/30 rounded-2xl p-3.5 sm:p-4 shadow-xl space-y-3">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                    <div class="flex items-center gap-2">
+                        <div class="p-1.5 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20 shrink-0">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h2 class="text-xs sm:text-sm font-bold text-white">AtmBet Cluster Optimizer (Filtri Consigliati)</h2>
-                                <span class="text-[9px] bg-amber-500/20 text-amber-300 font-mono px-2 py-0.5 rounded font-black uppercase">Algoritmo di Scrematura</span>
-                            </div>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Riduci i segnali a bassa resa per alzare il Win Rate ed evitare la fatica di esecuzione per gli abbonati.</p>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Cluster Optimizer</h2>
+                            <p class="text-[10px] text-slate-400">Scrematura del flusso per gli abbonati</p>
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-1.5">
-                        <button type="button" onclick="setClusterFilter('pure', this)" id="btn-cluster-pure" class="cluster-btn px-2.5 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold transition flex items-center gap-1">
-                            <i data-lucide="crown" class="w-3.5 h-3.5 text-amber-400"></i> Pure Signal (Canali Selezionati)
+                    <div class="grid grid-cols-3 gap-1 overflow-x-auto">
+                        <button type="button" onclick="setClusterFilter('pure', this)" id="btn-cluster-pure" class="cluster-btn px-2 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
+                            Pure Signal
                         </button>
-                        <button type="button" onclick="setClusterFilter('elite', this)" id="btn-cluster-elite" class="cluster-btn px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1">
-                            <i data-lucide="zap" class="w-3.5 h-3.5 text-emerald-400"></i> Cluster Elite (ROI Positivo)
+                        <button type="button" onclick="setClusterFilter('elite', this)" id="btn-cluster-elite" class="cluster-btn px-2 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
+                            Elite (ROI+)
                         </button>
-                        <button type="button" onclick="setClusterFilter('all', this)" id="btn-cluster-all" class="cluster-btn cluster-pill-active px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-xs font-bold transition">
-                            Tutti (Full Volume)
+                        <button type="button" onclick="setClusterFilter('all', this)" id="btn-cluster-all" class="cluster-btn cluster-pill-active px-2 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
+                            Tutti (Full)
                         </button>
                     </div>
                 </div>
 
-                <div id="cluster-metrics-bar" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800/80 text-xs font-mono">
+                <div id="cluster-metrics-bar" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-slate-800/80 text-xs font-mono">
                     <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
                         <span class="text-[9px] text-slate-500 uppercase block font-sans">Canali Attivi</span>
-                        <span id="opt-channels-count" class="font-bold text-white">Tutti</span>
+                        <span id="opt-channels-count" class="font-bold text-white truncate block">Tutti</span>
                     </div>
                     <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Volume Medio Giornaliero</span>
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Volume Stimato</span>
                         <span id="opt-daily-volume" class="font-bold text-amber-400">Tutti i segnali</span>
                     </div>
                     <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Win Rate Stimato</span>
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Win Rate Target</span>
                         <span id="opt-winrate-est" class="font-bold text-emerald-400">-</span>
                     </div>
                     <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Resa Target / Profilo</span>
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Profilo</span>
                         <span id="opt-target-profile" class="font-bold text-slate-200">Full Coverage</span>
                     </div>
                 </div>
             </section>
 
-            <!-- MODULO: CONTROLLO SOVRAESPOSIZIONE & CONFLITTI -->
-            <section id="conflict-panel" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 shadow-lg space-y-3">
+            <!-- MODULO CONFLITTI -->
+            <section id="conflict-panel" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 shadow-lg space-y-2">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <div class="p-1.5 bg-amber-500/20 text-amber-400 rounded-lg">
-                            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xs sm:text-sm font-bold text-amber-300">Rilevata Sovraesposizione / Conflitto Match</h3>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">Partite duplicate o mercati contrapposti. Puoi rimuovere le singole giocate o confermare di volerle mantenere.</p>
-                        </div>
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                        <h3 class="text-xs font-bold text-amber-300">Sovraesposizione / Conflitto Match</h3>
                     </div>
-                    <span id="conflict-count-badge" class="text-[10px] font-mono font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0 Anomalie</span>
+                    <span id="conflict-count-badge" class="text-[9px] font-mono font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0</span>
                 </div>
-                <div id="conflict-items-container" class="space-y-2 pt-1"></div>
+                <div id="conflict-items-container" class="space-y-1.5 pt-1"></div>
             </section>
 
-            <!-- FILTRO TEMPORALE & ANALISI RENDIMENTO DATA (SINCRONIZZATO) -->
-            <section class="bg-slate-900 border border-slate-800 p-4 sm:p-5 rounded-2xl space-y-4 shadow-xl">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <!-- FILTRO DATA E RENDIMENTO -->
+            <section class="bg-slate-900 border border-slate-800 p-3.5 sm:p-5 rounded-2xl space-y-3.5 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-800 pb-3">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
-                                <i data-lucide="calendar-clock" class="w-4 h-4"></i>
-                            </span>
-                            <h2 class="text-xs sm:text-sm font-bold text-white">Filtro Risultati per Data</h2>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="calendar-clock" class="w-4 h-4 text-blue-400"></i>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Filtro Temporale</h2>
                         </div>
-                        <p class="text-[10px] sm:text-[11px] text-slate-400">Seleziona un giorno esatto o usa i pulsanti rapidi per visualizzare e ricalcolare l'intera console.</p>
+                        <p class="text-[10px] text-slate-400">Simula e visualizza i risultati del periodo</p>
                     </div>
 
-                    <div class="flex flex-wrap items-center gap-2">
-                        <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-                            <span class="text-[10px] text-slate-400 font-semibold">Giorno Selezionato:</span>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2 py-1 rounded-xl">
+                            <span class="text-[10px] text-slate-400">Data:</span>
                             <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)"
                                 class="bg-transparent text-xs text-emerald-400 font-mono font-bold focus:outline-none cursor-pointer">
                         </div>
 
-                        <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
-                            <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi</button>
-                            <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ieri</button>
-                            <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ultimi 7gg</button>
-                            <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
+                        <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl">
+                            <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Oggi</button>
+                            <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Ieri</button>
+                            <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">7gg</button>
+                            <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Tutto</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
                         <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
-                        <div id="sim-profit-units" class="text-lg sm:text-xl font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
-                        <div id="sim-profit-fiat" class="text-[10px] font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+                        <div id="sim-profit-units" class="text-base sm:text-lg font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
+                        <div id="sim-profit-fiat" class="text-[10px] font-mono font-bold text-emerald-400">≈ +0.00 €</div>
                     </div>
 
-                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
-                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Yield / ROI Periodo</span>
-                        <div id="sim-roi" class="text-lg sm:text-xl font-mono font-black text-white mt-0.5">0.0%</div>
-                        <span class="text-[9px] text-slate-500">Sul volume periodo</span>
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Yield Periodo</span>
+                        <div id="sim-roi" class="text-base sm:text-lg font-mono font-black text-white mt-0.5">0.0%</div>
+                        <span class="text-[8px] text-slate-500">Sul volume</span>
                     </div>
 
-                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
-                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Win Rate Periodo</span>
-                        <div id="sim-winrate" class="text-lg sm:text-xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
-                        <span class="text-[9px] text-slate-500">Accuratezza esiti</span>
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
+                        <div id="sim-winrate" class="text-base sm:text-lg font-mono font-black text-amber-400 mt-0.5">0.0%</div>
+                        <span class="text-[8px] text-slate-500">Accuratezza</span>
                     </div>
 
-                    <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-xl">
-                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Chiuse Periodo</span>
-                        <div id="sim-resolved-count" class="text-lg sm:text-xl font-mono font-black text-slate-200 mt-0.5">0</div>
-                        <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Chiuse</span>
+                        <div id="sim-resolved-count" class="text-base sm:text-lg font-mono font-black text-slate-200 mt-0.5">0</div>
+                        <div class="text-[8px] text-slate-500"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Statistiche Globali filtrate per Data e Categoria -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
-                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
-                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Pronostici Mostrati</span>
-                    <span id="stat-total" class="text-xl sm:text-2xl font-black text-white">0</span>
+            <!-- STATISTICHE GLOBALI -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
+                    <span class="text-[10px] text-slate-400 block">Pronostici</span>
+                    <span id="stat-total" class="text-lg sm:text-xl font-black text-white">0</span>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl border-l-4 border-l-emerald-500 flex flex-col justify-between">
-                    <span class="text-[10px] sm:text-xs text-emerald-400 font-semibold block mb-0.5">Win Rate</span>
-                    <span id="stat-winrate" class="text-xl sm:text-2xl font-black text-white">0%</span>
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl border-l-4 border-l-emerald-500 flex flex-col justify-between">
+                    <span class="text-[10px] text-emerald-400 font-semibold block">Win Rate</span>
+                    <span id="stat-winrate" class="text-lg sm:text-xl font-black text-white">0%</span>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Profitto Netto</span>
-                        <span id="admin-stat-fiat" class="text-[10px] sm:text-[11px] font-mono text-emerald-400 font-bold">≈ +0.00€</span>
+                        <span class="text-[10px] text-slate-400 block">Profitto</span>
+                        <span id="admin-stat-fiat" class="text-[10px] font-mono text-emerald-400 font-bold">≈ +0.00€</span>
                     </div>
-                    <span id="stat-profit" class="text-xl sm:text-2xl font-black text-amber-400">0.00u</span>
+                    <span id="stat-profit" class="text-lg sm:text-xl font-black text-amber-400">0.00u</span>
                 </div>
-                <div class="bg-slate-900 border border-slate-800 p-3 sm:p-4 rounded-xl flex flex-col justify-between">
-                    <span class="text-[10px] sm:text-xs text-slate-400 block mb-0.5">Yield / ROI</span>
-                    <span id="stat-yield" class="text-xl sm:text-2xl font-black text-white">0%</span>
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
+                    <span class="text-[10px] text-slate-400 block">Yield Totale</span>
+                    <span id="stat-yield" class="text-lg sm:text-xl font-black text-white">0%</span>
                 </div>
             </div>
 
-            <!-- AI PARSER & GESTIONE IN BLOCCO -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg">
-                <div class="flex items-center justify-between mb-2.5">
-                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+            <!-- AI PARSER -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg space-y-2">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
                         <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> AI Parser & Gestione in Blocco
                     </h2>
-                    <span class="text-[10px] sm:text-[11px] text-slate-500">Con controllo duplicati, filtro quote (&ge;1.30) e normalizzazione automatica</span>
+                    <span class="text-[9px] text-slate-500 hidden sm:inline">Normalizzazione e filtro quote</span>
                 </div>
-                <div class="space-y-2.5">
-                    <textarea id="ai-input" rows="3" placeholder="Formato inserimento in blocco:&#10;DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;&#10;Oppure aggiorna esiti:&#10;Paju Frontier - Hwaseong - Esito: Persa"
-                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 sm:p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
-                    <div class="flex justify-end">
-                        <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2.5 rounded-lg font-bold flex items-center justify-center gap-1.5 transition">
-                            <i data-lucide="check-check" class="w-4 h-4"></i> Esegui AI Parser / Salva in Blocco
-                        </button>
-                    </div>
+                <textarea id="ai-input" rows="3" placeholder="Formato: DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;Oppure aggiorna esiti: Squadra A - Squadra B - Esito: Vinta"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
+                <div class="flex justify-end">
+                    <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="check-check" class="w-4 h-4"></i> Inserisci / Aggiorna in Blocco
+                    </button>
                 </div>
             </section>
 
-            <!-- CLASSIFICA RENDIMENTO FORNITORI CON ELIMINAZIONE DIRETTA -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                    <div>
-                        <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
-                            <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Classifica Rendimento Fornitori / Tipster
-                        </h2>
-                        <p class="text-[10px] sm:text-[11px] text-slate-400">Margini, resa percentuale e cifra netta. Puoi eliminare un fornitore e tutte le sue giocate con un clic.</p>
-                    </div>
-                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 self-start sm:self-auto font-bold uppercase">Uso Riservato Admin</span>
+            <!-- CLASSIFICA RENDIMENTO FORNITORI -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                        <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Rendimento Fornitori
+                    </h2>
+                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20 font-bold uppercase">Report</span>
                 </div>
 
-                <div class="overflow-x-auto rounded-xl border border-slate-800">
-                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap">
-                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
+                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[650px]">
+                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
                             <tr>
                                 <th class="py-2.5 px-3 text-center">Rank</th>
-                                <th class="py-2.5 px-3">Fornitore / Tipster</th>
-                                <th class="py-2.5 px-3 text-center">Giocate Chiuse</th>
+                                <th class="py-2.5 px-3">Fornitore</th>
+                                <th class="py-2.5 px-3 text-center">Chiuse</th>
                                 <th class="py-2.5 px-3 text-center">Win Rate</th>
-                                <th class="py-2.5 px-3 text-center">Yield / ROI</th>
-                                <th class="py-2.5 px-3 text-right">Profitto (Unità)</th>
-                                <th class="py-2.5 px-3 text-right">Cifra Guadagnata (€)</th>
-                                <th class="py-2.5 px-3 text-center">Rimuovi Fornitore</th>
+                                <th class="py-2.5 px-3 text-center">Yield</th>
+                                <th class="py-2.5 px-3 text-right">Profitto (u)</th>
+                                <th class="py-2.5 px-3 text-right">Guadagno (€)</th>
+                                <th class="py-2.5 px-3 text-center">Elimina</th>
                             </tr>
                         </thead>
                         <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
@@ -539,19 +531,16 @@
             </section>
 
             <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-slate-900 border border-slate-800 p-2.5 sm:p-3 rounded-xl">
-                <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
-                    <span class="text-[11px] text-slate-400 font-semibold mr-1 hidden sm:inline">Stato:</span>
-                    <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Tutti</button>
-                    <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition whitespace-nowrap">In Corso</button>
-                    <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn flex-1 sm:flex-initial text-xs px-3 py-1.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition">Chiusi</button>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900 border border-slate-800 p-2.5 rounded-xl">
+                <div class="grid grid-cols-3 sm:flex items-center gap-1.5 w-full sm:w-auto">
+                    <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn text-xs py-1.5 px-2.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition text-center">Tutti</button>
+                    <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn text-xs py-1.5 px-2.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition text-center whitespace-nowrap">In Corso</button>
+                    <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn text-xs py-1.5 px-2.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition text-center">Chiusi</button>
                 </div>
 
-                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto">
+                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto pt-1 sm:pt-0">
                     <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-2 py-1 rounded-lg">
-                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold flex items-center gap-1">
-                            <i data-lucide="calculator" class="w-3 h-3 text-emerald-400"></i> 1u =
-                        </span>
+                        <span class="text-[10px] text-slate-400 font-semibold">1u =</span>
                         <select id="admin-unit-multiplier" onchange="renderDashboard()" class="bg-transparent text-xs text-white font-mono font-bold focus:outline-none cursor-pointer">
                             <option value="5">5 €</option>
                             <option value="10" selected>10 €</option>
@@ -561,33 +550,37 @@
                         </select>
                     </div>
 
-                    <div class="flex items-center gap-1">
-                        <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium">
-                            <option value="all">Tutti i Fornitori</option>
-                        </select>
-                    </div>
+                    <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium flex-1 sm:flex-initial">
+                        <option value="all">Tutti i Fornitori</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- TABELLA PRONOSTICI COMPLETA -->
-            <section class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
-                            <tr>
-                                <th class="py-2.5 px-3">Data</th>
-                                <th class="py-2.5 px-3">Partita</th>
-                                <th class="py-2.5 px-3">Pronostico</th>
-                                <th class="py-2.5 px-3">Quota/Stake</th>
-                                <th class="py-2.5 px-3">Fornitore</th>
-                                <th class="py-2.5 px-3 text-center">Vetrina</th>
-                                <th class="py-2.5 px-3">Stato & Azione Rapida</th>
-                                <th class="py-2.5 px-3 text-center">Telegram</th>
-                                <th class="py-2.5 px-3 text-right">Elimina</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bets-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
-                    </table>
+            <!-- SEZIONE PRONOSTICI: RESPONSIVE (CARDS SU MOBILE, TABELLA SU DESKTOP) -->
+            <section class="space-y-3">
+                <!-- VISTA MOBILE: Feed di Card Verticali Touch-Friendly -->
+                <div class="block md:hidden space-y-2.5" id="admin-mobile-bets-container"></div>
+
+                <!-- VISTA DESKTOP: Tabella Tradizionale Completa -->
+                <div class="hidden md:block bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
+                                <tr>
+                                    <th class="py-2.5 px-3">Data</th>
+                                    <th class="py-2.5 px-3">Partita</th>
+                                    <th class="py-2.5 px-3">Pronostico</th>
+                                    <th class="py-2.5 px-3">Quota/Stake</th>
+                                    <th class="py-2.5 px-3">Fornitore</th>
+                                    <th class="py-2.5 px-3 text-center">Vetrina</th>
+                                    <th class="py-2.5 px-3">Stato & Azione Rapida</th>
+                                    <th class="py-2.5 px-3 text-center">Telegram</th>
+                                    <th class="py-2.5 px-3 text-right">Elimina</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bets-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -623,10 +616,7 @@
             if (lower.includes('atmbet')) return 'AtmBetSignal';
             if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
             if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
-            
-            // Regola prioritaria per Valuebet: non viene catturata dalle altre regole BetMines
             if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
-            
             if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
             if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
             if (lower.includes('zcode')) return 'ZCODE';
@@ -647,7 +637,7 @@
         let currentClusterMode = 'all';
         let stagedVerificationResults = {};
 
-        // ==================== GESTIONE FORNITORI ABILITATI CANALE PURE ====================
+        // GESTIONE FORNITORI ABILITATI CANALE PURE
         function getPureSelectedTipsters() {
             try {
                 const raw = localStorage.getItem(PURE_TIPSTERS_KEY);
@@ -695,7 +685,7 @@
             existingTipsters.sort().forEach(t => {
                 const isChecked = selected.includes(t);
                 const label = document.createElement('label');
-                label.className = `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs cursor-pointer select-none transition ${isChecked ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'}`;
+                label.className = `inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] cursor-pointer select-none transition ${isChecked ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'}`;
 
                 label.innerHTML = `
                     <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="togglePureTipster('${t.replace(/'/g, "\\'")}', this.checked)" class="accent-amber-500 rounded cursor-pointer">
@@ -705,7 +695,7 @@
             });
         }
 
-        // ==================== MOTORE VERIFICA RISULTATI DETERMINISTICO ====================
+        // MOTORE VERIFICA RISULTATI
         function evaluatePickOutcome(predictionStr, homeScore, awayScore) {
             const h = parseInt(homeScore);
             const a = parseInt(awayScore);
@@ -717,33 +707,23 @@
             if (pred === '1') return h > a ? 'won' : 'lost';
             if (pred === 'X') return h === a ? 'won' : 'lost';
             if (pred === '2') return a > h ? 'won' : 'lost';
-
             if (pred === '1X') return (h >= a) ? 'won' : 'lost';
             if (pred === 'X2') return (a >= h) ? 'won' : 'lost';
             if (pred === '12') return (h !== a) ? 'won' : 'lost';
-
             if (pred === 'GG' || pred === 'GOAL' || pred === 'GOL') return (h > 0 && a > 0) ? 'won' : 'lost';
             if (pred === 'NG' || pred === 'NO GOAL' || pred === 'NO GOL') return (h === 0 || a === 0) ? 'won' : 'lost';
 
             const overMatch = pred.match(/OVER\s*(\d+(?:\.\d+)?)/i);
-            if (overMatch) {
-                const threshold = parseFloat(overMatch[1]);
-                return totalGoals > threshold ? 'won' : 'lost';
-            }
+            if (overMatch) return totalGoals > parseFloat(overMatch[1]) ? 'won' : 'lost';
 
             const underMatch = pred.match(/UNDER\s*(\d+(?:\.\d+)?)/i);
-            if (underMatch) {
-                const threshold = parseFloat(underMatch[1]);
-                return totalGoals < threshold ? 'won' : 'lost';
-            }
+            if (underMatch) return totalGoals < parseFloat(underMatch[1]) ? 'won' : 'lost';
 
             if (pred.includes('+')) {
                 const parts = pred.split('+').map(p => p.trim());
                 const res1 = evaluatePickOutcome(parts[0], h, a);
                 const res2 = evaluatePickOutcome(parts[1], h, a);
-                if (res1 && res2) {
-                    return (res1 === 'won' && res2 === 'won') ? 'won' : 'lost';
-                }
+                if (res1 && res2) return (res1 === 'won' && res2 === 'won') ? 'won' : 'lost';
             }
 
             return null;
@@ -760,7 +740,7 @@
             const pendingBets = bets.filter(b => b.status === 'pending');
 
             if (pendingBets.length === 0) {
-                listEl.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs font-medium">Nessun pronostico in stato "In Corso" da verificare.</div>`;
+                listEl.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs font-medium">Nessun pronostico in corso da verificare.</div>`;
                 if (badgeEl) badgeEl.innerText = "0 giocate in attesa";
                 modal.classList.remove('hidden');
                 return;
@@ -879,7 +859,7 @@
             alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati su GitHub.`);
         }
 
-        // ==================== GESTIONE ABBONATI (users.json) ====================
+        // GESTIONE ABBONATI (users.json)
         function loadAllUsers() {
             try {
                 const raw = localStorage.getItem(USERS_LOCAL_KEY);
@@ -970,12 +950,12 @@
             const planFreq = {};
 
             if (users.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun abbonato presente in users.json. Inserisci il primo per iniziare.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun abbonato presente in users.json.</td></tr>`;
             }
 
             users.forEach(u => {
                 const userIdent = u.identifier || u.email || u.customer_email || 'Utente';
-                const accessCode = u.access_code || u.code || (u.telegram_link ? 'Link Telegram' : '-');
+                const accessCode = u.access_code || u.code || '-';
                 const expDate = u.expires_at || u.expiration || '-';
                 const isExpired = expDate !== '-' && expDate < todayStr;
 
@@ -988,31 +968,30 @@
                     ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
                     : (userPlan === 'elite' 
                         ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
-                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ALL-INCLUSIVE</span>`);
+                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ALL-IN</span>`);
 
                 const statusBadge = !isExpired
-                    ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded font-mono text-[9px] font-bold">ATTIVO</span>`
-                    : `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/30 px-2 py-0.5 rounded font-mono text-[9px] font-bold">SCADUTO</span>`;
+                    ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono text-[9px] font-bold">ATTIVO</span>`
+                    : `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/30 px-1.5 py-0.2 rounded font-mono text-[9px] font-bold">SCADUTO</span>`;
 
                 const tr = document.createElement('tr');
                 tr.className = isExpired ? "hover:bg-rose-500/[0.03]" : "hover:bg-emerald-500/[0.03]";
 
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 font-bold text-white">
+                    <td class="py-2 px-3 font-bold text-white">
                         <div>${userIdent}</div>
-                        <div class="text-[9px] text-slate-500 font-mono">Iscritto il ${u.created_at || '-'}</div>
+                        <div class="text-[9px] text-slate-500 font-mono">${u.telegram_id || '-'}</div>
                     </td>
-                    <td class="py-2.5 px-3">${planBadge}</td>
-                    <td class="py-2.5 px-3 font-mono text-slate-300 text-[11px]">${u.telegram_id || u.telegram_link || '-'}</td>
-                    <td class="py-2.5 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer" title="Codice">${accessCode}</td>
-                    <td class="py-2.5 px-3 text-center font-mono text-slate-300">${expDate}</td>
-                    <td class="py-2.5 px-3 text-center">${statusBadge}</td>
-                    <td class="py-2.5 px-3 text-right">
-                        <div class="flex items-center justify-end gap-1.5">
-                            <button type="button" onclick="extendUserDays('${u.id}', 30)" title="Aggiungi 30 giorni di abbonamento" class="text-xs bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-2 py-1 rounded font-bold transition">
-                                +30gg
+                    <td class="py-2 px-3">${planBadge}</td>
+                    <td class="py-2 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer">${accessCode}</td>
+                    <td class="py-2 px-3 text-center font-mono text-slate-300">${expDate}</td>
+                    <td class="py-2 px-3 text-center">${statusBadge}</td>
+                    <td class="py-2 px-3 text-right">
+                        <div class="flex items-center justify-end gap-1">
+                            <button type="button" onclick="extendUserDays('${u.id}', 30)" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-2 py-0.5 rounded font-bold transition">
+                                +30g
                             </button>
-                            <button type="button" onclick="deleteUser('${u.id}')" title="Rimuovi utente" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
+                            <button type="button" onclick="deleteUser('${u.id}')" class="text-rose-400 p-1 rounded hover:bg-rose-500/10 transition">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
@@ -1075,7 +1054,7 @@
                 });
 
                 const syncEl = document.getElementById('usr-sync-status');
-                if (syncEl) syncEl.innerText = putRes.ok ? "Sincronizzato" : "Errore Sincro";
+                if (syncEl) syncEl.innerText = putRes.ok ? "Sincro" : "Errore";
             } catch(e) {
                 const syncEl = document.getElementById('usr-sync-status');
                 if (syncEl) syncEl.innerText = "Offline";
@@ -1106,17 +1085,17 @@
                     if (Array.isArray(parsed)) {
                         localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(parsed));
                         renderUsersTable();
-                        alert(`Caricati ${parsed.length} abbonati aggiornati da users.json su GitHub!`);
+                        alert(`Caricati ${parsed.length} abbonati da users.json su GitHub!`);
                     }
                 } else {
                     alert("File users.json non trovato su GitHub.");
                 }
             } catch(err) {
-                alert("Errore lettura users.json da GitHub: " + err.message);
+                alert("Errore lettura users.json: " + err.message);
             }
         }
 
-        // ==================== CONFIGURAZIONE E DISPATCHER TELEGRAM ====================
+        // TELEGRAM CONFIG & DISPATCH
         function loadTelegramConfig() {
             try {
                 const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
@@ -1178,12 +1157,12 @@
             const pendings = bets.filter(b => b.status === 'pending' && extractStandardDate(b.event_date) >= todayStr && !b.tg_sent);
             
             if (pendings.length === 0) {
-                alert("Nessun NUOVO pronostico da inviare. Tutti i pronostici odierni sono già stati recapitati!");
+                alert("Nessun NUOVO pronostico da inviare per oggi!");
                 return;
             }
 
             const statusEl = document.getElementById('tg_status_msg');
-            statusEl.innerText = "Invio in corso dei nuovi segnali...";
+            statusEl.innerText = "Invio in corso...";
 
             if (channelType === 'pure') {
                 const allowedPureTipsters = getPureSelectedTipsters();
@@ -1194,7 +1173,7 @@
                 });
 
                 if (toSend.length === 0) {
-                    alert(`Nessun NUOVO segnale PURE da inviare per oggi dai fornitori abilitati (${allowedPureTipsters.join(', ')}).`);
+                    alert(`Nessun segnale PURE da inviare per i canali attivi (${allowedPureTipsters.join(', ')}).`);
                     statusEl.innerText = "";
                     return;
                 }
@@ -1206,21 +1185,20 @@
                     msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
                     msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
                 });
-                msg += `🔗 Verifica in tempo reale: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
+                msg += `🔗 Web App: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet</a>`;
 
                 try {
                     const res = await sendTelegramMessage(token, chatId, msg);
                     if (res.ok) {
                         toSend.forEach(b => b.tg_sent = true);
                         persistBets(bets);
-
-                        statusEl.innerText = `Inviati con successo ${toSend.length} nuovi segnali a PURE!`;
+                        statusEl.innerText = `Inviati ${toSend.length} segnali a PURE!`;
                         setTimeout(() => { statusEl.innerText = ""; }, 5000);
                     } else {
-                        statusEl.innerText = `Errore Telegram: ${res.description}`;
+                        statusEl.innerText = `Errore: ${res.description}`;
                     }
                 } catch(e) {
-                    statusEl.innerText = `Errore di rete: ${e.message}`;
+                    statusEl.innerText = `Errore: ${e.message}`;
                 }
 
             } else {
@@ -1231,7 +1209,7 @@
 
                 for (let bIdx = 0; bIdx < totalBatches; bIdx++) {
                     const batch = toSend.slice(bIdx * BATCH_SIZE, (bIdx + 1) * BATCH_SIZE);
-                    let msg = `🌐 <b>ATMBET SIGNAL | AGGIORNAMENTO SEGNALI (${bIdx + 1}/${totalBatches})</b> 🌐\n`;
+                    let msg = `🌐 <b>ATMBET SIGNAL | AGGIORNAMENTO (${bIdx + 1}/${totalBatches})</b> 🌐\n`;
                     msg += `📅 <i>Sessione: ${todayStr}</i>\n\n`;
 
                     batch.forEach((b, i) => {
@@ -1243,7 +1221,7 @@
                     });
 
                     if (bIdx === totalBatches - 1) {
-                        msg += `🔗 Dashboard Completa: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
+                        msg += `🔗 Dashboard: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
                     }
 
                     try {
@@ -1251,13 +1229,12 @@
                         if (res.ok) {
                             batch.forEach(b => b.tg_sent = true);
                             sentCount += batch.length;
-                            statusEl.innerText = `Inviata parte ${bIdx + 1} di ${totalBatches}...`;
                         } else {
                             statusEl.innerText = `Errore: ${res.description}`;
                             return;
                         }
                     } catch(e) {
-                        statusEl.innerText = `Errore invio: ${e.message}`;
+                        statusEl.innerText = `Errore: ${e.message}`;
                         return;
                     }
 
@@ -1265,7 +1242,7 @@
                 }
 
                 persistBets(bets);
-                statusEl.innerText = `Inviati con successo ${sentCount} nuovi segnali ad All-Inclusive!`;
+                statusEl.innerText = `Inviati ${sentCount} segnali ad All-Inclusive!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
             }
         }
@@ -1291,7 +1268,7 @@
             const channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
 
             if (!chatId) {
-                alert(`Chat ID mancante per il canale ${channelLabel}.`);
+                alert(`Chat ID mancante per ${channelLabel}.`);
                 return;
             }
 
@@ -1308,9 +1285,9 @@
                 if (res.ok) {
                     b.tg_sent = true;
                     persistBets(bets);
-                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
+                    alert(`Pronostico inviato a ${channelLabel}!`);
                 } else {
-                    alert(`Errore invio Telegram: ${res.description}`);
+                    alert(`Errore Telegram: ${res.description}`);
                 }
             } catch(e) {
                 alert(`Errore rete: ${e.message}`);
@@ -1382,10 +1359,7 @@
 
         function normalizeMatchText(str) {
             if (!str) return '';
-            return str.toLowerCase()
-                      .replace(/[-–—/vs\.]/g, ' ')
-                      .replace(/\s+/g, ' ')
-                      .trim();
+            return str.toLowerCase().replace(/[-–—/vs\.]/g, ' ').replace(/\s+/g, ' ').trim();
         }
 
         function scanForConflictsAndDuplicates(bets) {
@@ -1405,8 +1379,7 @@
                 let foundKey = Object.keys(matchGroups).find(k => {
                     const wordsA = k.split(' ').filter(w => w.length > 2);
                     const wordsB = norm.split(' ').filter(w => w.length > 2);
-                    const intersection = wordsA.filter(w => wordsB.includes(w));
-                    return intersection.length >= 2;
+                    return wordsA.filter(w => wordsB.includes(w)).length >= 2;
                 });
 
                 const groupKey = foundKey || norm;
@@ -1422,7 +1395,7 @@
             }
 
             conflictPanel.classList.remove('hidden');
-            if (badge) badge.innerText = `${conflicts.length} da verificare`;
+            if (badge) badge.innerText = `${conflicts.length}`;
 
             conflictContainer.innerHTML = '';
             conflicts.forEach(([key, items]) => {
@@ -1430,38 +1403,28 @@
                 const isConflict = uniquePicks.length > 1;
 
                 const box = document.createElement('div');
-                box.className = "bg-slate-950 p-3 rounded-xl border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-3";
+                box.className = "bg-slate-950 p-2.5 rounded-xl border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-2";
 
                 let itemsListHtml = items.map(i => `
-                    <div class="text-xs flex items-center justify-between gap-2 bg-slate-900 px-2 py-1 rounded border border-slate-800">
-                        <span class="text-slate-300 font-semibold">${i.original_tipster}: <span class="text-emerald-400 font-bold">${i.prediction}</span> (@${parseFloat(i.odds).toFixed(2)})</span>
-                        <div class="flex items-center gap-1.5">
-                            <span class="font-mono text-slate-400 text-[10px]">${i.stake.toFixed(1)}u</span>
-                            <button onclick="deleteBet('${i.id}')" title="Elimina questa giocata" class="text-rose-400 hover:text-rose-300 p-0.5 rounded text-[10px] border border-rose-500/30 px-1 bg-rose-500/10 transition">
-                                Rimuovi
-                            </button>
-                        </div>
+                    <div class="text-[11px] flex items-center justify-between gap-1.5 bg-slate-900 px-2 py-1 rounded border border-slate-800">
+                        <span class="text-slate-300">${i.original_tipster}: <strong class="text-emerald-400">${i.prediction}</strong> (@${parseFloat(i.odds).toFixed(2)})</span>
+                        <button onclick="deleteBet('${i.id}')" class="text-rose-400 p-0.5 rounded text-[10px] border border-rose-500/30 px-1 bg-rose-500/10">✕</button>
                     </div>
                 `).join('');
 
                 box.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="font-bold text-white text-xs sm:text-sm">${items[0].match_name}</span>
-                            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded uppercase font-mono ${isConflict ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'}">
-                                ${isConflict ? 'Pronostici Contrapposti' : 'Stesso Pronostico (Duplicato)'}
+                    <div class="space-y-0.5">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white text-xs">${items[0].match_name}</span>
+                            <span class="text-[8px] font-bold px-1.5 py-0.2 rounded font-mono ${isConflict ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'}">
+                                ${isConflict ? 'Contrapposti' : 'Duplicati'}
                             </span>
                         </div>
-                        <div class="text-[10px] text-slate-400 font-mono">Stake Rischio Totale: <span class="text-white font-bold">${items.reduce((acc, curr) => acc + curr.stake, 0).toFixed(1)}u</span></div>
                     </div>
                     
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-                        <div class="space-y-1">
-                            ${itemsListHtml}
-                        </div>
-                        <button type="button" onclick="confirmConflictMatch('${key}')" class="bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 border border-emerald-500/40 text-[11px] font-bold px-3 py-1.5 rounded-lg transition whitespace-nowrap flex items-center justify-center gap-1">
-                            <i data-lucide="check" class="w-3.5 h-3.5"></i> Conferma & Mantieni
-                        </button>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
+                        <div class="space-y-1">${itemsListHtml}</div>
+                        <button type="button" onclick="confirmConflictMatch('${key}')" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold px-2 py-1 rounded-lg">Mantieni</button>
                     </div>
                 `;
                 conflictContainer.appendChild(box);
@@ -1473,17 +1436,10 @@
         function extractStandardDate(rawDateStr) {
             if (!rawDateStr) return '';
             const clean = String(rawDateStr).trim();
-
             const isoMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
-            if (isoMatch) {
-                return `${isoMatch[1]}-${String(isoMatch[2]).padStart(2, '0')}-${String(isoMatch[3]).padStart(2, '0')}`;
-            }
-
+            if (isoMatch) return `${isoMatch[1]}-${String(isoMatch[2]).padStart(2, '0')}-${String(isoMatch[3]).padStart(2, '0')}`;
             const euMatch = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
-            if (euMatch) {
-                return `${euMatch[3]}-${String(euMatch[2]).padStart(2, '0')}-${String(euMatch[1]).padStart(2, '0')}`;
-            }
-
+            if (euMatch) return `${euMatch[3]}-${String(euMatch[2]).padStart(2, '0')}-${String(euMatch[1]).padStart(2, '0')}`;
             return clean.slice(0, 10);
         }
 
@@ -1500,16 +1456,12 @@
             yesterday.setDate(today.getDate() - 1);
 
             const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
-            
-            const todayLabel = `Oggi (${today.getDate()} ${monthNames[today.getMonth()]})`;
-            const yesterdayLabel = `Ieri (${yesterday.getDate()} ${monthNames[yesterday.getMonth()]})`;
-
             const btnToday = document.getElementById('btn-preset-today');
             const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
 
-            if (btnToday) btnToday.innerText = todayLabel;
-            if (btnYesterday) btnYesterday.innerText = yesterdayLabel;
+            if (btnToday) btnToday.innerText = `Oggi (${today.getDate()})`;
+            if (btnYesterday) btnYesterday.innerText = `Ieri (${yesterday.getDate()})`;
 
             const todayStr = getLocalDateString(today);
             if (dateInput) {
@@ -1542,7 +1494,6 @@
 
             const today = new Date();
             const todayStr = getLocalDateString(today);
-
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
             const yesterdayStr = getLocalDateString(yesterday);
@@ -1570,7 +1521,6 @@
         function loadGitHubSettings() {
             const savedRepo = localStorage.getItem(GH_REPO_KEY) || '';
             const savedToken = localStorage.getItem(GH_TOKEN_KEY) || '';
-
             const repoInput = document.getElementById('gh-repo');
             const tokenInput = document.getElementById('gh-token');
 
@@ -1603,23 +1553,23 @@
             if (!icon || !text) return;
 
             if (status === 'ready') {
-                icon.className = 'w-3 h-3 rounded-full bg-emerald-500 shrink-0 animate-pulse';
-                text.innerText = 'Pronto. I commit automatici su bets.json e users.json sono attivi.';
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 animate-pulse';
+                text.innerText = 'Pronto. Commit automatici attivi.';
                 text.className = 'text-[10px] text-emerald-400 font-mono';
             } else if (status === 'syncing') {
-                icon.className = 'w-3 h-3 rounded-full bg-amber-500 shrink-0 animate-ping';
-                text.innerText = 'Invio aggiornamento a GitHub in corso...';
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0 animate-ping';
+                text.innerText = 'Invio a GitHub in corso...';
                 text.className = 'text-[10px] text-amber-400 font-mono';
             } else if (status === 'success') {
-                icon.className = 'w-3 h-3 rounded-full bg-emerald-500 shrink-0';
-                text.innerText = `Sincronizzato con successo su GitHub (${new Date().toLocaleTimeString()}). Tutto il sito è aggiornato!`;
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0';
+                text.innerText = `Sincronizzato (${new Date().toLocaleTimeString()})`;
                 text.className = 'text-[10px] text-emerald-400 font-mono font-bold';
             } else if (status === 'error') {
-                icon.className = 'w-3 h-3 rounded-full bg-rose-500 shrink-0';
-                text.innerText = 'Errore sincronizzazione: ' + (message || 'Verifica dati.');
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0';
+                text.innerText = 'Errore: ' + (message || 'Verifica dati');
                 text.className = 'text-[10px] text-rose-400 font-mono font-bold';
             } else {
-                icon.className = 'w-3 h-3 rounded-full bg-slate-500 shrink-0';
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0';
                 text.innerText = 'Non configurata.';
                 text.className = 'text-[10px] text-slate-400 font-mono';
             }
@@ -1652,7 +1602,7 @@
                 const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
 
                 const bodyPayload = {
-                    message: `Aggiornamento automatico bets.json da AtmBet Console [${new Date().toISOString()}]`,
+                    message: `Aggiornamento automatico bets.json [${new Date().toISOString()}]`,
                     content: base64Content
                 };
                 if (currentSha) bodyPayload.sha = currentSha;
@@ -1710,8 +1660,6 @@
                 const matchText = String(b.match_name || b.match || b.teams || 'Evento');
                 let canonicalTipster = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
 
-                // Separazione automatica BetMines: PreMatch per singole, BetMines per multiple (con '/')
-                // I pronostici BetMines Valuebet non vengono alterati
                 if (canonicalTipster.toLowerCase().includes('betmines') && !canonicalTipster.toLowerCase().includes('valuebet')) {
                     const isParlay = matchText.includes('/');
                     canonicalTipster = isParlay ? 'BetMines' : 'BetMines PreMatch';
@@ -1812,7 +1760,7 @@
 
             if (updatedCount > 0) {
                 persistBets(bets);
-                alert(`Aggiornati con successo gli esiti di ${updatedCount} giocate!`);
+                alert(`Aggiornati esiti di ${updatedCount} giocate!`);
                 document.getElementById('ai-input').value = '';
                 return;
             }
@@ -1831,8 +1779,6 @@
 
                         if (oddsPart < 1.30) return;
 
-                        // Riconoscimento automatico BetMines: PreMatch (singole) vs BetMines (multiple)
-                        // Rimangono invariate le Valuebet
                         if (tipsterPart.toLowerCase().includes('betmines') && !tipsterPart.toLowerCase().includes('valuebet')) {
                             tipsterPart = matchPart.includes('/') ? 'BetMines' : 'BetMines PreMatch';
                         }
@@ -1906,19 +1852,13 @@
 
             const canonical = canonicalizeTipsterName(tipsterName);
             const confirmed = confirm(
-                `ATTENZIONE: Eliminare definitivamente il fornitore "${canonical}"?\n\n` +
-                `Verranno cancellati dall'archivio TUTTI i suoi pronostici (in corso e chiusi) ` +
-                `e verrà sincronizzato subito su GitHub (bets.json).`
+                `ATTENZIONE: Eliminare il fornitore "${canonical}"?\n\nVerranno cancellati TUTTI i suoi pronostici.`
             );
 
             if (!confirmed) return;
 
             const allBets = loadAllBets();
-            const beforeCount = allBets.length;
-
             const remainingBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) !== canonical);
-            const deletedCount = beforeCount - remainingBets.length;
-
             persistBets(remainingBets);
 
             if (currentTipsterFilter.toLowerCase() === canonical.toLowerCase()) {
@@ -1927,7 +1867,7 @@
                 if (select) select.value = 'all';
             }
 
-            alert(`Fornitore "${canonical}" rimosso con successo!\nCancellati ${deletedCount} pronostici correlati.`);
+            alert(`Fornitore "${canonical}" rimosso con successo!`);
         }
 
         function setFilter(filterType, element) {
@@ -2005,46 +1945,28 @@
                 const roi = t.totalStake > 0 ? ((t.netProfit / t.totalStake) * 100).toFixed(1) : 0;
                 const fiatProfit = t.netProfit * unitVal;
 
-                let rankBadge = `<span class="font-mono text-slate-400 font-bold">${index + 1}</span>`;
-
+                let rankBadge = `<span class="font-mono text-slate-400 font-bold text-xs">${index + 1}</span>`;
                 if (t.netProfit > 0) {
-                    if (index === 0) rankBadge = `<span class="text-sm">🥇</span>`;
-                    else if (index === 1) rankBadge = `<span class="text-sm">🥈</span>`;
-                    else if (index === 2) rankBadge = `<span class="text-sm">🥉</span>`;
+                    if (index === 0) rankBadge = `🥇`;
+                    else if (index === 1) rankBadge = `🥈`;
+                    else if (index === 2) rankBadge = `🥉`;
                 }
 
                 const escapedName = t.name.replace(/'/g, "\\'");
 
                 const tr = document.createElement('tr');
-                tr.className = t.netProfit >= 0 
-                    ? "hover:bg-emerald-500/[0.04] transition" 
-                    : "hover:bg-rose-500/[0.04] transition";
+                tr.className = t.netProfit >= 0 ? "hover:bg-emerald-500/[0.04]" : "hover:bg-rose-500/[0.04]";
 
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-center">${rankBadge}</td>
-                    <td class="py-2.5 px-3">
-                        <div class="font-bold text-white flex items-center gap-1.5">
-                            <span>${t.name}</span>
-                            ${(index === 0 && t.netProfit > 0) ? '<span class="text-[8px] bg-amber-500/20 text-amber-400 px-1 py-0.2 rounded font-black uppercase tracking-wider">Top Performer</span>' : ''}
-                        </div>
-                    </td>
-                    <td class="py-2.5 px-3 text-center font-mono text-slate-300">
-                        ${t.total} <span class="text-[10px] text-slate-500">(${t.won}V - ${t.lost}P)</span>
-                    </td>
-                    <td class="py-2.5 px-3 text-center font-mono font-bold ${parseFloat(winRate) >= 55 ? 'text-amber-400' : 'text-slate-300'}">
-                        ${winRate}%
-                    </td>
-                    <td class="py-2.5 px-3 text-center font-mono font-bold ${parseFloat(roi) >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
-                        ${parseFloat(roi) >= 0 ? '+' : ''}${roi}%
-                    </td>
-                    <td class="py-2.5 px-3 text-right font-mono font-black ${t.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
-                        ${t.netProfit >= 0 ? '+' : ''}${t.netProfit.toFixed(2)}u
-                    </td>
-                    <td class="py-2.5 px-3 text-right font-mono font-black ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
-                        ${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €
-                    </td>
-                    <td class="py-2.5 px-3 text-center">
-                        <button type="button" onclick="deleteTipsterAndBets('${escapedName}')" title="Elimina '${t.name}' e tutti i suoi pronostici" class="p-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition">
+                    <td class="py-2 px-3 text-center">${rankBadge}</td>
+                    <td class="py-2 px-3 font-bold text-white">${t.name}</td>
+                    <td class="py-2 px-3 text-center font-mono text-slate-300">${t.total} (${t.won}V-${t.lost}P)</td>
+                    <td class="py-2 px-3 text-center font-mono font-bold ${parseFloat(winRate) >= 55 ? 'text-amber-400' : 'text-slate-300'}">${winRate}%</td>
+                    <td class="py-2 px-3 text-center font-mono font-bold ${parseFloat(roi) >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${parseFloat(roi) >= 0 ? '+' : ''}${roi}%</td>
+                    <td class="py-2 px-3 text-right font-mono font-black ${t.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${t.netProfit >= 0 ? '+' : ''}${t.netProfit.toFixed(2)}u</td>
+                    <td class="py-2 px-3 text-right font-mono font-black ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €</td>
+                    <td class="py-2 px-3 text-center">
+                        <button type="button" onclick="deleteTipsterAndBets('${escapedName}')" class="p-1 text-rose-400 hover:text-rose-300">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         </button>
                     </td>
@@ -2057,11 +1979,9 @@
         function calculateSimulationInAdmin(allBets, unitVal) {
             const today = new Date();
             const todayStr = getLocalDateString(today);
-
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
             const yesterdayStr = getLocalDateString(yesterday);
-
             const d7 = new Date();
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
@@ -2072,17 +1992,11 @@
 
                 const bDate = extractStandardDate(b.event_date);
 
-                if (currentSimMode === 'today') {
-                    return bDate === todayStr;
-                } else if (currentSimMode === 'yesterday') {
-                    return bDate === yesterdayStr;
-                } else if (currentSimMode === '7days') {
-                    return bDate >= d7Str && bDate <= todayStr;
-                } else if (currentSimMode === 'all') {
-                    return true;
-                } else if (currentSimMode === 'custom') {
-                    return bDate === currentCustomDate;
-                }
+                if (currentSimMode === 'today') return bDate === todayStr;
+                if (currentSimMode === 'yesterday') return bDate === yesterdayStr;
+                if (currentSimMode === '7days') return bDate >= d7Str && bDate <= todayStr;
+                if (currentSimMode === 'all') return true;
+                if (currentSimMode === 'custom') return bDate === currentCustomDate;
                 return true;
             });
 
@@ -2096,11 +2010,8 @@
 
             simBets.forEach(b => {
                 const s = b.stake || 1.0;
-                if (b.status === 'won') {
-                    netProfit += (b.odds - 1) * s;
-                } else if (b.status === 'lost') {
-                    netProfit -= s;
-                }
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
                 totalStake += s;
             });
 
@@ -2110,13 +2021,13 @@
             const profitEl = document.getElementById('sim-profit-units');
             if (profitEl) {
                 profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
-                profitEl.className = `text-lg sm:text-xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+                profitEl.className = `text-base sm:text-lg font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
             }
 
             const fiatEl = document.getElementById('sim-profit-fiat');
             if (fiatEl) {
                 fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
-                fiatEl.className = `text-[10px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+                fiatEl.className = `text-[10px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
             }
 
             const roiEl = document.getElementById('sim-roi');
@@ -2145,20 +2056,20 @@
 
             if (currentClusterMode === 'pure') {
                 const pureTipsters = getPureSelectedTipsters();
-                chEl.innerText = pureTipsters.length > 0 ? pureTipsters.join(', ') : "Canali Pure Selezionati";
-                volEl.innerText = "Top Selezioni Filtrate";
-                wrEl.innerText = "> 65.0% Win Rate Target";
-                targetEl.innerText = "Piano 'Pure Signal' (Top Ticket)";
+                chEl.innerText = pureTipsters.length > 0 ? pureTipsters.join(', ') : "Canali Pure";
+                volEl.innerText = "Top Selezioni";
+                wrEl.innerText = "> 65.0% Target";
+                targetEl.innerText = "Piano 'Pure Signal'";
             } else if (currentClusterMode === 'elite') {
-                chEl.innerText = "Top Fornitori (ROI Positivo)";
+                chEl.innerText = "Top ROI+";
                 volEl.innerText = "~10-15 / die";
-                wrEl.innerText = "~ 62.5% Win Rate";
-                targetEl.innerText = "Piano Bilanciato / Elite";
+                wrEl.innerText = "~ 62.5% Target";
+                targetEl.innerText = "Piano Elite";
             } else {
                 chEl.innerText = "Tutti (Canali Connessi)";
                 volEl.innerText = "Full (~30-50 / die)";
-                wrEl.innerText = "50-60% Win Rate";
-                targetEl.innerText = "Piano 'All-Inclusive'";
+                wrEl.innerText = "50-60% Flusso";
+                targetEl.innerText = "All-Inclusive";
             }
         }
 
@@ -2181,7 +2092,6 @@
 
             updateClusterOptimizerSummary(allBets);
 
-            // Filtro PURE dinamico basato sui fornitori attivi nelle checkbox
             if (currentClusterMode === 'pure') {
                 const allowedPure = getPureSelectedTipsters();
                 allBets = allBets.filter(b => allowedPure.includes(canonicalizeTipsterName(b.original_tipster)));
@@ -2250,11 +2160,8 @@
 
             resolved.forEach(b => {
                 const s = b.stake || 1.0;
-                if (b.status === 'won') {
-                    netProfit += (b.odds - 1) * s;
-                } else if (b.status === 'lost') {
-                    netProfit -= s;
-                }
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
                 totalResolvedStake += s;
             });
 
@@ -2263,7 +2170,7 @@
             const fiatEl = document.getElementById('admin-stat-fiat');
             if (fiatEl) {
                 fiatEl.innerText = `≈ ${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €`;
-                fiatEl.className = `text-[10px] sm:text-[11px] font-mono font-bold ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+                fiatEl.className = `text-[10px] font-mono font-bold ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
             }
 
             document.getElementById('stat-total').innerText = total;
@@ -2272,55 +2179,166 @@
             document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
 
             renderTable(filtered);
+            renderMobileCards(filtered);
         }
 
+        function getTipsterOptionsHtml(selectedTipster) {
+            const list = [
+                'AtmBetSignal', 'AtmBet Safe', 'AtmBetSignal XG', 'Pronostici1', 'CalcioAI',
+                'BetMines', 'BetMines PreMatch', 'BetMines Valuebet', 'ZCODE', 'BetExpBot',
+                'FootyStats', 'Infoland', 'Freak Elite VIP', 'Stats4bets bollamaker', 'Stats4Bets Automatibet'
+            ];
+            let html = list.map(t => `<option value="${t}" ${selectedTipster === t ? 'selected' : ''}>${t}</option>`).join('');
+            if (!list.includes(selectedTipster) && selectedTipster) {
+                html += `<option value="${selectedTipster}" selected>${selectedTipster}</option>`;
+            }
+            return html;
+        }
+
+        // RENDER VISTA MOBILE ADATTATA A SCHEDA TOUCH
+        function renderMobileCards(betsToDisplay) {
+            const container = document.getElementById('admin-mobile-bets-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (betsToDisplay.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-500 font-medium text-xs bg-slate-900 border border-slate-800 rounded-2xl">Nessun pronostico trovato.</div>`;
+                return;
+            }
+
+            betsToDisplay.forEach(bet => {
+                const card = document.createElement('div');
+                const isWon = bet.status === 'won';
+                const isLost = bet.status === 'lost';
+                const isVoid = bet.status === 'void';
+                const isPending = bet.status === 'pending';
+
+                let borderStatus = 'border-slate-800';
+                if (isWon) borderStatus = 'border-emerald-500/40 bg-emerald-500/[0.03]';
+                else if (isLost) borderStatus = 'border-rose-500/40 bg-rose-500/[0.03]';
+                else if (isVoid) borderStatus = 'border-amber-500/40 bg-amber-500/[0.03]';
+
+                card.className = `p-3.5 rounded-2xl border ${borderStatus} bg-slate-900 shadow-md space-y-2.5`;
+
+                let submatchesHtml = '';
+                if (bet.match_name.includes('/')) {
+                    const subList = bet.match_name.split('/').map(s => s.trim()).filter(Boolean);
+                    submatchesHtml = `
+                        <div class="mt-1.5 p-2 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                            ${subList.map((m, idx) => `
+                                <div class="text-[11px] text-slate-300 flex items-center justify-between">
+                                    <span>${idx+1}. ${m}</span>
+                                    <span class="text-[9px] text-emerald-400 font-mono">E${idx+1}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between text-[10px] text-slate-400">
+                        <span class="font-mono text-slate-500">${bet.event_date}</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-slate-300 font-medium truncate max-w-[120px]">${bet.league}</span>
+                            <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
+                                ${bet.is_published ? '★ Vetrina' : 'Interno'}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="font-bold text-white text-xs sm:text-sm leading-snug">${bet.match_name}</div>
+                        ${submatchesHtml}
+                    </div>
+
+                    <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <div class="text-xs font-black text-emerald-400">${bet.prediction}</div>
+                            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+                                Quota: <strong class="text-white">@${parseFloat(bet.odds).toFixed(2)}</strong> • Stake: ${bet.stake.toFixed(1)}u
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1.5">
+                            ${bet.tg_sent ? `
+                                <span class="text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">
+                                    TG ✓
+                                </span>
+                            ` : `
+                                <button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" class="text-[10px] font-bold font-mono text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2.5 py-1 rounded-lg">
+                                    Invia TG
+                                </button>
+                            `}
+                            <button type="button" onclick="deleteBet('${bet.id}')" class="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/10 border border-rose-500/20">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-1 flex flex-col gap-2">
+                        <select onchange="updateBetTipster('${bet.id}', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-300 font-medium">
+                            ${getTipsterOptionsHtml(bet.original_tipster)}
+                        </select>
+
+                        <div class="grid grid-cols-4 gap-1.5">
+                            <button type="button" onclick="updateStatus('${bet.id}', 'won')" class="py-1.5 rounded-xl font-black text-xs border transition ${isWon ? 'bg-emerald-500 text-slate-950 border-emerald-500' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'}">
+                                ✓ Vinta
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" class="py-1.5 rounded-xl font-black text-xs border transition ${isLost ? 'bg-rose-500 text-white border-rose-500' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'}">
+                                ✕ Persa
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'void')" class="py-1.5 rounded-xl font-bold text-xs border transition ${isVoid ? 'bg-amber-500 text-slate-950 border-amber-500' : 'bg-amber-500/10 text-amber-400 border-amber-500/30'}">
+                                Void
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'pending')" class="py-1.5 rounded-xl font-bold text-xs border transition ${isPending ? 'bg-slate-700 text-white border-slate-600' : 'bg-slate-800/60 text-slate-400 border-slate-700'}">
+                                In Corso
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // RENDER VISTA DESKTOP (TABELLA)
         function renderTable(betsToDisplay) {
             const tbody = document.getElementById('bets-tbody');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             if (betsToDisplay.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico trovato per la data o i filtri selezionati.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico trovato.</td></tr>`;
                 return;
             }
 
             betsToDisplay.forEach(bet => {
                 const tr = document.createElement('tr');
-
                 let rowClass = "row-pending transition";
                 let statusControlHtml = '';
 
                 if (bet.status === 'pending') {
                     statusControlHtml = `
                         <div class="flex items-center gap-1.5 whitespace-nowrap">
-                            <span class="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>
-                            <button type="button" onclick="updateStatus('${bet.id}', 'won')" title="Segna come Vinta" class="px-2.5 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-400 font-black text-xs border border-emerald-500/40 transition active:scale-95 flex items-center gap-1 shadow-sm">
-                                <span>✓</span> V
-                            </button>
-                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" title="Segna come Persa" class="px-2.5 py-1 rounded bg-rose-500/20 hover:bg-rose-500/40 text-rose-400 font-black text-xs border border-rose-500/40 transition active:scale-95 flex items-center gap-1 shadow-sm">
-                                <span>✕</span> P
-                            </button>
-                            <button type="button" onclick="updateStatus('${bet.id}', 'void')" title="Segna come Void" class="px-1.5 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/20 transition active:scale-95">
-                                Void
-                            </button>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'won')" class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 font-black text-xs border border-emerald-500/40">✓ V</button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 font-black text-xs border border-rose-500/40">✕ P</button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'void')" class="px-1.5 py-1 rounded bg-amber-500/10 text-amber-400 font-bold text-[10px] border border-amber-500/20">Void</button>
                         </div>
                     `;
                 } else {
-                    let badge = '';
-                    if (bet.status === 'won') {
-                        rowClass = "row-won transition";
-                        badge = '<span class="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">VINTA</span>';
-                    } else if (bet.status === 'lost') {
-                        rowClass = "row-lost transition";
-                        badge = '<span class="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30 whitespace-nowrap">PERSA</span>';
-                    } else if (bet.status === 'void') {
-                        rowClass = "transition bg-amber-500/5";
-                        badge = '<span class="px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 whitespace-nowrap">VOID</span>';
-                    }
+                    let badge = bet.status === 'won'
+                        ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
+                        : (bet.status === 'lost'
+                            ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
+                    
+                    rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
                     statusControlHtml = `
                         <div class="flex items-center gap-1.5 whitespace-nowrap">
                             ${badge}
-                            <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1 py-0.5 text-[10px] sm:text-[11px] text-slate-400 focus:outline-none">
+                            <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1 py-0.5 text-[11px] text-slate-400">
                                 <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
                                 <option value="lost" ${bet.status === 'lost' ? 'selected' : ''}>Persa</option>
                                 <option value="pending" ${bet.status === 'pending' ? 'selected' : ''}>Riapri</option>
@@ -2335,7 +2353,7 @@
                 if (bet.match_name.includes('/')) {
                     const subList = bet.match_name.split('/').map(s => s.trim()).filter(Boolean);
                     toggleBtnHtml = `
-                        <button type="button" id="admin-btn-${bet.id}" onclick="toggleAdminSubmatches('${bet.id}')" class="text-[9px] font-bold text-emerald-400 hover:text-emerald-300 py-0.5 px-1.5 rounded bg-emerald-500/10 border border-emerald-500/20 transition mt-1 block">
+                        <button type="button" id="admin-btn-${bet.id}" onclick="toggleAdminSubmatches('${bet.id}')" class="text-[9px] font-bold text-emerald-400 py-0.5 px-1.5 rounded bg-emerald-500/10 border border-emerald-500/20 mt-1 block">
                             Dettagli Match ▼
                         </button>
                     `;
@@ -2343,87 +2361,55 @@
                         <div id="admin-submatches-${bet.id}" class="hidden space-y-1 mt-1.5 p-1.5 bg-slate-950 rounded border border-slate-800">
                             ${subList.map((m, idx) => `
                                 <div class="text-[10px] text-slate-300 flex items-center justify-between gap-2 border-b border-slate-800/60 pb-0.5 last:border-none">
-                                    <span class="font-semibold">${idx+1}. ${m}</span>
-                                    <span class="text-[8px] text-emerald-400 font-mono">Evento ${idx+1}</span>
+                                    <span>${idx+1}. ${m}</span>
+                                    <span class="text-[8px] text-emerald-400 font-mono">E${idx+1}</span>
                                 </div>
                             `).join('')}
                         </div>
                     `;
                 }
 
-                let tgColumnHtml = '';
-                if (bet.tg_sent) {
-                    tgColumnHtml = `
-                        <span title="Segnale già inviato su Telegram" class="inline-flex items-center gap-1 text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">
-                            <i data-lucide="check" class="w-3 h-3"></i> Inviato
-                        </span>
-                    `;
-                } else {
-                    tgColumnHtml = `
-                        <button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" title="Invia ora a Telegram" class="inline-flex items-center gap-1 text-[10px] font-bold font-mono text-blue-400 hover:text-white bg-blue-500/10 hover:bg-blue-600 border border-blue-500/30 px-2 py-1 rounded-lg transition shadow-sm active:scale-95">
-                            <i data-lucide="send" class="w-3 h-3"></i> TG
-                        </button>
-                    `;
-                }
+                let tgColumnHtml = bet.tg_sent
+                    ? `<span class="text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">Inviato</span>`
+                    : `<button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" class="text-[10px] font-bold font-mono text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-lg">TG</button>`;
 
                 tr.className = rowClass;
-
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-slate-400 whitespace-nowrap font-mono text-[10px] sm:text-[11px]">${bet.event_date}</td>
+                    <td class="py-2.5 px-3 text-slate-400 whitespace-nowrap font-mono text-[11px]">${bet.event_date}</td>
                     <td class="py-2.5 px-3 font-bold text-white min-w-[200px]">
-                        <div class="leading-snug break-words">${bet.match_name}</div>
+                        <div>${bet.match_name}</div>
                         <div class="text-[9px] text-slate-500 font-normal">${bet.league}</div>
                         ${toggleBtnHtml}
                         ${submatchesHtml}
                     </td>
                     <td class="py-2.5 px-3 min-w-[150px]">
-                        <div class="font-bold text-emerald-400 text-xs break-words">${bet.prediction}</div>
-                        <div class="text-[9px] text-slate-400 font-normal">${bet.market}</div>
+                        <div class="font-bold text-emerald-400 text-xs">${bet.prediction}</div>
+                        <div class="text-[9px] text-slate-400">${bet.market}</div>
                     </td>
                     <td class="py-2.5 px-3 whitespace-nowrap">
                         <span class="font-bold text-white font-mono">${parseFloat(bet.odds).toFixed(2)}</span>
                         <span class="text-slate-500 text-[10px] font-mono">(${bet.stake.toFixed(1)}u)</span>
                     </td>
                     <td class="py-2.5 px-3 whitespace-nowrap">
-                        <select onchange="updateBetTipster('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-1 text-[10px] text-slate-300 focus:outline-none focus:border-emerald-500 font-medium">
-                            <option value="AtmBetSignal" ${bet.original_tipster === 'AtmBetSignal' ? 'selected' : ''}>AtmBetSignal</option>
-                            <option value="AtmBet Safe" ${bet.original_tipster === 'AtmBet Safe' ? 'selected' : ''}>AtmBet Safe</option>
-                            <option value="AtmBetSignal XG" ${bet.original_tipster === 'AtmBetSignal XG' ? 'selected' : ''}>AtmBetSignal XG</option>
-                            <option value="Pronostici1" ${bet.original_tipster === 'Pronostici1' ? 'selected' : ''}>Pronostici1</option>
-                            <option value="CalcioAI" ${bet.original_tipster === 'CalcioAI' ? 'selected' : ''}>CalcioAI</option>
-                            <option value="BetMines" ${bet.original_tipster === 'BetMines' ? 'selected' : ''}>BetMines (Multiple)</option>
-                            <option value="BetMines PreMatch" ${bet.original_tipster === 'BetMines PreMatch' ? 'selected' : ''}>BetMines PreMatch (Singole)</option>
-                            <option value="BetMines Valuebet" ${bet.original_tipster === 'BetMines Valuebet' ? 'selected' : ''}>BetMines Valuebet</option>
-                            <option value="ZCODE" ${bet.original_tipster === 'ZCODE' ? 'selected' : ''}>ZCODE</option>
-                            <option value="BetExpBot" ${bet.original_tipster === 'BetExpBot' ? 'selected' : ''}>BetExpBot</option>
-                            <option value="FootyStats" ${bet.original_tipster === 'FootyStats' ? 'selected' : ''}>FootyStats</option>
-                            <option value="Infoland" ${bet.original_tipster === 'Infoland' ? 'selected' : ''}>Infoland</option>
-                            <option value="Freak Elite VIP" ${bet.original_tipster === 'Freak Elite VIP' ? 'selected' : ''}>Freak Elite VIP</option>
-                            <option value="Stats4bets bollamaker" ${bet.original_tipster === 'Stats4bets bollamaker' ? 'selected' : ''}>Stats4bets bollamaker</option>
-                            <option value="Stats4Bets Automatibet" ${bet.original_tipster === 'Stats4Bets Automatibet' ? 'selected' : ''}>Stats4Bets Automatibet</option>
-                            ${!['AtmBetSignal','AtmBet Safe','AtmBetSignal XG','Pronostici1','CalcioAI','BetMines','BetMines PreMatch','BetMines Valuebet','ZCODE','BetExpBot','FootyStats','Infoland','Freak Elite VIP','Stats4bets bollamaker','Stats4Bets Automatibet'].includes(bet.original_tipster) ? `<option value="${bet.original_tipster}" selected>${bet.original_tipster}</option>` : ''}
+                        <select onchange="updateBetTipster('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-1 text-[10px] text-slate-300 font-medium">
+                            ${getTipsterOptionsHtml(bet.original_tipster)}
                         </select>
                     </td>
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">
-                        <button type="button" onclick="togglePublish('${bet.id}')" class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
+                        <button type="button" onclick="togglePublish('${bet.id}')" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
                             ${bet.is_published ? '★ Vetrina' : 'Interno'}
                         </button>
                     </td>
-                    <td class="py-2.5 px-3">
-                        ${statusControlHtml}
-                    </td>
-                    <td class="py-2.5 px-3 text-center whitespace-nowrap">
-                        ${tgColumnHtml}
-                    </td>
+                    <td class="py-2.5 px-3">${statusControlHtml}</td>
+                    <td class="py-2.5 px-3 text-center whitespace-nowrap">${tgColumnHtml}</td>
                     <td class="py-2.5 px-3 text-right whitespace-nowrap">
-                        <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition">
+                        <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 p-1 rounded hover:bg-rose-500/10">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-
             lucide.createIcons();
         }
 
