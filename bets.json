@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793639426600_0",
+    "event_date": "2026-11-04 21:00",
+    "match_name": "Slavia Praha - Arsenal",
+    "league": "Champions League",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "odds": 1.63,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793609437845_11",
     "event_date": "2026-11-04 21:00",
     "match_name": "Viking - Sabah",
