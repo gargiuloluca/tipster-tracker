@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793622731033_0",
+    "event_date": "2026-11-02 19:10",
+    "match_name": "Chicago Blackhawks - Colorado Avalanche",
+    "league": "NHL",
+    "original_tipster": "ZCODE",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.5,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793609437845_11",
     "event_date": "2026-11-04 21:00",
     "match_name": "Viking - Sabah",
