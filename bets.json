@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793638108124_0",
+    "event_date": "2026-11-02 18:00",
+    "match_name": "Radnicki Nis - Zeleznicar Pancevo",
+    "league": "Super Liga",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.91,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793609437845_11",
     "event_date": "2026-11-04 21:00",
     "match_name": "Viking - Sabah",
