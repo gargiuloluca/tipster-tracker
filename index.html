@@ -109,7 +109,7 @@
         </div>
     </nav>
 
-    <!-- MODALE DI VERIFICA CODICE LICENZA (users.json) -->
+    <!-- MODALE DI VERIFICA CODICE LICENZA (users.json) & USERNAME TELEGRAM -->
     <div id="license-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 p-6 sm:p-7 rounded-3xl max-w-sm w-full shadow-2xl space-y-4">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -118,8 +118,8 @@
                         <i data-lucide="key" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-white">Attiva Codice Abbonamento</h3>
-                        <p class="text-[11px] text-slate-400">Ricevuto da un creator, Telegram o Stripe</p>
+                        <h3 class="text-sm font-bold text-white">Attiva Accesso VIP</h3>
+                        <p class="text-[11px] text-slate-400">Inserisci i tuoi dati per registrare l'accesso</p>
                     </div>
                 </div>
                 <button type="button" onclick="closeLicenseModal()" class="text-slate-500 hover:text-white">
@@ -129,12 +129,17 @@
 
             <form onsubmit="handleVerifyLicense(event)" class="space-y-3">
                 <div>
-                    <label class="block text-slate-400 mb-1 text-[11px]">Codice Personale o Promo Creator</label>
+                    <label class="block text-slate-400 mb-1 text-[11px]">Codice Abbonamento o Promo</label>
                     <input type="text" id="user-license-code" required placeholder="ES. MARIOVIP / ATM-XXXXXX"
                         class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white text-center tracking-widest uppercase font-mono focus:outline-none focus:border-emerald-500">
                 </div>
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[11px]">Tua Username Telegram (es. @mario)</label>
+                    <input type="text" id="user-telegram-handle" required placeholder="@TuaUsername"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white text-center font-mono focus:outline-none focus:border-emerald-500">
+                </div>
                 <div id="license-error-msg" class="text-[11px] font-bold text-rose-400 hidden text-center">Codice inesistente o scaduto.</div>
-                <div id="license-success-msg" class="text-[11px] font-bold text-emerald-400 hidden text-center">Licenza sbloccata con successo!</div>
+                <div id="license-success-msg" class="text-[11px] font-bold text-emerald-400 hidden text-center">Accesso sbloccato con successo!</div>
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
                     Sblocca Vetrina & VIP
                 </button>
@@ -719,7 +724,7 @@
     <!-- 10. FOOTER -->
     <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
         <div>
-            AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.
+            AtmBet &copy; 2026. Analisi e Modellazione Quantitativa per el Betting Sportivo.
         </div>
         <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500">
             <a href="index.html" class="hover:text-slate-400 transition">Home</a>
@@ -885,6 +890,7 @@
         async function handleVerifyLicense(e) {
             e.preventDefault();
             const typedCode = document.getElementById('user-license-code').value.trim().toUpperCase();
+            const typedTelegram = document.getElementById('user-telegram-handle').value.trim();
             const errEl = document.getElementById('license-error-msg');
             const succEl = document.getElementById('license-success-msg');
 
@@ -936,6 +942,7 @@
                     const sessionData = {
                         name: match.identifier ? match.identifier.split('@')[0] : 'Ospite VIP',
                         email: match.identifier || `${typedCode.toLowerCase()}@promo.atmbet`,
+                        telegram_username: typedTelegram,
                         role: 'user',
                         plan: planType,
                         access_code: typedCode,
@@ -958,6 +965,7 @@
                     }, 800);
                 } else {
                     errEl.innerText = "Codice non valido. Verifica il testo digitato.";
+                    errEl.classList.add('hidden'); // Fix hidden display
                     errEl.classList.remove('hidden');
                 }
             } catch(err) {
@@ -1257,7 +1265,6 @@
                 const canonTipster = canonicalizeTipsterName(rawTipster);
                 const isXG = canonTipster.toLowerCase().includes('xg');
 
-                // Riconoscimento PURE rigoroso al 100%: uguaglianza esatta
                 const isPureCandidate = !isXG && (
                     b.isPure === true ||
                     pureTipstersList.includes(canonTipster) ||
@@ -1398,7 +1405,6 @@
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
 
-                // Se l'utente è abbonato Pure, calcola il simulatore sulle sue giocate Pure
                 if (isUserPure && b.is_pure !== true) return false;
 
                 const bDate = extractStandardDate(b.event_date);
@@ -1477,7 +1483,6 @@
             if (lostEl) lostEl.innerText = lost + 'P';
         }
 
-        // RENDICONTO GLOBALE DINAMICO IN BASE AL PIANO DELL'UTENTE
         function calculateGlobalPerformance() {
             activeUser = getActiveUserSession();
             const isUserPure = activeUser && activeUser.plan === 'pure';
@@ -1485,7 +1490,6 @@
             let completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
             const subTitleEl = document.getElementById('stat-global-subtitle');
 
-            // Se l'utente è abbonato PURE, la sezione "Performance Globale" mostra le sue metriche PURE reali
             if (isUserPure) {
                 completed = completed.filter(b => b.is_pure === true);
                 if (subTitleEl) {
@@ -1940,7 +1944,6 @@
             cachedAllBets = await fetchAllBets();
             initServiceStartDate();
             
-            // Imposta automaticamente il filtro storico predefinito su Pure se l'utente è abbonato Pure
             activeUser = getActiveUserSession();
             if (activeUser && activeUser.plan === 'pure') {
                 currentTipsterPlanFilter = 'pure';
