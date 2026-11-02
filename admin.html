@@ -422,7 +422,7 @@
                     <div class="flex flex-wrap items-center gap-1.5">
                         <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2 py-1 rounded-xl">
                             <span class="text-[10px] text-slate-400">Data:</span>
-                            <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)"
+                            <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)" oninput="applyCustomCalendarDate(this.value)"
                                 class="bg-transparent text-xs text-emerald-400 font-mono font-bold focus:outline-none cursor-pointer">
                         </div>
 
@@ -445,13 +445,13 @@
                     <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
                         <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Yield Periodo</span>
                         <div id="sim-roi" class="text-base sm:text-lg font-mono font-black text-white mt-0.5">0.0%</div>
-                        <span class="text-[8px] text-slate-500">Sul volume</span>
+                        <span id="sim-roi-sub" class="text-[8px] text-slate-500">Sul volume</span>
                     </div>
 
                     <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
                         <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
                         <div id="sim-winrate" class="text-base sm:text-lg font-mono font-black text-amber-400 mt-0.5">0.0%</div>
-                        <span class="text-[8px] text-slate-500">Accuratezza</span>
+                        <span id="sim-winrate-sub" class="text-[8px] text-slate-500">Accuratezza</span>
                     </div>
 
                     <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
@@ -636,6 +636,7 @@
         let currentCustomDate = '';
         let currentClusterMode = 'all';
         let stagedVerificationResults = {};
+        let firstServiceDate = '';
 
         // GESTIONE FORNITORI ABILITATI CANALE PURE
         function getPureSelectedTipsters() {
@@ -1455,7 +1456,6 @@
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
 
-            const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
             const btnToday = document.getElementById('btn-preset-today');
             const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
@@ -1478,10 +1478,35 @@
             }
         }
 
+        function initAdminServiceStartDate(allBets) {
+            const dateInput = document.getElementById('sim-start-date');
+            if (!dateInput || !Array.isArray(allBets) || allBets.length === 0) return;
+
+            const dates = allBets
+                .map(b => extractStandardDate(b.event_date))
+                .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
+                .sort();
+
+            if (dates.length > 0) {
+                firstServiceDate = dates[0];
+                dateInput.min = firstServiceDate;
+            }
+            dateInput.max = getLocalDateString(new Date());
+        }
+
         function applyCustomCalendarDate(dateStr) {
             if (!dateStr) return;
+            const stdDate = extractStandardDate(dateStr);
+
+            if (firstServiceDate && stdDate < firstServiceDate) {
+                const dateInput = document.getElementById('sim-start-date');
+                if (dateInput) dateInput.value = firstServiceDate;
+                currentCustomDate = firstServiceDate;
+            } else {
+                currentCustomDate = stdDate;
+            }
+
             currentSimMode = 'custom';
-            currentCustomDate = dateStr;
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             renderDashboard();
         }
@@ -2003,8 +2028,37 @@
             const total = simBets.length;
             const won = simBets.filter(b => b.status === 'won').length;
             const lost = simBets.filter(b => b.status === 'lost').length;
-            const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
 
+            const profitEl = document.getElementById('sim-profit-units');
+            const fiatEl = document.getElementById('sim-profit-fiat');
+            const roiEl = document.getElementById('sim-roi');
+            const roiSubEl = document.getElementById('sim-roi-sub');
+            const winEl = document.getElementById('sim-winrate');
+            const winSubEl = document.getElementById('sim-winrate-sub');
+            const countEl = document.getElementById('sim-resolved-count');
+            const wonEl = document.getElementById('sim-won-count');
+            const lostEl = document.getElementById('sim-lost-count');
+
+            if (total === 0) {
+                if (profitEl) {
+                    profitEl.innerText = 'NO BET';
+                    profitEl.className = 'text-base sm:text-lg font-mono font-black text-slate-400 mt-0.5';
+                }
+                if (fiatEl) {
+                    fiatEl.innerText = 'Nessuna operazione';
+                    fiatEl.className = 'text-[10px] font-mono font-semibold text-slate-500';
+                }
+                if (roiEl) roiEl.innerText = '-';
+                if (roiSubEl) roiSubEl.innerText = 'Nessun match';
+                if (winEl) winEl.innerText = '-';
+                if (winSubEl) winSubEl.innerText = 'Nessuna giocata';
+                if (countEl) countEl.innerText = '0';
+                if (wonEl) wonEl.innerText = '0V';
+                if (lostEl) lostEl.innerText = '0P';
+                return;
+            }
+
+            const winRate = ((won / total) * 100).toFixed(1);
             let netProfit = 0;
             let totalStake = 0;
 
@@ -2018,31 +2072,22 @@
             const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
             const fiatSimAmount = netProfit * unitVal;
 
-            const profitEl = document.getElementById('sim-profit-units');
             if (profitEl) {
                 profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
                 profitEl.className = `text-base sm:text-lg font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
             }
 
-            const fiatEl = document.getElementById('sim-profit-fiat');
             if (fiatEl) {
                 fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
                 fiatEl.className = `text-[10px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
             }
 
-            const roiEl = document.getElementById('sim-roi');
             if (roiEl) roiEl.innerText = (roi >= 0 ? '+' : '') + roi + '%';
-
-            const winEl = document.getElementById('sim-winrate');
+            if (roiSubEl) roiSubEl.innerText = 'Sul volume';
             if (winEl) winEl.innerText = winRate + '%';
-
-            const countEl = document.getElementById('sim-resolved-count');
+            if (winSubEl) winSubEl.innerText = 'Accuratezza';
             if (countEl) countEl.innerText = total;
-
-            const wonEl = document.getElementById('sim-won-count');
             if (wonEl) wonEl.innerText = won + 'V';
-
-            const lostEl = document.getElementById('sim-lost-count');
             if (lostEl) lostEl.innerText = lost + 'P';
         }
 
@@ -2415,6 +2460,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            const bets = loadAllBets();
+            initAdminServiceStartDate(bets);
             checkAdminSession();
         });
     </script>
