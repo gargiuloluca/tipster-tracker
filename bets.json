@@ -1,33 +1,5 @@
 [
   {
-    "id": "bet_1793614225574_1",
-    "event_date": "2026-11-02 17:00",
-    "match_name": "Atromitos - Volos NFC / Heracles Almelo - TOP Oss",
-    "league": "Multipla",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "odds": 1.48,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793614225573_0",
-    "event_date": "2026-11-02 18:30",
-    "match_name": "Sassuolo - Fiorentina",
-    "league": "Serie A",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793609437845_11",
     "event_date": "2026-11-04 21:00",
     "match_name": "Viking - Sabah",
@@ -109,7 +81,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793609437844_9",
@@ -221,7 +193,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793598467635_3",
@@ -235,7 +207,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793598467633_0",
@@ -249,7 +221,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793598831900_5",
@@ -291,7 +263,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793598488024_0",
@@ -319,7 +291,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793609437844_8",
@@ -361,7 +333,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793598467634_2",
@@ -375,7 +347,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793598467634_1",
@@ -389,7 +361,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793609437844_5",
@@ -462,6 +434,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793614225573_0",
+    "event_date": "2026-11-02 18:30",
+    "match_name": "Sassuolo - Fiorentina",
+    "league": "Serie A",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.57,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793598831901_6",
     "event_date": "2026-11-02 18:30",
     "match_name": "Sassuolo - Fiorentina",
@@ -498,6 +484,20 @@
     "prediction": "No Gol",
     "original_tipster": "Pronostici1",
     "odds": 1.95,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793614225574_1",
+    "event_date": "2026-11-02 17:00",
+    "match_name": "Atromitos - Volos NFC / Heracles Almelo - TOP Oss",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "1X / 1",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.48,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -543,7 +543,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793609524817_0",
