@@ -827,22 +827,27 @@
                     const nameEl = document.getElementById('vip-welcome-name');
                     const descEl = document.getElementById('vip-status-desc');
                     const tgBtn = document.getElementById('vip-direct-tg-btn');
-                    const tgLabel = document.getElementById('vip-tg-label');
                     const planBadge = activeUser.plan ? activeUser.plan.toUpperCase() : 'VIP';
 
                     if (nameEl) nameEl.innerText = `Area Riservata | Piano ${planBadge}`;
                     if (descEl) {
-                        descEl.innerText = activeUser.expires_at 
+                        descEl.innerText = activeUser.expires_at && activeUser.plan !== 'credits'
                             ? `Abbonamento attivo fino al ${activeUser.expires_at}. Selezioni pronte per essere giocate.`
-                            : `Hai ${activeUser.credits || 0} crediti operativi disponibili.`;
+                            : `Hai ${activeUser.credits || 0} crediti operativi disponibili per sbloccare le selezioni.`;
                     }
-                    if (tgBtn && tgLabel) {
-                        if (activeUser.plan === 'pure') {
-                            tgBtn.href = TELEGRAM_CONFIG.pure_channel_invite;
-                            tgLabel.innerText = "Canale Telegram PURE";
+                    
+                    if (tgBtn) {
+                        if (activeUser.plan === 'credits' || activeUser.plan === 'trial_vip') {
+                            tgBtn.classList.add('hidden');
                         } else {
-                            tgBtn.href = TELEGRAM_CONFIG.full_channel_invite;
-                            tgLabel.innerText = "Canale Telegram VIP";
+                            tgBtn.classList.remove('hidden');
+                            if (activeUser.plan === 'pure') {
+                                tgBtn.href = TELEGRAM_CONFIG.pure_channel_invite;
+                                tgBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> <span>Canale Telegram PURE</span>`;
+                            } else {
+                                tgBtn.href = TELEGRAM_CONFIG.full_channel_invite;
+                                tgBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> <span>Canale Telegram VIP</span>`;
+                            }
                         }
                     }
                 }
