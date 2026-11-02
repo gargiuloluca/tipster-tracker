@@ -70,7 +70,7 @@
                 <p class="text-xs text-slate-400 mt-1">Accesso rapido verificato per gli abbonati della piattaforma.</p>
             </div>
 
-            <!-- Form di Accesso con Sola Email -->
+            <!-- Form di Accesso con Email e Username Telegram -->
             <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 
                 <!-- Email -->
@@ -81,14 +81,24 @@
                         <input type="email" id="user-email" required placeholder="tua@email.com"
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                     </div>
-                    
-                    <!-- Istruzioni Chiare sotto il campo Email -->
-                    <div class="mt-2.5 p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
-                        <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
-                        <span>
-                            Inserisci l'<strong>indirizzo email</strong> utilizzato durante l'acquisto o l'attivazione della prova su Stripe. Non serve alcuna password: il sistema riconoscerà automaticamente la tua licenza attiva.
-                        </span>
+                </div>
+
+                <!-- Username Telegram -->
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Tua Username Telegram</label>
+                    <div class="relative">
+                        <i data-lucide="send" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input type="text" id="user-telegram-handle" required placeholder="@TuaUsername"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition font-mono">
                     </div>
+                </div>
+
+                <!-- Istruzioni Chiare sotto i campi -->
+                <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
+                    <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                    <span>
+                        Inserisci l'<strong>indirizzo email</strong> utilizzato su Stripe e la tua <strong>username Telegram</strong>. Il sistema riconoscerà automaticamente la tua licenza attiva.
+                    </span>
                 </div>
 
                 <!-- Messaggio di Errore / Successo -->
@@ -134,7 +144,7 @@
         </div>
     </main>
 
-    <!-- LOGICA AUTENTICAZIONE PASSWORDLESS VIA EMAIL -->
+    <!-- LOGICA AUTENTICAZIONE VIA EMAIL & TELEGRAM -->
     <script>
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
@@ -179,9 +189,10 @@
         async function handleAuthSubmit(e) {
             e.preventDefault();
             const emailInput = document.getElementById('user-email').value.trim().toLowerCase();
+            const telegramInput = document.getElementById('user-telegram-handle').value.trim();
 
-            if (!emailInput) {
-                showAlert("Inserisci la tua email per accedere.", "error");
+            if (!emailInput || !telegramInput) {
+                showAlert("Inserisci sia l'email che la username Telegram.", "error");
                 return;
             }
 
@@ -190,7 +201,6 @@
             const users = await fetchLiveUsers();
             const todayStr = getLocalDateString(new Date());
 
-            // Controllo email su users.json (o identifier)
             const user = users.find(u => {
                 const uEmail = (u.email || u.identifier || '').trim().toLowerCase();
                 const uCode = (u.access_code || u.code || '').trim().toLowerCase();
@@ -202,14 +212,12 @@
                 return;
             }
 
-            // Controllo scadenza
             const exp = user.expires_at || user.expiration || user.plan_expires;
             if (exp && exp !== '-' && exp < todayStr) {
                 showAlert("Il tuo abbonamento è scaduto il " + exp + ". Rinnovalo per continuare.", "error");
                 return;
             }
 
-            // Normalizzazione piano
             let mappedPlan = 'all_inclusive';
             if (user.plan === 'pure') mappedPlan = 'pure';
             else if (user.plan === 'full' || user.plan === 'all_inclusive') mappedPlan = 'all_inclusive';
@@ -220,6 +228,7 @@
                 id: user.id || ('usr_' + Date.now()),
                 name: user.name || emailInput.split('@')[0],
                 email: user.email || emailInput,
+                telegram_username: telegramInput,
                 role: user.role || 'user',
                 plan: mappedPlan,
                 expires_at: exp || '2099-12-31',
@@ -227,7 +236,6 @@
                 unlocked_bets: user.unlocked_bets || []
             };
 
-            // Salva sessione attiva per navigare su index.html
             localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(sessionData));
 
             showAlert("Abbonamento verificato con successo! Reindirizzamento...", "success");
@@ -241,6 +249,7 @@
                 id: 'usr_dev_' + planType,
                 name: 'Tester ' + planType.toUpperCase(),
                 email: planType + '@atmbet.local',
+                telegram_username: '@tester_admin',
                 role: 'user',
                 plan: planType,
                 expires_at: '2099-12-31',
