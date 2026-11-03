@@ -91,9 +91,9 @@
             <!-- LINK NAVIGAZIONE DESKTOP -->
             <div class="hidden md:flex items-center gap-3 lg:gap-6" id="desktop-nav-links">
                 <a href="#metodo" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
-                <a href="#selezioni" class="text-xs font-bold text-emerald-400 hover:text-white transition">Pronostici Oggi</a>
                 <a href="#simulatore" class="text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
                 <a href="#confronto-piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
+                <a href="#selezioni" class="text-xs font-bold text-emerald-400 hover:text-white transition">Pronostici Oggi</a>
                 <a href="#storico" class="text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
                 <a href="#piani" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
                 <a href="#faq" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
@@ -236,7 +236,7 @@
             </div>
         </section>
 
-        <!-- 3. SEZIONE METODO STRATEGICO (Spostata subito in alto per conquistare fiducia) -->
+        <!-- 3. SEZIONE METODO STRATEGICO (Fiducia immediata sotto l'hero) -->
         <section id="metodo" class="public-marketing-element bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6">
             <div class="text-center max-w-2xl mx-auto space-y-1.5">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Protocollo Operativo</span>
@@ -291,36 +291,6 @@
                         <li>• Stake disciplinato in unità percentuali fisse (1 Unità)</li>
                         <li>• Storico consultabile e verificato al 100% via feed ufficiali</li>
                     </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. SELEZIONI APERTE (GRIGLIA ORDINATA PER VIP) -->
-        <section id="selezioni" class="space-y-4 pt-2">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-                <div>
-                    <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> Selezioni Operative di Oggi
-                    </h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Pronostici della giornata odierna attualmente in corso o in attesa di inizio.</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-bold">Verifica Automatica Attiva</span>
-                    <div id="cards-scroll-arrows" class="hidden items-center gap-1">
-                        <button onclick="scrollPublicCards('left')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
-                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="scrollPublicCards('right')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
-                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative">
-                <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory"></div>
-                <div id="cards-mobile-scroll-hint" class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
-                    Scorri lateralmente per vedere tutti i match &rarr;
                 </div>
             </div>
         </section>
@@ -475,64 +445,32 @@
             </div>
         </section>
 
-        <!-- 5. RENDICONTO GLOBALE & CONVERTITORE UNITA' (€) -->
-        <section class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <!-- 6. SELEZIONI OPERATIVE DI OGGI (Spostate prima dello storico) -->
+        <section id="selezioni" class="space-y-4 pt-2">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
                 <div>
-                    <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="activity" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Performance Globale Certificata
+                    <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> Selezioni Operative di Oggi
                     </h2>
-                    <p id="stat-global-subtitle" class="text-[11px] sm:text-xs text-slate-400">Dati cumulativi di tutto l'archivio verificato.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Pronostici della giornata odierna attualmente in corso o in attesa di inizio.</p>
                 </div>
-
-                <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
-                    <span class="text-[10px] text-slate-400 font-bold px-1.5 hidden sm:inline">1u =</span>
-                    <button type="button" onclick="setUnitValue(5, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">5€</button>
-                    <button type="button" onclick="setUnitValue(10, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">10€</button>
-                    <button type="button" onclick="setUnitValue(20, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">20€</button>
-                    <button type="button" onclick="setUnitValue(50, this)" id="default-unit-btn" class="unit-btn unit-pill-active flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">50€</button>
-                    <button type="button" onclick="setUnitValue(100, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">100€</button>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-bold">Verifica Automatica Attiva</span>
+                    <div id="cards-scroll-arrows" class="hidden items-center gap-1">
+                        <button onclick="scrollPublicCards('left')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
+                            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="scrollPublicCards('right')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
+                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>YIELD / ROI</span>
-                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
-                    </div>
-                    <div id="stat-roi" class="text-xl sm:text-3xl font-mono font-black text-emerald-400">+0.0%</div>
-                    <div class="text-[9px] text-slate-500 mt-1">Sul capitale investito</div>
-                </div>
-
-                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>WIN RATE</span>
-                        <i data-lucide="target" class="w-3.5 h-3.5 text-white"></i>
-                    </div>
-                    <div id="stat-winrate" class="text-xl sm:text-3xl font-mono font-black text-white">0.0%</div>
-                    <div class="text-[9px] text-slate-500 mt-1">Percentuale vincenti</div>
-                </div>
-
-                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>PROFITTO NETTO</span>
-                        <i data-lucide="wallet" class="w-3.5 h-3.5 text-amber-400"></i>
-                    </div>
-                    <div>
-                        <div id="stat-profit-units" class="text-xl sm:text-3xl font-mono font-black text-amber-400">+0.00u</div>
-                        <div id="stat-profit-fiat" class="text-[11px] sm:text-xs font-mono font-bold text-amber-400 mt-0.5">≈ +0.00 €</div>
-                    </div>
-                    <div class="text-[9px] text-slate-500 mt-1">Guadagno cumulativo</div>
-                </div>
-
-                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>GIOCATE CHIUSE</span>
-                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-slate-400"></i>
-                    </div>
-                    <div id="stat-total-resolved" class="text-xl sm:text-3xl font-mono font-black text-slate-200">0</div>
-                    <div class="text-[9px] text-slate-500 mt-1">Verificate in archivio</div>
+            <div class="relative">
+                <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory"></div>
+                <div id="cards-mobile-scroll-hint" class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
+                    Scorri lateralmente per vedere tutti i match &rarr;
                 </div>
             </div>
         </section>
@@ -600,7 +538,7 @@
             </div>
         </section>
 
-        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE (Solo Vetrina) -->
+        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE (Subito dopo lo storico) -->
         <section id="piani" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-2xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Piani d'Abbonamento & Crediti</span>
@@ -975,7 +913,7 @@
                     }, 800);
                 } else {
                     errEl.innerText = "Codice non valido. Verifica il testo digitato.";
-                    errEl.classList.remove('hidden');
+                    errEl.classList.add('hidden');
                 }
             } catch(err) {
                 errEl.innerText = "Errore durante la verifica. Riprova.";
@@ -1273,7 +1211,9 @@
 
             try {
                 const timestamp = new Date().getTime();
-                const res = await fetch(`bets.json?_nocache=${timestamp}`, {
+                const res = await fetch(`users.json?_nocache=${timestamp}`, { cache: 'no-store' });
+                // fallback bets fetch
+                const resBets = await fetch(`bets.json?_nocache=${timestamp}`, {
                     cache: 'no-store',
                     headers: {
                         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -1281,8 +1221,8 @@
                         'Expires': '0'
                     }
                 });
-                if (res.ok) {
-                    const data = await res.json();
+                if (resBets.ok) {
+                    const data = await resBets.json();
                     if (Array.isArray(data) && data.length > 0) bets = data;
                 }
             } catch(e) {}
@@ -1548,7 +1488,7 @@
                 }
             } else {
                 if (subTitleEl) {
-                    subTitleEl.innerText = "Dati cumulativi di tutto l'archivio verificato.";
+                    if (subTitleEl) subTitleEl.innerText = "Dati cumulativi di tutto l'archivio verificato.";
                 }
             }
 
