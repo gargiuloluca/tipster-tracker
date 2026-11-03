@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793709317778_0",
-    "event_date": "2026-11-03 14:30",
-    "match_name": "Mushuc Runa SC - Manta FC",
-    "league": "Liga Ecuador",
-    "original_tipster": "ZCODE",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.55,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793696590656_0",
     "event_date": "2026-11-05 21:00",
     "match_name": "Sturm Graz - Celje",
@@ -624,6 +610,20 @@
     "prediction": "Under 3.5",
     "original_tipster": "AtmBetSignal",
     "odds": 1.56,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793709317778_0",
+    "event_date": "2026-11-03 14:30",
+    "match_name": "Mushuc Runa SC - Manta FC",
+    "league": "Liga Ecuador",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "ZCODE",
+    "odds": 1.55,
     "stake": 1,
     "status": "pending",
     "is_published": true,
