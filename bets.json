@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793703941419_0",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Lilleström - Viktoria Plzen",
+    "league": "Europa League",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "odds": 1.61,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793696590656_0",
     "event_date": "2026-11-05 21:00",
     "match_name": "Sturm Graz - Celje",
