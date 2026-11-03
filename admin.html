@@ -469,9 +469,9 @@
 
                         <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl">
                             <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Oggi</button>
-                            <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Ieri</button>
+                            <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Ieri</button>
                             <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">7gg</button>
-                            <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Tutto</button>
+                            <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn sim-pill-active px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Tutto</button>
                         </div>
                     </div>
                 </div>
@@ -645,7 +645,6 @@
             channel_full: "-1004390945826"
         };
 
-        // FUNZIONI DI TEST RAPIDO ADMIN DALLA CONSOLE
         function toggleAdminTestPanel() {
             const panel = document.getElementById('admin-test-collapsible');
             const btn = document.getElementById('admin-test-toggle-btn');
@@ -924,7 +923,7 @@
             if (badgeEl) {
                 badgeEl.innerHTML = status === 'won'
                     ? `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`
-                    : `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
+                    : `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA ✕</span>`;
             }
         }
 
@@ -1603,29 +1602,14 @@
         }
 
         function setupDynamicDatePresets() {
-            const today = new Date();
-            const yesterday = new Date();
-            yesterday.setDate(today.getDate() - 1);
+            // IMPOSTATO DI DEFAULT SU "TUTTO" PER EVITARE SCHERMATE VUOTE ALL'AVVIO
+            currentSimMode = 'all';
+            currentCustomDate = '';
 
-            const btnToday = document.getElementById('btn-preset-today');
-            const btnYesterday = document.getElementById('btn-preset-yesterday');
-            const dateInput = document.getElementById('sim-start-date');
-
-            if (btnToday) btnToday.innerText = `Oggi (${today.getDate()})`;
-            if (btnYesterday) btnYesterday.innerText = `Ieri (${yesterday.getDate()})`;
-
-            const todayStr = getLocalDateString(today);
-            if (dateInput) {
-                dateInput.value = todayStr;
-                dateInput.max = todayStr;
-            }
-            
-            currentSimMode = 'today';
-            currentCustomDate = todayStr;
-
-            if (btnToday) {
+            const btnAll = document.getElementById('btn-preset-all');
+            if (btnAll) {
                 document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
-                btnToday.classList.add('sim-pill-active');
+                btnAll.classList.add('sim-pill-active');
             }
         }
 
@@ -1805,7 +1789,7 @@
 
         function loadAllBets() {
             let bets = [];
-            const rawV1 = localStorage.getItem(PRIMARY_KEY);
+            const rawV1 = localStorage.getItem(PRIMARY_KEY) || localStorage.getItem(ATMBET_KEY);
             if (rawV1) {
                 try {
                     const parsed = JSON.parse(rawV1);
@@ -1814,7 +1798,7 @@
             }
 
             if (bets.length === 0) {
-                const alternateKeys = [ATMBET_KEY, 'bets', 'tipster_tracker_bets', 'pronostici'];
+                const alternateKeys = ['bets', 'tipster_tracker_bets', 'pronostici'];
                 for (const k of alternateKeys) {
                     const raw = localStorage.getItem(k);
                     if (raw) {
