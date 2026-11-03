@@ -119,24 +119,6 @@
                 </a>
             </div>
 
-            <!-- Box di Simulazione e Test Veloce (Visibile AUTOMATICAMENTE solo se Admin autenticato in sessione) -->
-            <div id="admin-dev-box" class="hidden mt-6 pt-5 border-t border-slate-800/80">
-                <div class="text-[10px] font-mono text-amber-400 uppercase tracking-widest text-center mb-2 font-bold flex items-center justify-center gap-1">
-                    <i data-lucide="shield" class="w-3 h-3"></i> Accesso Rapido di Test (Admin Only)
-                </div>
-                <div class="grid grid-cols-3 gap-1.5">
-                    <button type="button" onclick="quickDevLogin('pure')" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 p-2 rounded-xl text-[10px] font-bold text-center transition">
-                        ⚡ Signal PURE
-                    </button>
-                    <button type="button" onclick="quickDevLogin('all_inclusive')" class="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 p-2 rounded-xl text-[10px] font-bold text-center transition">
-                        🌐 All-Inclusive
-                    </button>
-                    <button type="button" onclick="quickDevLogin('credits')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 p-2 rounded-xl text-[10px] font-bold text-center transition">
-                        🎟️ 10 Crediti
-                    </button>
-                </div>
-            </div>
-
             <div class="mt-5 text-center text-[11px] text-slate-500">
                 AtmBet &copy; 2026. Accesso istantaneo sincronizzato con Stripe & GitHub.
             </div>
@@ -148,21 +130,6 @@
     <script>
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
-        const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
-
-        function checkAdminDevVisibility() {
-            // Controllo rigoroso basato unicamente sulla sessione attiva dell'admin
-            const isAdmin = sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true";
-            
-            const devBox = document.getElementById('admin-dev-box');
-            if (devBox) {
-                if (isAdmin) {
-                    devBox.classList.remove('hidden');
-                } else {
-                    devBox.classList.add('hidden');
-                }
-            }
-        }
 
         async function fetchLiveUsers() {
             try {
@@ -246,26 +213,6 @@
             }, 800);
         }
 
-        function quickDevLogin(planType) {
-            const devUser = {
-                id: 'usr_dev_' + planType,
-                name: 'Tester ' + planType.toUpperCase(),
-                email: planType + '@atmbet.local',
-                telegram_username: '@tester_admin',
-                role: 'user',
-                plan: planType,
-                expires_at: '2099-12-31',
-                credits: planType === 'credits' ? 10 : 5,
-                unlocked_bets: []
-            };
-
-            localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(devUser));
-            showAlert(`Loggato come account di test: ${planType.toUpperCase()}`, "success");
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 600);
-        }
-
         function showAlert(msg, type) {
             const alertBox = document.getElementById('auth-alert');
             alertBox.innerText = msg;
@@ -280,7 +227,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            checkAdminDevVisibility();
             lucide.createIcons();
         });
     </script>
