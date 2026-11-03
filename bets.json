@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793703941419_0",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Lilleström - Viktoria Plzen",
-    "league": "Europa League",
-    "original_tipster": "BetMines Valuebet",
+    "id": "bet_1793707538026_0",
+    "event_date": "2026-11-03 13:15",
+    "match_name": "Port MTI FC - Beijing Guoan",
+    "league": "AFC Champions League Elite",
+    "original_tipster": "BetExpBot",
     "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.61,
+    "prediction": "2",
+    "odds": 1.72,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -54,6 +54,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793703941419_0",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Lilleström - Viktoria Plzen",
+    "league": "Europa League",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.61,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793700397637_0",
