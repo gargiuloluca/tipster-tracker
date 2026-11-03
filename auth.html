@@ -151,7 +151,7 @@
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
 
         function checkAdminDevVisibility() {
-            const isAdmin = sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true";
+            const isAdmin = sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true" || localStorage.getItem('atmbet_is_admin') === "true";
             const devBox = document.getElementById('admin-dev-box');
             if (devBox) {
                 if (isAdmin) {
