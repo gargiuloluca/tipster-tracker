@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793700397637_0",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Real Sociedad - Olympique Lyonnais",
-    "league": "Europa League",
-    "original_tipster": "BetMines Valuebet",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.5",
-    "odds": 1.63,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793696590656_0",
     "event_date": "2026-11-05 21:00",
     "match_name": "Sturm Graz - Celje",
@@ -50,6 +36,20 @@
     "prediction": "Under 2.5",
     "original_tipster": "BetMines Valuebet",
     "odds": 1.77,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793700397637_0",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Real Sociedad - Olympique Lyonnais",
+    "league": "Europa League",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.63,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -194,6 +194,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793701385149_0",
+    "event_date": "2026-11-03 21:00",
+    "match_name": "Manchester United - Roma",
+    "league": "Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.55,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793690756241_0",
@@ -476,6 +490,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793701385150_1",
+    "event_date": "2026-11-03 19:00",
+    "match_name": "Pamplona - SD Eibar / FC Barcelona - Aston Villa / Bodo/Glimt - LOSC Lille",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "2 / 1 / 1X",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.99,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793689897270_1",
     "event_date": "2026-11-03 19:00",
     "match_name": "Pamplona - SD Eibar / Sirius - Halmstad / FC Barcelona - Aston Villa",
@@ -583,7 +611,7 @@
     "original_tipster": "BetExpBot",
     "odds": 1.9,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
