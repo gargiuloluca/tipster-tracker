@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793711148802_0",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Anderlecht - Salzburg",
-    "league": "Europa League",
-    "original_tipster": "BetMines Valuebet",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "odds": 1.93,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793696590656_0",
     "event_date": "2026-11-05 21:00",
     "match_name": "Sturm Graz - Celje",
@@ -54,6 +40,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793711148802_0",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Anderlecht - Salzburg",
+    "league": "Europa League",
+    "market": "1X2 / Mercato",
+    "prediction": "X2",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.93,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793703941419_0",
@@ -653,7 +653,7 @@
     "original_tipster": "BetExpBot",
     "odds": 1.72,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
