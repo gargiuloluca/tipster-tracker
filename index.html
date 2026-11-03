@@ -979,7 +979,7 @@
                 }
             } catch(err) {
                 errEl.innerText = "Errore durante la verifica. Riprova.";
-                errEl.classList.remove('hidden');
+                errEl.classList.add('hidden');
             }
         }
 
@@ -1138,16 +1138,18 @@
         }
 
         window.logoutUser = function() {
+            // Rimuove sessioni e flag amministrativi di test in modo sicuro
             localStorage.removeItem(CURRENT_SESSION_KEY);
+            localStorage.removeItem('atmbet_is_admin');
+            localStorage.removeItem('atmbet_admin_override');
+            sessionStorage.clear();
+            
             activeUser = null;
             showMarketingForVip = false;
             currentTipsterPlanFilter = 'all';
-            renderNavbarUserStatus();
-            applyUserExperienceMode();
-            updateTelegramBanner();
-            calculateGlobalPerformance();
-            renderPublicCards();
-            renderPublicHistory();
+            
+            // Reindirizza alla pagina di autenticazione
+            window.location.href = 'auth.html';
         };
 
         function getBetAccessState(user, bet) {
