@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793734660906_0",
-    "event_date": "2026-11-03 20:45",
-    "match_name": "QPR - Burnley",
-    "league": "Championship",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.98,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793696590656_0",
     "event_date": "2026-11-05 21:00",
     "match_name": "Sturm Graz - Celje",
@@ -470,6 +456,20 @@
     "prediction": "1",
     "original_tipster": "BetMines",
     "odds": 1.92,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793734660906_0",
+    "event_date": "2026-11-03 20:45",
+    "match_name": "QPR - Burnley",
+    "league": "Championship",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 1.98,
     "stake": 1,
     "status": "pending",
     "is_published": true,
