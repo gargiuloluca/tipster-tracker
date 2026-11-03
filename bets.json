@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793690756241_0",
-    "event_date": "2026-11-03 21:00",
-    "match_name": "Bodo-Glimt - Lille OSC / Sirius - Halmstads / Feyenoord - Inter / Barcellona - Aston Villa",
-    "league": "Multipla",
-    "original_tipster": "King",
-    "market": "Multipla",
-    "prediction": "1X / 1 / X2 / 1",
-    "odds": 2.643,
+    "id": "bet_1793691243092_0",
+    "event_date": "2026-11-03 08:45",
+    "match_name": "Newcastle Jets - Shanghai Port",
+    "league": "AFC Champions League",
+    "original_tipster": "BetExpBot",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.9,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -166,6 +166,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793690756241_0",
+    "event_date": "2026-11-03 21:00",
+    "match_name": "Bodo-Glimt - Lille OSC / Sirius - Halmstads / Feyenoord - Inter / Barcellona - Aston Villa",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "1X / 1 / X2 / 1",
+    "original_tipster": "King",
+    "odds": 2.643,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793690401711_0",
