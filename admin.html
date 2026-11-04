@@ -172,7 +172,7 @@
 
         <div class="max-w-7xl mx-auto px-2.5 sm:px-4 pt-3 sm:pt-6 space-y-4 sm:space-y-6">
 
-            <!-- SEZIONE TEST ABBONATI (ESCLUSIVA ADMIN A SCOMPARSA) -->
+            <!-- SEZIONE TEST ABBONATI -->
             <section class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/40 rounded-2xl p-3.5 sm:p-4 shadow-xl">
                 <div class="flex items-center justify-between cursor-pointer" onclick="toggleAdminTestPanel()">
                     <div class="flex items-center gap-2">
@@ -594,12 +594,10 @@
                 </div>
             </div>
 
-            <!-- SEZIONE PRONOSTICI: RESPONSIVE (CARDS SU MOBILE, TABELLA SU DESKTOP) -->
+            <!-- SEZIONE PRONOSTICI -->
             <section class="space-y-3">
-                <!-- VISTA MOBILE: Feed di Card Verticali Touch-Friendly -->
                 <div class="block md:hidden space-y-2.5" id="admin-mobile-bets-container"></div>
 
-                <!-- VISTA DESKTOP: Tabella Tradizionale Completa -->
                 <div class="hidden md:block bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-slate-300">
@@ -625,7 +623,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE, SCANNER, USERS SYNC, RISULTATI & TELEGRAM -->
+    <!-- SCRIPT GESTIONALE CON FORZATURA ANTI-CACHE -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
@@ -645,7 +643,6 @@
             channel_full: "-1004390945826"
         };
 
-        // AGGIUNTO CHIRURGICAMENTE: Pannello test rapido admin
         function toggleAdminTestPanel() {
             const panel = document.getElementById('admin-test-collapsible');
             const btn = document.getElementById('admin-test-toggle-btn');
@@ -681,30 +678,28 @@
         }
 
         function canonicalizeTipsterName(rawName) {
-    if (!rawName) return 'AtmBetSignal';
-    const clean = String(rawName).trim();
-    const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
+            if (!rawName) return 'AtmBetSignal';
+            const clean = String(rawName).trim();
+            const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
 
-    // Aggiunte per i nuovi fornitori o variazioni di nome
-    if (lower.includes('nerdytips') || lower.includes('nerdy tips')) return 'NerdyTips';
-    if (lower.includes('xg')) return 'AtmBetSignal XG';
-    if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
-    if (lower.includes('atmbet')) return 'AtmBetSignal';
-    if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
-    if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
-    if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
-    if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
-    if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
-    if (lower.includes('zcode')) return 'ZCODE';
-    if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
-    if (lower.includes('footy')) return 'FootyStats';
-    if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
-    if (lower.includes('freak')) return 'Freak Elite VIP';
-    if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
-    if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
+            if (lower.includes('nerdytips') || lower.includes('nerdy tips')) return 'NerdyTips';
+            if (lower.includes('xg')) return 'AtmBetSignal XG';
+            if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
+            if (lower.includes('atmbet')) return 'AtmBetSignal';
+            if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
+            if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+            if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
+            if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
+            if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
+            if (lower.includes('zcode')) return 'ZCODE';
+            if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
+            if (lower.includes('footy')) return 'FootyStats';
+            if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
+            if (lower.includes('freak')) return 'Freak Elite VIP';
+            if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
+            if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
 
-    return clean;
-            
+            return clean;
         }
 
         let currentFilter = 'all';
@@ -715,16 +710,15 @@
         let stagedVerificationResults = {};
         let firstServiceDate = '';
 
-        // GENERATORE UFFICIALE LINK DI INVITO TELEGRAM MONOUSO (1 solo ingresso)
         async function createOneTimeInviteLink(token, chatId, userIdentifier) {
             const url = `https://api.telegram.org/bot${token}/createChatInviteLink`;
-            const expireTimestamp = Math.floor(Date.now() / 1000) + (24 * 3600); // Valido 24 ore
+            const expireTimestamp = Math.floor(Date.now() / 1000) + (24 * 3600);
             
             const payload = {
                 chat_id: chatId,
                 name: `Sub: ${String(userIdentifier).slice(0, 20)}`,
                 expire_date: expireTimestamp,
-                member_limit: 1 // Link strettamente monouso: revocato dopo 1 ingresso
+                member_limit: 1
             };
 
             const res = await fetch(url, {
@@ -741,7 +735,6 @@
             }
         }
 
-        // GESTIONE FORNITORI ABILITATI CANALE PURE
         function getPureSelectedTipsters() {
             try {
                 const raw = localStorage.getItem(PURE_TIPSTERS_KEY);
@@ -799,7 +792,6 @@
             });
         }
 
-        // MOTORE VERIFICA RISULTATI
         function evaluatePickOutcome(predictionStr, homeScore, awayScore) {
             const h = parseInt(homeScore);
             const a = parseInt(awayScore);
@@ -963,7 +955,6 @@
             alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati su GitHub.`);
         }
 
-        // GESTIONE ABBONATI (users.json) CON LINK TELEGRAM MONOUSO
         function loadAllUsers() {
             try {
                 const raw = localStorage.getItem(USERS_LOCAL_KEY);
@@ -1003,7 +994,6 @@
 
             const accessCode = 'ATM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
-            // Generazione link monouso personale tramite Bot API
             const tgConf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
             const botToken = tgConf.token || DEFAULT_TG_CONFIG.token;
             const targetChatId = (plan === 'pure') ? (tgConf.channel_pure || DEFAULT_TG_CONFIG.channel_pure) : (tgConf.channel_full || DEFAULT_TG_CONFIG.channel_full);
@@ -1023,7 +1013,7 @@
                 identifier: ident,
                 email: ident,
                 telegram_id: tgId || '-',
-                telegram_link: oneTimeLink, // Salva il link monouso dedicato
+                telegram_link: oneTimeLink,
                 plan: plan,
                 access_code: accessCode,
                 created_at: getLocalDateString(new Date()),
@@ -1047,7 +1037,6 @@
             );
         }
 
-        // Rigenera un nuovo link monouso se l'abbonato lo richiede o scade
         async function regenerateUserOneTimeLink(userId) {
             const users = loadAllUsers();
             const u = users.find(x => String(x.id) === String(userId));
@@ -1264,7 +1253,6 @@
             }
         }
 
-        // TELEGRAM CONFIG & DISPATCH
         function loadTelegramConfig() {
             try {
                 const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
@@ -1354,7 +1342,7 @@
                     msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
                     msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
                 });
-                msg += `🔗 Web App: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet</a>`;
+                msg += `🔗 Web App: <a href="https://atmbetofficial.com">AtmBet</a>`;
 
                 try {
                     const res = await sendTelegramMessage(token, chatId, msg);
@@ -1390,7 +1378,7 @@
                     });
 
                     if (bIdx === totalBatches - 1) {
-                        msg += `🔗 Dashboard: <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
+                        msg += `🔗 Dashboard: <a href="https://atmbetofficial.com">AtmBet Web App</a>`;
                     }
 
                     try {
@@ -1447,7 +1435,7 @@
             msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
             msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
             msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
-            msg += `🔗 <a href="https://gargiuloluca.github.io/tipster-tracker">AtmBet Web App</a>`;
+            msg += `🔗 <a href="https://atmbetofficial.com">AtmBet Web App</a>`;
 
             try {
                 const res = await sendTelegramMessage(token, chatId, msg);
@@ -1504,7 +1492,12 @@
             renderPureTipstersSelector();
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
-            renderDashboard();
+            
+            // Forza il caricamento immediato da remoto all'apertura
+            syncBetsFromGitHubSilent().then(() => {
+                renderDashboard();
+            });
+            
             lucide.createIcons();
         }
 
@@ -1624,7 +1617,6 @@
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
 
-            const monthNames = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
             const btnToday = document.getElementById('btn-preset-today');
             const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
@@ -1766,6 +1758,36 @@
                 icon.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0';
                 text.innerText = 'Non configurata.';
                 text.className = 'text-[10px] text-slate-400 font-mono';
+            }
+        }
+
+        // AGGIUNTO: Sincronizzazione silenziosa con parametro anti-cache rigoroso
+        async function syncBetsFromGitHubSilent() {
+            const repo = localStorage.getItem(GH_REPO_KEY);
+            const token = localStorage.getItem(GH_TOKEN_KEY);
+            if (!repo || !token) return;
+
+            try {
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/bets.json?_nocache=${Date.now()}`;
+                const getRes = await fetch(getFileUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    const content = decodeURIComponent(escape(atob(fileData.content)));
+                    const parsed = JSON.parse(content);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        localStorage.setItem(PRIMARY_KEY, JSON.stringify(parsed));
+                        localStorage.setItem(ATMBET_KEY, JSON.stringify(parsed));
+                    }
+                }
+            } catch (err) {
+                console.warn("Impossibile sincronizzare i dati da GitHub in background:", err);
             }
         }
 
@@ -2389,7 +2411,6 @@
             return html;
         }
 
-        // RENDER VISTA MOBILE ADATTATA A SCHEDA TOUCH
         function renderMobileCards(betsToDisplay) {
             const container = document.getElementById('admin-mobile-bets-container');
             if (!container) return;
@@ -2495,7 +2516,6 @@
             lucide.createIcons();
         }
 
-        // RENDER VISTA DESKTOP (TABELLA)
         function renderTable(betsToDisplay) {
             const tbody = document.getElementById('bets-tbody');
             if (!tbody) return;
@@ -2525,7 +2545,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
