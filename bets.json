@@ -4,9 +4,9 @@
     "event_date": "2026-11-07 00:00",
     "match_name": "Boyacá Chicó - Internacional de Bogotá",
     "league": "Liga BetPlay",
-    "original_tipster": "BetMines Valuebet",
     "market": "1X2 / Mercato",
     "prediction": "1X",
+    "original_tipster": "BetMines Valuebet",
     "odds": 1.44,
     "stake": 1,
     "status": "pending",
@@ -389,7 +389,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793802890165_3",
