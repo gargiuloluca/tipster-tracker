@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtmBet | Contatti e Supporto Ufficiale</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased flex flex-col justify-between">
+
+    <!-- Header Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 w-auto">
+                <span class="text-base sm:text-lg font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
+            </div>
+            <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Torna alla Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-8 flex-1">
+        <div class="text-center space-y-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                <i data-lucide="headset" class="w-6 h-6"></i>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-white">Contatti & Supporto Ufficiale</h1>
+            <p class="text-xs sm:text-sm text-slate-400 max-w-md mx-auto">Hai bisogno di assistenza o informazioni sui nostri piani? Il team di AtmBet è a tua completa disposizione.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+            <!-- Email Info -->
+            <a href="mailto:Info@atmbetofficial.com" class="bg-slate-900 border border-slate-800 hover:border-emerald-500/40 p-6 rounded-2xl transition space-y-3 text-center group">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto group-hover:scale-110 transition">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Informazioni</div>
+                    <div class="text-xs sm:text-sm font-bold text-white mt-1 break-all">Info@atmbetofficial.com</div>
+                </div>
+            </a>
+
+            <!-- Email Assistenza -->
+            <a href="mailto:Assistenza@atmbetofficial.it" class="bg-slate-900 border border-slate-800 hover:border-emerald-500/40 p-6 rounded-2xl transition space-y-3 text-center group">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto group-hover:scale-110 transition">
+                    <i data-lucide="life-buoy" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Assistenza Tecnica</div>
+                    <div class="text-xs sm:text-sm font-bold text-white mt-1 break-all">Assistenza@atmbetofficial.it</div>
+                </div>
+            </a>
+
+            <!-- Telegram Ufficiale -->
+            <a href="https://t.me/AtmBetOfficial" target="_blank" class="bg-slate-900 border border-slate-800 hover:border-emerald-500/40 p-6 rounded-2xl transition space-y-3 text-center group">
+                <div class="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center mx-auto group-hover:scale-110 transition">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Canale Telegram</div>
+                    <div class="text-xs sm:text-sm font-bold text-white mt-1">@AtmBetOfficial</div>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500 font-mono">
+        &copy; 2026 AtmBet Official. Tutti i diritti riservati.
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
