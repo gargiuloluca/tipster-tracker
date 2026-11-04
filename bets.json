@@ -448,20 +448,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793790875840_0",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Borussia Dortmund - Real Betis",
-    "league": "Champions League",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793780882969_3",
     "event_date": "2026-11-04 21:00",
     "match_name": "Oxford United - Reading",
@@ -798,20 +784,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793790875840_1",
-    "event_date": "2026-11-04 18:45",
-    "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "2 / 2",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.61,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793780107930_1",
     "event_date": "2026-11-04 18:45",
     "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal / Athletico PR - Vasco da Gama",
@@ -962,20 +934,6 @@
     "odds": 1.86,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793701385149_0",
-    "event_date": "2026-11-03 21:00",
-    "match_name": "Manchester United - Roma",
-    "league": "Champions League",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.55,
-    "stake": 1,
-    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
@@ -1270,20 +1228,6 @@
     "odds": 1.51,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793701385150_1",
-    "event_date": "2026-11-03 19:00",
-    "match_name": "Pamplona - SD Eibar / FC Barcelona - Aston Villa / Bodo/Glimt - LOSC Lille",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "2 / 1 / 1X",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.99,
-    "stake": 1,
-    "status": "pending",
     "is_published": true,
     "tg_sent": true
   },
@@ -1792,20 +1736,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793614225573_0",
-    "event_date": "2026-11-02 18:30",
-    "match_name": "Sassuolo - Fiorentina",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793598831901_6",
     "event_date": "2026-11-02 18:30",
     "match_name": "Sassuolo - Fiorentina",
@@ -1856,20 +1786,6 @@
     "prediction": "No Gol",
     "original_tipster": "Pronostici1",
     "odds": 1.95,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793614225574_1",
-    "event_date": "2026-11-02 17:00",
-    "match_name": "Atromitos - Volos NFC / Heracles Almelo - TOP Oss",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.48,
     "stake": 1,
     "status": "won",
     "is_published": true,
@@ -2044,20 +1960,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793515893484_20",
-    "event_date": "2026-11-01 20:45",
-    "match_name": "Lazio - Cagliari",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "NoGol",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.72,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793515893482_1",
     "event_date": "2026-11-01 19:30",
     "match_name": "Alemannia Aachen - Preussen Munster",
@@ -2226,20 +2128,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793527656137_0",
-    "event_date": "2026-11-01 17:00",
-    "match_name": "Sarpsborg 08 - Kristiansund",
-    "league": "Eliteserien",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.53,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793516771243_0",
     "event_date": "2026-11-01 17:00",
     "match_name": "Kasimpasa - Besiktas / Celje - NK Nafta Lendava",
@@ -2350,20 +2238,6 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": false
-  },
-  {
-    "id": "bet_1793527656138_4",
-    "event_date": "2026-11-01 16:30",
-    "match_name": "Hacken - IFK Goteborg / Partizan - Zemun",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.45,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
   },
   {
     "id": "bet_1793515893484_23",
@@ -2716,20 +2590,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793527656138_3",
-    "event_date": "2026-11-01 14:00",
-    "match_name": "Trabzonspor - Gaziantep F.K. / Mura - Grosuplje / Stromsgodset - Moss",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "1 / 1X / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.97,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793515928566_2",
     "event_date": "2026-11-01 14:00",
     "match_name": "Young Boys - FC Zurigo / Amed - Eyupspor / Palermo - Vicenza Virtus",
@@ -2850,20 +2710,6 @@
     "prediction": "NoGol",
     "original_tipster": "Pronostici1",
     "odds": 1.77,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793527656137_2",
-    "event_date": "2026-11-01 12:15",
-    "match_name": "PEC Zwolle - ADO Den Haag / Djurgarden - Degerfors / Young Boys - Zurich",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "Over 1.5 / 1 / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.94,
     "stake": 1,
     "status": "lost",
     "is_published": true,
@@ -3220,20 +3066,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793441329222_3",
-    "event_date": "2026-10-31 18:00",
-    "match_name": "Rudes - Dinamo Zagreb / Charlotte - Orlando City / Mamelodi Sundowns - Durban City",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "2 / 1X / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 2.13,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793424044979_30",
     "event_date": "2026-10-31 18:00",
     "match_name": "Udinese - Roma",
@@ -3388,34 +3220,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793441329222_2",
-    "event_date": "2026-10-31 16:00",
-    "match_name": "Stockport County - AFC Wimbledon / Middlesbrough - Charlton Athletic / MB Rouissat - ES Ben Aknoun",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "1 / 1 / 1X",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.92,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793441329222_1",
-    "event_date": "2026-10-31 16:00",
-    "match_name": "Barnsley - Oxford United",
-    "league": "League One",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793424044978_22",
     "event_date": "2026-10-31 16:00",
     "match_name": "Man City - Brighton",
@@ -3542,20 +3346,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793441329223_4",
-    "event_date": "2026-10-31 15:00",
-    "match_name": "SK Artis Brno - Zlin / CSKA Sofia - Slavia Sofia",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.45,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793424044977_18",
     "event_date": "2026-10-31 15:00",
     "match_name": "Kocaelispor - Rizespor",
@@ -3580,20 +3370,6 @@
     "odds": 1.53,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793441329221_0",
-    "event_date": "2026-10-31 14:00",
-    "match_name": "Levante - Atletico de Madrid",
-    "league": "La Liga",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.6,
-    "stake": 1,
-    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
@@ -3648,20 +3424,6 @@
     "prediction": "2",
     "original_tipster": "Stats4bets bollamaker",
     "odds": 1.6,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793441329223_5",
-    "event_date": "2026-10-31 13:30",
-    "match_name": "Tammeka - Harju Jalgpallikool / FC Augsburg - SC Freiburg / Peterborough United - Luton Town / Crewe Alexandra - Barnet / Real Betis - Malaga",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "Over 1.5 / Over 1.5 / Over 1.5 / Over 1.5 / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 2.34,
     "stake": 1,
     "status": "won",
     "is_published": true,
@@ -3878,20 +3640,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793360187503_0",
-    "event_date": "2026-10-30 21:00",
-    "match_name": "Villarreal - Espanyol",
-    "league": "La Liga",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793360016669_7",
     "event_date": "2026-10-30 21:00",
     "match_name": "Villarreal - Espanyol",
@@ -4000,20 +3748,6 @@
     "odds": 1.7,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793360187503_1",
-    "event_date": "2026-10-30 19:30",
-    "match_name": "Rapid Bucuresti - Csikszereda / Atletico Madrid II - Alcorcon",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "1 / Over 1.5",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.55,
-    "stake": 1,
-    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
@@ -4256,20 +3990,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793269192191_0",
-    "event_date": "2026-10-29 20:45",
-    "match_name": "Fiorentina - Atalanta",
-    "league": "Serie A",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.65,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793269006994_0",
     "event_date": "2026-10-29 20:45",
     "match_name": "Casa Pia - Sporting Lisbon",
@@ -4406,20 +4126,6 @@
     "odds": 1.75,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793269192191_1",
-    "event_date": "2026-10-29 19:00",
-    "match_name": "Al Nassr - Al Kholood / ACV - AFC / Benfica - Gil Vicente",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "1 / Over 1.5 / 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.92,
-    "stake": 1,
-    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
@@ -4606,20 +4312,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793183748437_1",
-    "event_date": "2026-10-28 20:45",
-    "match_name": "Fulham - Crystal Palace / Celtic - Dundee Utd / Excelsior M. - Heerenveen",
-    "league": "Mista",
-    "market": "Multipla",
-    "prediction": "Tripla: Fulham 1X + Celtic 1 + Heerenveen 2",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.88,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793176959290_0",
     "event_date": "2026-10-28 20:45",
     "match_name": "Sunderland - Brentford",
@@ -4700,20 +4392,6 @@
     "odds": 1.48,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793183748437_0",
-    "event_date": "2026-10-28 20:00",
-    "match_name": "VVV-Venlo - Vitesse",
-    "league": "Coppa d'Olanda",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.46,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
@@ -5082,20 +4760,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793095531838_0",
-    "event_date": "2026-10-27 20:45",
-    "match_name": "Luton Town - Doncaster Rovers",
-    "league": "League One",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.54,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793074592428_4",
     "event_date": "2026-10-27 20:45",
     "match_name": "Roma - Cagliari / Spennymoor Town - South Shields",
@@ -5320,20 +4984,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793095531838_1",
-    "event_date": "2026-10-27 17:00",
-    "match_name": "Levadia - Tammeka / Sonnenhof Großaspach - FC Augsburg / Koninklijke HFC - Go Ahead Eagles",
-    "league": "Mista",
-    "market": "Multipla",
-    "prediction": "Tripla: 1 (Levadia) + 2 (Augsburg) + 2 (Go Ahead Eagles)",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.99,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793074592428_0",
     "event_date": "2026-10-27 17:00",
     "match_name": "Levadia - Tammeka / Sonnenhof Großaspach - FC Augsburg / Mantova - Cremonese",
@@ -5502,20 +5152,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793010582811_0",
-    "event_date": "2026-10-26 19:30",
-    "match_name": "Galatasaray vs Fenerbahçe",
-    "league": "Süper Lig",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793000252931_8",
     "event_date": "2026-10-26 19:00",
     "match_name": "FC Copenaghen vs Odense",
@@ -5642,34 +5278,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1792923097279_1",
-    "event_date": "2026-10-25 17:15",
-    "match_name": "Olympique Marseille - Le Havre",
-    "league": "Ligue 1",
-    "market": "1X2 / Mercato",
-    "prediction": "Segno 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.53,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1792923097279_0",
-    "event_date": "2026-10-25 17:15",
-    "match_name": "Toulouse - Troyes",
-    "league": "Ligue 1",
-    "market": "1X2 / Mercato",
-    "prediction": "Segno 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1792941943332_1",
     "event_date": "2026-10-25 16:30",
     "match_name": "Crystal Palace vs Newcastle United",
@@ -5694,34 +5302,6 @@
     "odds": 1.4,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1792923097279_2",
-    "event_date": "2026-10-25 15:00",
-    "match_name": "Sparta Praha vs Slovácko / Dep. Maipú vs Güemes / Sporting CP vs Academico Viseu",
-    "league": "Multipla Calcio",
-    "market": "1X2 / Mercato",
-    "prediction": "Tripla 1 (1 / 1 / 1)",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.98,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1792923097279_3",
-    "event_date": "2026-10-25 13:00",
-    "match_name": "Strømmen vs Strømsgodset / Villarreal II vs Cartagena / Aldosivi vs Belgrano",
-    "league": "Multipla Calcio",
-    "market": "1X2 / Mercato",
-    "prediction": "Tripla Mista (2 / 1X / X2)",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.99,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
@@ -6328,20 +5908,6 @@
     "tg_sent": false
   },
   {
-    "id": 1792863193811,
-    "event_date": "2026-10-25",
-    "match_name": "Meppen vs Wurzburger / York vs Port Vale / Slavia Praha vs Mlada",
-    "league": "Generale",
-    "market": "Multipla Tripla",
-    "prediction": "Tripla (1X / 1X / 1)",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 2.01,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": 1792857650290,
     "event_date": "2026-10-25",
     "match_name": "Sport Huancayo vs Alianza Atlético",
@@ -6426,20 +5992,6 @@
     "tg_sent": false
   },
   {
-    "id": 6,
-    "event_date": "2026-10-24 20:45",
-    "match_name": "Lazio vs Parma",
-    "league": "Serie A",
-    "market": "1X2",
-    "prediction": "Segno 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.46,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": 18,
     "event_date": "2026-10-24 20:45",
     "match_name": "Lazio vs Parma",
@@ -6504,20 +6056,6 @@
     "prediction": "Handicap Asiatico: Gil Vicente +1.5",
     "original_tipster": "Pronostici1",
     "odds": 1.55,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": 7,
-    "event_date": "2026-10-24 18:30",
-    "match_name": "Borussia Dortmund vs Eintracht Frankfurt",
-    "league": "Bundesliga",
-    "market": "1X2",
-    "prediction": "Segno 1",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.52,
     "stake": 1,
     "status": "won",
     "is_published": true,
@@ -6604,20 +6142,6 @@
     "odds": 2.43,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": 8,
-    "event_date": "2026-10-24 16:00",
-    "match_name": "Rangers vs St. Johnstone / Rapid vs Lustenau / Atl. Madrid vs La Coruña",
-    "league": "Multiplo Calcio",
-    "market": "Multipla Tripla",
-    "prediction": "Tripla (1 / 1 / 1)",
-    "original_tipster": "Stats4Bets Automatibet",
-    "odds": 1.92,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
