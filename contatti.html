@@ -45,7 +45,7 @@
                 <i data-lucide="headset" class="w-6 h-6"></i>
             </div>
             <h1 class="text-2xl sm:text-3xl font-black text-white">Contatti & Supporto Ufficiale</h1>
-            <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto">Hai bisogno di assistenza tecnica, informazioni sui piani o verifica degli accessi? Il team di AtmBet è a tua completa disposizione.</p>
+            <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto">Hai bisogno di assistenza tecnica, informazioni sui piani o verifica degli accessi? Compila il form sottostante o utilizza i nostri canali diretti.</p>
         </div>
 
         <!-- 3 Box Principali -->
@@ -84,6 +84,42 @@
             </a>
         </div>
 
+        <!-- Modulo di Contatto Diretto (Form) -->
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl shadow-xl space-y-4">
+            <div class="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <i data-lucide="message-square" class="w-5 h-5 text-emerald-400"></i>
+                <h2 class="text-sm font-bold text-white">Invia un Messaggio Diretto</h2>
+            </div>
+
+            <form action="https://formsubmit.co/Assistenza@atmbetofficial.it" method="POST" class="space-y-4 text-xs">
+                <input type="hidden" name="_subject" value="Nuovo messaggio dal sito AtmBet Official">
+                <input type="hidden" name="_captcha" value="false">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[11px]">Il tuo Nome</label>
+                        <input type="text" name="name" required placeholder="Mario Rossi" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[11px]">Il tuo Indirizzo Email</label>
+                        <input type="email" name="email" required placeholder="mario@gmail.com" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[11px]">Messaggio o Richiesta</label>
+                    <textarea name="message" rows="4" required placeholder="Scrivi qui la tua richiesta di assistenza o dettagli sul tuo abbonamento..." 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-white focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i> Invia Messaggio
+                </button>
+            </form>
+        </div>
+
         <!-- Sezione Info e Sicurezza -->
         <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
             <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
@@ -115,7 +151,7 @@
             <div class="space-y-3 text-xs text-slate-300">
                 <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-1">
                     <strong class="text-white block">Ho acquistato un piano ma non trovo il codice d'accesso, cosa faccio?</strong>
-                    <p class="text-slate-400">Contatta subito <a href="mailto:Assistenza@atmbetofficial.it" class="text-emerald-400 hover:underline">Assistenza@atmbetofficial.it</a> indicando la tua email di pagamento Stripe: verificheremo e attiveremo il tuo profilo in pochi minuti.</p>
+                    <p class="text-slate-400">Compila il form sopra indicando la tua email di pagamento Stripe: verificheremo e attiveremo il tuo profilo in pochi minuti.</p>
                 </div>
                 <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-1">
                     <strong class="text-white block">Come posso accedere al canale Telegram riservato?</strong>
