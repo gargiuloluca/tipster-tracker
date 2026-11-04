@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1793802890165_3",
+    "event_date": "2026-11-04 21:00",
+    "match_name": "RB Lipsia - Manchester City",
+    "league": "Champions League",
+    "original_tipster": "NerdyTips",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "odds": 1.32,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793802890164_2",
+    "event_date": "2026-11-04 21:00",
+    "match_name": "Bristol City - Wolverhampton Wanderers",
+    "league": "Championship",
+    "original_tipster": "NerdyTips",
+    "market": "1X2 / Mercato",
+    "prediction": "X2",
+    "odds": 1.36,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793779774284_6",
     "event_date": "2026-11-07 00:00",
     "match_name": "Independiente Petrolero - Real Tomayapo",
