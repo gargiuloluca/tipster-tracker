@@ -1,33 +1,5 @@
 [
   {
-    "id": "bet_1793821912474_1",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Lens - Como",
-    "league": "Champions League",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.86,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793821912474_0",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Dortmund - Betis",
-    "league": "Champions League",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.61,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793805204166_0",
     "event_date": "2026-11-07 00:00",
     "match_name": "Boyacá Chicó - Internacional de Bogotá",
@@ -404,6 +376,34 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793821912474_1",
+    "event_date": "2026-11-04 21:00",
+    "match_name": "Lens - Como",
+    "league": "Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "BetExpBot",
+    "odds": 1.86,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793821912474_0",
+    "event_date": "2026-11-04 21:00",
+    "match_name": "Dortmund - Betis",
+    "league": "Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetExpBot",
+    "odds": 1.61,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793805145376_0",
@@ -877,7 +877,7 @@
     "original_tipster": "Stats4Bets Automatibet",
     "odds": 1.61,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
