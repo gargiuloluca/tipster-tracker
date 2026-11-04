@@ -101,6 +101,9 @@
 
             <!-- CONTENITORE DINAMICO ACCEDI / SBLOCCO CODICE -->
             <div id="nav-user-area" class="flex items-center gap-2 sm:gap-3">
+                <a href="contatti.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition flex items-center gap-1">
+                    <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="hidden sm:inline">Contatti</span>
+                </a>
                 <button type="button" onclick="openLicenseModal()" class="text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 px-2 py-1.5 transition flex items-center gap-1">
                     <i data-lucide="key" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Codice</span> Sblocco
                 </button>
@@ -236,7 +239,7 @@
             </div>
         </section>
 
-        <!-- 3. SEZIONE METODO STRATEGICO (Più persuasiva e orientata alla conversione) -->
+        <!-- 3. SEZIONE METODO STRATEGICO -->
         <section id="metodo" class="public-marketing-element bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-slate-950 border border-emerald-500/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
             <div class="absolute -left-20 -top-20 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
             
@@ -358,7 +361,7 @@
             </div>
         </section>
 
-        <!-- 4.1 CONFRONTO PERFORMANCE: AtmBet Selection vs AtmBet Signal -->
+        <!-- 4.1 CONFRONTO PERFORMANCE -->
         <section id="confronto-piani" class="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-7 text-white shadow-xl space-y-6">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
                 <div>
@@ -452,7 +455,7 @@
             </div>
         </section>
 
-        <!-- 6. SELEZIONI OPERATIVE DI OGGI (Spostate prima dello storico) -->
+        <!-- 6. SELEZIONI OPERATIVE DI OGGI -->
         <section id="selezioni" class="space-y-4 pt-2">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
                 <div>
@@ -545,7 +548,7 @@
             </div>
         </section>
 
-        <!-- 8. SEZIONE PIANI & CREDITI: ARCHITETTURA COMMERCIALE (Subito dopo lo storico) -->
+        <!-- 8. SEZIONE PIANI & CREDITI -->
         <section id="piani" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-2xl mx-auto space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Piani d'Abbonamento & Crediti</span>
@@ -628,7 +631,7 @@
             </div>
         </section>
 
-        <!-- 9. SEZIONE FAQ (Solo Vetrina) -->
+        <!-- 9. SEZIONE FAQ -->
         <section id="faq" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
             <div class="text-center space-y-2">
                 <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
@@ -679,6 +682,8 @@
         <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500">
             <a href="index.html" class="hover:text-slate-400 transition">Home</a>
             <span>•</span>
+            <a href="contatti.html" class="hover:text-emerald-400 transition">Contatti</a>
+            <span>•</span>
             <a href="#piani" class="hover:text-slate-400 transition">Piani VIP</a>
             <span>•</span>
             <a href="auth.html" class="hover:text-slate-400 transition">Area Utente</a>
@@ -704,30 +709,30 @@
         };
 
         function canonicalizeTipsterName(rawName) {
-    if (!rawName) return 'AtmBetSignal';
-    const clean = String(rawName).trim();
-    const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
+            if (!rawName) return 'AtmBetSignal';
+            const clean = String(rawName).trim();
+            const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
 
-    // Aggiunte per i nuovi fornitori o variazioni di nome
-    if (lower.includes('nerdytips') || lower.includes('nerdy tips')) return 'NerdyTips';
-    if (lower.includes('xg')) return 'AtmBetSignal XG';
-    if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
-    if (lower.includes('atmbet')) return 'AtmBetSignal';
-    if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
-    if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
-    if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
-    if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
-    if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
-    if (lower.includes('zcode')) return 'ZCODE';
-    if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
-    if (lower.includes('footy')) return 'FootyStats';
-    if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
-    if (lower.includes('freak')) return 'Freak Elite VIP';
-    if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
-    if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
+            if (lower.includes('nerdytips') || lower.includes('nerdy tips')) return 'NerdyTips';
+            if (lower.includes('xg')) return 'AtmBetSignal XG';
+            if (lower.includes('il presidente')) return 'Il presidente';
+            if (lower.includes('upper90') || lower.includes('upper 90')) return 'Upper90';
+            if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
+            if (lower.includes('atmbet')) return 'AtmBetSignal';
+            if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
+            if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+            if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
+            if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
+            if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
+            if (lower.includes('zcode')) return 'ZCODE';
+            if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
+            if (lower.includes('footy')) return 'FootyStats';
+            if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
+            if (lower.includes('freak')) return 'Freak Elite VIP';
+            if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
+            if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
 
-    return clean;
-            
+            return clean;
         }
 
         function getActivePureTipsters() {
@@ -961,7 +966,6 @@
             if (!box) return;
 
             if (!user) {
-                // Vista Visitatore: Mostra il banner guida
                 box.className = "bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
                 box.innerHTML = `
                     <div class="flex items-center gap-3">
@@ -987,7 +991,6 @@
                     </div>
                 `;
             } else if (user.plan === 'credits' || user.plan === 'trial_vip') {
-                // Vista Utente a Crediti: Niente Telegram, ma invito ad acquistare altri crediti
                 box.className = "bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
                 box.innerHTML = `
                     <div class="flex items-center gap-3">
@@ -1004,7 +1007,6 @@
                     </a>
                 `;
             } else {
-                // Vista Abbonato VIP (Pure o All-Inclusive): Mostra il pulsante diretto per entrare nel canale Telegram
                 let channelUrl = TELEGRAM_CONFIG.full_channel_invite;
                 let channelTitle = "🌐 Canale VIP Telegram: AtmBet Signal All-Inclusive";
                 let channelDesc = "Accesso illimitato al flusso completo di tutti i segnali su Telegram.";
@@ -1044,6 +1046,9 @@
 
             if (!activeUser) {
                 container.innerHTML = `
+                    <a href="contatti.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition flex items-center gap-1">
+                        <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="hidden sm:inline">Contatti</span>
+                    </a>
                     <button type="button" onclick="openLicenseModal()" class="text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 px-2 py-1.5 transition flex items-center gap-1">
                         <i data-lucide="key" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Codice</span> Sblocco
                     </button>
@@ -1072,6 +1077,9 @@
 
                 container.innerHTML = `
                     <div class="flex items-center gap-2">
+                        <a href="contatti.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition hidden sm:flex items-center gap-1" title="Contatti">
+                            <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        </a>
                         <div class="flex flex-col text-right">
                             <span class="text-xs font-bold text-white max-w-[110px] sm:max-w-[140px] truncate">${activeUser.name || activeUser.email.split('@')[0]}</span>
                             <span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${badgeClass} inline-block font-semibold">${badgeLabel}</span>
@@ -1222,7 +1230,6 @@
             try {
                 const timestamp = new Date().getTime();
                 const res = await fetch(`users.json?_nocache=${timestamp}`, { cache: 'no-store' });
-                // fallback bets fetch
                 const resBets = await fetch(`bets.json?_nocache=${timestamp}`, {
                     cache: 'no-store',
                     headers: {
@@ -1498,7 +1505,7 @@
                 }
             } else {
                 if (subTitleEl) {
-                    if (subTitleEl) subTitleEl.innerText = "Dati cumulativi di tutto l'archivio verificato.";
+                    subTitleEl.innerText = "Dati cumulativi di tutto l'archivio verificato.";
                 }
             }
 
