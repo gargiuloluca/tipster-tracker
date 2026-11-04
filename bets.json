@@ -821,7 +821,7 @@
     "original_tipster": "BetExpBot",
     "odds": 1.78,
     "stake": 1,
-    "status": "won",
+    "status": "pending",
     "is_published": true,
     "tg_sent": false
   },
