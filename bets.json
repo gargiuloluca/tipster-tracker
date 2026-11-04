@@ -1078,20 +1078,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793687685734_0",
-    "event_date": "2026-11-03 19:00",
-    "match_name": "Anaitasuna - Alaves",
-    "league": "Copa del Rey",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "original_tipster": "CalcioAI",
-    "odds": 2.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793689773285_10",
     "event_date": "2026-11-03 18:45",
     "match_name": "SK Sturm Graz - NK Celje",
