@@ -49,6 +49,11 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
+        /* Classe dinamica per illuminare di verde solo la voce di menu selezionata */
+        .nav-item-active {
+            color: #22c55e !important;
+            font-weight: 700 !important;
+        }
         .custom-cards-scroll::-webkit-scrollbar,
         .custom-scroll-box::-webkit-scrollbar {
             width: 6px;
@@ -88,15 +93,15 @@
                 </a>
             </div>
 
-            <!-- LINK NAVIGAZIONE DESKTOP -->
+            <!-- LINK NAVIGAZIONE DESKTOP (Tutti neutri con classe nav-item) -->
             <div class="hidden md:flex items-center gap-3 lg:gap-6" id="desktop-nav-links">
-                <a href="#metodo" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
-                <a href="#simulatore" class="text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
-                <a href="#confronto-piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
-                <a href="#selezioni" class="text-xs font-bold text-emerald-400 hover:text-white transition">Pronostici Oggi</a>
-                <a href="#storico" class="text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
-                <a href="#piani" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
-                <a href="#faq" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+                <a href="#metodo" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
+                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
+                <a href="#confronto-piani" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
+                <a href="#selezioni" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici Oggi</a>
+                <a href="#storico" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
+                <a href="#piani" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
+                <a href="#faq" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
             </div>
 
             <!-- CONTENITORE DINAMICO ACCEDI / SBLOCCO CODICE -->
@@ -707,6 +712,12 @@
             full_channel_invite: "https://t.me/+bEe4tdqJREMwOThk",
             bot_username: "AtmBetOfficialBot"
         };
+
+        // Funzione per gestire l'evidenziazione verde al click nel menu
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-item-active'));
+            element.classList.add('nav-item-active');
+        }
 
         function canonicalizeTipsterName(rawName) {
             if (!rawName) return 'AtmBetSignal';
