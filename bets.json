@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793794674105_0",
-    "event_date": "2026-11-04 13:15",
-    "match_name": "Buriram - Kashima Antlers",
-    "league": "AFC Champions League Elite",
-    "original_tipster": "BetExpBot",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.97,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793779774284_6",
     "event_date": "2026-11-07 00:00",
     "match_name": "Independiente Petrolero - Real Tomayapo",
@@ -834,6 +820,20 @@
     "prediction": "1",
     "original_tipster": "Infoland",
     "odds": 1.85,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793794674105_0",
+    "event_date": "2026-11-04 13:15",
+    "match_name": "Buriram - Kashima Antlers",
+    "league": "AFC Champions League Elite",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "BetExpBot",
+    "odds": 1.97,
     "stake": 1,
     "status": "pending",
     "is_published": true,
