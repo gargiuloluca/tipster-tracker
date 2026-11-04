@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793791154795_0",
-    "event_date": "2026-11-06 20:30",
-    "match_name": "Ascoli - Palermo",
-    "league": "Serie B",
-    "original_tipster": "BetMines Valuebet",
-    "market": "1X2 / Mercato",
-    "prediction": "1X",
-    "odds": 1.66,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793779774284_6",
     "event_date": "2026-11-07 00:00",
     "match_name": "Independiente Petrolero - Real Tomayapo",
@@ -36,6 +22,20 @@
     "prediction": "Gol",
     "original_tipster": "BetMines Valuebet",
     "odds": 1.9,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793791154795_0",
+    "event_date": "2026-11-06 20:30",
+    "match_name": "Ascoli - Palermo",
+    "league": "Serie B",
+    "market": "1X2 / Mercato",
+    "prediction": "1X",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.66,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -389,7 +389,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793780882969_0",
@@ -403,7 +403,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793780107930_0",
@@ -459,7 +459,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793778852759_2",
@@ -473,7 +473,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793778828488_15",
@@ -781,7 +781,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793778852759_0",
@@ -795,7 +795,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793609437845_12",
