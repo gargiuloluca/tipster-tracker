@@ -444,7 +444,7 @@
     "odds": 1.36,
     "stake": 1,
     "status": "pending",
-    "is_published": true,
+    "is_published": false,
     "tg_sent": true
   },
   {
