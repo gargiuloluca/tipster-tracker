@@ -686,20 +686,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793778828485_5",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Deportiva Minera - FC Cartagena",
-    "league": "Copa del Rey",
-    "market": "1X2 / Mercato",
-    "prediction": "1X",
-    "original_tipster": "Pronostici1",
-    "odds": 1.66,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793778828485_4",
     "event_date": "2026-11-04 21:00",
     "match_name": "Calvo Sotelo - Albacete",
