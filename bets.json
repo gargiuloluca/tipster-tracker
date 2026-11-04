@@ -1078,20 +1078,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793687685736_2",
-    "event_date": "2026-11-03 19:00",
-    "match_name": "Anaitasuna - Alaves / Pamplona - Eibar / Villarreal - Paris Saint Germain",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "2 + Over 1.5 / 2 + Over 1.5 / 2 + Over 1.5",
-    "original_tipster": "CalcioAI",
-    "odds": 3.94,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793687685735_1",
     "event_date": "2026-11-03 19:00",
     "match_name": "Pamplona - Eibar / Villarreal - Paris Saint Germain",
