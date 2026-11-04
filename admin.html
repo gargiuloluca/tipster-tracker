@@ -681,27 +681,30 @@
         }
 
         function canonicalizeTipsterName(rawName) {
-            if (!rawName) return 'AtmBetSignal';
-            const clean = String(rawName).trim();
-            const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!rawName) return 'AtmBetSignal';
+    const clean = String(rawName).trim();
+    const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
 
-            if (lower.includes('xg')) return 'AtmBetSignal XG';
-            if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
-            if (lower.includes('atmbet')) return 'AtmBetSignal';
-            if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
-            if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
-            if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
-            if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
-            if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
-            if (lower.includes('zcode')) return 'ZCODE';
-            if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
-            if (lower.includes('footy')) return 'FootyStats';
-            if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
-            if (lower.includes('freak')) return 'Freak Elite VIP';
-            if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
-            if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
+    // Aggiunte per i nuovi fornitori o variazioni di nome
+    if (lower.includes('nerdytips') || lower.includes('nerdy tips')) return 'NerdyTips';
+    if (lower.includes('xg')) return 'AtmBetSignal XG';
+    if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
+    if (lower.includes('atmbet')) return 'AtmBetSignal';
+    if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
+    if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+    if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
+    if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
+    if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
+    if (lower.includes('zcode')) return 'ZCODE';
+    if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
+    if (lower.includes('footy')) return 'FootyStats';
+    if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
+    if (lower.includes('freak')) return 'Freak Elite VIP';
+    if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
+    if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
 
-            return clean;
+    return clean;
+            
         }
 
         let currentFilter = 'all';
