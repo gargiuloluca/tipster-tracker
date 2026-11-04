@@ -364,20 +364,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793804816213_0",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Racing Club De Lens - Como",
-    "league": "Champions League",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "original_tipster": "Brunetti Vip",
-    "odds": 1.53,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793802890165_3",
     "event_date": "2026-11-04 21:00",
     "match_name": "RB Lipsia - Manchester City",
@@ -389,7 +375,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793802890164_2",
