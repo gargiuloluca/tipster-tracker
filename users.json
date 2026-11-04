@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "id": "usr_admin_01",
+    "email": "admin@atmbet.com",
+    "name": "Amministratore",
+    "role": "admin",
+    "plan": "full",
+    "expires_at": "2099-12-31",
+    "telegram_link": "https://t.me/+qu_Llw2IATkxYzlk",
+    "active": true
+  },
+  {
+    "id": "usr_test_pure",
+    "identifier": "pure@atmbet.com",
+    "access_code": "PUREVIP",
+    "name": "Accesso Fisso Pure",
+    "role": "user",
+    "plan": "pure",
+    "expires_at": "2099-12-31",
+    "telegram_link": "https://t.me/+LWSXqh4jBxc5YzE0",
+    "status": "active",
+    "active": true
+  },
+  {
+    "id": "usr_test_full",
+    "identifier": "full@atmbet.com",
+    "access_code": "FULLVIP",
+    "name": "Accesso Fisso Full",
+    "role": "user",
+    "plan": "full",
+    "expires_at": "2099-12-31",
+    "telegram_link": "https://t.me/+Xl-QWFpjHvk0YTZk",
+    "status": "active",
+    "active": true
+  }
+]
