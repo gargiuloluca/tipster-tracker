@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793794583405_0",
+    "event_date": "2026-11-04 14:45",
+    "match_name": "FC Arkadag - Gol Gohar",
+    "league": "AFC Champions League Two",
+    "original_tipster": "Infoland",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.85,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793779774284_6",
     "event_date": "2026-11-07 00:00",
     "match_name": "Independiente Petrolero - Real Tomayapo",
