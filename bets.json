@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793833561715_0",
+    "event_date": "2026-11-06 18:00",
+    "match_name": "Puszcza Niepołomice - Miedź Legnica",
+    "league": "1. Liga",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "odds": 1.48,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793805204166_0",
     "event_date": "2026-11-07 00:00",
     "match_name": "Boyacá Chicó - Internacional de Bogotá",
