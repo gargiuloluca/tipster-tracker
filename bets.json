@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793805145376_0",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Racing Club De Lens - Como",
-    "league": "Champions League",
-    "original_tipster": "Il presidente",
+    "id": "bet_1793805204166_0",
+    "event_date": "2026-11-07 00:00",
+    "match_name": "Boyacá Chicó - Internacional de Bogotá",
+    "league": "Liga BetPlay",
+    "original_tipster": "BetMines Valuebet",
     "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "odds": 1.53,
+    "prediction": "1X",
+    "odds": 1.44,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -376,6 +376,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793805145376_0",
+    "event_date": "2026-11-04 21:00",
+    "match_name": "Racing Club De Lens - Como",
+    "league": "Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "Gol",
+    "original_tipster": "Il presidente",
+    "odds": 1.53,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793802890165_3",
