@@ -812,20 +812,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793837375603_1",
-    "event_date": "2026-11-05 19:00",
-    "match_name": "Tarancón - Levante / FC Lugano - Kauno Žalgiris / AZ Alkmaar - Juventus",
-    "league": "Multipla",
-    "market": "Multipla",
-    "prediction": "2 + Over 1.5 / 1 + Over 1.5 / 2 + Over 1.5",
-    "original_tipster": "CalcioAI",
-    "odds": 3.9,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793879979239_1",
     "event_date": "2026-11-05 18:45",
     "match_name": "Trabzonspor - SC Freiburg / FC Twente - Pafos FC / Sint-Truiden - Brann",
