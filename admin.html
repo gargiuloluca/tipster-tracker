@@ -1294,7 +1294,6 @@
             return res.json();
         }
 
-        // AGGIUNTO: Funzione per filtrare rigorosamente solo i pronostici della giornata odierna
         function getTodayBetsForTelegram(allBets) {
             const todayStr = getLocalDateString(new Date());
             return allBets.filter(b => {
@@ -1324,7 +1323,6 @@
             const bets = loadAllBets();
             const todayStr = getLocalDateString(new Date());
 
-            // APPLICATO IL FILTRO RIGOROSO SOLO PER OGGI
             const pendings = getTodayBetsForTelegram(bets);
             
             if (pendings.length === 0) {
@@ -2412,7 +2410,7 @@
 
         function getTipsterOptionsHtml(selectedTipster) {
             const list = [
-                'AtmBetSignal', 'AtmBet Safe', 'AtmBetSignal XG', 'Pronostici1', 'CalcioAI',
+                'AtmBetSignal', 'AtmBet Safe', 'AtmBetSignal XG', 'Il presidente', 'Upper90', 'ZcodeAi', 'Pronostici1', 'CalcioAI',
                 'BetMines', 'BetMines PreMatch', 'BetMines Valuebet', 'ZCODE', 'BetExpBot',
                 'FootyStats', 'Infoland', 'Freak Elite VIP', 'Stats4bets bollamaker', 'Stats4Bets Automatibet'
             ];
