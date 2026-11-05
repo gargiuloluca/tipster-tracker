@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1793892522433_1",
+    "event_date": "2026-11-07 13:00",
+    "match_name": "Safa - Araz",
+    "league": "Premier League",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "odds": 1.87,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793892522433_0",
+    "event_date": "2026-11-07 14:00",
+    "match_name": "Westfalia Rhynern - SC Paderborn 07 U23",
+    "league": "Regionalliga: West",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "odds": 1.7,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
