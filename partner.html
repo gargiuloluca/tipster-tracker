@@ -243,11 +243,15 @@
                 if (raw) users = JSON.parse(raw);
             } catch(e) {}
 
-            // FILTRO RIGOROSO: Prende gli utenti con il ref_code del partner, escludendo l'account tecnico di test
+            // FILTRO RIGOROSO: Prende gli utenti con il ref_code del partner, escludendo gli account di test o tecnici dei creator
             const matchedUsers = users.filter(u => {
                 const ref = (u.ref_code || '').trim().toUpperCase();
                 const email = (u.identifier || u.email || '').toLowerCase();
-                const isTestAccount = email.includes('@partner.atmbet');
+                const userId = (u.id || '').toLowerCase();
+                
+                // Esclude sia l'account tecnico @partner.atmbet sia qualsiasi ID che inizia con 'creator_'
+                const isTestAccount = email.includes('@partner.atmbet') || userId.startsWith('creator_');
+                
                 return ref === partner.code && !isTestAccount;
             });
 
