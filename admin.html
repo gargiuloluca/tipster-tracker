@@ -286,7 +286,7 @@
                         <div>
                             <label class="block text-slate-400 mb-1 text-[10px]">Piano Sottoscritto</label>
                             <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
-                                <option value="pure" selected>Pure Signal (Consigliato Test)</option>
+                                <option value="pure" selected>Pure Signal (Top Ticket)</option>
                                 <option value="elite">Cluster Elite (Bilanciato)</option>
                                 <option value="full">All-Inclusive (Tutti)</option>
                             </select>
@@ -2733,7 +2733,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
