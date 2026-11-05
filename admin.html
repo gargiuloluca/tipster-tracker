@@ -258,12 +258,23 @@
                     </div>
                 </div>
 
-                <!-- FORM AGGIUNTA MANUALE UTENTE -->
+                <!-- FORM AGGIUNTA MANUALE UNIFICATA (UTENTE O CREATOR) -->
                 <div id="add-user-panel" class="hidden bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 space-y-3">
-                    <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                        <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Inserisci Nuovo Abbonamento
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                            <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Crea Nuova Voce nel Sistema
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label class="text-[10px] text-slate-400 font-medium">Tipo:</label>
+                            <select id="entry-type-select" onchange="switchEntryFormType(this.value)" class="bg-slate-900 border border-slate-800 text-xs font-bold text-emerald-400 rounded-lg px-2 py-1 outline-none">
+                                <option value="user">Abbonato / Utente</option>
+                                <option value="creator">Codice Creator Partner</option>
+                            </select>
+                        </div>
                     </div>
-                    <form onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+
+                    <!-- FORM UTENTE -->
+                    <form id="form-type-user" onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                         <div>
                             <label class="block text-slate-400 mb-1 text-[10px]">Nome o Email</label>
                             <input type="text" id="new_user_ident" required placeholder="mario@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
@@ -275,19 +286,37 @@
                         <div>
                             <label class="block text-slate-400 mb-1 text-[10px]">Piano Sottoscritto</label>
                             <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
-                                <option value="pure">Pure Signal (Top Ticket)</option>
-                                <option value="elite" selected>Cluster Elite (Bilanciato)</option>
+                                <option value="pure" selected>Pure Signal (Consigliato Test)</option>
+                                <option value="elite">Cluster Elite (Bilanciato)</option>
                                 <option value="full">All-Inclusive (Tutti)</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-slate-400 mb-1 text-[10px]">Durata (Giorni)</label>
-                            <input type="number" id="new_user_days" value="30" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            <input type="number" id="new_user_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
                         </div>
                         <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
                             <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
                             <button type="submit" id="submit-user-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">
                                 Salva & Genera Link Monouso
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- FORM CREATOR PARTNER -->
+                    <form id="form-type-creator" onsubmit="handleManualCreateCreator(event)" class="hidden grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                        <div>
+                            <label class="block text-slate-400 mb-1 text-[10px]">Codice Creator (Es. PROVA10)</label>
+                            <input type="text" id="new_creator_code" required placeholder="PROVA10" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono uppercase focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block text-slate-400 mb-1 text-[10px]">Nome / Nickname Creator</label>
+                            <input type="text" id="new_creator_name" required placeholder="Mario Rossi" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div class="flex items-end gap-2">
+                            <button type="button" onclick="toggleAddUserModal()" class="px-3 py-2 text-xs text-slate-400 hover:text-white transition">Annulla</button>
+                            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs py-2 rounded-xl transition">
+                                Salva Creator
                             </button>
                         </div>
                     </form>
@@ -1004,7 +1033,7 @@
                 badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`;
             } else if (evaluated === 'lost') {
                 stagedVerificationResults[betId] = 'lost';
-                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
+                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA ✕</span>`;
             } else {
                 badgeEl.innerHTML = `
                     <div class="flex items-center gap-1">
@@ -1021,7 +1050,7 @@
             if (badgeEl) {
                 badgeEl.innerHTML = status === 'won'
                     ? `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`
-                    : `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA ✕</span>`;
+                    : `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA ✕</span>`;
             }
         }
 
@@ -1067,6 +1096,24 @@
             if (panel) panel.classList.toggle('hidden');
         }
 
+        function switchEntryFormType(type) {
+            const userForm = document.getElementById('form-type-user');
+            const creatorForm = document.getElementById('form-type-creator');
+            if (!userForm || !creatorForm) return;
+
+            if (type === 'creator') {
+                userForm.classList.add('hidden');
+                userForm.classList.remove('grid');
+                creatorForm.classList.remove('hidden');
+                creatorForm.classList.add('grid');
+            } else {
+                creatorForm.classList.add('hidden');
+                creatorForm.classList.remove('grid');
+                userForm.classList.remove('hidden');
+                userForm.classList.add('grid');
+            }
+        }
+
         async function handleManualCreateUser(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submit-user-btn');
@@ -1078,7 +1125,7 @@
             const ident = document.getElementById('new_user_ident').value.trim();
             const tgId = document.getElementById('new_user_tgid').value.trim();
             const plan = document.getElementById('new_user_plan').value;
-            const days = parseInt(document.getElementById('new_user_days').value) || 30;
+            const days = parseInt(document.getElementById('new_user_days').value) || 7;
 
             const expDate = new Date();
             expDate.setDate(expDate.getDate() + days);
@@ -1123,10 +1170,40 @@
             }
 
             alert(
-                `Abbonato salvato con successo!\n\n` +
+                `Abbonato salvato con successo (Durata ${days} giorni)!\n\n` +
                 `• Codice Accesso Web: ${accessCode}\n` +
-                `• Link Telegram Monouso (1 solo ingresso): ${oneTimeLink}`
+                `• Link Telegram Monouso: ${oneTimeLink}`
             );
+        }
+
+        const AUTHORIZED_PARTNERS_KEY = 'atmbet_authorized_partners_list';
+        function loadAuthorizedPartnersList() {
+            try {
+                const raw = localStorage.getItem(AUTHORIZED_PARTNERS_KEY);
+                if (raw) return JSON.parse(raw);
+            } catch(e) {}
+            return {
+                "TEST": { name: "Account di Test" },
+                "MARIO50": { name: "Mario Rossi" },
+                "TOWN10": { name: "Luca Bianchi" }
+            };
+        }
+
+        function handleManualCreateCreator(e) {
+            e.preventDefault();
+            const code = document.getElementById('new_creator_code').value.trim().toUpperCase();
+            const name = document.getElementById('new_creator_name').value.trim();
+
+            if (!code || !name) return;
+
+            const partners = loadAuthorizedPartnersList();
+            partners[code] = { name: name };
+            localStorage.setItem(AUTHORIZED_PARTNERS_KEY, JSON.stringify(partners));
+
+            e.target.reset();
+            toggleAddUserModal();
+            renderUsersTable();
+            alert(`Creator Partner "${name}" con codice "${code}" creato con successo!\n\nLink campagna: https://atmbetofficial.com/?ref=${code.toLowerCase()}`);
         }
 
         async function regenerateUserOneTimeLink(userId) {
@@ -2655,7 +2732,7 @@
                     let badge = bet.status === 'won'
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
-                            ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'
+                            ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
                             : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
