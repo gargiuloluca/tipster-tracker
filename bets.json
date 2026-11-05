@@ -1400,34 +1400,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793812577954_2",
-    "event_date": "2026-11-04 20:00",
-    "match_name": "Lens - Como / Slavia Prague - Arsenal",
-    "league": "Champions League",
-    "market": "Multipla",
-    "prediction": "Under 3.5 / Arsenal -1.0 H.A.",
-    "original_tipster": "Upper90",
-    "odds": 2.12,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793812577953_1",
-    "event_date": "2026-11-04 20:00",
-    "match_name": "RB Lipsia - Manchester City / PSV - Club Brugge",
-    "league": "Champions League",
-    "market": "Multipla",
-    "prediction": "Over 2.5 + Gol / Gol",
-    "original_tipster": "Upper90",
-    "odds": 2.04,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793780107930_1",
     "event_date": "2026-11-04 18:45",
     "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal / Athletico PR - Vasco da Gama",
@@ -1480,20 +1452,6 @@
     "odds": 1.54,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793812577953_0",
-    "event_date": "2026-11-04 17:45",
-    "match_name": "Fenerbahçe - Liverpool / Porto - Napoli",
-    "league": "Champions League",
-    "market": "Multipla",
-    "prediction": "2 / Porto Over 5.5 1°T Tiri + Porto Over 0.5",
-    "original_tipster": "Upper90",
-    "odds": 2.13,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
