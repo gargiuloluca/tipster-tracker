@@ -882,20 +882,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793859803320_4",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Aarhus - Braga",
-    "league": "UEFA Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.993,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793857130539_24",
     "event_date": "2026-11-05 18:45",
     "match_name": "Twente - Pafos",
