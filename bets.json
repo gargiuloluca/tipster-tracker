@@ -1148,20 +1148,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793857130527_2",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Anderlecht - Red Bull Salisburgo",
-    "league": "Europa League",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "original_tipster": "Pronostici1",
-    "odds": 1.83,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793857130526_0",
     "event_date": "2026-11-05 18:45",
     "match_name": "Aarhus - Braga",
