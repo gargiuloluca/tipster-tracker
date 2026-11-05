@@ -1,5 +1,17 @@
 [
   {
+    "id": "creator_1793893743374",
+    "identifier": "starace5@partner.atmbet",
+    "email": "starace5@partner.atmbet",
+    "name": "Tommaso",
+    "plan": "pure",
+    "access_code": "STARACE5",
+    "ref_code": "STARACE5",
+    "created_at": "2026-11-05",
+    "expires_at": "2026-11-12",
+    "status": "active"
+  },
+  {
     "id": "usr_admin_01",
     "email": "admin@atmbet.com",
     "name": "Amministratore",
