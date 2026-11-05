@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1793905082929_1",
+    "event_date": "2026-11-07 16:00",
+    "match_name": "St Albans City - Welling United",
+    "league": "Non League Premier: Isthmian",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.92,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793905082929_0",
+    "event_date": "2026-11-07 15:30",
+    "match_name": "Slovan Bratislava - Trenčín",
+    "league": "Niké Liga",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "GOL",
+    "odds": 1.83,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
