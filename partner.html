@@ -233,7 +233,7 @@
                 if (raw) users = JSON.parse(raw);
             } catch(e) {}
 
-            // FILTRO CORRETTO: Cerca ESATTAMENTE il codice del partner nel campo ref_code (escludendo i dati generali)
+            // FILTRO RIGOROSO AGGIORNATO: Prende esclusivamente gli utenti con ref_code corrispondente al codice del partner
             const matchedUsers = users.filter(u => {
                 const ref = (u.ref_code || '').trim().toUpperCase();
                 return ref === partner.code;
