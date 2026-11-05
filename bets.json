@@ -588,20 +588,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793857130538_22",
-    "event_date": "2026-11-05 21:00",
-    "match_name": "St. Truiden - Brann",
-    "league": "Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Pronostici1",
-    "odds": 1.54,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793857130536_18",
     "event_date": "2026-11-05 21:00",
     "match_name": "Real Sociedad - Lione",
@@ -680,20 +666,6 @@
     "prediction": "No Gol",
     "original_tipster": "Pronostici1",
     "odds": 1.73,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793857130528_6",
-    "event_date": "2026-11-05 21:00",
-    "match_name": "Getafe - Brighton",
-    "league": "Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Pronostici1",
-    "odds": 1.9,
     "stake": 1,
     "status": "lost",
     "is_published": true,
