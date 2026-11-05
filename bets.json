@@ -1199,7 +1199,7 @@
     "original_tipster": "NerdyTips",
     "odds": 1.34,
     "stake": 1,
-    "status": "void",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
