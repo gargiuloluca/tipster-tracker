@@ -243,10 +243,12 @@
                 if (raw) users = JSON.parse(raw);
             } catch(e) {}
 
-            // FILTRO RIGOROSO: Prende esclusivamente gli utenti con ref_code corrispondente al codice del partner
+            // FILTRO RIGOROSO: Prende gli utenti con il ref_code del partner, escludendo l'account tecnico di test
             const matchedUsers = users.filter(u => {
                 const ref = (u.ref_code || '').trim().toUpperCase();
-                return ref === partner.code;
+                const email = (u.identifier || u.email || '').toLowerCase();
+                const isTestAccount = email.includes('@partner.atmbet');
+                return ref === partner.code && !isTestAccount;
             });
 
             const tbody = document.getElementById('partner-conversions-tbody');
