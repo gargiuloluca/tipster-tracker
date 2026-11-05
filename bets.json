@@ -1269,7 +1269,7 @@
     "original_tipster": "BetMines Valuebet",
     "odds": 1.86,
     "stake": 1,
-    "status": "void",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
