@@ -5250,20 +5250,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793897360315_39",
-    "event_date": "2026-10-25 11:30",
-    "match_name": "Meppen vs Wurzburger / York vs Port Vale / Slavia Praha vs Mlada",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "Tripla (1X / 1X / 1)",
-    "original_tipster": "Multipla Tripla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": 1792907774067,
     "event_date": "2026-10-25",
     "match_name": "VfL Osnabrück vs SpVgg Greuther Fürth",
