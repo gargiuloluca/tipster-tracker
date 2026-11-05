@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793905834032_0",
+    "event_date": "2026-11-07 14:00",
+    "match_name": "Barockstadt Fulda-Lehnerz - TSV Steinbach",
+    "league": "Regionalliga: Südwest",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "odds": 1.57,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
