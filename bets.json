@@ -1078,20 +1078,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793857130530_9",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "FC Thun - Hearts",
-    "league": "Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "original_tipster": "Pronostici1",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793857130526_0",
     "event_date": "2026-11-05 18:45",
     "match_name": "Aarhus - Braga",
