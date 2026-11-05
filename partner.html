@@ -191,7 +191,6 @@
         const CURRENT_PARTNER_SESSION = 'atmbet_active_partner_session';
         const USERS_LOCAL_KEY = 'atmbet_users_accounts';
 
-        // Elenco dei codici partner autorizzati (puoi aggiungere qui i tuoi creator)
         const AUTHORIZED_PARTNERS = {
             "TEST": { name: "Account di Test" },
             "MARIO50": { name: "Mario Rossi" },
@@ -234,10 +233,10 @@
                 if (raw) users = JSON.parse(raw);
             } catch(e) {}
 
-            // Filtriamo gli utenti registrati che hanno utilizzato il codice di questo partner (tramite ref_code o access_code)
+            // FILTRO CORRETTO: Cerca ESATTAMENTE il codice del partner nel campo ref_code (escludendo i dati generali)
             const matchedUsers = users.filter(u => {
-                const ref = (u.ref_code || u.code || u.access_code || '').toUpperCase();
-                return ref.includes(partner.code) || partner.code === 'TEST';
+                const ref = (u.ref_code || '').trim().toUpperCase();
+                return ref === partner.code;
             });
 
             const tbody = document.getElementById('partner-conversions-tbody');
@@ -247,7 +246,7 @@
             const planPrices = { 'pure': 39.90, 'all_inclusive': 24.90, 'full': 24.90, 'elite': 24.90, 'credits': 9.90 };
 
             if (matchedUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna conversione registrata con questo codice al momento. Condividi il tuo link per iniziare!</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna conversione a pagamento registrata con questo codice al momento.</td></tr>`;
             } else {
                 matchedUsers.forEach(u => {
                     const plan = (u.plan || 'pure').toLowerCase();
