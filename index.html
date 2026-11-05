@@ -49,6 +49,11 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
+        /* Classe dinamica per illuminare di verde solo la voce di menu selezionata */
+        .nav-item-active {
+            color: #22c55e !important;
+            font-weight: 700 !important;
+        }
         .custom-cards-scroll::-webkit-scrollbar,
         .custom-scroll-box::-webkit-scrollbar {
             width: 6px;
@@ -694,6 +699,10 @@
             <span>•</span>
             <a href="auth.html" class="hover:text-slate-400 transition">Area Utente</a>
             <span>•</span>
+            <a href="collaborazioni.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
+                <i data-lucide="award" class="w-3 h-3 text-amber-500"></i> Collaborazioni
+            </a>
+            <span>•</span>
             <a href="admin.html" class="hover:text-emerald-400 transition flex items-center gap-1 font-mono">
                 <i data-lucide="lock" class="w-3 h-3 text-slate-600"></i> Console Gestore
             </a>
@@ -831,7 +840,7 @@
                     betsContainer.className = "flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory";
                 }
                 if (scrollArrows) scrollArrows.classList.remove('hidden');
-                if (mobileScrollHint) mobileScrollHint.classList.remove('hidden');
+                if (mobileScrollHint) mobileScrollHint.classList.add('hidden');
             }
         }
 
@@ -895,20 +904,20 @@
                 if (match) {
                     if (match.status && match.status !== 'active') {
                         errEl.innerText = "Questo codice promozionale è disattivato.";
-                        errEl.classList.remove('hidden');
+                        errEl.classList.add('hidden');
                         return;
                     }
 
                     const exp = match.expires_at || match.expiration;
                     if (exp && exp !== '-' && exp < todayStr) {
                         errEl.innerText = "Codice promo scaduto il " + exp;
-                        errEl.classList.remove('hidden');
+                        errEl.classList.add('hidden');
                         return;
                     }
 
                     if (match.max_uses && (match.used_count || 0) >= match.max_uses) {
                         errEl.innerText = "Codice promo esaurito.";
-                        errEl.classList.remove('hidden');
+                        errEl.classList.add('hidden');
                         return;
                     }
 
@@ -927,7 +936,7 @@
 
                     saveActiveUserSession(sessionData);
                     succEl.innerText = `Licenza ${planType.toUpperCase()} sbloccata!`;
-                    succEl.classList.remove('hidden');
+                    succEl.classList.add('hidden');
 
                     setTimeout(() => {
                         closeLicenseModal();
