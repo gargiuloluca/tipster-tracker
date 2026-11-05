@@ -854,20 +854,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793870775347_1",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Gent - KuPS",
-    "league": "Europe Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.659,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793863080493_1",
     "event_date": "2026-11-05 18:45",
     "match_name": "Anderlecht - Salzburg",
