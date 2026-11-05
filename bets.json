@@ -4788,20 +4788,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793897360312_28",
-    "event_date": "2026-10-28 20:00",
-    "match_name": "VVV-Venlo - Vitesse",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Coppa d'Olanda",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793200724442_0",
     "event_date": "2026-10-28 18:30",
     "match_name": "Inter Miami - FC Cincinnati",
@@ -5610,34 +5596,6 @@
     "odds": 1.4,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793897360314_37",
-    "event_date": "2026-10-25 15:00",
-    "match_name": "Sparta Praha vs Slovácko / Dep. Maipú vs Güemes / Sporting CP vs Academico Viseu",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "Tripla 1 (1 / 1 / 1)",
-    "original_tipster": "Multipla Calcio",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793897360315_38",
-    "event_date": "2026-10-25 13:00",
-    "match_name": "Strømmen vs Strømsgodset / Villarreal II vs Cartagena / Aldosivi vs Belgrano",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "Tripla Mista (2 / 1X / X2)",
-    "original_tipster": "Multipla Calcio",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
     "is_published": true,
     "tg_sent": false
   },
