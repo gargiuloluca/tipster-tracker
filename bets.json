@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793912763148_0",
-    "event_date": "2026-11-07 16:00",
-    "match_name": "Three Bridges - Brentwood Town",
-    "league": "Non League Premier: Isthmian",
-    "original_tipster": "BetMines Valuebet",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
@@ -64,6 +50,20 @@
     "prediction": "1",
     "original_tipster": "BetMines Valuebet",
     "odds": 1.9,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793912763148_0",
+    "event_date": "2026-11-07 16:00",
+    "match_name": "Three Bridges - Brentwood Town",
+    "league": "Non League Premier: Isthmian",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.5,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -863,7 +863,7 @@
     "original_tipster": "BetMines Valuebet",
     "odds": 1.57,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
