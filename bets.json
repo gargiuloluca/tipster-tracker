@@ -1,33 +1,5 @@
 [
   {
-    "id": "bet_1793879979239_1",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Trabzonspor - SC Freiburg / FC Twente - Pafos FC / Sint-Truiden - Brann",
-    "league": "Europa Conference League",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "Multipla",
-    "prediction": "Over 1.5 / 1 / 1X",
-    "odds": 1.86,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793879979238_0",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Sparta Praha - Bournemouth",
-    "league": "Europa League",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.51,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
@@ -361,7 +333,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793870775347_4",
@@ -417,7 +389,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793859517902_1",
@@ -445,7 +417,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793857130538_22",
@@ -742,6 +714,34 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793879979239_1",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Trabzonspor - SC Freiburg / FC Twente - Pafos FC / Sint-Truiden - Brann",
+    "league": "Europa Conference League",
+    "market": "Multipla",
+    "prediction": "Over 1.5 / 1 / 1X",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.86,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793879979238_0",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Sparta Praha - Bournemouth",
+    "league": "Europa League",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793870775347_1",
     "event_date": "2026-11-05 18:45",
     "match_name": "Gent - KuPS",
@@ -767,7 +767,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793859803320_4",
