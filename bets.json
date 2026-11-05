@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793882245680_0",
-    "event_date": "2026-11-05 19:30",
-    "match_name": "CS U Craiova - Egnatia Rrogozhinë",
-    "league": "Conference League",
-    "original_tipster": "ZCODE",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
@@ -722,6 +708,20 @@
     "prediction": "X2",
     "original_tipster": "BetMines Valuebet",
     "odds": 1.72,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793882245680_0",
+    "event_date": "2026-11-05 19:30",
+    "match_name": "CS U Craiova - Egnatia Rrogozhinë",
+    "league": "Conference League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "ZCODE",
+    "odds": 1.5,
     "stake": 1,
     "status": "pending",
     "is_published": true,
