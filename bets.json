@@ -4410,20 +4410,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793897360312_27",
-    "event_date": "2026-10-28 20:45",
-    "match_name": "Fulham - Crystal Palace / Celtic - Dundee Utd / Excelsior M. - Heerenveen",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "Tripla: Fulham 1X + Celtic 1 + Heerenveen 2",
-    "original_tipster": "Mista",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793176959290_0",
     "event_date": "2026-10-28 20:45",
     "match_name": "Sunderland - Brentford",
@@ -4938,20 +4924,6 @@
     "odds": 1.59,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793897360313_32",
-    "event_date": "2026-10-27 17:00",
-    "match_name": "Levadia - Tammeka / Sonnenhof Großaspach - FC Augsburg / Koninklijke HFC - Go Ahead Eagles",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "Tripla: 1 (Levadia) + 2 (Augsburg) + 2 (Go Ahead Eagles)",
-    "original_tipster": "Mista",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
     "is_published": true,
     "tg_sent": false
   },
