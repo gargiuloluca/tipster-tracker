@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793891712900_0",
-    "event_date": "2026-11-07 20:00",
-    "match_name": "Avai - Sao Bernardo FC",
-    "league": "Brasileire Serie B",
-    "original_tipster": "Infoland",
-    "market": "1X2 / Mercato",
-    "prediction": "2 DNB",
-    "odds": 1.83,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
@@ -22,6 +8,20 @@
     "prediction": "1",
     "original_tipster": "BetMines Valuebet",
     "odds": 1.62,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793891712900_0",
+    "event_date": "2026-11-07 20:00",
+    "match_name": "Avai - Sao Bernardo FC",
+    "league": "Brasileire Serie B",
+    "market": "1X2 / Mercato",
+    "prediction": "2 DNB",
+    "original_tipster": "Infoland",
+    "odds": 1.83,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -291,7 +291,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793779774282_0",
