@@ -1,47 +1,5 @@
 [
   {
-    "id": "bet_1793859803320_4",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Aarhus - Braga",
-    "league": "UEFA Conference League",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.993,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793859803320_2",
-    "event_date": "2026-11-05 19:30",
-    "match_name": "Univ. Craiova - Egnatia",
-    "league": "UEFA Conference League",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.448,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793859803320_1",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "KuPS - Gent",
-    "league": "UEFA Conference League",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.7,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793857243519_4",
     "event_date": "2026-11-07 16:00",
     "match_name": "York City - Northampton Town",
@@ -602,6 +560,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793859803320_2",
+    "event_date": "2026-11-05 19:30",
+    "match_name": "Univ. Craiova - Egnatia",
+    "league": "UEFA Conference League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.448,
+    "stake": 1,
+    "status": "lost",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793859517903_2",
     "event_date": "2026-11-05 19:30",
     "match_name": "Univ. Craiova - Zrinjski Mostar",
@@ -628,6 +600,34 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793859803320_4",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Aarhus - Braga",
+    "league": "UEFA Conference League",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.993,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793859803320_1",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "KuPS - Gent",
+    "league": "UEFA Conference League",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.7,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793858031249_0",
