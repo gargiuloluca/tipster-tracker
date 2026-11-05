@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793861710708_0",
+    "event_date": "2026-11-07 20:00",
+    "match_name": "Gualberto Villarroel SJ - Real Oruro",
+    "league": "Liga De Futbol Prof",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.7,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793857243519_4",
     "event_date": "2026-11-07 16:00",
     "match_name": "York City - Northampton Town",
