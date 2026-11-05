@@ -1246,20 +1246,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896427257_2",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Borussia Dortmund - Real Betis",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "original_tipster": "Champions League",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793805145376_0",
     "event_date": "2026-11-04 21:00",
     "match_name": "Racing Club De Lens - Como",
@@ -1568,20 +1554,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896427257_3",
-    "event_date": "2026-11-04 18:45",
-    "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "2 / 2",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793780107930_1",
     "event_date": "2026-11-04 18:45",
     "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal / Athletico PR - Vasco da Gama",
@@ -1678,20 +1650,6 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896427258_4",
-    "event_date": "2026-11-03 21:00",
-    "match_name": "Manchester United - Roma",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Champions League",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793689773285_11",
@@ -1930,20 +1888,6 @@
     "status": "won",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896427259_5",
-    "event_date": "2026-11-03 19:00",
-    "match_name": "Pamplona - SD Eibar / FC Barcelona - Aston Villa / Bodo/Glimt - LOSC Lille",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "2 / 1 / 1X",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793689773285_10",
@@ -2338,20 +2282,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896427260_7",
-    "event_date": "2026-11-02 17:00",
-    "match_name": "Atromitos - Volos NFC / Heracles Almelo - TOP Oss",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793600670662_1",
     "event_date": "2026-11-02 17:00",
     "match_name": "Atromitos - Volos NFC / Heracles Almelo - TOP Oss / Sporting Cristal - FC Cajamarca",
@@ -2730,20 +2660,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896427261_10",
-    "event_date": "2026-11-01 16:30",
-    "match_name": "Hacken - IFK Goteborg / Partizan - Zemun",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793515893484_23",
     "event_date": "2026-11-01 16:30",
     "match_name": "Maritimo - Santa Clara",
@@ -3052,20 +2968,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896427263_11",
-    "event_date": "2026-11-01 14:00",
-    "match_name": "Trabzonspor - Gaziantep F.K. / Mura - Grosuplje / Stromsgodset - Moss",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "1 / 1X / 1",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793515928566_2",
     "event_date": "2026-11-01 14:00",
     "match_name": "Young Boys - FC Zurigo / Amed - Eyupspor / Palermo - Vicenza Virtus",
@@ -3106,34 +3008,6 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896427264_14",
-    "event_date": "2026-11-01 13:30",
-    "match_name": "Tammeka - Harju Jalgpallikool / FC Augsburg - SC Freiburg / Peterborough United - Luton Town / Crewe Alexandra - Barnet / Real Betis - Malaga",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "Over 1.5 / Over 1.5 / Over 1.5 / Over 1.5 / 1",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793896427263_12",
-    "event_date": "2026-11-01 13:30",
-    "match_name": "SK Artis Brno - Zlin / CSKA Sofia - Slavia Sofia",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793515893485_31",
@@ -3458,20 +3332,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793896427265_16",
-    "event_date": "2026-10-31 18:00",
-    "match_name": "Rudes - Dinamo Zagreb / Charlotte - Orlando City / Mamelodi Sundowns - Durban City",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "2 / 1X / 1",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793424044979_30",
     "event_date": "2026-10-31 18:00",
     "match_name": "Udinese - Roma",
@@ -3566,20 +3426,6 @@
     "odds": 1.57,
     "stake": 1,
     "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793896427265_17",
-    "event_date": "2026-10-31 16:00",
-    "match_name": "Stockport County - AFC Wimbledon / Middlesbrough - Charlton Athletic / MB Rouissat - ES Ben Aknoun",
-    "league": "Generale",
-    "market": "Multipla",
-    "prediction": "1 / 1 / 1X",
-    "original_tipster": "Multipla",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
     "is_published": true,
     "tg_sent": false
   },
