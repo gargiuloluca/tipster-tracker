@@ -994,20 +994,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793778978752_1",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "AC Milan - Ferencvaros",
-    "league": "Europa League",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "NerdyTips",
-    "odds": 1.34,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793711148802_0",
     "event_date": "2026-11-05 18:45",
     "match_name": "Anderlecht - Salzburg",
