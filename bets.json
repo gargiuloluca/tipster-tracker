@@ -1213,7 +1213,7 @@
     "original_tipster": "NerdyTips",
     "odds": 1.34,
     "stake": 1,
-    "status": "pending",
+    "status": "void",
     "is_published": true,
     "tg_sent": true
   },
