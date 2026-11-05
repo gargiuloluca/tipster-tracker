@@ -2674,20 +2674,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896563498_9",
-    "event_date": "2026-11-01 17:00",
-    "match_name": "Sarpsborg 08 - Kristiansund",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "Eliteserien",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793515893485_35",
     "event_date": "2026-11-01 17:00",
     "match_name": "Trabzonspor - Gazisehir Gaziantep",
@@ -3092,20 +3078,6 @@
     "status": "won",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896563501_13",
-    "event_date": "2026-11-01 14:00",
-    "match_name": "Levante - Atletico de Madrid",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "La Liga",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793896563499_11",
@@ -3960,20 +3932,6 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896563503_22",
-    "event_date": "2026-10-30 21:00",
-    "match_name": "Villarreal - Espanyol",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "La Liga",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793430039419_2",
