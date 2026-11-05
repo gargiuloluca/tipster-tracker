@@ -5432,20 +5432,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793897360313_33",
-    "event_date": "2026-10-26 19:30",
-    "match_name": "Galatasaray - Fenerbahçe",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Süper Lig",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793000252931_8",
     "event_date": "2026-10-26 19:00",
     "match_name": "FC Copenaghen vs Odense",
