@@ -1,47 +1,5 @@
 [
   {
-    "id": "bet_1793863080494_4",
-    "event_date": "2026-11-05 21:00",
-    "match_name": "Sunderland - Dinamo Zagreb",
-    "league": "UEFA Europa League",
-    "original_tipster": "AtmBet Safe",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.43,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793863080494_3",
-    "event_date": "2026-11-05 23:00",
-    "match_name": "Aldosivi Mar del Plata - River Plate",
-    "league": "Primera División - Argentina",
-    "original_tipster": "AtmBet Safe",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.44,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793863080493_1",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Anderlecht - Salzburg",
-    "league": "UEFA Europa League",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.5",
-    "odds": 1.54,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793861710708_0",
     "event_date": "2026-11-07 20:00",
     "match_name": "Gualberto Villarroel SJ - Real Oruro",
@@ -320,6 +278,34 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793863080494_3",
+    "event_date": "2026-11-05 23:00",
+    "match_name": "Aldosivi Mar del Plata - River Plate",
+    "league": "Primera División - Argentina",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "AtmBet Safe",
+    "odds": 1.44,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793863080494_4",
+    "event_date": "2026-11-05 21:00",
+    "match_name": "Sunderland - Dinamo Zagreb",
+    "league": "UEFA Europa League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "AtmBet Safe",
+    "odds": 1.43,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793859517904_3",
@@ -656,6 +642,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793863080493_1",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Anderlecht - Salzburg",
+    "league": "UEFA Europa League",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.54,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793859803320_4",
@@ -1722,20 +1722,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793689773284_9",
-    "event_date": "2026-11-03 20:30",
-    "match_name": "KV Kortrijk - KV Mechelen",
-    "league": "Pro League",
-    "market": "1X2 / Mercato",
-    "prediction": "1X",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.51,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793689773285_10",
     "event_date": "2026-11-03 18:45",
     "match_name": "SK Sturm Graz - NK Celje",
@@ -1912,20 +1898,6 @@
     "prediction": "1 + Over 1.5 / 1 + Over 1.5",
     "original_tipster": "CalcioAI",
     "odds": 2.5,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793598488024_0",
-    "event_date": "2026-11-02 21:00",
-    "match_name": "Newcastle - Everton",
-    "league": "Premier League",
-    "market": "1X2 / Mercato",
-    "prediction": "DNB 1",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.66,
     "stake": 1,
     "status": "lost",
     "is_published": true,
@@ -3010,20 +2982,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793441649240_4",
-    "event_date": "2026-10-31 21:00",
-    "match_name": "Ajax - AZ Alkmaar",
-    "league": "Eredivisie",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.72,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793424044978_21",
     "event_date": "2026-10-31 21:00",
     "match_name": "Lione - Angers",
@@ -3298,20 +3256,6 @@
     "prediction": "X2",
     "original_tipster": "Pronostici1",
     "odds": 1.57,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793441649240_1",
-    "event_date": "2026-10-31 16:00",
-    "match_name": "Manchester City - Brighton",
-    "league": "Premier League",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "AtmBetSignal XG",
-    "odds": 1.68,
     "stake": 1,
     "status": "lost",
     "is_published": true,
