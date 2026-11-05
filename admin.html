@@ -214,7 +214,7 @@
                         <div id="sync-status-icon" class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0"></div>
                         <div>
                             <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> GitHub API Direct Sync
+                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione Dati Protetta
                             </div>
                             <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">Non configurata.</div>
                         </div>
@@ -252,7 +252,7 @@
                         <button type="button" onclick="toggleAddUserModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow">
                             <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Nuovo
                         </button>
-                        <button type="button" onclick="syncUsersFromGitHub()" title="Ricarica da GitHub" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold p-2 sm:px-2.5 sm:py-1.5 rounded-xl transition flex items-center gap-1">
+                        <button type="button" onclick="syncUsersFromGitHub()" title="Ricarica da remoto" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold p-2 sm:px-2.5 sm:py-1.5 rounded-xl transition flex items-center gap-1">
                             <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-blue-400"></i>
                         </button>
                     </div>
@@ -1044,7 +1044,7 @@
 
             persistBets(bets);
             closeResultsModal();
-            alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati su GitHub.`);
+            alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati.`);
         }
 
         function loadAllUsers() {
@@ -1335,10 +1335,10 @@
                     if (Array.isArray(parsed)) {
                         localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(parsed));
                         renderUsersTable();
-                        alert(`Caricati ${parsed.length} abbonati da users.json su GitHub!`);
+                        alert(`Caricati ${parsed.length} abbonati da users.json!`);
                     }
                 } else {
-                    alert("File users.json non trovato su GitHub.");
+                    alert("File users.json non trovato.");
                 }
             } catch(err) {
                 alert("Errore lettura users.json: " + err.message);
@@ -1852,15 +1852,15 @@
 
             if (status === 'ready') {
                 icon.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 animate-pulse';
-                text.innerText = 'Pronto. Commit automatici attivi.';
+                text.innerText = 'Pronto. Sincronizzazione attiva.';
                 text.className = 'text-[10px] text-emerald-400 font-mono';
             } else if (status === 'syncing') {
                 icon.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0 animate-ping';
-                text.innerText = 'Invio a GitHub in corso...';
+                text.innerText = 'Sincronizzazione in corso...';
                 text.className = 'text-[10px] text-amber-400 font-mono';
             } else if (status === 'success') {
                 icon.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0';
-                text.innerText = `Sincronizzato (${new Date().toLocaleTimeString()})`;
+                text.innerText = `Aggiornato (${new Date().toLocaleTimeString()})`;
                 text.className = 'text-[10px] text-emerald-400 font-mono font-bold';
             } else if (status === 'error') {
                 icon.className = 'w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0';
@@ -1898,7 +1898,7 @@
                     }
                 }
             } catch (err) {
-                console.warn("Impossibile sincronizzare i dati da GitHub in background:", err);
+                console.warn("Impossibile sincronizzare i dati da remoto in background:", err);
             }
         }
 
@@ -2655,8 +2655,8 @@
                     let badge = bet.status === 'won'
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
-                            ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
+                            ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
