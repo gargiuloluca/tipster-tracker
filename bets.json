@@ -5222,34 +5222,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793897360314_36",
-    "event_date": "2026-10-25 17:15",
-    "match_name": "Toulouse - Troyes",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Segno 1",
-    "original_tipster": "Ligue 1",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793897360314_35",
-    "event_date": "2026-10-25 17:15",
-    "match_name": "Olympique Marseille - Le Havre",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Segno 1",
-    "original_tipster": "Ligue 1",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1792941943332_1",
     "event_date": "2026-10-25 16:30",
     "match_name": "Crystal Palace vs Newcastle United",
