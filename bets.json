@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793895849736_0",
+    "event_date": "2026-11-05 21:00",
+    "match_name": "Copenhagen - Iberia 1999 / Lugano - Zalgiris Kaunas / AZ Alkmaar - Juventus",
+    "league": "UEFA Conference League",
+    "original_tipster": "CalcioAI",
+    "market": "Multipla",
+    "prediction": "1 & Over 1.5 / 1 & Over 1.5 / 2 & Over 1.5",
+    "odds": 3.712,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
