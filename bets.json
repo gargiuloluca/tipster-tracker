@@ -1,33 +1,5 @@
 [
   {
-    "id": "bet_1793880710115_1",
-    "event_date": "2026-11-07 14:00",
-    "match_name": "Astoria Walldorf - Homburg",
-    "league": "Regionalliga: Südwest",
-    "original_tipster": "BetMines Valuebet",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.74,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793880710115_0",
-    "event_date": "2026-11-07 15:00",
-    "match_name": "Värnamo - Norrköping",
-    "league": "Superettan",
-    "original_tipster": "BetMines Valuebet",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
@@ -112,6 +84,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793880710115_0",
+    "event_date": "2026-11-07 15:00",
+    "match_name": "Värnamo - Norrköping",
+    "league": "Superettan",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793857243518_2",
     "event_date": "2026-11-07 14:30",
     "match_name": "Crotone - SSC Giugliano",
@@ -120,6 +106,20 @@
     "prediction": "1",
     "original_tipster": "BetMines Valuebet",
     "odds": 1.85,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793880710115_1",
+    "event_date": "2026-11-07 14:00",
+    "match_name": "Astoria Walldorf - Homburg",
+    "league": "Regionalliga: Südwest",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "BetMines Valuebet",
+    "odds": 1.74,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -767,7 +767,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793870775347_1",
