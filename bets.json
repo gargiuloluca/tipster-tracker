@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793837483651_0",
+    "event_date": "2026-11-07 14:00",
+    "match_name": "Eimsbutteler TV - Todesfelde",
+    "league": "Regionalliga: Nord",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "odds": 1.67,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793805204166_0",
     "event_date": "2026-11-07 00:00",
     "match_name": "Boyacá Chicó - Internacional de Bogotá",
