@@ -1293,6 +1293,16 @@
             return res.json();
         }
 
+        // AGGIUNTO: Funzione per filtrare rigorosamente solo i pronostici della giornata odierna
+        function getTodayBetsForTelegram(allBets) {
+            const todayStr = getLocalDateString(new Date());
+            return allBets.filter(b => {
+                const isPending = String(b.status || 'pending').toLowerCase() === 'pending';
+                const betDate = extractStandardDate(b.event_date);
+                return isPending && betDate === todayStr && b.is_published !== false && !b.tg_sent;
+            });
+        }
+
         async function dispatchTelegramSignals(channelType) {
             const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
             const token = conf.token || DEFAULT_TG_CONFIG.token;
@@ -1313,10 +1323,11 @@
             const bets = loadAllBets();
             const todayStr = getLocalDateString(new Date());
 
-            const pendings = bets.filter(b => b.status === 'pending' && extractStandardDate(b.event_date) >= todayStr && !b.tg_sent);
+            // APPLICATO IL FILTRO RIGOROSO SOLO PER OGGI
+            const pendings = getTodayBetsForTelegram(bets);
             
             if (pendings.length === 0) {
-                alert("Nessun NUOVO pronostico da inviare per oggi!");
+                alert("Nessun nuovo pronostico programmato specificamente per OGGI da inviare su Telegram!");
                 return;
             }
 
@@ -1332,12 +1343,12 @@
                 });
 
                 if (toSend.length === 0) {
-                    alert(`Nessun segnale PURE da inviare per i canali attivi (${allowedPureTipsters.join(', ')}).`);
+                    alert(`Nessun segnale PURE per oggi nei canali attivi (${allowedPureTipsters.join(', ')}).`);
                     statusEl.innerText = "";
                     return;
                 }
 
-                let msg = `⚡ <b>ATMBET SELECTION | SIGNAL PURE (Nuovo Aggiornamento)</b> ⚡\n📅 <i>Sessione: ${todayStr}</i>\n🎯 <i>Top Selezioni ad Alto Valore Matematico</i>\n\n`;
+                let msg = `⚡ <b>ATMBET SELECTION | SIGNAL PURE (Aggiornamento Odierno)</b> ⚡\n📅 <i>Data: ${todayStr}</i>\n🎯 <i>Top Selezioni ad Alto Valore Matematico</i>\n\n`;
                 toSend.forEach((b, i) => {
                     msg += `<b>${i+1}. ${b.match_name}</b>\n`;
                     msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
@@ -1351,7 +1362,7 @@
                     if (res.ok) {
                         toSend.forEach(b => b.tg_sent = true);
                         persistBets(bets);
-                        statusEl.innerText = `Inviati ${toSend.length} segnali a PURE!`;
+                        statusEl.innerText = `Inviati ${toSend.length} segnali di oggi a PURE!`;
                         setTimeout(() => { statusEl.innerText = ""; }, 5000);
                     } else {
                         statusEl.innerText = `Errore: ${res.description}`;
@@ -1368,8 +1379,8 @@
 
                 for (let bIdx = 0; bIdx < totalBatches; bIdx++) {
                     const batch = toSend.slice(bIdx * BATCH_SIZE, (bIdx + 1) * BATCH_SIZE);
-                    let msg = `🌐 <b>ATMBET SIGNAL | AGGIORNAMENTO (${bIdx + 1}/${totalBatches})</b> 🌐\n`;
-                    msg += `📅 <i>Sessione: ${todayStr}</i>\n\n`;
+                    let msg = `🌐 <b>ATMBET SIGNAL | AGGIORNAMENTO ODIERNO (${bIdx + 1}/${totalBatches})</b> 🌐\n`;
+                    msg += `📅 <i>Data: ${todayStr}</i>\n\n`;
 
                     batch.forEach((b, i) => {
                         const globalIndex = bIdx * BATCH_SIZE + i + 1;
@@ -1401,7 +1412,7 @@
                 }
 
                 persistBets(bets);
-                statusEl.innerText = `Inviati ${sentCount} segnali ad All-Inclusive!`;
+                statusEl.innerText = `Inviati ${sentCount} segnali di oggi ad All-Inclusive!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
             }
         }
@@ -1495,7 +1506,6 @@
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
             
-            // Forza il caricamento immediato da remoto all'apertura
             syncBetsFromGitHubSilent().then(() => {
                 renderDashboard();
             });
@@ -1763,7 +1773,6 @@
             }
         }
 
-        // AGGIUNTO: Sincronizzazione silenziosa con parametro anti-cache rigoroso
         async function syncBetsFromGitHubSilent() {
             const repo = localStorage.getItem(GH_REPO_KEY);
             const token = localStorage.getItem(GH_TOKEN_KEY);
@@ -2547,7 +2556,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
