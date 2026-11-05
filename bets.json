@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793892273320_0",
-    "event_date": "2026-11-06 16:00",
-    "match_name": "Gomel - Arsenal Dzerzhinsk",
-    "league": "Belarus Vysshaya Liga",
-    "original_tipster": "BetMines PreMatch",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
@@ -316,6 +302,20 @@
     "prediction": "Under 2.5",
     "original_tipster": "BetMines Valuebet",
     "odds": 1.86,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793892273320_0",
+    "event_date": "2026-11-06 16:00",
+    "match_name": "Gomel - Arsenal Dzerzhinsk",
+    "league": "Belarus Vysshaya Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetMines PreMatch",
+    "odds": 1.57,
     "stake": 1,
     "status": "pending",
     "is_published": true,
