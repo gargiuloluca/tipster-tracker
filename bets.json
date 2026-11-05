@@ -1,12 +1,26 @@
 [
   {
+    "id": "bet_1793869601917_0",
+    "event_date": "2026-11-07 09:30",
+    "match_name": "Borneo - PSM",
+    "league": "Liga 1",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.64,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
     "league": "Liga Nacional",
-    "original_tipster": "BetMines Valuebet",
     "market": "1X2 / Mercato",
     "prediction": "1",
+    "original_tipster": "BetMines Valuebet",
     "odds": 1.62,
     "stake": 1,
     "status": "pending",
