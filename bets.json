@@ -1050,20 +1050,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793857130530_11",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Lewski Sofia - Jagiellonia",
-    "league": "Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "original_tipster": "Pronostici1",
-    "odds": 1.75,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793857130530_10",
     "event_date": "2026-11-05 18:45",
     "match_name": "Hapoel Beer Sheva - OFI Creta",
