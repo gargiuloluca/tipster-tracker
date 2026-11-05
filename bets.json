@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793857312390_0",
-    "event_date": "2026-11-05 21:00",
-    "match_name": "AZ Alkmaar - Juventus / Celtic - Beşiktaş",
+    "id": "bet_1793858031249_0",
+    "event_date": "2026-11-05 18:45",
+    "match_name": "Real Sociedad - Lione / Sparta Praga - Bournemouth / Lillestrøm - Viktoria Plzeň",
     "league": "Multipla",
-    "original_tipster": "BetMines",
+    "original_tipster": "Pronostici1",
     "market": "Multipla",
-    "prediction": "Over 1.5 / Over 2.5",
-    "odds": 1.91,
+    "prediction": "Over 2.5 / Under 3.5 / Over 2.5",
+    "odds": 3.63,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -264,6 +264,20 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793857312390_0",
+    "event_date": "2026-11-05 21:00",
+    "match_name": "AZ Alkmaar - Juventus / Celtic - Beşiktaş",
+    "league": "Multipla",
+    "market": "Multipla",
+    "prediction": "Over 1.5 / Over 2.5",
+    "original_tipster": "BetMines",
+    "odds": 1.91,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793857130538_22",
