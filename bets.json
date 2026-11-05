@@ -6006,20 +6006,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793897360315_41",
-    "event_date": "2026-10-24 18:30",
-    "match_name": "Borussia Dortmund vs Eintracht Frankfurt",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Segno 1",
-    "original_tipster": "Bundesliga",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": 23,
     "event_date": "2026-10-24 18:30",
     "match_name": "Racing Santander vs Espanyol",
