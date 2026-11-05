@@ -2296,20 +2296,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896427259_6",
-    "event_date": "2026-11-02 18:30",
-    "match_name": "Sassuolo - Fiorentina",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Serie A",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793598831901_6",
     "event_date": "2026-11-02 18:30",
     "match_name": "Sassuolo - Fiorentina",
@@ -2462,20 +2448,6 @@
     "status": "won",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896427260_8",
-    "event_date": "2026-11-01 20:45",
-    "match_name": "Lazio - Cagliari",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "NoGol",
-    "original_tipster": "Serie A",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793519622351_1",
@@ -2672,20 +2644,6 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896427261_9",
-    "event_date": "2026-11-01 17:00",
-    "match_name": "Sarpsborg 08 - Kristiansund",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "Eliteserien",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793515893485_35",
