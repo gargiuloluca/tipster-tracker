@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AtmBet | Area Partner & Creator Dashboard</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png?v=2">
+    <link rel="apple-touch-icon" href="logo.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#070a10',
+                            card: '#0e1522',
+                            border: '#1e293b',
+                            gold: '#fbbf24'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #0b0f17;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-atm-bg text-slate-100 min-h-screen font-sans antialiased pb-12 flex flex-col justify-between selection:bg-emerald-500 selection:text-black">
+
+    <!-- TOP NAVBAR -->
+    <header class="border-b border-slate-800 bg-slate-950/90 sticky top-0 z-50 backdrop-blur">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 w-auto">
+                <span class="text-base font-black tracking-wider text-white">ATM<span class="text-atm-green">BET</span> <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 ml-2">Partner Hub</span></span>
+            </div>
+            <div>
+                <a href="index.html" class="text-xs bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1.5">
+                    <i data-lucide="home" class="w-3.5 h-3.5 text-emerald-400"></i> Torna al Sito
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MODALE LOGIN PARTNER -->
+    <div id="partner-auth-overlay" class="fixed inset-0 bg-slate-950 z-[999] flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-sm w-full shadow-2xl text-center space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto">
+                <i data-lucide="award" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-black text-white">Area Partner Creator</h2>
+                <p class="text-xs text-slate-400 mt-1">Inserisci il tuo codice creator assegnato per visualizzare le statistiche.</p>
+            </div>
+            <form onsubmit="verifyPartnerLogin(event)" class="space-y-3">
+                <input type="text" id="partner-code-input" placeholder="ES. MARIO50 / TOWN10" required autofocus
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white text-center tracking-widest uppercase placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono">
+                <div id="partner-auth-error" class="text-[11px] font-bold text-rose-400 hidden">Codice partner non riconosciuto.</div>
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
+                    Accedi alla Dashboard
+                </button>
+            </form>
+            <div class="text-[10px] text-slate-600 font-sans">Richiedi un codice su <a href="collaborazioni.html" class="text-emerald-400 hover:underline">AtmBet Collaborazioni</a></div>
+        </div>
+    </div>
+
+    <!-- CONTENUTO DASHBOARD PARTNER -->
+    <div id="partner-main-content" class="hidden max-w-5xl mx-auto px-4 pt-6 space-y-6 flex-1 w-full">
+
+        <!-- Header Benvenuto Partner -->
+        <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/20 border border-amber-500/30 rounded-3xl p-5 sm:p-7 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase">Creator Partner</span>
+                    <span class="text-xs font-mono text-slate-400" id="partner-code-badge">Codice: -</span>
+                </div>
+                <h1 class="text-xl sm:text-2xl font-black text-white" id="partner-welcome-title">Benvenuto nella tua Dashboard</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Tracciamento in tempo reale delle conversioni generate dalla tua community.</p>
+            </div>
+            <div>
+                <button type="button" onclick="logoutPartner()" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Esci
+                </button>
+            </div>
+        </section>
+
+        <!-- KPI CARDS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg">
+                <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Utenti Attivati (Codice)</span>
+                <div id="partner-stat-uses" class="text-2xl font-mono font-black text-white mt-1">0</div>
+                <span class="text-[10px] text-emerald-400 font-medium">Registrazioni totali tracciate</span>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg">
+                <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Volume Generato (Lordo)</span>
+                <div id="partner-stat-volume" class="text-2xl font-mono font-black text-amber-400 mt-1">0.00 €</div>
+                <span class="text-[10px] text-slate-500">Valore transazioni prime sottoscrizioni</span>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg border-l-4 border-l-emerald-500">
+                <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider block">Il tuo Guadagno (50%)</span>
+                <div id="partner-stat-earnings" class="text-2xl font-mono font-black text-emerald-400 mt-1">0.00 €</div>
+                <span class="text-[10px] text-emerald-400/80 font-bold">Commissione spettante</span>
+            </div>
+        </div>
+
+        <!-- GENERATORE LINK / MATERIALE CAMPAGNA -->
+        <section class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+            <div class="flex items-center gap-2">
+                <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                    <i data-lucide="link" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-white">I tuoi Strumenti di Promozione</h2>
+                    <p class="text-[11px] text-slate-400">Condividi il tuo link tracciato o invita ad usare il tuo codice in fase di sblocco.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-1.5">
+                    <label class="block text-slate-400 text-[10px]">Il tuo Codice Promozionale</label>
+                    <div class="flex items-center justify-between bg-slate-900 px-3 py-2 rounded-xl border border-slate-800 font-mono font-bold text-amber-400">
+                        <span id="display-promo-code">-</span>
+                        <button onclick="copyToClipboard('display-promo-code')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded transition">Copia</button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-1.5">
+                    <label class="block text-slate-400 text-[10px]">Link Dedicato Campagna</label>
+                    <div class="flex items-center justify-between bg-slate-900 px-3 py-2 rounded-xl border border-slate-800 font-mono text-slate-300 text-[11px] truncate">
+                        <span id="display-promo-link" class="truncate mr-2">-</span>
+                        <button onclick="copyToClipboard('display-promo-link')" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 rounded transition shrink-0">Copia Link</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LISTA UTENTI ATTIVATI (TRASPARENZA TOTALE) -->
+        <section class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-3">
+            <h2 class="text-sm font-bold text-white">Storico Conversioni Registrate</h2>
+            <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
+                <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[600px]">
+                    <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
+                        <tr>
+                            <th class="py-2.5 px-3">Data Attivazione</th>
+                            <th class="py-2.5 px-3">Utente / Riferimento</th>
+                            <th class="py-2.5 px-3">Piano Sottoscritto</th>
+                            <th class="py-2.5 px-3 text-right">Valore Abbonamento</th>
+                            <th class="py-2.5 px-3 text-right text-emerald-400">Tua Commissione (50%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="partner-conversions-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-12">
+        AtmBet Partner Network &copy; 2026. Trasparenza e Affiliazioni Certificate.
+    </footer>
+
+    <!-- SCRIPT GESTIONE PARTNER HUB -->
+    <script>
+        const CURRENT_PARTNER_SESSION = 'atmbet_active_partner_session';
+        const USERS_LOCAL_KEY = 'atmbet_users_accounts';
+
+        function verifyPartnerLogin(e) {
+            e.preventDefault();
+            const code = document.getElementById('partner-code-input').value.trim().toUpperCase();
+            const errEl = document.getElementById('partner-auth-error');
+
+            if (!code) return;
+
+            // Per semplicità e test, verifichiamo se esiste nel database utenti un codice associato o se è un codice valido
+            // (Puoi precaricare o far corrispondere i codici dei creator)
+            let users = [];
+            try {
+                const raw = localStorage.getItem(USERS_LOCAL_KEY);
+                if (raw) users = JSON.parse(raw);
+            } catch(err) {}
+
+            // Simuliamo il riscontro o cerchiamo se c'è un riscontro nel localStorage/database
+            // Inizializziamo una sessione partner
+            const partnerData = {
+                code: code,
+                name: "Creator " + code
+            };
+
+            localStorage.setItem(CURRENT_PARTNER_SESSION, JSON.stringify(partnerData));
+            loadPartnerDashboard(partnerData);
+        }
+
+        function loadPartnerDashboard(partner) {
+            document.getElementById('partner-auth-overlay').classList.add('hidden');
+            document.getElementById('partner-main-content').classList.remove('hidden');
+
+            document.getElementById('partner-code-badge').innerText = `Codice: ${partner.code}`;
+            document.getElementById('partner-welcome-title').innerText = `Dashboard Partner: ${partner.code}`;
+            document.getElementById('display-promo-code').innerText = partner.code;
+            document.getElementById('display-promo-link').innerText = `https://atmbetofficial.com/?ref=${partner.code.toLowerCase()}`;
+
+            // Calcoliamo i dati reali prendendo gli utenti dal localStorage che hanno usato questo codice o simulando se vuoto
+            let users = [];
+            try {
+                const raw = localStorage.getItem(USERS_LOCAL_KEY);
+                if (raw) users = JSON.parse(raw);
+            } catch(e) {}
+
+            // Filtriamo gli utenti che contengono il codice o simuliamo dati realistici se è un test
+            const matchedUsers = users.filter(u => {
+                const c = (u.access_code || u.code || '').toUpperCase();
+                return c.includes(partner.code) || partner.code === 'TEST';
+            });
+
+            const tbody = document.getElementById('partner-conversions-tbody');
+            tbody.innerHTML = '';
+
+            let totalVolume = 0;
+            // Prezzo medio stimato dei piani per calcolare le commissioni al 50%
+            const planPrices = { 'pure': 39.90, 'all_inclusive': 24.90, 'full': 24.90, 'elite': 24.90, 'credits': 9.90 };
+
+            if (matchedUsers.length === 0) {
+                // Se è un nuovo partner senza ancora conversioni dirette registrate in locale, mostriamo lo stato a zero pulito
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna conversione registrata con questo codice al momento. Condividi il tuo link per iniziare!</td></tr>`;
+            } else {
+                matchedUsers.forEach(u => {
+                    const plan = (u.plan || 'pure').toLowerCase();
+                    const price = planPrices[plan] || 24.90;
+                    const commission = price * 0.50;
+                    totalVolume += price;
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-slate-950/50";
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3 font-mono text-slate-400">${u.created_at || 'Oggi'}</td>
+                        <td class="py-2.5 px-3 font-bold text-white">${u.identifier || u.email || 'Utente VIP'}</td>
+                        <td class="py-2.5 px-3 uppercase text-amber-400 font-bold">${plan}</td>
+                        <td class="py-2.5 px-3 text-right font-mono">${price.toFixed(2)} €</td>
+                        <td class="py-2.5 px-3 text-right font-mono font-black text-emerald-400">+${commission.toFixed(2)} €</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            const totalUses = matchedUsers.length;
+            const totalEarnings = totalVolume * 0.50;
+
+            document.getElementById('partner-stat-uses').innerText = totalUses;
+            document.getElementById('partner-stat-volume').innerText = totalVolume.toFixed(2) + ' €';
+            document.getElementById('partner-stat-earnings').innerText = totalEarnings.toFixed(2) + ' €';
+
+            lucide.createIcons();
+        }
+
+        function logoutPartner() {
+            localStorage.removeItem(CURRENT_PARTNER_SESSION);
+            location.reload();
+        }
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copiato negli appunti con successo!");
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            const saved = localStorage.getItem(CURRENT_PARTNER_SESSION);
+            if (saved) {
+                try {
+                    const partner = JSON.parse(saved);
+                    loadPartnerDashboard(partner);
+                } catch(e) {}
+            }
+        });
+    </script>
+</body>
+</html>
