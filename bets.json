@@ -518,20 +518,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793870775347_4",
-    "event_date": "2026-11-05 21:00",
-    "match_name": "Brann - St. Truiden",
-    "league": "Europe Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.72,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1793870775347_3",
     "event_date": "2026-11-05 21:00",
     "match_name": "Nordsjaelland - Monaco",
