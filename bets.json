@@ -1246,20 +1246,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793897360300_2",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Borussia Dortmund - Real Betis",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "original_tipster": "Champions League",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793805145376_0",
     "event_date": "2026-11-04 21:00",
     "match_name": "Racing Club De Lens - Como",
@@ -1678,20 +1664,6 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793897360301_4",
-    "event_date": "2026-11-03 21:00",
-    "match_name": "Manchester United - Roma",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Champions League",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793689773285_11",
