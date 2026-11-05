@@ -364,15 +364,44 @@
                     </div>
                 </div>
 
-                <!-- SELETTORE FORNITORI PURE -->
-                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-1.5">
-                    <div class="flex items-center justify-between">
-                        <span class="text-[10px] sm:text-[11px] font-bold text-amber-300 flex items-center gap-1">
-                            <i data-lucide="check-square" class="w-3.5 h-3.5 text-amber-400"></i> Tipster Canale PURE:
+                <!-- SELETTORE FORNITORI PURE (MENÙ A TENDINA A SCOMPARSA) -->
+                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleAccordion('pure-accordion-body', 'pure-accordion-icon')">
+                        <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                            <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i> Seleziona Tipster attivi per Canale PURE
                         </span>
-                        <span class="text-[9px] text-slate-500 font-mono">Filtro automatico</span>
+                        <div class="flex items-center gap-1.5 text-slate-400 text-xs font-mono">
+                            <span id="pure-selected-count" class="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded text-[10px]">0 attivi</span>
+                            <i data-lucide="chevron-down" id="pure-accordion-icon" class="w-4 h-4 transition-transform duration-200"></i>
+                        </div>
                     </div>
-                    <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-1.5 pt-1"></div>
+                    <div id="pure-accordion-body" class="hidden pt-2 border-t border-slate-800/80 space-y-2">
+                        <div class="flex gap-2">
+                            <button type="button" onclick="selectAllTipsters('pure', true)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Seleziona Tutti</button>
+                            <button type="button" onclick="selectAllTipsters('pure', false)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Deseleziona Tutti</button>
+                        </div>
+                        <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-1.5 pt-1"></div>
+                    </div>
+                </div>
+
+                <!-- SELETTORE FORNITORI ALL-INCLUSIVE (MENÙ A TENDINA A SCOMPARSA) -->
+                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleAccordion('full-accordion-body', 'full-accordion-icon')">
+                        <span class="text-xs font-bold text-blue-300 flex items-center gap-1.5">
+                            <i data-lucide="sliders" class="w-4 h-4 text-blue-400"></i> Seleziona Tipster attivi per Canale All-Inclusive
+                        </span>
+                        <div class="flex items-center gap-1.5 text-slate-400 text-xs font-mono">
+                            <span id="full-selected-count" class="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded text-[10px]">0 attivi</span>
+                            <i data-lucide="chevron-down" id="full-accordion-icon" class="w-4 h-4 transition-transform duration-200"></i>
+                        </div>
+                    </div>
+                    <div id="full-accordion-body" class="hidden pt-2 border-t border-slate-800/80 space-y-2">
+                        <div class="flex gap-2">
+                            <button type="button" onclick="selectAllTipsters('full', true)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Seleziona Tutti</button>
+                            <button type="button" onclick="selectAllTipsters('full', false)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Deseleziona Tutti</button>
+                        </div>
+                        <div id="full-tipsters-checkboxes" class="flex flex-wrap items-center gap-1.5 pt-1"></div>
+                    </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
@@ -636,6 +665,7 @@
         const GH_TOKEN_KEY = 'atmbet_gh_token';
         const TG_CONF_KEY = 'atmbet_tg_config';
         const PURE_TIPSTERS_KEY = 'atmbet_pure_selected_tipsters';
+        const FULL_TIPSTERS_KEY = 'atmbet_full_selected_tipsters';
 
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
@@ -653,6 +683,19 @@
             } else {
                 panel.classList.add('hidden');
                 btn.innerText = 'Mostra Test ▼';
+            }
+        }
+
+        function toggleAccordion(bodyId, iconId) {
+            const body = document.getElementById(bodyId);
+            const icon = document.getElementById(iconId);
+            if (!body || !icon) return;
+            if (body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                body.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
             }
         }
 
@@ -751,10 +794,28 @@
 
         function savePureSelectedTipsters(list) {
             localStorage.setItem(PURE_TIPSTERS_KEY, JSON.stringify(list));
+            renderTipstersSelectors();
         }
 
-        function togglePureTipster(tipsterName, isChecked) {
-            let current = getPureSelectedTipsters();
+        function getFullSelectedTipsters() {
+            try {
+                const raw = localStorage.getItem(FULL_TIPSTERS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            const allBets = loadAllBets();
+            return [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+        }
+
+        function saveFullSelectedTipsters(list) {
+            localStorage.setItem(FULL_TIPSTERS_KEY, JSON.stringify(list));
+            renderTipstersSelectors();
+        }
+
+        function toggleTipster(type, tipsterName, isChecked) {
+            let current = type === 'pure' ? getPureSelectedTipsters() : getFullSelectedTipsters();
             const canonical = canonicalizeTipsterName(tipsterName);
 
             if (isChecked) {
@@ -763,35 +824,63 @@
                 current = current.filter(t => t !== canonical);
             }
 
-            savePureSelectedTipsters(current);
-            renderDashboard();
+            if (type === 'pure') savePureSelectedTipsters(current);
+            else saveFullSelectedTipsters(current);
         }
 
-        function renderPureTipstersSelector() {
-            const container = document.getElementById('pure-tipsters-checkboxes');
-            if (!container) return;
+        function selectAllTipsters(type, selectAll) {
+            const allBets = loadAllBets();
+            const allTipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+            const guaranteed = ['AtmBetSignal', 'AtmBet Safe'];
+            guaranteed.forEach(g => { if (!allTipsters.includes(g)) allTipsters.push(g); });
+
+            const newList = selectAll ? allTipsters : [];
+            if (type === 'pure') savePureSelectedTipsters(newList);
+            else saveFullSelectedTipsters(newList);
+            renderTipstersSelectors();
+        }
+
+        function renderTipstersSelectors() {
+            const pureContainer = document.getElementById('pure-tipsters-checkboxes');
+            const fullContainer = document.getElementById('full-tipsters-checkboxes');
+            if (!pureContainer || !fullContainer) return;
 
             const allBets = loadAllBets();
             const existingTipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
-            
             const guaranteed = ['AtmBetSignal', 'AtmBet Safe'];
-            guaranteed.forEach(g => {
-                if (!existingTipsters.includes(g)) existingTipsters.push(g);
-            });
+            guaranteed.forEach(g => { if (!existingTipsters.includes(g)) existingTipsters.push(g); });
+            existingTipsters.sort();
 
-            const selected = getPureSelectedTipsters();
-            container.innerHTML = '';
+            const pureSelected = getPureSelectedTipsters();
+            const fullSelected = getFullSelectedTipsters();
 
-            existingTipsters.sort().forEach(t => {
-                const isChecked = selected.includes(t);
+            const pureCountEl = document.getElementById('pure-selected-count');
+            const fullCountEl = document.getElementById('full-selected-count');
+            if (pureCountEl) pureCountEl.innerText = `${pureSelected.length} attivi`;
+            if (fullCountEl) fullCountEl.innerText = `${fullSelected.length} attivi`;
+
+            pureContainer.innerHTML = '';
+            existingTipsters.forEach(t => {
+                const isChecked = pureSelected.includes(t);
                 const label = document.createElement('label');
                 label.className = `inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] cursor-pointer select-none transition ${isChecked ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'}`;
-
                 label.innerHTML = `
-                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="togglePureTipster('${t.replace(/'/g, "\\'")}', this.checked)" class="accent-amber-500 rounded cursor-pointer">
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTipster('pure', '${t.replace(/'/g, "\\'")}', this.checked)" class="accent-amber-500 rounded cursor-pointer">
                     <span>${t}</span>
                 `;
-                container.appendChild(label);
+                pureContainer.appendChild(label);
+            });
+
+            fullContainer.innerHTML = '';
+            existingTipsters.forEach(t => {
+                const isChecked = fullSelected.includes(t);
+                const label = document.createElement('label');
+                label.className = `inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] cursor-pointer select-none transition ${isChecked ? 'bg-blue-500/20 border-blue-500/40 text-blue-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'}`;
+                label.innerHTML = `
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTipster('full', '${t.replace(/'/g, "\\'")}', this.checked)" class="accent-blue-500 rounded cursor-pointer">
+                    <span>${t}</span>
+                `;
+                fullContainer.appendChild(label);
             });
         }
 
@@ -839,7 +928,7 @@
             const pendingBets = bets.filter(b => b.status === 'pending');
 
             if (pendingBets.length === 0) {
-                listEl.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs font-medium">Nessun pronostico in corso da verificare.</div>`;
+                listEl.innerHTML = `<div class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico in corso da verificare.</div>`;
                 if (badgeEl) badgeEl.innerText = "0 giocate in attesa";
                 modal.classList.remove('hidden');
                 return;
@@ -1371,7 +1460,19 @@
                 }
 
             } else {
-                const toSend = pendings;
+                const allowedFullTipsters = getFullSelectedTipsters();
+
+                const toSend = pendings.filter(b => {
+                    const norm = canonicalizeTipsterName(b.original_tipster);
+                    return allowedFullTipsters.includes(norm);
+                });
+
+                if (toSend.length === 0) {
+                    alert(`Nessun segnale All-Inclusive per oggi nei canali attivi (${allowedFullTipsters.join(', ')}).`);
+                    statusEl.innerText = "";
+                    return;
+                }
+
                 const BATCH_SIZE = 8;
                 const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
                 let sentCount = 0;
@@ -1501,7 +1602,7 @@
             loadGitHubSettings();
             loadTelegramConfig();
             renderUsersTable();
-            renderPureTipstersSelector();
+            renderTipstersSelectors();
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
             
@@ -1918,7 +2019,7 @@
             localStorage.setItem(PRIMARY_KEY, JSON.stringify(bets));
             localStorage.setItem(ATMBET_KEY, JSON.stringify(bets));
             renderDashboard();
-            renderPureTipstersSelector();
+            renderTipstersSelectors();
             syncBetsToGitHub(bets);
         }
 
@@ -2555,7 +2656,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
