@@ -197,6 +197,13 @@
             "TOWN10": { name: "Luca Bianchi" }
         };
 
+                const AUTHORIZED_PARTNERS = {
+            "TEST": { name: "Account di Test" },
+            "MARIO50": { name: "Mario Rossi" },
+            "TOWN10": { name: "Luca Bianchi" },
+            "PROVA10": { name: "Creator di Prova" } // <-- Aggiunto qui
+        };
+
         function verifyPartnerLogin(e) {
             e.preventDefault();
             const code = document.getElementById('partner-code-input').value.trim().toUpperCase();
