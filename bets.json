@@ -1,75 +1,5 @@
 [
   {
-    "id": "bet_1793900668412_4",
-    "event_date": "2026-11-04 18:45",
-    "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal",
-    "league": "Champions League",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "Multipla",
-    "prediction": "2 / 2",
-    "odds": 1.61,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793900668412_3",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Borussia Dortmund - Real Betis",
-    "league": "Champions League",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793900668412_2",
-    "event_date": "2026-11-03 21:00",
-    "match_name": "Manchester United - Roma",
-    "league": "Champions League",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.55,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793900668412_1",
-    "event_date": "2026-11-02 17:00",
-    "match_name": "Atromitos - Volos NFC / Heracles Almelo - TOP Oss",
-    "league": "Grecia / Olanda B",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "Multipla",
-    "prediction": "1X / 1",
-    "odds": 1.48,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793900668411_0",
-    "event_date": "2026-11-02 18:30",
-    "match_name": "Sassuolo - Fiorentina",
-    "league": "Serie A",
-    "original_tipster": "Stats4Bets Automatibet",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
@@ -1316,6 +1246,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793900668412_3",
+    "event_date": "2026-11-04 21:00",
+    "match_name": "Borussia Dortmund - Real Betis",
+    "league": "Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "Gol",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.5,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793805145376_0",
     "event_date": "2026-11-04 21:00",
     "match_name": "Racing Club De Lens - Como",
@@ -1624,6 +1568,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793900668412_4",
+    "event_date": "2026-11-04 18:45",
+    "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal",
+    "league": "Champions League",
+    "market": "Multipla",
+    "prediction": "2 / 2",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.61,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793780107930_1",
     "event_date": "2026-11-04 18:45",
     "match_name": "AEK Athens - Real Madrid / Slavia Praha - Arsenal / Athletico PR - Vasco da Gama",
@@ -1720,6 +1678,20 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793900668412_2",
+    "event_date": "2026-11-03 21:00",
+    "match_name": "Manchester United - Roma",
+    "league": "Champions League",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.55,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793689773285_11",
@@ -2310,6 +2282,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793900668411_0",
+    "event_date": "2026-11-02 18:30",
+    "match_name": "Sassuolo - Fiorentina",
+    "league": "Serie A",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.57,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793598831901_6",
     "event_date": "2026-11-02 18:30",
     "match_name": "Sassuolo - Fiorentina",
@@ -2350,6 +2336,20 @@
     "status": "won",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793900668412_1",
+    "event_date": "2026-11-02 17:00",
+    "match_name": "Atromitos - Volos NFC / Heracles Almelo - TOP Oss",
+    "league": "Grecia / Olanda B",
+    "market": "Multipla",
+    "prediction": "1X / 1",
+    "original_tipster": "Stats4Bets Automatibet",
+    "odds": 1.48,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793600670662_1",
@@ -6659,7 +6659,7 @@
     "original_tipster": "Stats4Bets Automatibet",
     "odds": 2.01,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": false
   },
