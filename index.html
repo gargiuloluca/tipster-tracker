@@ -711,6 +711,13 @@
 
     <!-- LOGICA JAVASCRIPT, LICENZE & TELEGRAM -->
     <script>
+        // CATTURA DEL PARAMETRO ?ref= DAL LINK DEL CREATOR (Persistente nel browser)
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCodeFromUrl = urlParams.get('ref');
+        if (refCodeFromUrl) {
+            localStorage.setItem('atmbet_active_ref_code', refCodeFromUrl.trim().toUpperCase());
+        }
+
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
         const USERS_DB_KEY = 'atmbet_users_accounts';
@@ -840,7 +847,7 @@
                     betsContainer.className = "flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory";
                 }
                 if (scrollArrows) scrollArrows.classList.remove('hidden');
-                if (mobileScrollHint) mobileScrollHint.classList.add('hidden');
+                if (mobileScrollHint) mobileScrollHint.classList.remove('hidden');
             }
         }
 
@@ -1918,7 +1925,7 @@
                             <span class="text-slate-400 font-semibold">${bet.league}</span>
                             ${isWon 
                                 ? '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
-                                : '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'}
+                                : '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
                         </div>
                     </div>
                     
@@ -1965,7 +1972,7 @@
                     <td class="py-2.5 px-3 text-center">
                         ${isWon 
                             ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
-                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'}
+                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
                     </td>
                     <td class="py-2.5 px-3 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
                         ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
