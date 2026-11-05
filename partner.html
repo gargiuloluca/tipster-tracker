@@ -191,6 +191,13 @@
         const CURRENT_PARTNER_SESSION = 'atmbet_active_partner_session';
         const USERS_LOCAL_KEY = 'atmbet_users_accounts';
 
+        // Elenco dei codici partner autorizzati (puoi aggiungere qui i tuoi creator)
+        const AUTHORIZED_PARTNERS = {
+            "TEST": { name: "Account di Test" },
+            "MARIO50": { name: "Mario Rossi" },
+            "TOWN10": { name: "Luca Bianchi" }
+        };
+
         function verifyPartnerLogin(e) {
             e.preventDefault();
             const code = document.getElementById('partner-code-input').value.trim().toUpperCase();
@@ -198,23 +205,18 @@
 
             if (!code) return;
 
-            // Per semplicità e test, verifichiamo se esiste nel database utenti un codice associato o se è un codice valido
-            // (Puoi precaricare o far corrispondere i codici dei creator)
-            let users = [];
-            try {
-                const raw = localStorage.getItem(USERS_LOCAL_KEY);
-                if (raw) users = JSON.parse(raw);
-            } catch(err) {}
+            if (AUTHORIZED_PARTNERS[code] || code === "TEST") {
+                errEl.classList.add('hidden');
+                const partnerData = {
+                    code: code,
+                    name: AUTHORIZED_PARTNERS[code] ? AUTHORIZED_PARTNERS[code].name : "Creator Partner"
+                };
 
-            // Simuliamo il riscontro o cerchiamo se c'è un riscontro nel localStorage/database
-            // Inizializziamo una sessione partner
-            const partnerData = {
-                code: code,
-                name: "Creator " + code
-            };
-
-            localStorage.setItem(CURRENT_PARTNER_SESSION, JSON.stringify(partnerData));
-            loadPartnerDashboard(partnerData);
+                localStorage.setItem(CURRENT_PARTNER_SESSION, JSON.stringify(partnerData));
+                loadPartnerDashboard(partnerData);
+            } else {
+                errEl.classList.remove('hidden');
+            }
         }
 
         function loadPartnerDashboard(partner) {
@@ -222,32 +224,29 @@
             document.getElementById('partner-main-content').classList.remove('hidden');
 
             document.getElementById('partner-code-badge').innerText = `Codice: ${partner.code}`;
-            document.getElementById('partner-welcome-title').innerText = `Dashboard Partner: ${partner.code}`;
+            document.getElementById('partner-welcome-title').innerText = `Benvenuto, ${partner.name}`;
             document.getElementById('display-promo-code').innerText = partner.code;
             document.getElementById('display-promo-link').innerText = `https://atmbetofficial.com/?ref=${partner.code.toLowerCase()}`;
 
-            // Calcoliamo i dati reali prendendo gli utenti dal localStorage che hanno usato questo codice o simulando se vuoto
             let users = [];
             try {
                 const raw = localStorage.getItem(USERS_LOCAL_KEY);
                 if (raw) users = JSON.parse(raw);
             } catch(e) {}
 
-            // Filtriamo gli utenti che contengono il codice o simuliamo dati realistici se è un test
+            // Filtriamo gli utenti registrati che hanno utilizzato il codice di questo partner (tramite ref_code o access_code)
             const matchedUsers = users.filter(u => {
-                const c = (u.access_code || u.code || '').toUpperCase();
-                return c.includes(partner.code) || partner.code === 'TEST';
+                const ref = (u.ref_code || u.code || u.access_code || '').toUpperCase();
+                return ref.includes(partner.code) || partner.code === 'TEST';
             });
 
             const tbody = document.getElementById('partner-conversions-tbody');
             tbody.innerHTML = '';
 
             let totalVolume = 0;
-            // Prezzo medio stimato dei piani per calcolare le commissioni al 50%
             const planPrices = { 'pure': 39.90, 'all_inclusive': 24.90, 'full': 24.90, 'elite': 24.90, 'credits': 9.90 };
 
             if (matchedUsers.length === 0) {
-                // Se è un nuovo partner senza ancora conversioni dirette registrate in locale, mostriamo lo stato a zero pulito
                 tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna conversione registrata con questo codice al momento. Condividi il tuo link per iniziare!</td></tr>`;
             } else {
                 matchedUsers.forEach(u => {
