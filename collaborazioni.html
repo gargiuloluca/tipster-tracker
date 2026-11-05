@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AtmBet | Programma Partner & Collaborazioni Creator</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png?v=2">
+    <link rel="apple-touch-icon" href="logo.png?v=2">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#070a10',
+                            card: '#0e1522',
+                            border: '#1e293b',
+                            gold: '#fbbf24'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-cards-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-cards-scroll::-webkit-scrollbar-track {
+            background: #0b0f17;
+        }
+        .custom-cards-scroll::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        .custom-cards-scroll::-webkit-scrollbar-thumb:hover {
+            background: #22c55e;
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
+
+    <!-- NAVBAR -->
+    <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="flex items-center gap-2">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
+                    <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
+                </a>
+            </div>
+            <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Torna alla Home
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-12 flex-1 w-full">
+
+        <!-- HERO COLLABORAZIONI -->
+        <section class="text-center space-y-4 pt-4">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] sm:text-[11px] font-mono uppercase tracking-wider font-bold">
+                <i data-lucide="award" class="w-3.5 h-3.5"></i> Programma Partner Esclusivo Creator & Community
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+                Monetizza la tua Community con il <span class="text-atm-green">Modello Quantitativo N.1</span>
+            </h1>
+            
+            <p class="text-xs sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                Offri ai tuoi follower un servizio di betting serio, basato su dati oggettivi, money management ferreo e storico certificato via API. In cambio, guadagna una <strong>commissione record del 50%</strong>.
+            </p>
+        </section>
+
+        <!-- 3 PILASTRI PERCHÉ CONVIENE -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2.5 shadow-xl">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/20">
+                    <i data-lucide="percent" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-bold text-white">50% di Revenue Share</h3>
+                <p class="text-slate-400 leading-relaxed">Riconosciamo il 50% netto su ogni primo abbonamento sottoscritto tramite il tuo codice creator esclusivo. Guadagni reali e tracciabili.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2.5 shadow-xl">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center font-bold border border-amber-500/20">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-bold text-white">Valore Reale per i Followers</h3>
+                <p class="text-slate-400 leading-relaxed">Zero vendite di fumo o promesse irrealistiche. La tua community amerà l'approccio scientifico, il simulatore di rendimento e la trasparenza API.</p>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-2.5 shadow-xl">
+                <div class="w-9 h-9 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center font-bold border border-blue-500/20">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+                <h3 class="text-sm font-bold text-white">Zero Sforzo Operativo</h3>
+                <p class="text-slate-400 leading-relaxed">Gestiamo noi tutta la parte tecnica, l'invio dei segnali Telegram, l'assistenza e la fatturazione. Tu devi solo condividere il valore del progetto.</p>
+            </div>
+        </div>
+
+        <!-- SEZIONE COME FUNZIONA -->
+        <section class="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/20 border border-emerald-500/30 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <h2 class="text-xl sm:text-2xl font-black text-white">Come Funziona la Partnership in 3 Step</h2>
+                <p class="text-xs text-slate-400">Un processo rapido, trasparente e strutturato per iniziare subito.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2 text-center">
+                    <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-black flex items-center justify-center mx-auto text-xs">1</div>
+                    <strong class="text-white block">Richiedi il Codice</strong>
+                    <p class="text-slate-400">Compila il modulo in basso o scrivici indicando i tuoi canali social/Telegram.</p>
+                </div>
+
+                <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2 text-center">
+                    <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-black flex items-center justify-center mx-auto text-xs">2</div>
+                    <strong class="text-white block">Ricevi il Kit & Link</strong>
+                    <p class="text-slate-400">Ti assegniamo un codice promo personalizzato (es. <code>TOWN10</code>) e materiali dedicati.</p>
+                </div>
+
+                <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2 text-center">
+                    <div class="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-black flex items-center justify-center mx-auto text-xs">3</div>
+                    <strong class="text-white block">Incassa le Commissioni</strong>
+                    <p class="text-slate-400">Guadagna il 50% su ogni transazione generata e ricevi i pagamenti in modo puntuale.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FORM CANDIDATURA PARTNER -->
+        <section class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl shadow-xl space-y-5">
+            <div class="text-center space-y-2">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/20">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                </div>
+                <h2 class="text-lg font-black text-white">Candidati come Partner Ufficiale</h2>
+                <p class="text-xs text-slate-400 max-w-md mx-auto">Inserisci i tuoi dati: verificheremo il profilo e ti invieremo l'accesso di prova e il codice personalizzato.</p>
+            </div>
+
+            <form action="mailto:Info@atmbetofficial.com" method="POST" enctype="text/plain" class="space-y-4 text-xs max-w-xl mx-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[11px]">Il tuo Nome / Nickname</label>
+                        <input type="text" name="Nome_Creator" required placeholder="Mario Rossi" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[11px]">Tua Email di Contatto</label>
+                        <input type="email" name="Email" required placeholder="creator@email.com" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[11px]">Link al tuo Canale Telegram / Social principale</label>
+                    <input type="text" name="Canale_Link" required placeholder="https://t.me/TuoCanale o profilo social" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500">
+                </div>
+
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[11px]">Breve descrizione della tua community e dimensioni stimate</label>
+                    <textarea name="Messaggio" rows="3" required placeholder=" es. Canale Telegram di betting sportivo con 2000 utenti attivi..." 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-white focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> Invia Richiesta di Collaborazione
+                </button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
+        <div>
+            AtmBet &copy; 2026. Programma Affiliazione B2B & Creator Partner.
+        </div>
+        <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500">
+            <a href="index.html" class="hover:text-slate-400 transition">Torna alla Home</a>
+            <span>•</span>
+            <a href="contatti.html" class="hover:text-emerald-400 transition">Supporto Ufficiale</a>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
