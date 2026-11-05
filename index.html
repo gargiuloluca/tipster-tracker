@@ -49,11 +49,6 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
-        /* Classe dinamica per illuminare di verde solo la voce di menu selezionata */
-        .nav-item-active {
-            color: #22c55e !important;
-            font-weight: 700 !important;
-        }
         .custom-cards-scroll::-webkit-scrollbar,
         .custom-scroll-box::-webkit-scrollbar {
             width: 6px;
@@ -93,15 +88,15 @@
                 </a>
             </div>
 
-            <!-- LINK NAVIGAZIONE DESKTOP (Tutti neutri con classe nav-item) -->
+            <!-- LINK NAVIGAZIONE DESKTOP -->
             <div class="hidden md:flex items-center gap-3 lg:gap-6" id="desktop-nav-links">
-                <a href="#metodo" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
-                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
-                <a href="#confronto-piani" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
-                <a href="#selezioni" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici Oggi</a>
-                <a href="#storico" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
-                <a href="#piani" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
-                <a href="#faq" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+                <a href="#metodo" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
+                <a href="#simulatore" class="text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
+                <a href="#confronto-piani" class="text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
+                <a href="#selezioni" class="text-xs font-bold text-emerald-400 hover:text-white transition">Pronostici Oggi</a>
+                <a href="#storico" class="text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
+                <a href="#piani" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
+                <a href="#faq" class="public-marketing-element text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
             </div>
 
             <!-- CONTENITORE DINAMICO ACCEDI / SBLOCCO CODICE -->
@@ -396,7 +391,10 @@
                     </div>
                     <div>
                         <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Ufficiale</div>
-                        <div class="text-lg font-black text-emerald-400 mb-1">AtmBet Selection</div>
+                        <div class="text-lg font-black text-emerald-400 mb-1 flex items-baseline justify-between">
+                            <span>AtmBet Selection</span>
+                            <span id="comp-pure-avgodds" class="text-xs font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Quota Med: 1.65</span>
+                        </div>
                         <div class="text-[11px] text-slate-400 mb-4">Canali Safe & Pure Signal • Filtro matematico ad alta probabilità (&ge;65%)</div>
 
                         <div class="grid grid-cols-2 gap-2.5 text-center mb-4">
@@ -429,7 +427,10 @@
                 <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
                     <div>
                         <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Globale</div>
-                        <div class="text-lg font-black text-blue-400 mb-1">AtmBet Signal</div>
+                        <div class="text-lg font-black text-blue-400 mb-1 flex items-baseline justify-between">
+                            <span>AtmBet Signal</span>
+                            <span id="comp-full-avgodds" class="text-xs font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Quota Med: 1.75</span>
+                        </div>
                         <div class="text-[11px] text-slate-400 mb-4">Flusso All-Inclusive • Aggregatore completo di tutti i canali e bot</div>
 
                         <div class="grid grid-cols-2 gap-2.5 text-center mb-4">
@@ -713,7 +714,6 @@
             bot_username: "AtmBetOfficialBot"
         };
 
-        // Funzione per gestire l'evidenziazione verde al click nel menu
         function setActiveNav(element) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-item-active'));
             element.classList.add('nav-item-active');
@@ -735,6 +735,7 @@
             if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
             if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
             if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
+            if (lower.includes('zcodeai') || lower.includes('zcode ai')) return 'ZcodeAi';
             if (lower.includes('zcode')) return 'ZCODE';
             if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
             if (lower.includes('footy')) return 'FootyStats';
@@ -1549,10 +1550,11 @@
             const completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
 
             const pureBets = completed.filter(b => b.is_pure === true);
-            let pureWins = 0, pureNetUnits = 0, pureStakeTotal = 0;
+            let pureWins = 0, pureNetUnits = 0, pureStakeTotal = 0, pureOddsSum = 0;
             pureBets.forEach(b => {
                 const s = b.stake || 1.0;
                 pureStakeTotal += s;
+                pureOddsSum += parseFloat(b.odds || 0);
                 if (b.status === 'won') {
                     pureWins++;
                     pureNetUnits += (b.odds - 1) * s;
@@ -1563,11 +1565,13 @@
             const pureWR = pureBets.length > 0 ? ((pureWins / pureBets.length) * 100).toFixed(1) : '0.0';
             const pureROI = pureStakeTotal > 0 ? ((pureNetUnits / pureStakeTotal) * 100).toFixed(1) : '0.0';
             const pureFiat = pureNetUnits * currentMultiplier;
+            const pureAvgOdds = pureBets.length > 0 ? (pureOddsSum / pureBets.length).toFixed(2) : '1.65';
 
-            let fullWins = 0, fullNetUnits = 0, fullStakeTotal = 0;
+            let fullWins = 0, fullNetUnits = 0, fullStakeTotal = 0, fullOddsSum = 0;
             completed.forEach(b => {
                 const s = b.stake || 1.0;
                 fullStakeTotal += s;
+                fullOddsSum += parseFloat(b.odds || 0);
                 if (b.status === 'won') {
                     fullWins++;
                     fullNetUnits += (b.odds - 1) * s;
@@ -1578,12 +1582,14 @@
             const fullWR = completed.length > 0 ? ((fullWins / completed.length) * 100).toFixed(1) : '0.0';
             const fullROI = fullStakeTotal > 0 ? ((fullNetUnits / fullStakeTotal) * 100).toFixed(1) : '0.0';
             const fullFiat = fullNetUnits * currentMultiplier;
+            const fullAvgOdds = completed.length > 0 ? (fullOddsSum / completed.length).toFixed(2) : '1.75';
 
             const pureWREl = document.getElementById('comp-pure-winrate');
             const pureROIEl = document.getElementById('comp-pure-roi');
             const pureUnitsEl = document.getElementById('comp-pure-units');
             const pureFiatEl = document.getElementById('comp-pure-fiat');
             const pureCountEl = document.getElementById('comp-pure-count');
+            const pureAvgOddsEl = document.getElementById('comp-pure-avgodds');
 
             if (pureWREl) pureWREl.innerText = pureWR + '%';
             if (pureROIEl) pureROIEl.innerText = (pureROI >= 0 ? '+' : '') + pureROI + '%';
@@ -1596,12 +1602,14 @@
                 pureFiatEl.className = `text-lg sm:text-xl font-mono font-black ${pureFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
             }
             if (pureCountEl) pureCountEl.innerText = `${pureBets.length} (${pureWins}V - ${pureBets.length - pureWins}P)`;
+            if (pureAvgOddsEl) pureAvgOddsEl.innerText = `Quota Med: ${pureAvgOdds}`;
 
             const fullWREl = document.getElementById('comp-full-winrate');
             const fullROIEl = document.getElementById('comp-full-roi');
             const fullUnitsEl = document.getElementById('comp-full-units');
             const fullFiatEl = document.getElementById('comp-full-fiat');
             const fullCountEl = document.getElementById('comp-full-count');
+            const fullAvgOddsEl = document.getElementById('comp-full-avgodds');
 
             if (fullWREl) fullWREl.innerText = fullWR + '%';
             if (fullROIEl) fullROIEl.innerText = (fullROI >= 0 ? '+' : '') + fullROI + '%';
@@ -1614,6 +1622,7 @@
                 fullFiatEl.className = `text-lg sm:text-xl font-mono font-black ${fullFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
             }
             if (fullCountEl) fullCountEl.innerText = `${completed.length} (${fullWins}V - ${completed.length - fullWins}P)`;
+            if (fullAvgOddsEl) fullAvgOddsEl.innerText = `Quota Med: ${fullAvgOdds}`;
         }
 
         window.togglePublicParlay = function(betId) {
