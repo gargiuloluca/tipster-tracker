@@ -707,6 +707,7 @@
         const TG_CONF_KEY = 'atmbet_tg_config';
         const PURE_TIPSTERS_KEY = 'atmbet_pure_selected_tipsters';
         const FULL_TIPSTERS_KEY = 'atmbet_full_selected_tipsters';
+        const AUTHORIZED_PARTNERS_KEY = 'atmbet_authorized_partners_list';
 
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
@@ -1050,7 +1051,7 @@
                 badgeEl.innerHTML = `
                     <div class="flex items-center gap-1">
                         <button type="button" onclick="setStagedManual('${betId}', 'won')" class="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[9px] font-bold border border-emerald-500/30">V</button>
-                        <button type="button" onclick="setStagedManual('${betId}', 'lost')" class="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[9px] font-bold border border-rose-500/30">P</button>
+                        <button type="button" onclick="setStagedManual('${betId}', 'lost')" class="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[9px] font-bold border border-emerald-500/30">P</button>
                     </div>
                 `;
             }
@@ -1188,7 +1189,6 @@
             );
         }
 
-        const AUTHORIZED_PARTNERS_KEY = 'atmbet_authorized_partners_list';
         function loadAuthorizedPartnersList() {
             try {
                 const raw = localStorage.getItem(AUTHORIZED_PARTNERS_KEY);
@@ -1210,6 +1210,7 @@
 
             if (!code || !name) return;
 
+            // 1. Salvataggio nei partner autorizzati (per partner.html)
             const partners = loadAuthorizedPartnersList();
             partners[code] = { 
                 name: name,
@@ -1218,10 +1219,38 @@
             };
             localStorage.setItem(AUTHORIZED_PARTNERS_KEY, JSON.stringify(partners));
 
+            // 2. Salvataggio anche nel database utenti (users.json) così il codice viene riconosciuto dal sistema e sblocca l'accesso
+            const expDate = new Date();
+            expDate.setDate(expDate.getDate() + days);
+            const expDateStr = getLocalDateString(expDate);
+
+            const users = loadAllUsers();
+            const existingIdx = users.findIndex(u => (u.access_code || '').trim().toUpperCase() === code);
+            const creatorUserRecord = {
+                id: 'creator_' + Date.now(),
+                identifier: `${code.toLowerCase()}@partner.atmbet`,
+                email: `${code.toLowerCase()}@partner.atmbet`,
+                name: name,
+                plan: plan,
+                access_code: code,
+                ref_code: code,
+                created_at: getLocalDateString(new Date()),
+                expires_at: expDateStr,
+                status: 'active'
+            };
+
+            if (existingIdx >= 0) {
+                users[existingIdx] = Object.assign({}, users[existingIdx], creatorUserRecord);
+            } else {
+                users.unshift(creatorUserRecord);
+            }
+
+            persistUsers(users);
+
             e.target.reset();
             toggleAddUserModal();
             renderUsersTable();
-            alert(`Creator Partner "${name}" (${code}) salvato con successo!\nPiano: ${plan.toUpperCase()} | Durata: ${days} giorni\nLink campagna: https://atmbetofficial.com/?ref=${code.toLowerCase()}`);
+            alert(`Creator Partner "${name}" (${code}) salvato e sincronizzato con successo!\nPiano: ${plan.toUpperCase()} | Durata: ${days} giorni\nLink campagna: https://atmbetofficial.com/?ref=${code.toLowerCase()}`);
         }
 
         async function regenerateUserOneTimeLink(userId) {
@@ -1305,7 +1334,7 @@
                     ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
                     : (userPlan === 'elite' 
                         ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
-                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ALL-IN</span>`);
+                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.2 rounded text-[10px] font-bold">ALL-IN</span>`);
 
                 const statusBadge = !isExpired
                     ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono text-[9px] font-bold">ATTIVO</span>`
