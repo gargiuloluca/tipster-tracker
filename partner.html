@@ -190,13 +190,20 @@
     <script>
         const CURRENT_PARTNER_SESSION = 'atmbet_active_partner_session';
         const USERS_LOCAL_KEY = 'atmbet_users_accounts';
+        const AUTHORIZED_PARTNERS_KEY = 'atmbet_authorized_partners_list';
 
-        const AUTHORIZED_PARTNERS = {
-            "TEST": { name: "Account di Test" },
-            "MARIO50": { name: "Mario Rossi" },
-            "PROVA10": { name: "Creator di Prova" },
-            "TOWN10": { name: "Luca Bianchi" }
-        };
+        function getAuthorizedPartners() {
+            try {
+                const raw = localStorage.getItem(AUTHORIZED_PARTNERS_KEY);
+                if (raw) return JSON.parse(raw);
+            } catch(e) {}
+            return {
+                "TEST": { name: "Account di Test" },
+                "MARIO50": { name: "Mario Rossi" },
+                "PROVA10": { name: "Creator di Prova" },
+                "TOWN10": { name: "Luca Bianchi" }
+            };
+        }
 
         function verifyPartnerLogin(e) {
             e.preventDefault();
@@ -205,11 +212,13 @@
 
             if (!code) return;
 
-            if (AUTHORIZED_PARTNERS[code] || code === "TEST") {
+            const authorizedPartners = getAuthorizedPartners();
+
+            if (authorizedPartners[code] || code === "TEST") {
                 errEl.classList.add('hidden');
                 const partnerData = {
                     code: code,
-                    name: AUTHORIZED_PARTNERS[code] ? AUTHORIZED_PARTNERS[code].name : "Creator Partner"
+                    name: authorizedPartners[code] ? authorizedPartners[code].name : "Creator Partner"
                 };
 
                 localStorage.setItem(CURRENT_PARTNER_SESSION, JSON.stringify(partnerData));
@@ -234,7 +243,7 @@
                 if (raw) users = JSON.parse(raw);
             } catch(e) {}
 
-            // FILTRO RIGOROSO AGGIORNATO: Prende esclusivamente gli utenti con ref_code corrispondente al codice del partner
+            // FILTRO RIGOROSO: Prende esclusivamente gli utenti con ref_code corrispondente al codice del partner
             const matchedUsers = users.filter(u => {
                 const ref = (u.ref_code || '').trim().toUpperCase();
                 return ref === partner.code;
