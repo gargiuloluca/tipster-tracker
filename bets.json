@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793873384480_0",
+    "event_date": "2026-11-07 17:30",
+    "match_name": "Forlì - Gubbio",
+    "league": "Serie C: Girone B",
+    "original_tipster": "BetMines Valuebet",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.9,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793868855760_0",
     "event_date": "2026-11-07 22:00",
     "match_name": "Mixco - San Pedro",
