@@ -3094,20 +3094,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793896427264_13",
-    "event_date": "2026-11-01 14:00",
-    "match_name": "Levante - Atletico de Madrid",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "La Liga",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793896427263_11",
     "event_date": "2026-11-01 14:00",
     "match_name": "Trabzonspor - Gaziantep F.K. / Mura - Grosuplje / Stromsgodset - Moss",
@@ -3960,20 +3946,6 @@
     "status": "lost",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793896427266_22",
-    "event_date": "2026-10-30 21:00",
-    "match_name": "Villarreal - Espanyol",
-    "league": "Generale",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "La Liga",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793430039419_2",
