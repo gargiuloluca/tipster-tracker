@@ -471,7 +471,7 @@
     "original_tipster": "AtmBet Safe",
     "odds": 1.44,
     "stake": 1,
-    "status": "lost",
+    "status": "pending",
     "is_published": true,
     "tg_sent": true
   },
