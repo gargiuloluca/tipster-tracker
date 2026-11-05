@@ -170,16 +170,36 @@
             const users = await fetchLiveUsers();
             const todayStr = getLocalDateString(new Date());
 
-            const user = users.find(u => {
+            let user = users.find(u => {
                 const uEmail = (u.email || u.identifier || '').trim().toLowerCase();
                 const uCode = (u.access_code || u.code || '').trim().toLowerCase();
                 return uEmail === emailInput || uCode === emailInput;
             });
 
+            // RECUPERO DEL CODICE CREATOR SALVATO DAL LINK DI CAMPAGNA (?ref=...)
+            const trackedRefCode = localStorage.getItem('atmbet_active_ref_code') || '';
+
             if (!user) {
-                showAlert("Nessun abbonamento attivo trovato per questa email. Verifica l'indirizzo o attiva un piano.", "error");
-                return;
+                // Se l'utente non è ancora nel database locale, creiamo un record base associandogli il ref_code del creator se presente
+                user = {
+                    id: 'usr_' + Date.now(),
+                    identifier: emailInput,
+                    email: emailInput,
+                    plan: 'pure',
+                    ref_code: trackedRefCode,
+                    created_at: todayStr,
+                    status: 'active'
+                };
+                users.push(user);
+            } else {
+                // Se l'utente esiste ma non ha un ref_code e ha usato un link creator, glielo associamo
+                if (!user.ref_code && trackedRefCode) {
+                    user.ref_code = trackedRefCode;
+                }
             }
+
+            // Salvataggio aggiornato nel localStorage / DB utenti
+            localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
 
             const exp = user.expires_at || user.expiration || user.plan_expires;
             if (exp && exp !== '-' && exp < todayStr) {
@@ -200,6 +220,7 @@
                 telegram_username: telegramInput,
                 role: user.role || 'user',
                 plan: mappedPlan,
+                ref_code: user.ref_code || trackedRefCode,
                 expires_at: exp || '2099-12-31',
                 credits: user.credits !== undefined ? user.credits : 5,
                 unlocked_bets: user.unlocked_bets || []
