@@ -504,20 +504,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1793905956331_3",
-    "event_date": "2026-11-05 21:00",
-    "match_name": "AZ Alkmaar - Juventus",
-    "league": "Europa League",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.5",
-    "original_tipster": "Il presidente",
-    "odds": 1.4,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793895849736_0",
     "event_date": "2026-11-05 21:00",
     "match_name": "Copenhagen - Iberia 1999 / Lugano - Zalgiris Kaunas / AZ Alkmaar - Juventus",
@@ -880,48 +866,6 @@
     "status": "won",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1793905956331_2",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "FK Crvena Zvezda Belgrade - Inter Club de Escaldes",
-    "league": "UEFA Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "No Gol",
-    "original_tipster": "Il presidente",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793905956330_1",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Milan - Ferencvarosi Budapest",
-    "league": "Europa League",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Il presidente",
-    "odds": 1.44,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793905956330_0",
-    "event_date": "2026-11-05 18:45",
-    "match_name": "Atalanta - FC Kairat Almaty",
-    "league": "UEFA Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "original_tipster": "Il presidente",
-    "odds": 1.3,
-    "stake": 1,
-    "status": "lost",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1793879979239_1",
@@ -1342,20 +1286,6 @@
     "status": "won",
     "is_published": true,
     "tg_sent": false
-  },
-  {
-    "id": "bet_1793805145376_0",
-    "event_date": "2026-11-04 21:00",
-    "match_name": "Racing Club De Lens - Como",
-    "league": "Champions League",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "original_tipster": "Il presidente",
-    "odds": 1.53,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": true
   },
   {
     "id": "bet_1793802890165_3",
