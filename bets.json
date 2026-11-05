@@ -378,20 +378,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1793859517904_3",
-    "event_date": "2026-11-05 21:00",
-    "match_name": "St. Truiden - Brann",
-    "league": "Europe Conference League",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.72,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793859517902_1",
     "event_date": "2026-11-05 21:00",
     "match_name": "Gent - Ruzomberok",
