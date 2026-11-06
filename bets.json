@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1793959520570_1",
+    "event_date": "2026-11-06 19:30",
+    "match_name": "SK Rapid - Wolfsberger AC / Grenoble Foot 38 - Reims / Dijon - Red Star",
+    "league": "Austria / Ligue 2 / Ligue 2",
+    "original_tipster": "Stats4Bets Automatibet",
+    "market": "Multipla",
+    "prediction": "1 / X2 / Over 1.5",
+    "odds": 1.86,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793959520569_0",
+    "event_date": "2026-11-06 20:00",
+    "match_name": "Nancy - Sochaux",
+    "league": "Ligue 2",
+    "original_tipster": "Stats4Bets Automatibet",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.64,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793891712900_0",
     "event_date": "2026-11-07 20:00",
     "match_name": "Avai - Sao Bernardo FC",
