@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793990873875_0",
-    "event_date": "2026-11-06 20:45",
-    "match_name": "Venezia - Udinese",
-    "league": "Serie A",
-    "original_tipster": "Il presidente",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.5",
-    "odds": 1.4,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
@@ -250,6 +236,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793990873875_0",
+    "event_date": "2026-11-06 20:45",
+    "match_name": "Venezia - Udinese",
+    "league": "Serie A",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "original_tipster": "Il presidente",
+    "odds": 1.4,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793945053755_8",
@@ -596,20 +596,6 @@
     "prediction": "Handicap Asiatico -1.5",
     "original_tipster": "Pronostici1",
     "odds": 1.68,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793895271946_0",
-    "event_date": "2026-11-06 17:30",
-    "match_name": "Al Wakrah - Al Shahaniya",
-    "league": "Qatar Stars League",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "BetMines PreMatch",
-    "odds": 1.72,
     "stake": 1,
     "status": "pending",
     "is_published": true,
