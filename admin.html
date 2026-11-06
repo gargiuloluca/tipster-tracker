@@ -1563,7 +1563,7 @@
                 let msg = `⚡ <b>ATMBET SELECTION | SIGNAL PURE (Aggiornamento Odierno)</b> ⚡\n📅 <i>Data: ${todayStr}</i>\n🎯 <i>Top Selezioni ad Alto Valore Matematico</i>\n\n`;
                 toSend.forEach((b, i) => {
                     msg += `<b>${i+1}. ${b.match_name}</b>\n`;
-                    msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
+                    msg += `🏆 ${b.league} | 🤖 <code>AtmBet Selection</code>\n`;
                     msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
                     msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
                 });
@@ -1609,7 +1609,7 @@
                     batch.forEach((b, i) => {
                         const globalIndex = bIdx * BATCH_SIZE + i + 1;
                         msg += `<b>${globalIndex}. ${b.match_name}</b>\n`;
-                        msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
+                        msg += `🏆 ${b.league} | 🤖 <code>AtmBet Signal</code>\n`;
                         msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
                         msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
                     });
@@ -1666,10 +1666,13 @@
                 return;
             }
 
+            // Imposta la firma corretta in base al canale di destinazione
+            const brandSignature = isPure ? "AtmBet Selection" : "AtmBet Signal";
+
             let msg = `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA</b> ⚡\n`;
             msg += `📅 <i>Data: ${b.event_date}</i>\n\n`;
             msg += `<b>⚽ ${b.match_name}</b>\n`;
-            msg += `🏆 ${b.league} | 🤖 <code>${b.original_tipster}</code>\n`;
+            msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
             msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
             msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
             msg += `🔗 <a href="https://atmbetofficial.com">AtmBet Web App</a>`;
@@ -2780,7 +2783,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
