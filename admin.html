@@ -232,9 +232,9 @@
                 </div>
             </section>
 
-            <!-- SEZIONE: GESTIONE ABBONATI & LICENZE (users.json) -->
+            <!-- SEZIONE: GESTIONE ABBONATI & LICENZE (users.json) - ORA CHIUDIBILE A TENDINA -->
             <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/20 border border-emerald-500/30 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-800 pb-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-800 pb-3 cursor-pointer select-none" onclick="toggleAccordion('users-accordion-body', 'users-accordion-icon')">
                     <div class="flex items-center gap-2.5">
                         <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20 shrink-0">
                             <i data-lucide="users" class="w-5 h-5"></i>
@@ -244,132 +244,135 @@
                                 <h2 class="text-xs sm:text-sm font-bold text-white">Abbonati & Licenze</h2>
                                 <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-1.5 py-0.2 rounded font-black uppercase">users.json</span>
                             </div>
-                            <p class="text-[10px] text-slate-400">Codici, scadenze e link d'accesso Telegram monouso</p>
+                            <p class="text-[10px] text-slate-400">Codici, scadenze e link d'accesso Telegram monouso (Clicca per aprire/chiudere)</p>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-2 self-end sm:self-auto">
-                        <button type="button" onclick="toggleAddUserModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow">
+                        <button type="button" onclick="event.stopPropagation(); toggleAddUserModal();" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow">
                             <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Nuovo
                         </button>
-                        <button type="button" onclick="syncUsersFromGitHub()" title="Ricarica da remoto" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold p-2 sm:px-2.5 sm:py-1.5 rounded-xl transition flex items-center gap-1">
+                        <button type="button" onclick="event.stopPropagation(); syncUsersFromGitHub();" title="Ricarica da remoto" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold p-2 sm:px-2.5 sm:py-1.5 rounded-xl transition flex items-center gap-1">
                             <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-blue-400"></i>
                         </button>
+                        <i data-lucide="chevron-down" id="users-accordion-icon" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
                     </div>
                 </div>
 
-                <!-- FORM AGGIUNTA MANUALE UNIFICATA (UTENTE O CREATOR) -->
-                <div id="add-user-panel" class="hidden bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                            <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Crea Nuova Voce nel Sistema
+                <div id="users-accordion-body" class="hidden space-y-4 pt-2">
+                    <!-- FORM AGGIUNTA MANUALE UNIFICATA (UTENTE O CREATOR) -->
+                    <div id="add-user-panel" class="hidden bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                                <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Crea Nuova Voce nel Sistema
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-[10px] text-slate-400 font-medium">Tipo:</label>
+                                <select id="entry-type-select" onchange="switchEntryFormType(this.value)" class="bg-slate-900 border border-slate-800 text-xs font-bold text-emerald-400 rounded-lg px-2 py-1 outline-none">
+                                    <option value="user">Abbonato / Utente</option>
+                                    <option value="creator">Codice Creator Partner</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <label class="text-[10px] text-slate-400 font-medium">Tipo:</label>
-                            <select id="entry-type-select" onchange="switchEntryFormType(this.value)" class="bg-slate-900 border border-slate-800 text-xs font-bold text-emerald-400 rounded-lg px-2 py-1 outline-none">
-                                <option value="user">Abbonato / Utente</option>
-                                <option value="creator">Codice Creator Partner</option>
-                            </select>
+
+                        <!-- FORM UTENTE -->
+                        <form id="form-type-user" onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Nome o Email</label>
+                                <input type="text" id="new_user_ident" required placeholder="mario@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Telegram ID (Opzionale)</label>
+                                <input type="text" id="new_user_tgid" placeholder="123456789" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Piano Sottoscritto</label>
+                                <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                                    <option value="pure" selected>Pure Signal (Consigliato Test)</option>
+                                    <option value="elite">Cluster Elite (Bilanciato)</option>
+                                    <option value="full">All-Inclusive (Tutti)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Durata (Giorni)</label>
+                                <input type="number" id="new_user_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            </div>
+                            <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
+                                <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
+                                <button type="submit" id="submit-user-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">
+                                    Salva & Genera Link Monouso
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- FORM CREATOR PARTNER (AGGIORNATO CON PIANO E DURATA) -->
+                        <form id="form-type-creator" onsubmit="handleManualCreateCreator(event)" class="hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Codice Creator (Es. PROVA10)</label>
+                                <input type="text" id="new_creator_code" required placeholder="PROVA10" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono uppercase focus:outline-none focus:border-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Nome / Nickname Creator</label>
+                                <input type="text" id="new_creator_name" required placeholder="Mario Rossi" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Piano Associato</label>
+                                <select id="new_creator_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
+                                    <option value="pure" selected>Pure Signal (Consigliato)</option>
+                                    <option value="elite">Cluster Elite</option>
+                                    <option value="full">All-Inclusive</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Durata Prova (Giorni)</label>
+                                <input type="number" id="new_creator_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                            </div>
+                            <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
+                                <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
+                                <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">
+                                    Salva Creator Partner
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- METRICHE ABBONATI -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Attivi</span>
+                            <span id="usr-active-count" class="text-sm sm:text-base font-bold text-emerald-400">0</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Scaduti</span>
+                            <span id="usr-expired-count" class="text-sm sm:text-base font-bold text-rose-400">0</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Top Piano</span>
+                            <span id="usr-top-plan" class="text-sm sm:text-base font-bold text-amber-400">-</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Sincro</span>
+                            <span id="usr-sync-status" class="text-xs sm:text-sm font-bold text-slate-300">Locale</span>
                         </div>
                     </div>
 
-                    <!-- FORM UTENTE -->
-                    <form id="form-type-user" onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Nome o Email</label>
-                            <input type="text" id="new_user_ident" required placeholder="mario@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Telegram ID (Opzionale)</label>
-                            <input type="text" id="new_user_tgid" placeholder="123456789" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Piano Sottoscritto</label>
-                            <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
-                                <option value="pure" selected>Pure Signal (Consigliato Test)</option>
-                                <option value="elite">Cluster Elite (Bilanciato)</option>
-                                <option value="full">All-Inclusive (Tutti)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Durata (Giorni)</label>
-                            <input type="number" id="new_user_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
-                        </div>
-                        <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
-                            <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
-                            <button type="submit" id="submit-user-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">
-                                Salva & Genera Link Monouso
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- FORM CREATOR PARTNER (AGGIORNATO CON PIANO E DURATA) -->
-                    <form id="form-type-creator" onsubmit="handleManualCreateCreator(event)" class="hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Codice Creator (Es. PROVA10)</label>
-                            <input type="text" id="new_creator_code" required placeholder="PROVA10" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono uppercase focus:outline-none focus:border-amber-500">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Nome / Nickname Creator</label>
-                            <input type="text" id="new_creator_name" required placeholder="Mario Rossi" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Piano Associato</label>
-                            <select id="new_creator_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
-                                <option value="pure" selected>Pure Signal (Consigliato)</option>
-                                <option value="elite">Cluster Elite</option>
-                                <option value="full">All-Inclusive</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-slate-400 mb-1 text-[10px]">Durata Prova (Giorni)</label>
-                            <input type="number" id="new_creator_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500 font-mono">
-                        </div>
-                        <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
-                            <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
-                            <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">
-                                Salva Creator Partner
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- METRICHE ABBONATI -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Attivi</span>
-                        <span id="usr-active-count" class="text-sm sm:text-base font-bold text-emerald-400">0</span>
+                    <!-- TABELLA UTENTI -->
+                    <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
+                        <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[750px]">
+                            <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
+                                <tr>
+                                    <th class="py-2.5 px-3">Utente</th>
+                                    <th class="py-2.5 px-3">Piano</th>
+                                    <th class="py-2.5 px-3">Codice Accesso</th>
+                                    <th class="py-2.5 px-3">Link TG Monouso</th>
+                                    <th class="py-2.5 px-3 text-center">Scadenza</th>
+                                    <th class="py-2.5 px-3 text-center">Stato</th>
+                                    <th class="py-2.5 px-3 text-right">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                        </table>
                     </div>
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Scaduti</span>
-                        <span id="usr-expired-count" class="text-sm sm:text-base font-bold text-rose-400">0</span>
-                    </div>
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Top Piano</span>
-                        <span id="usr-top-plan" class="text-sm sm:text-base font-bold text-amber-400">-</span>
-                    </div>
-                    <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
-                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Sincro</span>
-                        <span id="usr-sync-status" class="text-xs sm:text-sm font-bold text-slate-300">Locale</span>
-                    </div>
-                </div>
-
-                <!-- TABELLA UTENTI -->
-                <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
-                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[750px]">
-                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
-                            <tr>
-                                <th class="py-2.5 px-3">Utente</th>
-                                <th class="py-2.5 px-3">Piano</th>
-                                <th class="py-2.5 px-3">Codice Accesso</th>
-                                <th class="py-2.5 px-3">Link TG Monouso</th>
-                                <th class="py-2.5 px-3 text-center">Scadenza</th>
-                                <th class="py-2.5 px-3 text-center">Stato</th>
-                                <th class="py-2.5 px-3 text-right">Azioni</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
-                    </table>
                 </div>
             </section>
 
@@ -1339,7 +1342,7 @@
                     ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
                     : (userPlan === 'elite' 
                         ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
-                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.2 rounded text-[10px] font-bold">ALL-IN</span>`);
+                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.2 rounded font-bold">ALL-IN</span>`);
 
                 const statusBadge = !isExpired
                     ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono text-[9px] font-bold">ATTIVO</span>`
