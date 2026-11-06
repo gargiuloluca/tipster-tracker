@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793989619829_0",
+    "event_date": "2026-11-06 20:30",
+    "match_name": "Amburgo - Borussia Mönchengladbach",
+    "league": "Bundesliga[span_0](start_span)[span_0](end_span)",
+    "original_tipster": "Il presidente",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "odds": 1.4,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
