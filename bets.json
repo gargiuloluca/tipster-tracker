@@ -6451,7 +6451,7 @@
     "stake": 1,
     "status": "won",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793985992065_1",
