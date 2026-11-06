@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793968241470_0",
+    "event_date": "2026-11-06 13:15",
+    "match_name": "Olympiacos - KK Crvena zvezda",
+    "league": "Euroleague",
+    "original_tipster": "ZCODE",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.55,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793966153149_0",
     "event_date": "2026-11-08 00:00",
     "match_name": "Tigres UANL - Cruz Azul",
