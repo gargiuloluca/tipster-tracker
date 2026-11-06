@@ -373,7 +373,7 @@
                 </div>
             </section>
 
-            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM -->
+            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM (AGGIORNATO CON CANALE FREE) -->
             <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 border border-blue-500/30 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-3 sm:space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
                     <div class="flex items-center gap-2.5">
@@ -402,6 +402,10 @@
                     <div>
                         <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Chat ID Canale FULL</label>
                         <input type="password" id="tg_channel_full" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Chat ID Canale FREE SIGNAL</label>
+                        <input type="password" id="tg_channel_free" placeholder="-100..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-slate-400">
                     </div>
                 </div>
 
@@ -712,7 +716,8 @@
         const DEFAULT_TG_CONFIG = {
             token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
             channel_pure: "-1004237267545",
-            channel_full: "-1004390945826"
+            channel_full: "-1004390945826",
+            channel_free: ""
         };
 
         function toggleAdminTestPanel() {
@@ -1475,10 +1480,14 @@
                 document.getElementById('tg_token').value = conf.token || DEFAULT_TG_CONFIG.token;
                 document.getElementById('tg_channel_pure').value = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
                 document.getElementById('tg_channel_full').value = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+                const freeInput = document.getElementById('tg_channel_free');
+                if (freeInput) freeInput.value = conf.channel_free || DEFAULT_TG_CONFIG.channel_free;
             } catch(e) {
                 document.getElementById('tg_token').value = DEFAULT_TG_CONFIG.token;
                 document.getElementById('tg_channel_pure').value = DEFAULT_TG_CONFIG.channel_pure;
                 document.getElementById('tg_channel_full').value = DEFAULT_TG_CONFIG.channel_full;
+                const freeInput = document.getElementById('tg_channel_free');
+                if (freeInput) freeInput.value = DEFAULT_TG_CONFIG.channel_free;
             }
         }
 
@@ -1486,7 +1495,8 @@
             const conf = {
                 token: document.getElementById('tg_token').value.trim() || DEFAULT_TG_CONFIG.token,
                 channel_pure: document.getElementById('tg_channel_pure').value.trim() || DEFAULT_TG_CONFIG.channel_pure,
-                channel_full: document.getElementById('tg_channel_full').value.trim() || DEFAULT_TG_CONFIG.channel_full
+                channel_full: document.getElementById('tg_channel_full').value.trim() || DEFAULT_TG_CONFIG.channel_full,
+                channel_free: document.getElementById('tg_channel_free') ? document.getElementById('tg_channel_free').value.trim() : ''
             };
             localStorage.setItem(TG_CONF_KEY, JSON.stringify(conf));
             alert("Configurazione Telegram salvata nel browser!");
@@ -1641,7 +1651,7 @@
             }
         }
 
-        async function sendSingleBetToTelegram(betId) {
+        async function sendSingleBetToTelegram(betId, targetMode = 'auto') {
             const bets = loadAllBets();
             const b = bets.find(x => String(x.id) === String(betId));
             if (!b) return;
@@ -1650,39 +1660,61 @@
             const token = conf.token || DEFAULT_TG_CONFIG.token;
             const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
             const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+            const channelFree = conf.channel_free || DEFAULT_TG_CONFIG.channel_free;
 
             if (!token) {
                 alert("Configura prima il Bot Token di Telegram.");
                 return;
             }
 
-            const allowedPure = getPureSelectedTipsters();
-            const isPure = allowedPure.includes(canonicalizeTipsterName(b.original_tipster));
-            const chatId = isPure ? channelPure : channelFull;
-            const channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
+            let chatId = '';
+            let channelLabel = '';
+            let brandSignature = '';
+
+            if (targetMode === 'free') {
+                chatId = channelFree;
+                channelLabel = "FREE SIGNAL";
+                brandSignature = "AtmBet Free Signal";
+                if (!chatId) {
+                    alert("Chat ID per il canale Free Signal non configurato nel Dispatcher Telegram.");
+                    return;
+                }
+            } else {
+                const allowedPure = getPureSelectedTipsters();
+                const isPure = allowedPure.includes(canonicalizeTipsterName(b.original_tipster));
+                chatId = isPure ? channelPure : channelFull;
+                channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
+                brandSignature = isPure ? "AtmBet Selection" : "AtmBet Signal";
+            }
 
             if (!chatId) {
                 alert(`Chat ID mancante per ${channelLabel}.`);
                 return;
             }
 
-            // Imposta la firma corretta in base al canale di destinazione
-            const brandSignature = isPure ? "AtmBet Selection" : "AtmBet Signal";
+            let msg = targetMode === 'free' 
+                ? `🎁 <b>ATMBET | FREE SIGNAL PREVIEW</b> 🎁\n📅 <i>Data: ${b.event_date}</i>\n\n`
+                : `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA</b> ⚡\n📅 <i>Data: ${b.event_date}</i>\n\n`;
 
-            let msg = `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA</b> ⚡\n`;
-            msg += `📅 <i>Data: ${b.event_date}</i>\n\n`;
             msg += `<b>⚽ ${b.match_name}</b>\n`;
             msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
             msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
             msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
-            msg += `🔗 <a href="https://atmbetofficial.com">AtmBet Web App</a>`;
+            
+            if (targetMode === 'free') {
+                msg += `🚀 Vuoi tutti i segnali in tempo reale?\n🔗 <a href="https://atmbetofficial.com">Unisciti ad AtmBet PRO</a>`;
+            } else {
+                msg += `🔗 <a href="https://atmbetofficial.com">AtmBet Web App</a>`;
+            }
 
             try {
                 const res = await sendTelegramMessage(token, chatId, msg);
                 if (res.ok) {
-                    b.tg_sent = true;
-                    persistBets(bets);
-                    alert(`Pronostico inviato a ${channelLabel}!`);
+                    if (targetMode !== 'free') {
+                        b.tg_sent = true;
+                        persistBets(bets);
+                    }
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
                 } else {
                     alert(`Errore Telegram: ${res.description}`);
                 }
@@ -2713,6 +2745,9 @@
                         </div>
 
                         <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2.5 py-1 rounded-lg">
+                                Free
+                            </button>
                             ${bet.tg_sent ? `
                                 <span class="text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">
                                     TG ✓
@@ -2821,9 +2856,15 @@
                     `;
                 }
 
-                let tgColumnHtml = bet.tg_sent
-                    ? `<span class="text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">Inviato</span>`
-                    : `<button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" class="text-[10px] font-bold font-mono text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-lg">TG</button>`;
+                let tgColumnHtml = `
+                    <div class="flex items-center gap-1 justify-center">
+                        <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
+                        ${bet.tg_sent 
+                            ? `<span class="text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">Inviato</span>`
+                            : `<button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" class="text-[10px] font-bold font-mono text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-lg">TG</button>`
+                        }
+                    </div>
+                `;
 
                 tr.className = rowClass;
                 tr.innerHTML = `
