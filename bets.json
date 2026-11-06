@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793946074992_0",
-    "event_date": "2026-11-07 01:00",
-    "match_name": "Charlotte Hornets - Boston Celtics / Minnesota Wild - San Jose Sharks",
-    "league": "NBA / NHL",
+    "id": "bet_1793946268531_0",
+    "event_date": "2026-11-07 01:30",
+    "match_name": "Cleveland Cavaliers - Philadelphia 76ers",
+    "league": "NBA",
     "original_tipster": "ZcodeAi",
-    "market": "Multipla",
-    "prediction": "V2 / V1",
-    "odds": 1.82,
+    "market": "1X2 / Mercato",
+    "prediction": "Under 228.5",
+    "odds": 1.9,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -390,6 +390,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793946074992_0",
+    "event_date": "2026-11-07 01:00",
+    "match_name": "Charlotte Hornets - Boston Celtics / Minnesota Wild - San Jose Sharks",
+    "league": "NBA / NHL",
+    "market": "Multipla",
+    "prediction": "V2 / V1",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.82,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793805204166_0",
