@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1793946457535_0",
-    "event_date": "2026-11-07 02:00",
-    "match_name": "Memphis Grizzlies - Oklahoma City Thunder",
-    "league": "NBA",
+    "id": "bet_1793946515520_0",
+    "event_date": "2026-11-06 20:30",
+    "match_name": "Union Brescia - A.S.D. ArzignanoChiampo",
+    "league": "Serie C - Girone A",
     "original_tipster": "ZcodeAi",
     "market": "1X2 / Mercato",
-    "prediction": "Under 225.5",
-    "odds": 1.88,
+    "prediction": "1",
+    "odds": 1.45,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -390,6 +390,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793946457535_0",
+    "event_date": "2026-11-07 02:00",
+    "match_name": "Memphis Grizzlies - Oklahoma City Thunder",
+    "league": "NBA",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 225.5",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.88,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793946268531_0",
