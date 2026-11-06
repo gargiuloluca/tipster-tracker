@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793945767346_0",
-    "event_date": "2026-11-06 09:40",
-    "match_name": "Sydney - Central Coast Mariners",
-    "league": "Australia",
-    "original_tipster": "Stats4bets bollamaker",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.56,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793944956016_2",
     "event_date": "2026-11-08 22:15",
     "match_name": "Club Bolívar - The Strongest",
@@ -824,6 +810,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": false
+  },
+  {
+    "id": "bet_1793945767346_0",
+    "event_date": "2026-11-06 09:40",
+    "match_name": "Sydney - Central Coast Mariners",
+    "league": "Australia",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "Stats4bets bollamaker",
+    "odds": 1.56,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
   },
   {
     "id": "bet_1793779774284_7",
