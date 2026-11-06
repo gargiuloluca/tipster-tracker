@@ -1676,7 +1676,6 @@
                 chatId = channelFree;
                 channelLabel = "FREE SIGNAL";
                 brandSignature = "AtmBet Free Signal";
-                // Link di default o pure per il free preview
                 tributeLink = "https://t.me/tribute/app?startapp=s1by8";
                 if (!chatId) {
                     alert("Chat ID per il canale Free Signal non configurato nel Dispatcher Telegram.");
@@ -1706,7 +1705,7 @@
             msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
             
             if (targetMode === 'free') {
-                msg += `🚀 Vuoi provare tutti i segnali in tempo reale? Approfitta dei 7gg gratuiti.\n`;
+                msg += `🚀 Vuoi tutti i segnali in tempo reale?\n`;
                 msg += `🔹 <b>Piano PURE:</b> <a href="https://t.me/tribute/app?startapp=s1by8">Attiva Pure</a>\n`;
                 msg += `🔸 <b>Piano ALL-INCLUSIVE:</b> <a href="https://t.me/tribute/app?startapp=s1bxZ">Attiva All-Inclusive</a>`;
             } else {
