@@ -1,27 +1,13 @@
 [
   {
-    "id": "bet_1793945619489_1",
-    "event_date": "2026-11-06 20:00",
-    "match_name": "Helmond - FC Volendam",
-    "league": "Eerste Divisie",
+    "id": "bet_1793945683902_0",
+    "event_date": "2026-11-06 12:00",
+    "match_name": "Van - Pyunik Yerevan / BKMA - Alashkert / Paris FC W - Montpellier W / Rapid Vienna - Wolfsberger AC / Llandudno - TNS",
+    "league": "Premier League / Premier League / Première Ligue / Bundesliga / Cymru South",
     "original_tipster": "NerdyTips",
-    "market": "1X2 / Mercato",
-    "prediction": "GOL",
-    "odds": 1.4,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793945619488_0",
-    "event_date": "2026-11-06 14:00",
-    "match_name": "Newroz - Karbala",
-    "league": "Premier League",
-    "original_tipster": "NerdyTips",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.42,
+    "market": "Multipla",
+    "prediction": "2 / 2 / 1 / 1 / 2",
+    "odds": 3.11,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -504,6 +490,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1793945619489_1",
+    "event_date": "2026-11-06 20:00",
+    "match_name": "Helmond - FC Volendam",
+    "league": "Eerste Divisie",
+    "market": "1X2 / Mercato",
+    "prediction": "GOL",
+    "original_tipster": "NerdyTips",
+    "odds": 1.4,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793945053758_10",
     "event_date": "2026-11-06 20:00",
     "match_name": "Willem II - PEC Zwolle",
@@ -782,6 +782,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1793945619488_0",
+    "event_date": "2026-11-06 14:00",
+    "match_name": "Newroz - Karbala",
+    "league": "Premier League",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "NerdyTips",
+    "odds": 1.42,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793779774284_5",
