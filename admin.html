@@ -1654,6 +1654,51 @@
             }
         }
 
+        async function sendSingleBetToTelegramManual(betId, channelType) {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(betId));
+            if (!b) return;
+
+            const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+
+            if (!token) {
+                alert("Configura prima il Bot Token di Telegram.");
+                return;
+            }
+
+            const isPure = channelType === 'pure';
+            const chatId = isPure ? channelPure : channelFull;
+            const channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
+            const brandSignature = isPure ? "AtmBet Selection" : "AtmBet Signal";
+            const tributeLink = isPure ? "https://t.me/tribute/app?startapp=s1by8" : "https://t.me/tribute/app?startapp=s1bxZ";
+
+            if (!chatId) {
+                alert(`Chat ID mancante per il canale ${channelLabel}.`);
+                return;
+            }
+
+            let msg = `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA (${channelLabel})</b> ⚡\n📅 <i>Data: ${b.event_date}</i>\n\n`;
+            msg += `<b>⚽ ${b.match_name}</b>\n`;
+            msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
+            msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
+            msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
+            msg += `🔗 <a href="${tributeLink}">Abbonati al servizio</a>`;
+
+            try {
+                const res = await sendTelegramMessage(token, chatId, msg);
+                if (res.ok) {
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
+                } else {
+                    alert(`Errore Telegram: ${res.description}`);
+                }
+            } catch(e) {
+                alert(`Errore rete: ${e.message}`);
+            }
+        }
+
         async function sendSingleBetToTelegram(betId, targetMode = 'auto') {
             const bets = loadAllBets();
             const b = bets.find(x => String(x.id) === String(betId));
@@ -2752,20 +2797,11 @@
                             </div>
                         </div>
 
-                        <div class="flex items-center gap-1.5">
-                            <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2.5 py-1 rounded-lg">
-                                Free
-                            </button>
-                            ${bet.tg_sent ? `
-                                <span class="text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">
-                                    TG ✓
-                                </span>
-                            ` : `
-                                <button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" class="text-[10px] font-bold font-mono text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2.5 py-1 rounded-lg">
-                                    Invia TG
-                                </button>
-                            `}
-                            <button type="button" onclick="deleteBet('${bet.id}')" class="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/10 border border-rose-500/20">
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[9px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
+                            <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a Full" class="text-[9px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
+                            <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[9px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
+                            <button type="button" onclick="deleteBet('${bet.id}')" class="p-1 rounded-lg text-rose-400 hover:bg-rose-500/10 border border-rose-500/20">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
@@ -2867,10 +2903,8 @@
                 let tgColumnHtml = `
                     <div class="flex items-center gap-1 justify-center">
                         <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
-                        ${bet.tg_sent 
-                            ? `<span class="text-[10px] font-bold font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2 py-1 rounded-lg">Inviato</span>`
-                            : `<button type="button" onclick="sendSingleBetToTelegram('${bet.id}')" class="text-[10px] font-bold font-mono text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-1 rounded-lg">TG</button>`
-                        }
+                        <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a All-Inclusive" class="text-[10px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
+                        <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[10px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
                     </div>
                 `;
 
