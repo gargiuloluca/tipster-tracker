@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793949911623_0",
-    "event_date": "2026-11-06 18:00",
-    "match_name": "Neom SC - Al-Ittihad FC",
-    "league": "Saudi Arabia Professional League",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2.5",
-    "odds": 1.55,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793891712900_0",
     "event_date": "2026-11-07 20:00",
     "match_name": "Avai - Sao Bernardo FC",
@@ -372,6 +358,20 @@
     "prediction": "Under 3.5",
     "original_tipster": "Pronostici1",
     "odds": 1.54,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793949911623_0",
+    "event_date": "2026-11-06 18:00",
+    "match_name": "Neom SC - Al-Ittihad FC",
+    "league": "Saudi Arabia Professional League",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 2.5",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.55,
     "stake": 1,
     "status": "pending",
     "is_published": true,
