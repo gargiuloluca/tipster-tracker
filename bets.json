@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793966086127_0",
+    "event_date": "2026-11-08 00:00",
+    "match_name": "Tigres UANL - Cruz Azul",
+    "league": "Liga MX[span_0](start_span)[span_0](end_span)",
+    "original_tipster": "Infoland",
+    "market": "1X2 / Mercato",
+    "prediction": "X2 & 2-5 Goal",
+    "odds": 1.9,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793891712900_0",
     "event_date": "2026-11-07 20:00",
     "match_name": "Avai - Sao Bernardo FC",
