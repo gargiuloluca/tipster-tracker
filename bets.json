@@ -569,7 +569,7 @@
     "original_tipster": "BetMines",
     "odds": 1.92,
     "stake": 1,
-    "status": "void",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
