@@ -1,5 +1,47 @@
 [
   {
+    "id": "bet_1793985992066_2",
+    "event_date": "2026-11-06 LIVE",
+    "match_name": "Newroz Sulaymaniyah - Karbala",
+    "league": "Iraq Stars League",
+    "original_tipster": "NerdyTips",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793985992065_1",
+    "event_date": "2026-11-06 LIVE",
+    "match_name": "Al-Wakrah - Al-Shahaniya",
+    "league": "Qatar Premier League",
+    "original_tipster": "NerdyTips",
+    "market": "1X2 / Mercato",
+    "prediction": "1X",
+    "odds": 1.89,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1793985992065_0",
+    "event_date": "2026-11-06 LIVE",
+    "match_name": "Neftci Baku - Kapaz",
+    "league": "Premier League",
+    "original_tipster": "NerdyTips",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.74,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793966153149_0",
     "event_date": "2026-11-08 00:00",
     "match_name": "Tigres UANL - Cruz Azul",
