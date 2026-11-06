@@ -1,75 +1,5 @@
 [
   {
-    "id": "bet_1793947299417_4",
-    "event_date": "2026-11-06 22:00",
-    "match_name": "Union Santa Fe - Velez Sarsfield BA",
-    "league": "Primera División",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "1X",
-    "odds": 1.46,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793947299417_3",
-    "event_date": "2026-11-06 20:00",
-    "match_name": "Derby County - Bolton Wanderers",
-    "league": "Championship",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "1X",
-    "odds": 1.48,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793947299416_2",
-    "event_date": "2026-11-06 19:00",
-    "match_name": "Hammarby IF - IF Elfsborg",
-    "league": "Allsvenskan",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3.5",
-    "odds": 1.62,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793947299415_1",
-    "event_date": "2026-11-06 22:00",
-    "match_name": "Independiente - Deportivo Riestra",
-    "league": "Primera División",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 1.5",
-    "odds": 1.52,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1793947299415_0",
-    "event_date": "2026-11-06 22:00",
-    "match_name": "San Lorenzo - Platense",
-    "league": "Primera División",
-    "original_tipster": "AtmBetSignal",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 1.5",
-    "odds": 1.56,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793891712900_0",
     "event_date": "2026-11-07 20:00",
     "match_name": "Avai - Sao Bernardo FC",
@@ -140,6 +70,48 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1793947299417_4",
+    "event_date": "2026-11-06 22:00",
+    "match_name": "Union Santa Fe - Velez Sarsfield BA",
+    "league": "Primera División",
+    "market": "1X2 / Mercato",
+    "prediction": "1X",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.46,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793947299415_1",
+    "event_date": "2026-11-06 22:00",
+    "match_name": "Independiente - Deportivo Riestra",
+    "league": "Primera División",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 1.5",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.52,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793947299415_0",
+    "event_date": "2026-11-06 22:00",
+    "match_name": "San Lorenzo - Platense",
+    "league": "Primera División",
+    "market": "1X2 / Mercato",
+    "prediction": "Over 1.5",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.56,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
     "id": "bet_1793945053755_8",
     "event_date": "2026-11-06 20:45",
     "match_name": "Tolosa - Strasburgo",
@@ -194,6 +166,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": false
+  },
+  {
+    "id": "bet_1793947299417_3",
+    "event_date": "2026-11-06 20:00",
+    "match_name": "Derby County - Bolton Wanderers",
+    "league": "Championship",
+    "market": "1X2 / Mercato",
+    "prediction": "1X",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.48,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
   },
   {
     "id": "bet_1793945619489_1",
@@ -263,7 +249,21 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793947299416_2",
+    "event_date": "2026-11-06 19:00",
+    "match_name": "Hammarby IF - IF Elfsborg",
+    "league": "Allsvenskan",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 3.5",
+    "original_tipster": "AtmBetSignal",
+    "odds": 1.62,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
   },
   {
     "id": "bet_1793945129187_1",
@@ -277,7 +277,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793945129186_0",
@@ -291,7 +291,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793945053753_3",
@@ -375,7 +375,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793945053754_6",
