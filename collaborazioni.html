@@ -54,7 +54,7 @@
         * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden justify-between">
 
     <!-- NAVBAR -->
     <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
@@ -213,7 +213,24 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-3">
+    <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-4">
+        <!-- LINK GIOCO RESPONSABILE & ADM -->
+        <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-semibold font-sans">
+            <a href="https://www.gioca-responsabile.it/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> Gioco Responsabile
+            </a>
+            <a href="https://www.adm.gov.it/portale/giochi" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition flex items-center gap-1.5">
+                <i data-lucide="landmark" class="w-4 h-4 text-amber-500"></i> ADM (Agenzia Dogane e Monopoli)
+            </a>
+            <div class="flex items-center gap-1.5 text-rose-400 font-bold bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20">
+                <i data-lucide="ban" class="w-3.5 h-3.5"></i> 18+
+            </div>
+        </div>
+
+        <div class="text-[11px] text-slate-400 max-w-xl mx-auto leading-relaxed font-sans">
+            Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.
+        </div>
+
         <div>
             AtmBet &copy; 2026. Programma Affiliazione B2B & Creator Partner.
         </div>
