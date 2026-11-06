@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1793958548566_0",
-    "event_date": "2026-11-06 20:30",
-    "match_name": "Odra Opole - Unia Skierniewice",
-    "league": "Liga I",
-    "original_tipster": "Infoland",
-    "market": "1X2 / Mercato",
-    "prediction": "1X & 2-5 Goal",
-    "odds": 1.83,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793891712900_0",
     "event_date": "2026-11-07 20:00",
     "match_name": "Avai - Sao Bernardo FC",
@@ -134,6 +120,20 @@
     "prediction": "X2",
     "original_tipster": "Pronostici1",
     "odds": 1.75,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1793958548566_0",
+    "event_date": "2026-11-06 20:30",
+    "match_name": "Odra Opole - Unia Skierniewice",
+    "league": "Liga I",
+    "market": "1X2 / Mercato",
+    "prediction": "1X & 2-5 Goal",
+    "original_tipster": "Infoland",
+    "odds": 1.83,
     "stake": 1,
     "status": "pending",
     "is_published": true,
