@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1793946074992_0",
+    "event_date": "2026-11-07 01:00",
+    "match_name": "Charlotte Hornets - Boston Celtics / Minnesota Wild - San Jose Sharks",
+    "league": "NBA / NHL",
+    "original_tipster": "ZcodeAi",
+    "market": "Multipla",
+    "prediction": "V2 / V1",
+    "odds": 1.82,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793944956016_2",
     "event_date": "2026-11-08 22:15",
     "match_name": "Club Bolívar - The Strongest",
