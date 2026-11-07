@@ -70,20 +70,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794037029399_3",
-    "event_date": "2026-11-07 23:30",
-    "match_name": "CF Montreal - Vancouver Whitecaps FC",
-    "league": "MLS",
-    "market": "1X2 / Mercato",
-    "prediction": "Doppia Chance 1X",
-    "original_tipster": "AtmBetSignal",
-    "odds": 2.29,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794036965497_4",
     "event_date": "2026-11-07 23:30",
     "match_name": "San Diego FC - Sporting Kansas City",
