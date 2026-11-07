@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1794044947233_0",
-    "event_date": "2026-11-07 16:00",
-    "match_name": "Nottingham Forest - Manchester City / Roma - Sassuolo / Valencia - Real Madrid",
-    "league": "Premier League / Serie A / LaLiga",
-    "original_tipster": "Cassandra",
-    "market": "Multipla",
-    "prediction": "X2 / 1 / OSPITE VINCE ALMENO UN TEMPO : SI",
-    "odds": 1.8,
+    "id": "bet_1794049066938_0",
+    "event_date": "2026-11-07 15:00",
+    "match_name": "GIF Sundsvall - Varberg BoIS",
+    "league": "Sweden Superettan",
+    "original_tipster": "BetMines PreMatch",
+    "market": "1X2 / Mercato",
+    "prediction": "GG",
+    "odds": 1.95,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -404,6 +404,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1794044947233_0",
+    "event_date": "2026-11-07 16:00",
+    "match_name": "Nottingham Forest - Manchester City / Roma - Sassuolo / Valencia - Real Madrid",
+    "league": "Premier League / Serie A / LaLiga",
+    "market": "Multipla",
+    "prediction": "X2 / 1 / OSPITE VINCE ALMENO UN TEMPO : SI",
+    "original_tipster": "Cassandra",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1794035997547_0",
