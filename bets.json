@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1794040956722_0",
-    "event_date": "2026-11-07 13:00",
-    "match_name": "Babrungas - FA Šiauliai II",
-    "league": "Lithuania 1. Lyga",
-    "original_tipster": "BetMines Valuebet",
-    "market": "1X2 / Mercato",
-    "prediction": "GG",
-    "odds": 2.2,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
