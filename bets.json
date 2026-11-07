@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1794041045642_0",
-    "event_date": "2026-11-07 13:00",
-    "match_name": "Babrungas - FA Šiauliai II",
-    "league": "Lithuania 1. Lyga",
-    "original_tipster": "BetMines PreMatch",
+    "id": "bet_1794041325578_0",
+    "event_date": "2026-11-07 09:47",
+    "match_name": "Persipura Jayapura - Deltras Sidoarjo",
+    "league": "Indonesia championship",
+    "original_tipster": "Infoland",
     "market": "1X2 / Mercato",
-    "prediction": "GG",
-    "odds": 2.2,
+    "prediction": "X2",
+    "odds": 1.8,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -754,6 +754,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1794041045642_0",
+    "event_date": "2026-11-07 13:00",
+    "match_name": "Babrungas - FA Šiauliai II",
+    "league": "Lithuania 1. Lyga",
+    "market": "1X2 / Mercato",
+    "prediction": "GG",
+    "original_tipster": "BetMines PreMatch",
+    "odds": 2.2,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793990801539_1",
