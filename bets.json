@@ -798,20 +798,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1794034882076_2",
-    "event_date": "2026-11-07 01:30",
-    "match_name": "New York - Cleveland",
-    "league": "NBA",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 224.5",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.93,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794034882075_1",
     "event_date": "2026-11-07 01:30",
     "match_name": "Brooklyn - Atlanta",
