@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1794041325578_0",
-    "event_date": "2026-11-07 09:47",
-    "match_name": "Persipura Jayapura - Deltras Sidoarjo",
-    "league": "Indonesia championship",
+    "id": "bet_1794041522707_0",
+    "event_date": "2026-11-08 20:00",
+    "match_name": "Independiente Santa Fe - Deportivo Pasto",
+    "league": "Primera A, Apertura",
     "original_tipster": "Infoland",
     "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "odds": 1.8,
+    "prediction": "ALTRO",
+    "odds": 4.5,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -810,6 +810,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1794041325578_0",
+    "event_date": "2026-11-07 09:47",
+    "match_name": "Persipura Jayapura - Deltras Sidoarjo",
+    "league": "Indonesia championship",
+    "market": "1X2 / Mercato",
+    "prediction": "X2",
+    "original_tipster": "Infoland",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1793946457535_0",
