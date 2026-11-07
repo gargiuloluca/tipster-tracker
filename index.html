@@ -53,7 +53,6 @@
             color: #22c55e !important;
             font-weight: 700 !important;
         }
-        /* OFFSET DI SCORRIMENTO PER EVITare CHE IL MENU COPRICA LE SEZIONI */
         #simulatore {
             scroll-margin-top: 100px;
         }
@@ -86,38 +85,66 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-    <!-- 1. NAVBAR IBRIDA -->
+    <!-- 1. NAVBAR IBRIDA RESPONSIVE CON MENU HAMBURGER MOBILE -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-2 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
-            <div class="flex items-center gap-1.5 shrink-0">
-                <a href="index.html" class="flex items-center gap-1.5">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="flex items-center gap-2">
                     <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
-                    <span class="text-base sm:text-xl font-black text-white tracking-tight">ATM<span class="text-atm-green">BET</span></span>
+                    <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
                 </a>
             </div>
 
-            <!-- LINK NAVIGAZIONE DESKTOP (Spaziature ottimizzate e Metodo ripristinato) -->
-            <div class="hidden lg:flex items-center gap-2 xl:gap-4 font-medium" id="desktop-nav-links">
-                <a href="#metodo" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Metodo</a>
-                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Analisi & Perf.</a>
-                <a href="#selezioni" onclick="setActiveNav(this)" class="nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Pronostici</a>
-                <a href="#storico" onclick="setActiveNav(this)" class="nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Storico</a>
-                <a href="#piani" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Piani VIP</a>
-                <a href="#faq" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">FAQ</a>
-                <a href="legal.html" class="nav-item text-[11px] xl:text-xs text-amber-400 hover:text-amber-300 transition flex items-center gap-1 whitespace-nowrap">
+            <!-- LINK NAVIGAZIONE DESKTOP -->
+            <div class="hidden lg:flex items-center gap-4 lg:gap-6" id="desktop-nav-links">
+                <a href="#metodo" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
+                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Analisi & Perf.</a>
+                <a href="#selezioni" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici</a>
+                <a href="#storico" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
+                <a href="#piani" onclick="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
+                <a href="#faq" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+                <a href="legal.html" class="nav-item text-xs font-semibold text-amber-400 hover:text-amber-300 transition flex items-center gap-1">
                     <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Note Legali
                 </a>
             </div>
 
-            <!-- CONTENITORE DINAMICO ACCEDI / SBLOCCO CODICE -->
-            <div id="nav-user-area" class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-                <a href="contatti.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition flex items-center gap-1">
-                    <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="hidden sm:inline">Contatti</span>
-                </a>
-                <button type="button" onclick="openLicenseModal()" class="text-xs font-semibold text-amber-400 hover:text-amber-300 px-1.5 py-1.5 transition flex items-center gap-1">
-                    <i data-lucide="key" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Codice</span> Sblocco
+            <!-- AREA DESTRA & PULSANTE MOBILE MENU -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div id="nav-user-area" class="hidden sm:flex items-center gap-2">
+                    <a href="contatti.html" class="text-xs font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition flex items-center gap-1">
+                        <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> Contatti
+                    </a>
+                    <button type="button" onclick="openLicenseModal()" class="text-xs font-semibold text-amber-400 hover:text-amber-300 px-2 py-1.5 transition flex items-center gap-1">
+                        <i data-lucide="key" class="w-3.5 h-3.5"></i> Sblocco
+                    </button>
+                    <a href="auth.html" class="text-xs font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition">Accedi</a>
+                </div>
+
+                <!-- HAMBURGER BUTTON PER MOBILE -->
+                <button type="button" onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition">
+                    <i data-lucide="menu" class="w-5 h-5" id="mobile-menu-icon"></i>
                 </button>
-                <a href="auth.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition">Accedi</a>
+            </div>
+        </div>
+
+        <!-- MENU A TENDINA MOBILE -->
+        <div id="mobile-dropdown-menu" class="hidden lg:hidden bg-slate-950 border-b border-slate-800 px-4 py-4 space-y-3">
+            <div class="grid grid-cols-2 gap-2 pb-3 border-b border-slate-800">
+                <a href="#metodo" onclick="toggleMobileMenu(); setActiveNav(this)" class="public-marketing-element text-xs font-bold text-slate-300 hover:text-emerald-400 py-1.5 px-2 bg-slate-900 rounded-lg">📍 Metodo</a>
+                <a href="#simulatore" onclick="toggleMobileMenu(); setActiveNav(this)" class="text-xs font-bold text-slate-300 hover:text-emerald-400 py-1.5 px-2 bg-slate-900 rounded-lg">📊 Analisi & Perf.</a>
+                <a href="#selezioni" onclick="toggleMobileMenu(); setActiveNav(this)" class="text-xs font-bold text-slate-300 hover:text-emerald-400 py-1.5 px-2 bg-slate-900 rounded-lg">🔥 Pronostici</a>
+                <a href="#storico" onclick="toggleMobileMenu(); setActiveNav(this)" class="text-xs font-bold text-slate-300 hover:text-emerald-400 py-1.5 px-2 bg-slate-900 rounded-lg">📜 Storico</a>
+                <a href="#piani" onclick="toggleMobileMenu(); setActiveNav(this)" class="public-marketing-element text-xs font-bold text-slate-300 hover:text-emerald-400 py-1.5 px-2 bg-slate-900 rounded-lg">💎 Piani VIP</a>
+                <a href="#faq" onclick="toggleMobileMenu(); setActiveNav(this)" class="public-marketing-element text-xs font-bold text-slate-300 hover:text-emerald-400 py-1.5 px-2 bg-slate-900 rounded-lg">❓ FAQ</a>
+                <a href="legal.html" class="text-xs font-bold text-amber-400 hover:text-amber-300 py-1.5 px-2 bg-slate-900 rounded-lg col-span-2 flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> Note Legali & Conformità
+                </a>
+            </div>
+            
+            <div class="flex items-center justify-between gap-2 pt-1">
+                <a href="contatti.html" class="flex-1 text-center bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold py-2 rounded-xl border border-slate-800">Contatti</a>
+                <button type="button" onclick="openLicenseModal(); toggleMobileMenu();" class="flex-1 text-center bg-amber-500/20 text-amber-400 text-xs font-bold py-2 rounded-xl border border-amber-500/30">Codice Sblocco</button>
+                <a href="auth.html" class="flex-1 text-center bg-emerald-500 text-slate-950 text-xs font-black py-2 rounded-xl">Accedi</a>
             </div>
         </div>
     </nav>
@@ -315,7 +342,7 @@
             </div>
         </section>
 
-        <!-- 4. ANALISI & PERFORMANCE (Con offset di scroll corretto) -->
+        <!-- 4. ANALISI & PERFORMANCE -->
         <section id="simulatore" class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-6 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
@@ -752,6 +779,20 @@
             bot_username: "AtmBetOfficialBot"
         };
 
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-dropdown-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            if (!menu) return;
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                if (icon) icon.setAttribute('data-lucide', 'x');
+            } else {
+                menu.classList.add('hidden');
+                if (icon) icon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+
         function setActiveNav(element) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-item-active'));
             element.classList.add('nav-item-active');
@@ -1096,13 +1137,13 @@
 
             if (!activeUser) {
                 container.innerHTML = `
-                    <a href="contatti.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition flex items-center gap-1">
-                        <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="hidden sm:inline">Contatti</span>
+                    <a href="contatti.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition hidden sm:flex items-center gap-1">
+                        <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> Contatti
                     </a>
-                    <button type="button" onclick="openLicenseModal()" class="text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 px-2 py-1.5 transition flex items-center gap-1">
-                        <i data-lucide="key" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Codice</span> Sblocco
+                    <button type="button" onclick="openLicenseModal()" class="text-xs font-semibold text-amber-400 hover:text-amber-300 px-1.5 py-1.5 transition flex items-center gap-1">
+                        <i data-lucide="key" class="w-3.5 h-3.5"></i> Sblocco
                     </button>
-                    <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition">Accedi</a>
+                    <a href="auth.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition">Accedi</a>
                 `;
             } else {
                 let badgeLabel = 'VIP';
@@ -1126,13 +1167,13 @@
                 }
 
                 container.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <a href="contatti.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition hidden sm:flex items-center gap-1" title="Contatti">
+                    <div class="flex items-center gap-1.5">
+                        <a href="contatti.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1 py-1.5 transition hidden sm:flex items-center gap-1" title="Contatti">
                             <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i>
                         </a>
                         <div class="flex flex-col text-right">
-                            <span class="text-xs font-bold text-white max-w-[110px] sm:max-w-[140px] truncate">${activeUser.name || activeUser.email.split('@')[0]}</span>
-                            <span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${badgeClass} inline-block font-semibold">${badgeLabel}</span>
+                            <span class="text-xs font-bold text-white max-w-[90px] sm:max-w-[120px] truncate">${activeUser.name || activeUser.email.split('@')[0]}</span>
+                            <span class="text-[9px] font-mono px-1 py-0.2 rounded border ${badgeClass} inline-block font-semibold">${badgeLabel}</span>
                         </div>
                         <button type="button" onclick="logoutUser()" title="Disconnetti" class="p-1.5 rounded-lg bg-slate-900 hover:bg-rose-500/20 border border-slate-800 hover:border-rose-500/30 text-slate-400 hover:text-rose-400 transition">
                             <i data-lucide="log-out" class="w-4 h-4"></i>
