@@ -1922,10 +1922,30 @@
         function extractStandardDate(rawDateStr) {
             if (!rawDateStr) return '';
             const clean = String(rawDateStr).trim();
+            
+            // Estrazione data e ora se presenti (es. 2026-11-08 02:30 o 2026-11-08T02:30)
+            const dateTimeMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})[ T](\d{2}):(\d{2})/);
+            if (dateTimeMatch) {
+                let year = parseInt(dateTimeMatch[1]);
+                let month = parseInt(dateTimeMatch[2]);
+                let day = parseInt(dateTimeMatch[3]);
+                let hour = parseInt(dateTimeMatch[4]);
+                
+                // Se la partita si gioca a notte fonda (tra le 00:00 e le 08:00), la consideriamo fiscalmente del giorno precedente
+                if (hour >= 0 && hour < 8) {
+                    let dObj = new Date(year, month - 1, day);
+                    dObj.setDate(dObj.getDate() - 1);
+                    return getLocalDateString(dObj);
+                }
+                return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            }
+
             const isoMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
             if (isoMatch) return `${isoMatch[1]}-${String(isoMatch[2]).padStart(2, '0')}-${String(isoMatch[3]).padStart(2, '0')}`;
+            
             const euMatch = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
             if (euMatch) return `${euMatch[3]}-${String(euMatch[2]).padStart(2, '0')}-${String(euMatch[1]).padStart(2, '0')}`;
+            
             return clean.slice(0, 10);
         }
 
