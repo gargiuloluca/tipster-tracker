@@ -452,16 +452,32 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
-                    <div class="grid grid-cols-2 sm:flex sm:items-center gap-2">
-                        <button type="button" onclick="dispatchTelegramSignals('pure')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
-                            <i data-lucide="send" class="w-3.5 h-3.5"></i> Canale PURE
-                        </button>
-                        <button type="button" onclick="dispatchTelegramSignals('full')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
-                            <i data-lucide="send" class="w-3.5 h-3.5"></i> All-Inclusive
-                        </button>
+                <!-- PULSANTI INVIO SEGNALI + NUOVI TASTI RESOCONTO GIORNALIERO -->
+                <div class="flex flex-col gap-3 pt-2 border-t border-slate-800/80">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                            <button type="button" onclick="dispatchTelegramSignals('pure')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i> Canale PURE
+                            </button>
+                            <button type="button" onclick="dispatchTelegramSignals('full')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i> All-Inclusive
+                            </button>
+                        </div>
+                        <span id="tg_status_msg" class="text-[11px] font-mono text-emerald-400 font-bold text-center sm:text-right"></span>
                     </div>
-                    <span id="tg_status_msg" class="text-[11px] font-mono text-emerald-400 font-bold text-center sm:text-right"></span>
+
+                    <!-- BOTTONI DEDICATI RESOCONTO GIORNALIERO -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800/60">
+                        <span class="text-[11px] text-slate-400 font-medium">Invia Resoconto Giornaliero Esiti:</span>
+                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+                            <button type="button" onclick="dispatchDailyReport('pure')" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> Resoconto PURE
+                            </button>
+                            <button type="button" onclick="dispatchDailyReport('full')" class="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> Resoconto All-Inc.
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -1660,6 +1676,109 @@
                 persistBets(bets);
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi ad All-Inclusive!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
+            }
+        }
+
+        // FUNZIONE DEDICATA PER IL RESOCONTO GIORNALIERO AUTOMATICO
+        async function dispatchDailyReport(channelType) {
+            const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+
+            if (!token) {
+                alert("Configura prima il Bot Token di Telegram.");
+                return;
+            }
+
+            const chatId = channelType === 'pure' ? channelPure : channelFull;
+            if (!chatId) {
+                alert(`Chat ID mancante per il canale ${channelType.toUpperCase()}.`);
+                return;
+            }
+
+            const bets = loadAllBets();
+            const todayStr = getLocalDateString(new Date());
+
+            // Prende le giocate chiuse (won o lost) della giornata odierna filtrate per canale
+            const resolvedBets = bets.filter(b => {
+                const isResolved = b.status === 'won' || b.status === 'lost';
+                const bDate = extractStandardDate(b.event_date);
+                if (!isResolved || bDate !== todayStr) return false;
+
+                const normTipster = canonicalizeTipsterName(b.original_tipster);
+                if (channelType === 'pure') {
+                    return getPureSelectedTipsters().includes(normTipster);
+                } else {
+                    return getFullSelectedTipsters().includes(normTipster);
+                }
+            });
+
+            if (resolvedBets.length === 0) {
+                alert("Nessuna giocata refertata (Vinta/Persa) trovata per la data odierna da inserire nel resoconto.");
+                return;
+            }
+
+            let wonCount = resolvedBets.filter(b => b.status === 'won').length;
+            let lostCount = resolvedBets.filter(b => b.status === 'lost').length;
+            let totalResolved = resolvedBets.length;
+            let winRate = totalResolved > 0 ? ((wonCount / totalResolved) * 100).toFixed(2) : 0;
+
+            let netProfit = 0;
+            let totalStake = 0;
+            resolvedBets.forEach(b => {
+                const s = b.stake || 1.0;
+                totalStake += s;
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
+            });
+
+            let roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(2) : 0;
+
+            const channelTitleName = channelType === 'pure' ? 'CANALE PURE' : 'CANALE ALL-INCLUSIVE';
+            const formattedDate = todayStr.split('-').reverse().join('/');
+
+            let reportMsg = `📊 <b>ATMBET — RESOCONTO GIORNALIERO ${channelTitleName}</b>\n`;
+            reportMsg += `📅 <i>Data: ${formattedDate}</i>\n`;
+            reportMsg += `Un'altra giornata solida gestita con rigore statistico e approccio quantitativo. Il servizio chiude in positivo, confermando la bontà della selezione algoritmica a valore.\n\n`;
+            
+            reportMsg += `📈 <b>PANORAMICA STATISTICA</b>\n`;
+            reportMsg += ` * ⚡ Totale Giocate: ${totalResolved}\n`;
+            reportMsg += ` * ✅ Vinte: ${wonCount}\n`;
+            reportMsg += ` * ❌ Perse: ${lostCount}\n`;
+            reportMsg += ` * 🎯 Win Rate: ${winRate}%\n`;
+            reportMsg += ` * 📊 Profitto Netto: ${(netProfit >= 0 ? '+' : '')}${netProfit.toFixed(2)}u\n`;
+            reportMsg += ` * 🔄 Yield / ROI: ${(roi >= 0 ? '+' : '')}${roi}%\n\n`;
+
+            reportMsg += `📋 <b>DETTAGLIO SEGNALI DEL GIORNO</b>\n`;
+            resolvedBets.forEach(b => {
+                const s = b.stake || 1.0;
+                let unitDiff = b.status === 'won' ? ((b.odds - 1) * s) : -s;
+                let outcomeLabel = b.status === 'won' 
+                    ? `👉 Vinta (${unitDiff >= 0 ? '+' : ''}${unitDiff.toFixed(2)}u)` 
+                    : `👉 Persa (${unitDiff.toFixed(2)}u)`;
+
+                reportMsg += ` * ${b.match_name} | ${b.prediction} @ ${parseFloat(b.odds).toFixed(2)} ${outcomeLabel}\n`;
+            });
+
+            reportMsg += `\n🔗 Analisi e statistiche complete sempre disponibili su AtmBet`;
+
+            const statusEl = document.getElementById('tg_status_msg');
+            if (statusEl) statusEl.innerText = "Invio resoconto in corso...";
+
+            try {
+                const res = await sendTelegramMessage(token, chatId, reportMsg);
+                if (res.ok) {
+                    if (statusEl) statusEl.innerText = "Resoconto giornaliero inviato con successo!";
+                    setTimeout(() => { if (statusEl) statusEl.innerText = ""; }, 5000);
+                    alert("Resoconto giornaliero inviato correttamente su Telegram!");
+                } else {
+                    alert(`Errore invio resoconto: ${res.description}`);
+                    if (statusEl) statusEl.innerText = "";
+                }
+            } catch(e) {
+                alert(`Errore di rete: ${e.message}`);
+                if (statusEl) statusEl.innerText = "";
             }
         }
 
@@ -2877,7 +2996,7 @@
                         <div class="flex items-center gap-1.5 whitespace-nowrap">
                             <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>
                             <button type="button" onclick="updateStatus('${bet.id}', 'won')" class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 font-black text-xs border border-emerald-500/40">✓ V</button>
-                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 font-black text-xs border border-rose-500/40">✕ P</button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 font-black text-xs border border-emerald-500/40">✕ P</button>
                             <button type="button" onclick="updateStatus('${bet.id}', 'void')" class="px-1.5 py-1 rounded bg-amber-500/10 text-amber-400 font-bold text-[10px] border border-amber-500/20">Void</button>
                         </div>
                     `;
@@ -2962,7 +3081,7 @@
                     <td class="py-2.5 px-3">${statusControlHtml}</td>
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">${tgColumnHtml}</td>
                     <td class="py-2.5 px-3 text-right whitespace-nowrap">
-                        <button type="button" onclick="deleteBet('${bet.id}')" class="text-rose-400 p-1 rounded hover:bg-rose-500/10">
+                        <button type="button" onclick="deleteBet('${bet.id}')" class="p-1 rounded text-rose-400 hover:bg-rose-500/10">
                             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         </button>
                     </td>
