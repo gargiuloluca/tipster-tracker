@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1794035786624_0",
+    "event_date": "2026-11-07 15:00",
+    "match_name": "Parma FC - Bologna / Torino - Lecce / Alverca - Casa Pia",
+    "league": "Serie A / Liga Portugal",
+    "original_tipster": "Pronostici1",
+    "market": "Multipla",
+    "prediction": "X2 / Over 1.5 / Under 3.5",
+    "odds": 2.01,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
