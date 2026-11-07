@@ -53,6 +53,10 @@
             color: #22c55e !important;
             font-weight: 700 !important;
         }
+        /* OFFSET DI SCORRIMENTO PER EVITare CHE IL MENU COPRICA LE SEZIONI */
+        #simulatore {
+            scroll-margin-top: 100px;
+        }
         .custom-cards-scroll::-webkit-scrollbar,
         .custom-scroll-box::-webkit-scrollbar {
             width: 6px;
@@ -84,36 +88,36 @@
 
     <!-- 1. NAVBAR IBRIDA -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <a href="index.html" class="flex items-center gap-2">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 shrink-0">
+                <a href="index.html" class="flex items-center gap-1.5">
                     <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
-                    <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
+                    <span class="text-base sm:text-xl font-black text-white tracking-tight">ATM<span class="text-atm-green">BET</span></span>
                 </a>
             </div>
 
-            <!-- LINK NAVIGAZIONE DESKTOP -->
-            <div class="hidden md:flex items-center gap-3 lg:gap-6" id="desktop-nav-links">
-                <a href="#metodo" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
-                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Analisi & Performance</a>
-                <a href="#selezioni" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici Oggi</a>
-                <a href="#storico" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
-                <a href="#piani" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
-                <a href="#faq" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
-                <a href="legal.html" class="nav-item text-xs font-semibold text-amber-400 hover:text-amber-300 transition flex items-center gap-1">
+            <!-- LINK NAVIGAZIONE DESKTOP (Spaziature ottimizzate e Metodo ripristinato) -->
+            <div class="hidden lg:flex items-center gap-2 xl:gap-4 font-medium" id="desktop-nav-links">
+                <a href="#metodo" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Metodo</a>
+                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Analisi & Perf.</a>
+                <a href="#selezioni" onclick="setActiveNav(this)" class="nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Pronostici</a>
+                <a href="#storico" onclick="setActiveNav(this)" class="nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Storico</a>
+                <a href="#piani" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">Piani VIP</a>
+                <a href="#faq" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-[11px] xl:text-xs text-slate-400 hover:text-white transition whitespace-nowrap">FAQ</a>
+                <a href="legal.html" class="nav-item text-[11px] xl:text-xs text-amber-400 hover:text-amber-300 transition flex items-center gap-1 whitespace-nowrap">
                     <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Note Legali
                 </a>
             </div>
 
             <!-- CONTENITORE DINAMICO ACCEDI / SBLOCCO CODICE -->
-            <div id="nav-user-area" class="flex items-center gap-2 sm:gap-3">
-                <a href="contatti.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition flex items-center gap-1">
+            <div id="nav-user-area" class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                <a href="contatti.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition flex items-center gap-1">
                     <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="hidden sm:inline">Contatti</span>
                 </a>
-                <button type="button" onclick="openLicenseModal()" class="text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 px-2 py-1.5 transition flex items-center gap-1">
+                <button type="button" onclick="openLicenseModal()" class="text-xs font-semibold text-amber-400 hover:text-amber-300 px-1.5 py-1.5 transition flex items-center gap-1">
                     <i data-lucide="key" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Codice</span> Sblocco
                 </button>
-                <a href="auth.html" class="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-2 py-1.5 transition">Accedi</a>
+                <a href="auth.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition">Accedi</a>
             </div>
         </div>
     </nav>
@@ -311,7 +315,7 @@
             </div>
         </section>
 
-        <!-- 4. ANALISI & PERFORMANCE (Simulatore e Confronto Piani unificati) -->
+        <!-- 4. ANALISI & PERFORMANCE (Con offset di scroll corretto) -->
         <section id="simulatore" class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-6 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
