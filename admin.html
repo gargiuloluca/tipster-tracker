@@ -2055,12 +2055,13 @@
                 let hour = parseInt(dateTimeMatch[4]);
                 
                 // Se la partita si gioca dalla mezzanotte alle 09:00 del mattino (es. 01:30 dell'8 novembre),
-                // la scaliamo al giorno precedente (7 novembre) così risulta visibile e inviabile "oggi".
+                // la scaliamo matematicamente di un giorno esatto (24 ore in millisecondi) al giorno precedente
                 if (hour >= 0 && hour < 9) {
                     let dObj = new Date(year, month - 1, day);
-                    dObj.setDate(dObj.getDate() - 1);
-                    return getLocalDateString(dObj);
+                    let prevDayObj = new Date(dObj.getTime() - (24 * 60 * 60 * 1000));
+                    return getLocalDateString(prevDayObj);
                 }
+
                 return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             }
 
