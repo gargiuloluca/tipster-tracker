@@ -1,13 +1,13 @@
 [
   {
-    "id": "bet_1794049066938_0",
-    "event_date": "2026-11-07 15:00",
-    "match_name": "GIF Sundsvall - Varberg BoIS",
-    "league": "Sweden Superettan",
+    "id": "bet_1794051921145_0",
+    "event_date": "2026-11-08 13:00",
+    "match_name": "Neman Grodno - Dnepr Mogilev",
+    "league": "Belarus Vysshaya Liga",
     "original_tipster": "BetMines PreMatch",
     "market": "1X2 / Mercato",
-    "prediction": "GG",
-    "odds": 1.95,
+    "prediction": "1",
+    "odds": 1.69,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -698,6 +698,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1794049066938_0",
+    "event_date": "2026-11-07 15:00",
+    "match_name": "GIF Sundsvall - Varberg BoIS",
+    "league": "Sweden Superettan",
+    "market": "1X2 / Mercato",
+    "prediction": "GG",
+    "original_tipster": "BetMines PreMatch",
+    "odds": 1.95,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1794036085220_1",
