@@ -127,7 +127,7 @@
             </div>
         </div>
 
-        <!-- MENU A TENDINA MOBILE PULITO -->
+            <!-- MENU A TENDINA MOBILE ORDINATO CON TASTI ACCESSO -->
         <div id="mobile-dropdown-menu" class="hidden lg:hidden bg-slate-950 border-b border-slate-800 px-4 py-4 space-y-2">
             <a href="#metodo" onclick="toggleMobileMenu(); setActiveNav(this)" class="public-marketing-element block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">📍 Metodo</a>
             <a href="#simulatore" onclick="toggleMobileMenu(); setActiveNav(this)" class="block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">📊 Analisi & Performance</a>
@@ -138,6 +138,19 @@
             <a href="legal.html" class="block text-xs font-bold text-amber-400 hover:text-amber-300 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-amber-500/30 flex items-center gap-1.5">
                 <i data-lucide="shield-check" class="w-4 h-4"></i> Note Legali & Conformità
             </a>
+            
+            <!-- Tasti rapidi di contatto, sblocco e accesso ottimizzati per mobile -->
+            <div class="pt-3 border-t border-slate-800 grid grid-cols-3 gap-2">
+                <a href="contatti.html" class="text-center bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold py-2.5 rounded-xl border border-slate-800 flex items-center justify-center gap-1">
+                    <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> Contatti
+                </a>
+                <button type="button" onclick="openLicenseModal(); toggleMobileMenu();" class="text-center bg-amber-500/20 text-amber-400 text-xs font-bold py-2.5 rounded-xl border border-amber-500/30 flex items-center justify-center gap-1">
+                    <i data-lucide="key" class="w-3.5 h-3.5"></i> Sblocco
+                </button>
+                <a href="auth.html" class="text-center bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black py-2.5 rounded-xl flex items-center justify-center gap-1 shadow">
+                    Accedi
+                </a>
+            </div>
         </div>
     </nav>
 
