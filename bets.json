@@ -868,20 +868,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1794034882076_3",
-    "event_date": "2026-11-07 01:00",
-    "match_name": "Washington - Oklahoma City",
-    "league": "NBA",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 219.5",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.96,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794034882075_0",
     "event_date": "2026-11-07 01:00",
     "match_name": "Denver - Indiana",
