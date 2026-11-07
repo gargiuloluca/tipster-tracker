@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1794054878394_0",
+    "event_date": "2026-11-07 10:30",
+    "match_name": "Górnik Zabrze - Wieczysta Kraków",
+    "league": "Ekstraklasa",
+    "original_tipster": "ZCODE",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
