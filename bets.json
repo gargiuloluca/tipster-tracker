@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1794040455010_0",
-    "event_date": "2026-11-07 11:30",
-    "match_name": "Málaga CF - Racing Santander",
-    "league": "La Liga",
-    "original_tipster": "ZCODE",
-    "market": "1X2 / Mercato",
-    "prediction": "Ambos equipos marcan - Sí",
-    "odds": 1.56,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
@@ -764,6 +750,20 @@
     "prediction": "1",
     "original_tipster": "NerdyTips",
     "odds": 1.4,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": true
+  },
+  {
+    "id": "bet_1794040455010_0",
+    "event_date": "2026-11-07 11:30",
+    "match_name": "Málaga CF - Racing Santander",
+    "league": "La Liga",
+    "market": "1X2 / Mercato",
+    "prediction": "Ambos equipos marcan - Sí",
+    "original_tipster": "ZCODE",
+    "odds": 1.56,
     "stake": 1,
     "status": "pending",
     "is_published": true,
