@@ -49,7 +49,6 @@
             border-color: #3b82f6 !important;
             font-weight: 800 !important;
         }
-        /* Classe dinamica per illuminare di verde solo la voce di menu selezionata */
         .nav-item-active {
             color: #22c55e !important;
             font-weight: 700 !important;
@@ -96,12 +95,14 @@
             <!-- LINK NAVIGAZIONE DESKTOP -->
             <div class="hidden md:flex items-center gap-3 lg:gap-6" id="desktop-nav-links">
                 <a href="#metodo" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Metodo</a>
-                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Simulatore</a>
-                <a href="#confronto-piani" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Confronto Piani</a>
+                <a href="#simulatore" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Analisi & Performance</a>
                 <a href="#selezioni" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Pronostici Oggi</a>
                 <a href="#storico" onclick="setActiveNav(this)" class="nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Storico</a>
                 <a href="#piani" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">Piani VIP</a>
                 <a href="#faq" onclick="setActiveNav(this)" class="public-marketing-element nav-item text-xs font-semibold text-slate-400 hover:text-white transition">FAQ</a>
+                <a href="legal.html" class="nav-item text-xs font-semibold text-amber-400 hover:text-amber-300 transition flex items-center gap-1">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Note Legali
+                </a>
             </div>
 
             <!-- CONTENITORE DINAMICO ACCEDI / SBLOCCO CODICE -->
@@ -117,7 +118,7 @@
         </div>
     </nav>
 
-    <!-- MODALE DI VERIFICA CODICE LICENZA (users.json) & USERNAME TELEGRAM -->
+    <!-- MODALE DI VERIFICA CODICE LICENZA -->
     <div id="license-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9999] hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 p-6 sm:p-7 rounded-3xl max-w-sm w-full shadow-2xl space-y-4">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -310,17 +311,17 @@
             </div>
         </section>
 
-        <!-- 4. SIMULATORE TEMPORALE DINAMICO -->
-        <section id="simulatore" class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
+        <!-- 4. ANALISI & PERFORMANCE (Simulatore e Confronto Piani unificati) -->
+        <section id="simulatore" class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-6 shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                 <div>
                     <div class="flex items-center gap-2 mb-1">
                         <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
-                            <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
                         </span>
-                        <h2 class="text-sm sm:text-base font-black text-white">Simulatore di Rendimento nel Tempo</h2>
+                        <h2 class="text-sm sm:text-base font-black text-white">Analisi & Performance</h2>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Verifica i guadagni selezionando un giorno esatto o un intervallo rapido.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Verifica i guadagni nel tempo e confronta in tempo reale i risultati tra Selection e Signal.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
@@ -364,103 +365,100 @@
                     <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
                 </div>
             </div>
-        </section>
 
-        <!-- 4.1 CONFRONTO PERFORMANCE -->
-        <section id="confronto-piani" class="bg-slate-900 border border-slate-800 rounded-2xl sm:rounded-3xl p-5 sm:p-7 text-white shadow-xl space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-800 pb-4">
-                <div>
-                    <h3 class="text-base sm:text-xl font-bold text-emerald-400 flex items-center gap-2">
-                        <i data-lucide="git-compare" class="w-5 h-5 text-emerald-400"></i> Confronto Performance: AtmBet Selection vs AtmBet Signal
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-0.5">
-                        Confronta in tempo reale i risultati dello storico tra la selezione ristretta d'élite e il flusso completo di tutti i segnali.
-                    </p>
-                </div>
-                
-                <div class="flex items-center gap-2.5 bg-slate-950 p-2 rounded-xl border border-slate-800 self-stretch sm:self-auto justify-between sm:justify-start">
-                    <span class="text-xs text-slate-300 font-medium">Capitale Base (1u =):</span>
-                    <div class="flex items-center gap-1">
-                        <input type="number" id="simUnitValueInput" value="50" min="1" class="w-16 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-emerald-400 rounded-lg py-1 outline-none focus:border-emerald-500" oninput="syncUnitFromInput(this.value)">
-                        <span class="text-xs text-slate-400 font-bold">€</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cards Confronto Piani -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                <!-- Box 1: AtmBet Selection -->
-                <div class="bg-slate-950/70 border-2 border-emerald-500/50 rounded-2xl p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
-                    <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[10px] font-black px-3 py-1 rounded-bl-xl tracking-wider uppercase shadow">
-                        Top Selection • Consigliato
-                    </div>
+            <!-- SUB-SECTION: CONFRONTO PERFORMANCE PIANI -->
+            <div class="pt-4 border-t border-slate-800/80 space-y-4">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                     <div>
-                        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Ufficiale</div>
-                        <div class="text-lg font-black text-emerald-400 mb-1 flex items-baseline justify-between">
-                            <span>AtmBet Selection</span>
-                            <span id="comp-pure-avgodds" class="text-xs font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Quota Med: 1.65</span>
-                        </div>
-                        <div class="text-[11px] text-slate-400 mb-4">Canali Safe & Pure Signal • Filtro matematico ad alta probabilità (&ge;65%)</div>
-
-                        <div class="grid grid-cols-2 gap-2.5 text-center mb-4">
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Win Rate</div>
-                                <div id="comp-pure-winrate" class="text-lg sm:text-xl font-mono font-black text-white">0.0%</div>
-                            </div>
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Yield / ROI</div>
-                                <div id="comp-pure-roi" class="text-lg sm:text-xl font-mono font-black text-emerald-400">+0.0%</div>
-                            </div>
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Profitto Unità</div>
-                                <div id="comp-pure-units" class="text-lg sm:text-xl font-mono font-black text-emerald-400">+0.00u</div>
-                            </div>
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Guadagno Reale</div>
-                                <div id="comp-pure-fiat" class="text-lg sm:text-xl font-mono font-black text-white">≈ +0.00 €</div>
-                            </div>
-                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-emerald-400 flex items-center gap-2">
+                            <i data-lucide="git-compare" class="w-4 h-4 text-emerald-400"></i> AtmBet Selection vs AtmBet Signal
+                        </h3>
+                        <p class="text-[11px] text-slate-400">Confronto diretto dello storico tra la selezione ristretta d'élite e il flusso completo.</p>
                     </div>
-                    
-                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
-                        <span>Operazioni verificate: <strong id="comp-pure-count" class="text-white font-mono">0</strong></span>
-                        <span class="text-emerald-400 font-bold">Minimo Drawdown</span>
+
+                    <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border border-slate-800 self-stretch sm:self-auto justify-between sm:justify-start">
+                        <span class="text-xs text-slate-300 font-medium">Capitale Base (1u =):</span>
+                        <div class="flex items-center gap-1">
+                            <input type="number" id="simUnitValueInput" value="50" min="1" class="w-16 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-emerald-400 rounded-lg py-1 outline-none focus:border-emerald-500" oninput="syncUnitFromInput(this.value)">
+                            <span class="text-xs text-slate-400 font-bold">€</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Box 2: AtmBet Signal -->
-                <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-5 relative overflow-hidden shadow-lg flex flex-col justify-between">
-                    <div>
-                        <div class="text-[11px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Globale</div>
-                        <div class="text-lg font-black text-blue-400 mb-1 flex items-baseline justify-between">
-                            <span>AtmBet Signal</span>
-                            <span id="comp-full-avgodds" class="text-xs font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Quota Med: 1.75</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Box 1: Selection -->
+                    <div class="bg-slate-950/70 border-2 border-emerald-500/50 rounded-2xl p-4 relative overflow-hidden shadow-lg flex flex-col justify-between">
+                        <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[9px] font-black px-2.5 py-0.5 rounded-bl-xl tracking-wider uppercase shadow">
+                            Top Selection • Consigliato
                         </div>
-                        <div class="text-[11px] text-slate-400 mb-4">Flusso All-Inclusive • Aggregatore completo di tutti i canali e bot</div>
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Ufficiale</div>
+                            <div class="text-base font-black text-emerald-400 mb-1 flex items-baseline justify-between">
+                                <span>AtmBet Selection</span>
+                                <span id="comp-pure-avgodds" class="text-[11px] font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Quota Med: 1.65</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mb-3">Canali Safe & Pure Signal • Filtro matematico (&ge;65%)</div>
 
-                        <div class="grid grid-cols-2 gap-2.5 text-center mb-4">
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Win Rate</div>
-                                <div id="comp-full-winrate" class="text-lg sm:text-xl font-mono font-black text-white">0.0%</div>
+                            <div class="grid grid-cols-2 gap-2 text-center mb-3">
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Win Rate</div>
+                                    <div id="comp-pure-winrate" class="text-base font-mono font-black text-white">0.0%</div>
+                                </div>
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Yield / ROI</div>
+                                    <div id="comp-pure-roi" class="text-base font-mono font-black text-emerald-400">+0.0%</div>
+                                </div>
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Profitto Unità</div>
+                                    <div id="comp-pure-units" class="text-base font-mono font-black text-emerald-400">+0.00u</div>
+                                </div>
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Guadagno Reale</div>
+                                    <div id="comp-pure-fiat" class="text-base font-mono font-black text-white">≈ +0.00 €</div>
+                                </div>
                             </div>
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Yield / ROI</div>
-                                <div id="comp-full-roi" class="text-lg sm:text-xl font-mono font-black text-blue-400">+0.0%</div>
-                            </div>
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Profitto Unità</div>
-                                <div id="comp-full-units" class="text-lg sm:text-xl font-mono font-black text-blue-400">+0.00u</div>
-                            </div>
-                            <div class="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800">
-                                <div class="text-[10px] text-slate-400 uppercase font-mono">Guadagno Reale</div>
-                                <div id="comp-full-fiat" class="text-lg sm:text-xl font-mono font-black text-white">≈ +0.00 €</div>
-                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800/80 text-[10px] text-slate-400 flex items-center justify-between">
+                            <span>Verificate: <strong id="comp-pure-count" class="text-white font-mono">0</strong></span>
+                            <span class="text-emerald-400 font-bold">Minimo Drawdown</span>
                         </div>
                     </div>
 
-                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
-                        <span>Operazioni verificate: <strong id="comp-full-count" class="text-white font-mono">0</strong></span>
-                        <span class="text-blue-400 font-bold">Alto Volume Operativo</span>
+                    <!-- Box 2: Signal -->
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 relative overflow-hidden shadow-lg flex flex-col justify-between">
+                        <div>
+                            <div class="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-semibold">Fornitore Globale</div>
+                            <div class="text-base font-black text-blue-400 mb-1 flex items-baseline justify-between">
+                                <span>AtmBet Signal</span>
+                                <span id="comp-full-avgodds" class="text-[11px] font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Quota Med: 1.75</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mb-3">Flusso All-Inclusive • Aggregatore completo di tutti i canali</div>
+
+                            <div class="grid grid-cols-2 gap-2 text-center mb-3">
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Win Rate</div>
+                                    <div id="comp-full-winrate" class="text-base font-mono font-black text-white">0.0%</div>
+                                </div>
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Yield / ROI</div>
+                                    <div id="comp-full-roi" class="text-base font-mono font-black text-blue-400">+0.0%</div>
+                                </div>
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Profitto Unità</div>
+                                    <div id="comp-full-units" class="text-base font-mono font-black text-blue-400">+0.00u</div>
+                                </div>
+                                <div class="bg-slate-900/90 p-2 rounded-xl border border-slate-800">
+                                    <div class="text-[9px] text-slate-400 uppercase font-mono">Guadagno Reale</div>
+                                    <div id="comp-full-fiat" class="text-base font-mono font-black text-white">≈ +0.00 €</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800/80 text-[10px] text-slate-400 flex items-center justify-between">
+                            <span>Verificate: <strong id="comp-full-count" class="text-white font-mono">0</strong></span>
+                            <span class="text-blue-400 font-bold">Alto Volume</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -716,6 +714,10 @@
             <span>•</span>
             <a href="auth.html" class="hover:text-slate-400 transition">Area Utente</a>
             <span>•</span>
+            <a href="legal.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
+                <i data-lucide="shield-check" class="w-3 h-3 text-amber-400"></i> Note Legali
+            </a>
+            <span>•</span>
             <a href="collaborazioni.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
                 <i data-lucide="award" class="w-3 h-3 text-amber-500"></i> Collaborazioni
             </a>
@@ -728,7 +730,6 @@
 
     <!-- LOGICA JAVASCRIPT, LICENZE & TELEGRAM -->
     <script>
-        // CATTURA DEL PARAMETRO ?ref= DAL LINK DEL CREATOR (Persistente nel browser)
         const urlParams = new URLSearchParams(window.location.search);
         const refCodeFromUrl = urlParams.get('ref');
         if (refCodeFromUrl) {
@@ -1628,11 +1629,11 @@
             if (pureROIEl) pureROIEl.innerText = (pureROI >= 0 ? '+' : '') + pureROI + '%';
             if (pureUnitsEl) {
                 pureUnitsEl.innerText = (pureNetUnits >= 0 ? '+' : '') + pureNetUnits.toFixed(2) + 'u';
-                pureUnitsEl.className = `text-lg sm:text-xl font-mono font-black ${pureNetUnits >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+                pureUnitsEl.className = `text-base font-mono font-black ${pureNetUnits >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
             }
             if (pureFiatEl) {
                 pureFiatEl.innerText = `≈ ${pureFiat >= 0 ? '+' : ''}${pureFiat.toFixed(2)} €`;
-                pureFiatEl.className = `text-lg sm:text-xl font-mono font-black ${pureFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
+                pureFiatEl.className = `text-base font-mono font-black ${pureFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
             }
             if (pureCountEl) pureCountEl.innerText = `${pureBets.length} (${pureWins}V - ${pureBets.length - pureWins}P)`;
             if (pureAvgOddsEl) pureAvgOddsEl.innerText = `Quota Med: ${pureAvgOdds}`;
@@ -1648,11 +1649,11 @@
             if (fullROIEl) fullROIEl.innerText = (fullROI >= 0 ? '+' : '') + fullROI + '%';
             if (fullUnitsEl) {
                 fullUnitsEl.innerText = (fullNetUnits >= 0 ? '+' : '') + fullNetUnits.toFixed(2) + 'u';
-                fullUnitsEl.className = `text-lg sm:text-xl font-mono font-black ${fullNetUnits >= 0 ? 'text-blue-400' : 'text-rose-400'}`;
+                fullUnitsEl.className = `text-base font-mono font-black ${fullNetUnits >= 0 ? 'text-blue-400' : 'text-rose-400'}`;
             }
             if (fullFiatEl) {
                 fullFiatEl.innerText = `≈ ${fullFiat >= 0 ? '+' : ''}${fullFiat.toFixed(2)} €`;
-                fullFiatEl.className = `text-lg sm:text-xl font-mono font-black ${fullFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
+                fullFiatEl.className = `text-base font-mono font-black ${fullFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
             }
             if (fullCountEl) fullCountEl.innerText = `${completed.length} (${fullWins}V - ${completed.length - fullWins}P)`;
             if (fullAvgOddsEl) fullAvgOddsEl.innerText = `Quota Med: ${fullAvgOdds}`;
@@ -1942,7 +1943,7 @@
                             <span class="text-slate-400 font-semibold">${bet.league}</span>
                             ${isWon 
                                 ? '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
-                                : '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
+                                : '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'}
                         </div>
                     </div>
                     
