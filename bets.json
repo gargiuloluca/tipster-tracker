@@ -784,20 +784,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794035083702_1",
-    "event_date": "2026-11-07 01:30",
-    "match_name": "Brooklyn Nets - Atlanta Hawks",
-    "league": "NBA",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 225.5",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.95,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794034882075_1",
     "event_date": "2026-11-07 01:30",
     "match_name": "Brooklyn - Atlanta",
@@ -1004,20 +990,6 @@
     "odds": 1.78,
     "stake": 1,
     "status": "won",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
-    "id": "bet_1793945053753_4",
-    "event_date": "2026-11-06 20:30",
-    "match_name": "Amburgo - Gladbach",
-    "league": "DFB Pokal",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "original_tipster": "Pronostici1",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
