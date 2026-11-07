@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AtmBet | Trasparenza, Note Legali & Compliance</title>
+<link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="logo.png?v=2">
+<link rel="apple-touch-icon" href="logo.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+mono: ['"JetBrains Mono"', 'monospace'],
+},
+colors: {
+atm: {
+green: '#22c55e',
+darkGreen: '#15803d',
+bg: '#0b0f17',
+card: '#111827',
+border: '#1f2937',
+gold: '#facc15'
+}
+}
+}
+}
+}
+</script>
+<style>
+.custom-scroll::-webkit-scrollbar {
+width: 5px;
+height: 5px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+background: #0b0f17;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+background: #1e293b;
+border-radius: 4px;
+}
+* { -webkit-tap-highlight-color: transparent; }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-16 selection:bg-emerald-500 selection:text-slate-950">
+<!-- NAVBAR HEADER -->
+<header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur">
+<div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-9 w-auto">
+<span class="text-base sm:text-lg font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
+</div>
+<div class="flex items-center space-x-2">
+<a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition">
+<i data-lucide="arrow-left" class="w-3.5 h-3.5 text-emerald-400"></i> Torna alla Vetrina
+</a>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT CONTAINER -->
+<main class="max-w-4xl mx-auto px-4 pt-8 sm:pt-12 space-y-8">
+<!-- INTRO HERO -->
+<div class="bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/20 border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4">
+<div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+<i data-lucide="shield-check" class="w-6 h-6"></i>
+</div>
+<div class="space-y-2">
+<div class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider">
+Compliance & Trasparenza
+</div>
+<h1 class="text-xl sm:text-2xl font-black text-white tracking-wide">Note Legali, Conformità e Disclaimer di AtmBet</h1>
+<p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+La trasparenza è il pilastro del nostro approccio quantitativo. In questa sezione spieghiamo nel dettaglio la natura dei nostri servizi, il rispetto delle normative vigenti, la sicurezza dell'infrastruttura e le garanzie a tutela degli utenti.
+</p>
+</div>
+</div>
+<!-- GRID SEZIONI INFORMATIVE -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- CARD 1: NATURA DEL SERVIZIO -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-3">
+<div class="flex items-center gap-2.5 text-emerald-400">
+<div class="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+<i data-lucide="cpu" class="w-5 h-5"></i>
+</div>
+<h2 class="text-sm font-bold text-white">1. Natura del Servizio (Tipster Tracking)</h2>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+<strong>AtmBet</strong> è una piattaforma digitale e un software di monitoraggio statistico (Tipster Tracker) progettato per l'analisi quantitativa, il tracciamento dei dati sportivi storici e l'elaborazione di metriche di rendimento (Yield, ROI, Win Rate).
+</p>
+<div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
+⚠️ <strong>Chiarimento operativo:</strong> Non siamo un bookmaker, non gestiamo conti di gioco, non raccogliamo scommesse e non movimentiamo denaro o capitali di terzi.
+</div>
+</div>
+<!-- CARD 2: GESTIONE DATI E SICUREZZA -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-3">
+<div class="flex items-center gap-2.5 text-blue-400">
+<div class="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20">
+<i data-lucide="lock" class="w-5 h-5"></i>
+</div>
+<h2 class="text-sm font-bold text-white">2. Sicurezza Infrastruttura & GDPR</h2>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+La gestione degli account, dei piani e dei codici d'accesso (tramite <code>users.json</code> e <code>bets.json</code>) avviene attraverso un sistema di sincronizzazione protetto e crittografato tramite API dirette con protocolli di autenticazione sicuri.
+</p>
+<div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
+🔒 <strong>Privacy:</strong> Rispettiamo rigorosamente i principi del Regolamento UE (GDPR) in materia di protezione dei dati personali. Nessun dato sensibile viene ceduto a terzi.
+</div>
+</div>
+<!-- CARD 3: MODELLO OPERATIVO E CANALI -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-3">
+<div class="flex items-center gap-2.5 text-amber-400">
+<div class="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20">
+<i data-lucide="bot" class="w-5 h-5"></i>
+</div>
+<h2 class="text-sm font-bold text-white">3. Canali e Comunicazione Informativa</h2>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+Le informazioni e le selezioni statistiche condivise attraverso i nostri canali Telegram dedicati (Pure Signal, All-Inclusive e Free Signal) hanno unicamente finalità informative, educative e di reportistica statistica.
+</p>
+<div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
+🎯 <strong>Autonomia:</strong> Gli utenti mantengono il totale e assoluto controllo sulle proprie scelte personali e sulle eventuali attività autonome esterne alla piattaforma.
+</div>
+</div>
+<!-- CARD 4: DISCLAIMER SUL RISCHIO -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-lg space-y-3">
+<div class="flex items-center gap-2.5 text-rose-400">
+<div class="p-2 bg-rose-500/10 rounded-xl border border-rose-500/20">
+<i data-lucide="alert-triangle" class="w-5 h-5"></i>
+</div>
+<h2 class="text-sm font-bold text-white">4. Disclaimer e Limitazione di Responsabilità</h2>
+</div>
+<p class="text-xs text-slate-400 leading-relaxed">
+I dati statistici passati, i tassi di successo (Win Rate) e i profitti storici registrati dai vari fornitori all'interno della console rappresentano simulazioni basate su dati oggettivi passati e <strong>non costituiscono alcuna garanzia matematica di profitto futuro</strong>.
+</p>
+<div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
+📊 <strong>Responsabilità:</strong> L'attività legata all'analisi sportiva comporta rischi statistici. Si raccomanda un approccio basato su una rigorosa gestione del budget personale.
+</div>
+</div>
+</div>
+<!-- FOOTER INFO BOX -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center space-y-3">
+<div class="text-xs font-bold text-white">Hai domande sulla nostra conformità o sulla sicurezza dei servizi?</div>
+<p class="text-xs text-slate-400 max-w-lg mx-auto">
+Il team di AtmBet è a disposizione per chiarimenti tecnici, supporto sugli abbonamenti e trasparenza operativa.
+</p>
+<div class="pt-2">
+<a href="index.html" class="inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/10">
+<i data-lucide="home" class="w-4 h-4"></i> Torna alla Home
+</a>
+</div>
+</div>
+</main>
+<!-- FOOTER COPYRIGHT -->
+<footer class="max-w-5xl mx-auto px-4 pt-12 text-center text-slate-600 text-[10px] font-mono space-y-1">
+<div>AtmBet Core Protocol — All Rights Reserved 2026</div>
+<div>Platform designed for statistical tracking & quantitative analytics.</div>
+</footer>
+<script>
+lucide.createIcons();
+</script>
+</body>
+</html>
