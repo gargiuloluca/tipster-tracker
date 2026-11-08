@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1794122956174_2",
+    "event_date": "2026-11-08 17:00",
+    "match_name": "Le Mans FC - AS Monaco",
+    "league": "Ligue 1 - France",
+    "original_tipster": "AtmBetSignal",
+    "market": "1X2 / Mercato",
+    "prediction": "Doppia Chance 1X",
+    "odds": 2.22,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794122956173_0",
+    "event_date": "2026-11-08 14:30",
+    "match_name": "Tromso - Bodø/Glimt",
+    "league": "Eliteserien - Norway",
+    "original_tipster": "AtmBetSignal",
+    "market": "Multipla",
+    "prediction": "Doppia Chance 1X",
+    "odds": 2.87,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
