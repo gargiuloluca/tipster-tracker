@@ -112,6 +112,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1794141508762_0",
+    "event_date": "2026-11-08 20:15",
+    "match_name": "Lech Poznań - Zagłębie Lubin",
+    "league": "Ekstraklasa",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "ZCODE",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794120640339_6",
     "event_date": "2026-11-08 20:00",
     "match_name": "Los Angeles Lakers - Detroit",
@@ -1148,20 +1162,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794141508762_0",
-    "event_date": "2026-11-08 20:15",
-    "match_name": "Lech Poznań - Zagłębie Lubin",
-    "league": "Ekstraklasa",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "ZCODE",
-    "odds": 1.51,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794051921145_0",
     "event_date": "2026-11-08 13:00",
     "match_name": "Neman Grodno - Dnepr Mogilev",
@@ -1171,7 +1171,7 @@
     "original_tipster": "BetMines PreMatch",
     "odds": 1.69,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
