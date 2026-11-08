@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1794141508762_0",
-    "event_date": "2026-11-08 13:15",
-    "match_name": "Lech Poznań - Zagłębie Lubin",
-    "league": "Ekstraklasa",
-    "original_tipster": "ZCODE",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.51,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
@@ -1160,6 +1146,20 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
+  },
+  {
+    "id": "bet_1794141508762_0",
+    "event_date": "2026-11-08 20:15",
+    "match_name": "Lech Poznań - Zagłębie Lubin",
+    "league": "Ekstraklasa",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "ZCODE",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
   },
   {
     "id": "bet_1794051921145_0",
