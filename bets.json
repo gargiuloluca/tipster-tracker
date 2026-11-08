@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1794167104929_0",
+    "event_date": "2026-11-09 00:00",
+    "match_name": "Deportivo Garcilaso - Comerciantes Unidos",
+    "league": "Peru Primera Division",
+    "original_tipster": "BetMines PreMatch",
+    "market": "1X2 / Mercato",
+    "prediction": "GG",
+    "odds": 2,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
@@ -289,7 +303,7 @@
     "original_tipster": "AtmBet Safe",
     "odds": 1.48,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
