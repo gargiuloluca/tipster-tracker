@@ -611,7 +611,7 @@
     "original_tipster": "CalcioAI",
     "odds": 1.75,
     "stake": 1,
-    "status": "pending",
+    "status": "void",
     "is_published": true,
     "tg_sent": true
   },
