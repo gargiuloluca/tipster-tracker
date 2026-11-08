@@ -266,20 +266,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794119876005_16",
-    "event_date": "2026-11-08 19:00",
-    "match_name": "Estoril - Maritimo",
-    "league": "Primeira Liga",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "original_tipster": "Pronostici1",
-    "odds": 1.73,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1794119876003_11",
     "event_date": "2026-11-08 19:00",
     "match_name": "Estrela Amadora - Benfica",
