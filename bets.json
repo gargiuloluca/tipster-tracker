@@ -140,20 +140,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1794120640339_6",
-    "event_date": "2026-11-08 20:00",
-    "match_name": "Los Angeles Lakers - Detroit",
-    "league": "NBA",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 221.5",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.95,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": true
-  },
-  {
     "id": "bet_1794120640338_5",
     "event_date": "2026-11-08 20:00",
     "match_name": "Los Angeles Rams - Washington Commanders",
