@@ -1,5 +1,33 @@
 [
   {
+    "id": "bet_1794119693606_1",
+    "event_date": "2026-11-08 16:00",
+    "match_name": "AEK Athens - Levadiakos / Partizan - Mačva Šabac / Viking - KFUM",
+    "league": "Generale",
+    "original_tipster": "Stats4bets bollamaker",
+    "market": "Multipla",
+    "prediction": "1 / 1 / 1",
+    "odds": 1.87,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794119693602_0",
+    "event_date": "2026-11-08 17:30",
+    "match_name": "SC Freiburg - FC Union Berlin",
+    "league": "Bundesliga",
+    "original_tipster": "Stats4bets bollamaker",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.53,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
