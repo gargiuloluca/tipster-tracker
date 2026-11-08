@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1794122115117_0",
+    "event_date": "2026-11-08 20:15",
+    "match_name": "Lech Poznań - Zagłębie Lubin / Fiorentina - Juventus",
+    "league": "Polonia - Ekstraklasa / Italia - Serie A",
+    "original_tipster": "BetMines",
+    "market": "Multipla",
+    "prediction": "+2.5 / +1.5",
+    "odds": 1.91,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
