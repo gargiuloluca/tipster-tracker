@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1794125160776_0",
-    "event_date": "2026-11-08 20:45",
-    "match_name": "Inter - Como / Napoli - Lazio",
-    "league": "Serie A / Serie A",
-    "original_tipster": "Cassandra",
-    "market": "Multipla",
-    "prediction": "1X / 1X",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1793987491142_0",
     "event_date": "2026-11-09 19:00",
     "match_name": "Atl. Madrid W - Badalona W",
@@ -50,6 +36,20 @@
     "prediction": "Under 3,5 gol",
     "original_tipster": "Pronostici1",
     "odds": 1.57,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794125160776_0",
+    "event_date": "2026-11-08 20:45",
+    "match_name": "Inter - Como / Napoli - Lazio",
+    "league": "Serie A / Serie A",
+    "market": "Multipla",
+    "prediction": "1X / 1X",
+    "original_tipster": "Cassandra",
+    "odds": 1.8,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -235,7 +235,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119876012_40",
@@ -291,7 +291,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794120640339_9",
@@ -403,7 +403,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794121928428_0",
@@ -417,7 +417,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794120640339_8",
@@ -571,7 +571,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119946391_0",
@@ -585,7 +585,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119876013_42",
@@ -711,7 +711,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119876006_19",
@@ -753,7 +753,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119876012_39",
@@ -809,7 +809,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793987450129_1",
@@ -823,7 +823,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119876009_27",
@@ -851,7 +851,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119876014_43",
@@ -1033,7 +1033,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794119875994_0",
@@ -1089,7 +1089,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794123971751_0",
