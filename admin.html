@@ -213,15 +213,19 @@
                         <span class="hidden sm:inline">Verifica Risultati</span>
                     </button>
 
-                    <button type="button" onclick="exportBackupJSON()" title="Scarica backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
-                        <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
-                        <span class="hidden md:inline">Esporta</span>
+                    <!-- PULSANTE BACKUP COMPLETO MASTER -->
+                    <button type="button" onclick="exportFullMasterBackup()" title="Scarica backup completo di tutto il sistema" class="text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-lg font-black flex items-center gap-1 transition shadow">
+                        <i data-lucide="database" class="w-3.5 h-3.5"></i>
+                        <span>Backup Completo</span>
                     </button>
-                    <label for="import-backup-file" title="Ripristina backup" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
+
+                    <!-- PULSANTE RIPRISTINO MASTER -->
+                    <label for="import-backup-file" title="Ripristina backup completo" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
                         <i data-lucide="upload" class="w-3.5 h-3.5 text-amber-400"></i>
-                        <span class="hidden md:inline">Importa</span>
-                        <input type="file" id="import-backup-file" class="hidden" accept=".json" onchange="importBackupJSON(event)">
+                        <span class="hidden md:inline">Ripristina</span>
+                        <input type="file" id="import-backup-file" class="hidden" accept=".json" onchange="importFullMasterBackup(event)">
                     </label>
+
                     <a href="index.html" target="_blank" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 p-2 sm:px-3 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
                         <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                         <span class="hidden sm:inline">Vetrina</span>
@@ -772,7 +776,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE CON FORZATURA ANTI-CACHE & MODIFICA RAPIDA -->
+    <!-- SCRIPT GESTIONALE CON BACKUP MASTER E MODIFICA RAPIDA -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
@@ -920,6 +924,75 @@
             alert("Pronostico aggiornato con successo!");
         }
 
+        // BACKUP COMPLETO MASTER (Pronostici + Utenti + Configs)
+        function exportFullMasterBackup() {
+            const masterData = {
+                version: "2.0",
+                backup_date: new Date().toISOString(),
+                platform: "AtmBet Official",
+                bets: loadAllBets(),
+                users: loadAllUsers(),
+                telegram_config: JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}'),
+                pure_tipsters: getPureSelectedTipsters(),
+                full_tipsters: getFullSelectedTipsters(),
+                partners: loadAuthorizedPartnersList()
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterData, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `atmbet_master_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        // RIPRISTINO DEL BACKUP COMPLETO MASTER
+        function importFullMasterBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    
+                    if (imported.bets && Array.isArray(imported.bets)) {
+                        persistBets(imported.bets);
+                        if (Array.isArray(imported.users)) {
+                            localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(imported.users));
+                        }
+                        if (imported.telegram_config) {
+                            localStorage.setItem(TG_CONF_KEY, JSON.stringify(imported.telegram_config));
+                        }
+                        if (Array.isArray(imported.pure_tipsters)) {
+                            localStorage.setItem(PURE_TIPSTERS_KEY, JSON.stringify(imported.pure_tipsters));
+                        }
+                        if (Array.isArray(imported.full_tipsters)) {
+                            localStorage.setItem(FULL_TIPSTERS_KEY, JSON.stringify(imported.full_tipsters));
+                        }
+                        if (imported.partners) {
+                            localStorage.setItem(AUTHORIZED_PARTNERS_KEY, JSON.stringify(imported.partners));
+                        }
+
+                        renderUsersTable();
+                        renderTipstersSelectors();
+                        renderDashboard();
+                        alert(`Backup Master ripristinato con successo!\n• Pronostici: ${imported.bets.length}\n• Utenti: ${imported.users ? imported.users.length : 0}`);
+                    } else if (Array.isArray(imported)) {
+                        persistBets(imported);
+                        alert(`Archivio pronostici ripristinato (${imported.length} elementi).`);
+                    } else {
+                        alert("File di backup non valido o corrotto.");
+                    }
+                } catch (err) {
+                    alert("Errore durante la lettura del file di backup: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
         async function createOneTimeInviteLink(token, chatId, userIdentifier) {
             const url = `https://api.telegram.org/bot${token}/createChatInviteLink`;
             const expireTimestamp = Math.floor(Date.now() / 1000) + (24 * 3600);
@@ -1001,7 +1074,6 @@
             const newList = selectAll ? allTipsters : [];
             if (type === 'pure') savePureSelectedTipsters(newList);
             else saveFullSelectedTipsters(newList);
-            renderTipstersSelectors();
         }
 
         function renderTipstersSelectors() {
@@ -2457,39 +2529,6 @@
             syncBetsToGitHub(bets);
         }
 
-        function exportBackupJSON() {
-            const bets = loadAllBets();
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(bets, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `atmbet_backup_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-        }
-
-        function importBackupJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedBets = JSON.parse(e.target.result);
-                    if (Array.isArray(importedBets) && importedBets.length > 0) {
-                        persistBets(importedBets);
-                        alert(`Archivio ripristinato con ${importedBets.length} pronostici.`);
-                    } else {
-                        alert("File JSON non valido.");
-                    }
-                } catch (err) {
-                    alert("Errore lettura file: " + err.message);
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = '';
-        }
-
         function parseAIText() {
             const text = document.getElementById('ai-input').value.trim();
             if (!text) {
@@ -3087,7 +3126,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
