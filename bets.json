@@ -1143,7 +1143,7 @@
     "original_tipster": "AtmBetSignal",
     "odds": 2.87,
     "stake": 1,
-    "status": "pending",
+    "status": "lost",
     "is_published": true,
     "tg_sent": true
   },
