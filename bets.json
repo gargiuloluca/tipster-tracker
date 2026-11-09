@@ -11,7 +11,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794204543454_3",
@@ -25,7 +25,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794218146836_0",
@@ -39,7 +39,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203673364_4",
@@ -81,7 +81,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203673369_9",
@@ -109,7 +109,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794205186274_0",
@@ -165,7 +165,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203769895_0",
@@ -179,7 +179,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203673360_0",
@@ -235,7 +235,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203673370_10",
