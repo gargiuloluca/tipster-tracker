@@ -2082,15 +2082,18 @@
 
         function verifyAdminAuth(e) {
             e.preventDefault();
-            const inputVal = document.getElementById('admin-pass-input').value.trim();
+            const passInput = document.getElementById('admin-pass-input');
             const errEl = document.getElementById('auth-error-msg');
+            if (!passInput) return;
+
+            const inputVal = passInput.value.trim();
 
             if (inputVal === ADMIN_REAL_PASSWORD) {
                 sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
                 unlockConsoleUI();
             } else {
                 if (errEl) errEl.classList.remove('hidden');
-                document.getElementById('admin-pass-input').value = '';
+                passInput.value = '';
             }
         }
 
