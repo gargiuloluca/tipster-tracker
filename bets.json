@@ -65,7 +65,7 @@
     "original_tipster": "ZcodeAi",
     "odds": 2.18,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
@@ -79,7 +79,7 @@
     "original_tipster": "Stats4bets bollamaker",
     "odds": 1.59,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
