@@ -2260,21 +2260,24 @@
         }
 
         function setupDynamicDatePresets() {
-            const today = new Date();
-            const yesterday = new Date();
-            yesterday.setDate(today.getDate() - 1);
+            const now = new Date();
+            const currentHour = now.getHours();
+            
+            // Se sono prima delle 09:00, consideriamo come "oggi di riferimento" la notte precedente
+            let activeDateObj = new Date(now);
+            if (currentHour < 9) {
+                activeDateObj.setDate(now.getDate() - 1);
+            }
 
+            const todayStr = getLocalDateString(activeDateObj);
             const btnToday = document.getElementById('btn-preset-today');
-            const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
 
-            if (btnToday) btnToday.innerText = `Oggi (${today.getDate()})`;
-            if (btnYesterday) btnYesterday.innerText = `Ieri (${yesterday.getDate()})`;
+            if (btnToday) btnToday.innerText = `Oggi (${activeDateObj.getDate()})`;
 
-            const todayStr = getLocalDateString(today);
             if (dateInput) {
                 dateInput.value = todayStr;
-                dateInput.max = todayStr;
+                dateInput.max = getLocalDateString(now);
             }
             
             currentSimMode = 'today';
