@@ -14,20 +14,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1794204543453_0",
-    "event_date": "2026-11-10 01:30",
-    "match_name": "Toronto Raptors - Memphis Grizzlies",
-    "league": "NBA",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 230.5",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.95,
-    "stake": 1,
-    "status": "won",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794204543454_3",
     "event_date": "2026-11-10 01:30",
     "match_name": "Aurora - Universitario de Vinto",
