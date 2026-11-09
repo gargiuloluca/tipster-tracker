@@ -56,20 +56,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794203673369_9",
-    "event_date": "2026-11-09 20:45",
-    "match_name": "Chelmsford City - Ebbsfleet United",
-    "league": "National League South",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3,5 gol",
-    "original_tipster": "Pronostici1",
-    "odds": 1.46,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794218146838_2",
     "event_date": "2026-11-09 20:30",
     "match_name": "Bari - Picerno",
@@ -194,20 +180,6 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1794203673370_10",
-    "event_date": "2026-11-09 18:30",
-    "match_name": "Colonia D - RB Lipsia D / Chelmsford City - Ebbsfleet United / Yaypan - Lochin",
-    "league": "Frauen-Bundesliga / National League South / First League",
-    "market": "Multipla",
-    "prediction": "Under 3,5 gol / Under 3,5 gol / Under 3,5 gol",
-    "original_tipster": "Pronostici1",
-    "odds": 3.22,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1794203673369_8",
