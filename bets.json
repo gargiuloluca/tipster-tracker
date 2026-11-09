@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1794205186274_0",
-    "event_date": "2026-11-09 20:30",
-    "match_name": "Picerno - Bari / Foggia - Barletta",
-    "league": "Serie C / Serie C",
-    "original_tipster": "Cassandra",
-    "market": "Multipla",
-    "prediction": "X2 / Multigol Casa 1-3",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794204543453_1",
     "event_date": "2026-11-10 02:00",
     "match_name": "Edmonton Oilers - New York Rangers",
@@ -37,7 +23,7 @@
     "original_tipster": "ZcodeAi",
     "odds": 1.95,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": false
   },
@@ -94,6 +80,20 @@
     "odds": 1.46,
     "stake": 1,
     "status": "won",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794205186274_0",
+    "event_date": "2026-11-09 20:30",
+    "match_name": "Picerno - Bari / Foggia - Barletta",
+    "league": "Serie C / Serie C",
+    "market": "Multipla",
+    "prediction": "X2 / Multigol Casa 1-3",
+    "original_tipster": "Cassandra",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
     "is_published": true,
     "tg_sent": false
   },
