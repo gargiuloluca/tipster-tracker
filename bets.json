@@ -1,6 +1,6 @@
 [
   {
-    "id": "bet_1794204543453_1",
+    "id": "bet_1794218146837_1",
     "event_date": "2026-11-10 02:00",
     "match_name": "Edmonton Oilers - New York Rangers",
     "league": "NHL",
@@ -9,7 +9,7 @@
     "original_tipster": "ZcodeAi",
     "odds": 1.68,
     "stake": 1,
-    "status": "won",
+    "status": "pending",
     "is_published": true,
     "tg_sent": false
   },
@@ -190,20 +190,6 @@
     "prediction": "1 + Over 1.5",
     "original_tipster": "CalcioAI",
     "odds": 2.46,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794218146837_1",
-    "event_date": "2026-11-10 02:00",
-    "match_name": "Edmonton Oilers - New York Rangers",
-    "league": "NHL",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.68,
     "stake": 1,
     "status": "pending",
     "is_published": true,
