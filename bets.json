@@ -168,20 +168,6 @@
     "tg_sent": false
   },
   {
-    "id": "bet_1794218146839_3",
-    "event_date": "2026-11-09 20:00",
-    "match_name": "Universitario de Vinto - Aurora",
-    "league": "Bolivia Liga de Futbol Prof",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794218146837_1",
     "event_date": "2026-11-09 20:00",
     "match_name": "New York Rangers - Edmonton Oilers",
