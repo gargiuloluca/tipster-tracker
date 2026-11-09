@@ -538,6 +538,19 @@
                             </button>
                         </div>
                     </div>
+
+                    <!-- PULSANTI AGGIUNTI PER IL RESET SELETTIVO DEI FLAG TG_SENT -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800/60">
+                        <span class="text-[11px] text-slate-400 font-medium">Resetta Stato (Test Telegram):</span>
+                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+                            <button type="button" onclick="resetTelegramSentStatus('pure')" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center justify-center gap-1">
+                                ↺ Reset tg_sent PURE
+                            </button>
+                            <button type="button" onclick="resetTelegramSentStatus('full')" class="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center justify-center gap-1">
+                                ↺ Reset tg_sent All-Inc.
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -1815,7 +1828,7 @@
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi a PURE!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
 
-                } else {
+            } else {
                 const allowedFullTipsters = getFullSelectedTipsters();
 
                 const toSend = pendings.filter(b => {
@@ -1867,6 +1880,51 @@
                 persistBets(bets);
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi ad All-Inclusive!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
+            }
+        }
+
+        // NUOVA FUNZIONE PER RESETTARE IL FLAG TG_SENT SELETTIVAMENTE
+        function resetTelegramSentStatus(channelType) {
+            const bets = loadAllBets();
+            const allowedTipsters = channelType === 'pure' ? getPureSelectedTipsters() : getFullSelectedTipsters();
+            const now = new Date();
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const todayStr = getLocalDateString(adjustedDate);
+
+            let resetCount = 0;
+            bets.forEach(b => {
+                const eventDateTime = String(b.event_date || '').trim();
+                const bDate = extractStandardDate(eventDateTime);
+                
+                let isTodayOrNight = (bDate === todayStr);
+                if (!isTodayOrNight) {
+                    const timePart = eventDateTime.slice(11, 16);
+                    if (timePart) {
+                        const [hh] = timePart.split(':').map(Number);
+                        if (hh < 9) {
+                            const matchDayObj = new Date(bDate);
+                            matchDayObj.setDate(matchDayObj.getDate() - 1);
+                            if (getLocalDateString(matchDayObj) === todayStr) isTodayOrNight = true;
+                        }
+                    }
+                }
+
+                if (isTodayOrNight) {
+                    const norm = canonicalizeTipsterName(b.original_tipster).toLowerCase();
+                    const isMatched = allowedTipsters.some(t => canonicalizeTipsterName(t).toLowerCase() === norm);
+                    
+                    if (isMatched && b.tg_sent === true) {
+                        b.tg_sent = false;
+                        resetCount++;
+                    }
+                }
+            });
+
+            if (resetCount > 0) {
+                persistBets(bets);
+                alert(`Reset completato! ${resetCount} pronostici del canale ${channelType.toUpperCase()} sono tornati a "non inviati". Ora puoi testare l'invio automatico.`);
+            } else {
+                alert(`Nessun pronostico con flag tg_sent attivo trovato per il canale ${channelType.toUpperCase()} nella data odierna.`);
             }
         }
 
