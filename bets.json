@@ -182,34 +182,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794203673368_7",
-    "event_date": "2026-11-09 17:00",
-    "match_name": "Napredak - OFK Bor 1919",
-    "league": "Prva Liga",
-    "market": "1X2 / Mercato",
-    "prediction": "Vittoria Napredak",
-    "original_tipster": "Pronostici1",
-    "odds": 1.51,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794203673366_6",
-    "event_date": "2026-11-09 16:00",
-    "match_name": "Redditch United - Peterborough Sports",
-    "league": "Southern League",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2,5 gol",
-    "original_tipster": "Pronostici1",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794203673364_3",
     "event_date": "2026-11-09 16:00",
     "match_name": "Atletico Madrid D - FC Levante Badalona D",
