@@ -776,7 +776,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE ORIGINALE STABILE -->
+    <!-- SCRIPT GESTIONALE ORIGINALE RIPRISTINATO E STABILE -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
@@ -1245,7 +1245,7 @@
                 badgeEl.innerHTML = `
                     <div class="flex items-center gap-1">
                         <button type="button" onclick="setStagedManual('${betId}', 'won')" class="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[9px] font-bold border border-emerald-500/30">V</button>
-                        <button type="button" onclick="setStagedManual('${betId}', 'lost')" class="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[9px] font-bold border border-rose-500/30">P</button>
+                        <button type="button" onclick="setStagedManual('${betId}', 'lost')" class="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[9px] font-bold border border-emerald-500/30">P</button>
                     </div>
                 `;
             }
@@ -1704,12 +1704,36 @@
             return res.json();
         }
 
+        // FUNZIONE AGGIORNATA PER GESTIRE LE PARTITE NOTTURNE FINO ALLE 09:00 (SOLO PER TELEGRAM)
         function getTodayBetsForTelegram(allBets) {
-            const todayStr = getLocalDateString(new Date());
+            const now = new Date();
+            const todayStr = getLocalDateString(now);
+            const currentHour = now.getHours();
+
             return allBets.filter(b => {
                 const isPending = String(b.status || 'pending').toLowerCase() === 'pending';
-                const betDate = extractStandardDate(b.event_date);
-                return isPending && betDate === todayStr && b.is_published !== false && !b.tg_sent;
+                const eventDateTime = String(b.event_date || '').trim();
+                const betDate = extractStandardDate(eventDateTime);
+                
+                if (!isPending || b.is_published === false || b.tg_sent) return false;
+
+                if (betDate === todayStr) return true;
+
+                if (currentHour < 9) {
+                    const yesterday = new Date();
+                    yesterday.setDate(now.getDate() - 1);
+                    const yesterdayStr = getLocalDateString(yesterday);
+                    
+                    if (betDate === yesterdayStr) {
+                        const timePart = eventDateTime.slice(11, 16);
+                        if (timePart) {
+                            const [hh] = timePart.split(':').map(Number);
+                            if (hh < 9) return true;
+                        }
+                    }
+                }
+
+                return false;
             });
         }
 
@@ -2054,7 +2078,7 @@
                         b.tg_sent = true;
                         persistBets(bets);
                     }
-                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`;
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
                 } else {
                     alert(`Errore Telegram: ${res.description}`);
                 }
@@ -3171,7 +3195,7 @@
                     <div class="flex items-center gap-1 justify-center">
                         <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
                         <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a All-Inclusive" class="text-[10px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
-                        <button type="button" onclick="sendSelfBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[10px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
+                        <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[10px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
                     </div>
                 `;
 
