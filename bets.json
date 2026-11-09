@@ -182,34 +182,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794203673364_3",
-    "event_date": "2026-11-09 16:00",
-    "match_name": "Atletico Madrid D - FC Levante Badalona D",
-    "league": "Primera Division Women",
-    "market": "1X2 / Mercato",
-    "prediction": "Vittoria Atletico Madrid D",
-    "original_tipster": "Pronostici1",
-    "odds": 1.33,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794203673365_5",
-    "event_date": "2026-11-09 15:00",
-    "match_name": "Yaypan - Lochin",
-    "league": "First League",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3,5 gol",
-    "original_tipster": "Pronostici1",
-    "odds": 1.5,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794167104929_0",
     "event_date": "2026-11-09 00:00",
     "match_name": "Deportivo Garcilaso - Comerciantes Unidos",
