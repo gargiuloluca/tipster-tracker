@@ -776,7 +776,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE CON BACKUP MASTER E MODIFICA RAPIDA -->
+    <!-- SCRIPT GESTIONALE CON GESTIONE NOTTURNA TELEGRAM FINO ALLE 09:00 -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
@@ -1704,12 +1704,41 @@
             return res.json();
         }
 
+        // FUNZIONE AGGIORNATA PER GESTIRE LE PARTITE NOTTURNE FINO ALLE 09:00 DEL MATTINO
         function getTodayBetsForTelegram(allBets) {
-            const todayStr = getLocalDateString(new Date());
+            const now = new Date();
+            const todayStr = getLocalDateString(now);
+
+            // Se l'orario attuale è prima delle 09:00 del mattino, consideriamo come "giornata odierna di invio" 
+            // anche le partite disputate nelle primissime ore della notte (fino alle 09:00).
+            const currentHour = now.getHours();
+            
             return allBets.filter(b => {
                 const isPending = String(b.status || 'pending').toLowerCase() === 'pending';
-                const betDate = extractStandardDate(b.event_date);
-                return isPending && betDate === todayStr && b.is_published !== false && !b.tg_sent;
+                const eventDateTime = String(b.event_date || '').trim();
+                const betDate = extractStandardDate(eventDateTime);
+                
+                if (!isPending || b.is_published === false || b.tg_sent) return false;
+
+                if (betDate === todayStr) return true;
+
+                // Se sono prima delle 09:00, includiamo eventuali match schedulati nelle prime ore del mattino (es. 01:00, 03:00)
+                if (currentHour < 9) {
+                    const yesterday = new Date();
+                    yesterday.setDate(now.getDate() - 1);
+                    const yesterdayStr = getLocalDateString(yesterday);
+                    
+                    if (betDate === yesterdayStr) {
+                        const timePart = eventDateTime.slice(11, 16); // estrae "HH:MM"
+                        if (timePart) {
+                            const [hh] = timePart.split(':').map(Number);
+                            // Se il match è notturno (es. tra le 00:00 e le 08:59)
+                            if (hh < 9) return true;
+                        }
+                    }
+                }
+
+                return false;
             });
         }
 
