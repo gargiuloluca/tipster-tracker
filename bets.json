@@ -14,6 +14,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1794204543453_0",
+    "event_date": "2026-11-10 01:30",
+    "match_name": "Toronto Raptors - Memphis Grizzlies",
+    "league": "NBA",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 230.5",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.95,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794203673364_4",
     "event_date": "2026-11-09 21:00",
     "match_name": "Mushuc Runa SC - Delfin SC",
@@ -121,7 +135,7 @@
     "original_tipster": "CalcioAI",
     "odds": 2.9,
     "stake": 1,
-    "status": "won",
+    "status": "pending",
     "is_published": true,
     "tg_sent": false
   },
@@ -148,20 +162,6 @@
     "prediction": "1",
     "original_tipster": "ZcodeAi",
     "odds": 1.57,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794204543453_0",
-    "event_date": "2026-11-10 01:30",
-    "match_name": "Toronto Raptors - Memphis Grizzlies",
-    "league": "NBA",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 230.5",
-    "original_tipster": "ZcodeAi",
-    "odds": 1.95,
     "stake": 1,
     "status": "pending",
     "is_published": true,
