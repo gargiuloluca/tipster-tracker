@@ -182,34 +182,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794203673369_8",
-    "event_date": "2026-11-09 18:30",
-    "match_name": "Colonia D - RB Lipsia D",
-    "league": "Frauen-Bundesliga",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 3,5 gol",
-    "original_tipster": "Pronostici1",
-    "odds": 1.47,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794203673362_1",
-    "event_date": "2026-11-09 18:00",
-    "match_name": "Deportivo de La Coruña D - Valencia D",
-    "league": "Primera Division Women",
-    "market": "1X2 / Mercato",
-    "prediction": "Vittoria Deportivo de La Coruña D",
-    "original_tipster": "Pronostici1",
-    "odds": 1.62,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794203673368_7",
     "event_date": "2026-11-09 17:00",
     "match_name": "Napredak - OFK Bor 1919",
