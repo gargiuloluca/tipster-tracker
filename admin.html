@@ -2956,9 +2956,32 @@
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
 
-            if (currentSimMode === 'today') {
-                filtered = filtered.filter(b => extractStandardDate(b.event_date) === todayStr);
-            } else if (currentSimMode === 'yesterday') {
+                    if (currentSimMode === 'today') {
+                const nowForView = new Date();
+                const todayStrView = getLocalDateString(nowForView);
+                const currentHourView = nowForView.getHours();
+
+                filtered = filtered.filter(b => {
+                    const bDate = extractStandardDate(b.event_date);
+                    if (bDate === todayStrView) return true;
+
+                    if (currentHourView < 9) {
+                        const yesterdayView = new Date();
+                        yesterdayView.setDate(nowForView.getDate() - 1);
+                        const yesterdayStrView = getLocalDateString(yesterdayView);
+
+                        if (bDate === yesterdayStrView) {
+                            const timePart = String(b.event_date || '').slice(11, 16);
+                            if (timePart) {
+                                const [hh] = timePart.split(':').map(Number);
+                                if (hh < 9) return true;
+                            }
+                        }
+                    }
+                    return false;
+                });
+            } else if (currentSimMode === 'yesterday') 
+                        {
                 filtered = filtered.filter(b => extractStandardDate(b.event_date) === yesterdayStr);
             } else if (currentSimMode === '7days') {
                 filtered = filtered.filter(b => {
