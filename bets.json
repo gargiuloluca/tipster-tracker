@@ -42,20 +42,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794203673363_2",
-    "event_date": "2026-11-09 21:00",
-    "match_name": "Tecnico Universitario - Manta FC",
-    "league": "Liga Pro",
-    "market": "1X2 / Mercato",
-    "prediction": "Vittoria Tecnico Universitario",
-    "original_tipster": "Pronostici1",
-    "odds": 1.62,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794204543454_4",
     "event_date": "2026-11-09 20:45",
     "match_name": "Chelmsford - Ebbsfleet",
@@ -166,20 +152,6 @@
     "status": "pending",
     "is_published": true,
     "tg_sent": true
-  },
-  {
-    "id": "bet_1794203673360_0",
-    "event_date": "2026-11-09 20:00",
-    "match_name": "Plymouth Parkway - Berkhamsted",
-    "league": "Non League Premier",
-    "market": "1X2 / Mercato",
-    "prediction": "Over 2,5 gol",
-    "original_tipster": "Pronostici1",
-    "odds": 1.6,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
   },
   {
     "id": "bet_1794204025528_1",
