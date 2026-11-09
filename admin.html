@@ -1707,15 +1707,9 @@
         // FUNZIONE AGGIORNATA PER GESTIRE LE PARTITE NOTTURNE FINO ALLE 09:00 DEL MATTINO
         function getTodayBetsForTelegram(allBets) {
             const now = new Date();
-            const currentHour = now.getHours();
-            
-            // Definiamo la "data di competenza" di riferimento per il palinsesto odierno:
-            // Se sono prima delle 09:00 del mattino, consideriamo ancora come "oggi" la giornata di ieri sera/notte.
-            let targetDateObj = new Date(now);
-            if (currentHour < 9) {
-                targetDateObj.setDate(now.getDate() - 1);
-            }
-            const targetDateStr = getLocalDateString(targetDateObj);
+            // Spostiamo indietro di 9 ore l'orologio di riferimento per la notte
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const targetDateStr = getLocalDateString(adjustedDate);
 
             return allBets.filter(b => {
                 const isPending = String(b.status || 'pending').toLowerCase() === 'pending';
@@ -1724,17 +1718,16 @@
                 
                 if (!isPending || b.is_published === false || b.tg_sent) return false;
 
-                // Confronta con la data di competenza corretta (inclusa la finestra notturna)
                 if (betDate === targetDateStr) return true;
 
-                // Controllo di sicurezza extra per match notturni a cavallo della mezzanotte (tra le 00:00 e le 08:59)
-                if (currentHour < 9) {
-                    if (betDate === getLocalDateString(now)) {
-                        const timePart = eventDateTime.slice(11, 16);
-                        if (timePart) {
-                            const [hh] = timePart.split(':').map(Number);
-                            if (hh < 9) return true;
-                        }
+                // Controllo per le partite che si giocano tra mezzanotte e le 09:00
+                const timePart = eventDateTime.slice(11, 16);
+                if (timePart) {
+                    const [hh] = timePart.split(':').map(Number);
+                    if (hh < 9) {
+                        const matchDayObj = new Date(betDate);
+                        matchDayObj.setDate(matchDayObj.getDate() - 1);
+                        if (getLocalDateString(matchDayObj) === targetDateStr) return true;
                     }
                 }
 
@@ -2261,19 +2254,14 @@
 
         function setupDynamicDatePresets() {
             const now = new Date();
-            const currentHour = now.getHours();
-            
-            // Se sono prima delle 09:00, consideriamo come "oggi di riferimento" la notte precedente
-            let activeDateObj = new Date(now);
-            if (currentHour < 9) {
-                activeDateObj.setDate(now.getDate() - 1);
-            }
+            // Anche qui applichiamo la finestra delle 9 ore per allineare la data di default di "Oggi"
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const todayStr = getLocalDateString(adjustedDate);
 
-            const todayStr = getLocalDateString(activeDateObj);
             const btnToday = document.getElementById('btn-preset-today');
             const dateInput = document.getElementById('sim-start-date');
 
-            if (btnToday) btnToday.innerText = `Oggi (${activeDateObj.getDate()})`;
+            if (btnToday) btnToday.innerText = `Oggi (${adjustedDate.getDate()})`;
 
             if (dateInput) {
                 dateInput.value = todayStr;
