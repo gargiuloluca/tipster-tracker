@@ -776,7 +776,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE CON GESTIONE NOTTURNA TELEGRAM FINO ALLE 09:00 -->
+    <!-- SCRIPT GESTIONALE ORIGINALE STABILE -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
@@ -1704,34 +1704,12 @@
             return res.json();
         }
 
-        // FUNZIONE AGGIORNATA PER GESTIRE LE PARTITE NOTTURNE FINO ALLE 09:00 DEL MATTINO
         function getTodayBetsForTelegram(allBets) {
-            const now = new Date();
-            // Spostiamo indietro di 9 ore l'orologio di riferimento per la notte
-            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
-            const targetDateStr = getLocalDateString(adjustedDate);
-
+            const todayStr = getLocalDateString(new Date());
             return allBets.filter(b => {
                 const isPending = String(b.status || 'pending').toLowerCase() === 'pending';
-                const eventDateTime = String(b.event_date || '').trim();
-                const betDate = extractStandardDate(eventDateTime);
-                
-                if (!isPending || b.is_published === false || b.tg_sent) return false;
-
-                if (betDate === targetDateStr) return true;
-
-                // Controllo per le partite che si giocano tra mezzanotte e le 09:00
-                const timePart = eventDateTime.slice(11, 16);
-                if (timePart) {
-                    const [hh] = timePart.split(':').map(Number);
-                    if (hh < 9) {
-                        const matchDayObj = new Date(betDate);
-                        matchDayObj.setDate(matchDayObj.getDate() - 1);
-                        if (getLocalDateString(matchDayObj) === targetDateStr) return true;
-                    }
-                }
-
-                return false;
+                const betDate = extractStandardDate(b.event_date);
+                return isPending && betDate === todayStr && b.is_published !== false && !b.tg_sent;
             });
         }
 
@@ -2065,8 +2043,8 @@
             
             if (targetMode === 'free') {
                 msg += `\n\n🚀 Vuoi tutti i segnali in tempo reale? Approfitta dei 7gg gratuiti!\n`;
-                msg += `🔹 <b>Piano PURE:</b> <a href="https://t.me/tribute/app?startapp=s1by8">Attiva Pure</a>\n`;
-                msg += `🔸 <b>Piano ALL-INCLUSIVE:</b> <a href="https://t.me/tribute/app?startapp=s1bxZ">Attiva All-Inclusive</a>`;
+                msg += `🔹 <b>Piano Pure:</b> <a href="https://t.me/tribute/app?startapp=s1by8">Attiva Pure</a>\n`;
+                msg += `🔸 <b>Piano All-Inclusive:</b> <a href="https://t.me/tribute/app?startapp=s1bxZ">Attiva All-Inclusive</a>`;
             }
 
             try {
@@ -2076,7 +2054,7 @@
                         b.tg_sent = true;
                         persistBets(bets);
                     }
-                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`;
                 } else {
                     alert(`Errore Telegram: ${res.description}`);
                 }
@@ -2253,19 +2231,21 @@
         }
 
         function setupDynamicDatePresets() {
-            const now = new Date();
-            // Anche qui applichiamo la finestra delle 9 ore per allineare la data di default di "Oggi"
-            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
-            const todayStr = getLocalDateString(adjustedDate);
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
 
             const btnToday = document.getElementById('btn-preset-today');
+            const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
 
-            if (btnToday) btnToday.innerText = `Oggi (${adjustedDate.getDate()})`;
+            if (btnToday) btnToday.innerText = `Oggi (${today.getDate()})`;
+            if (btnYesterday) btnYesterday.innerText = `Ieri (${yesterday.getDate()})`;
 
+            const todayStr = getLocalDateString(today);
             if (dateInput) {
                 dateInput.value = todayStr;
-                dateInput.max = getLocalDateString(now);
+                dateInput.max = todayStr;
             }
             
             currentSimMode = 'today';
@@ -2947,29 +2927,9 @@
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
 
-                    if (currentSimMode === 'today') {
-                const nowForView = new Date();
-                const adjustedViewDate = new Date(nowForView.getTime() - (9 * 3600 * 1000));
-                const targetViewStr = getLocalDateString(adjustedViewDate);
-
-                filtered = filtered.filter(b => {
-                    const bDate = extractStandardDate(b.event_date);
-                    if (bDate === targetViewStr) return true;
-
-                    const timePart = String(b.event_date || '').slice(11, 16);
-                    if (timePart) {
-                        const [hh] = timePart.split(':').map(Number);
-                        if (hh < 9) {
-                            const matchDayObj = new Date(bDate);
-                            matchDayObj.setDate(matchDayObj.getDate() - 1);
-                            if (getLocalDateString(matchDayObj) === targetViewStr) return true;
-                        }
-                    }
-                    return false;
-                });
-            } else if (currentSimMode === 'yesterday')
-
-                        {
+            if (currentSimMode === 'today') {
+                filtered = filtered.filter(b => extractStandardDate(b.event_date) === todayStr);
+            } else if (currentSimMode === 'yesterday') {
                 filtered = filtered.filter(b => extractStandardDate(b.event_date) === yesterdayStr);
             } else if (currentSimMode === '7days') {
                 filtered = filtered.filter(b => {
@@ -3208,7 +3168,7 @@
                     <div class="flex items-center gap-1 justify-center">
                         <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
                         <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a All-Inclusive" class="text-[10px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
-                        <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[10px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
+                        <button type="button" onclick="sendSelfBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[10px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
                     </div>
                 `;
 
