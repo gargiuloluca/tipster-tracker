@@ -42,20 +42,6 @@
     "tg_sent": true
   },
   {
-    "id": "bet_1794203673364_4",
-    "event_date": "2026-11-09 21:00",
-    "match_name": "Mushuc Runa SC - Delfin SC",
-    "league": "Liga Pro",
-    "market": "1X2 / Mercato",
-    "prediction": "Vittoria Mushuc Runa SC",
-    "original_tipster": "Pronostici1",
-    "odds": 1.67,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794203673363_2",
     "event_date": "2026-11-09 21:00",
     "match_name": "Tecnico Universitario - Manta FC",
@@ -137,7 +123,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203860790_0",
@@ -151,7 +137,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203769896_1",
@@ -207,7 +193,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794203522883_0",
@@ -221,7 +207,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1793987491142_0",
