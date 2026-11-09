@@ -960,6 +960,65 @@
             dlAnchor.remove();
         }
 
+        // AUTO-BACKUP MASTER SU GITHUB IN BACKGROUND (Esegue il backup e sovrascrive il file giornaliero)
+        async function autoBackupMasterToGitHub() {
+            const repo = localStorage.getItem(GH_REPO_KEY);
+            const token = localStorage.getItem(GH_TOKEN_KEY);
+            if (!repo || !token) return;
+
+            const masterData = {
+                version: "2.0",
+                backup_date: new Date().toISOString(),
+                platform: "AtmBet Official",
+                bets: loadAllBets(),
+                users: loadAllUsers(),
+                telegram_config: JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}'),
+                pure_tipsters: getPureSelectedTipsters(),
+                full_tipsters: getFullSelectedTipsters(),
+                partners: loadAuthorizedPartnersList()
+            };
+
+            const path = "backup_giornaliero.json";
+
+            try {
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/${path}?_nocache=${Date.now()}`;
+                let currentSha = null;
+
+                const getRes = await fetch(getFileUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    currentSha = fileData.sha;
+                }
+
+                const jsonString = JSON.stringify(masterData, null, 2);
+                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
+
+                const bodyPayload = {
+                    message: `Auto-backup giornaliero master [${new Date().toISOString().slice(0,10)}]`,
+                    content: base64Content
+                };
+                if (currentSha) bodyPayload.sha = currentSha;
+
+                await fetch(getFileUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+            } catch (err) {
+                console.warn("Errore durante l'auto-backup su GitHub:", err);
+            }
+        }
+
         // RIPRISTINO DEL BACKUP COMPLETO MASTER
         function importFullMasterBackup(event) {
             const file = event.target.files[0];
@@ -1825,6 +1884,7 @@
                 }
 
                 persistBets(bets);
+                autoBackupMasterToGitHub(); // Esegue l'auto-backup su GitHub in background!
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi a PURE!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
 
@@ -1878,6 +1938,7 @@
                 }
 
                 persistBets(bets);
+                autoBackupMasterToGitHub(); // Esegue l'auto-backup su GitHub in background!
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi ad All-Inclusive!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
             }
