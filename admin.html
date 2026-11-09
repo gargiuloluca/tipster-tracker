@@ -1815,12 +1815,13 @@
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi a PURE!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
 
-            } else {
+                } else {
                 const allowedFullTipsters = getFullSelectedTipsters();
 
                 const toSend = pendings.filter(b => {
-                    const norm = canonicalizeTipsterName(b.original_tipster);
-                    return allowedFullTipsters.includes(norm);
+                    const norm = canonicalizeTipsterName(b.original_tipster).toLowerCase();
+                    if (!allowedFullTipsters || allowedFullTipsters.length === 0) return true;
+                    return allowedFullTipsters.some(t => canonicalizeTipsterName(t).toLowerCase() === norm);
                 });
 
                 if (toSend.length === 0) {
