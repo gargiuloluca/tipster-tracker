@@ -1707,8 +1707,9 @@
         // FUNZIONE AGGIORNATA PER GESTIRE LE PARTITE NOTTURNE FINO ALLE 09:00 (SOLO PER TELEGRAM)
         function getTodayBetsForTelegram(allBets) {
             const now = new Date();
-            const todayStr = getLocalDateString(now);
-            const currentHour = now.getHours();
+            // Spostiamo indietro di 9 ore l'orologio di riferimento per la notte
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const targetDateStr = getLocalDateString(adjustedDate);
 
             return allBets.filter(b => {
                 const isPending = String(b.status || 'pending').toLowerCase() === 'pending';
@@ -1717,19 +1718,16 @@
                 
                 if (!isPending || b.is_published === false || b.tg_sent) return false;
 
-                if (betDate === todayStr) return true;
+                if (betDate === targetDateStr) return true;
 
-                if (currentHour < 9) {
-                    const yesterday = new Date();
-                    yesterday.setDate(now.getDate() - 1);
-                    const yesterdayStr = getLocalDateString(yesterday);
-                    
-                    if (betDate === yesterdayStr) {
-                        const timePart = eventDateTime.slice(11, 16);
-                        if (timePart) {
-                            const [hh] = timePart.split(':').map(Number);
-                            if (hh < 9) return true;
-                        }
+                // Controllo per le partite che si giocano tra mezzanotte e le 09:00
+                const timePart = eventDateTime.slice(11, 16);
+                if (timePart) {
+                    const [hh] = timePart.split(':').map(Number);
+                    if (hh < 9) {
+                        const matchDayObj = new Date(betDate);
+                        matchDayObj.setDate(matchDayObj.getDate() - 1);
+                        if (getLocalDateString(matchDayObj) === targetDateStr) return true;
                     }
                 }
 
@@ -2258,21 +2256,19 @@
         }
 
         function setupDynamicDatePresets() {
-            const today = new Date();
-            const yesterday = new Date();
-            yesterday.setDate(today.getDate() - 1);
+            const now = new Date();
+            // Anche qui applichiamo la finestra delle 9 ore per allineare la data di default di "Oggi"
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const todayStr = getLocalDateString(adjustedDate);
 
             const btnToday = document.getElementById('btn-preset-today');
-            const btnYesterday = document.getElementById('btn-preset-yesterday');
             const dateInput = document.getElementById('sim-start-date');
 
-            if (btnToday) btnToday.innerText = `Oggi (${today.getDate()})`;
-            if (btnYesterday) btnYesterday.innerText = `Ieri (${yesterday.getDate()})`;
+            if (btnToday) btnToday.innerText = `Oggi (${adjustedDate.getDate()})`;
 
-            const todayStr = getLocalDateString(today);
             if (dateInput) {
                 dateInput.value = todayStr;
-                dateInput.max = todayStr;
+                dateInput.max = getLocalDateString(now);
             }
             
             currentSimMode = 'today';
@@ -2954,8 +2950,26 @@
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
 
-            if (currentSimMode === 'today') {
-                filtered = filtered.filter(b => extractStandardDate(b.event_date) === todayStr);
+                if (currentSimMode === 'today') {
+                const nowForView = new Date();
+                const adjustedViewDate = new Date(nowForView.getTime() - (9 * 3600 * 1000));
+                const targetViewStr = getLocalDateString(adjustedViewDate);
+
+                filtered = filtered.filter(b => {
+                    const bDate = extractStandardDate(b.event_date);
+                    if (bDate === targetViewStr) return true;
+
+                    const timePart = String(b.event_date || '').slice(11, 16);
+                    if (timePart) {
+                        const [hh] = timePart.split(':').map(Number);
+                        if (hh < 9) {
+                            const matchDayObj = new Date(bDate);
+                            matchDayObj.setDate(matchDayObj.getDate() - 1);
+                            if (getLocalDateString(matchDayObj) === targetViewStr) return true;
+                        }
+                    }
+                    return false;
+                });
             } else if (currentSimMode === 'yesterday') {
                 filtered = filtered.filter(b => extractStandardDate(b.event_date) === yesterdayStr);
             } else if (currentSimMode === '7days') {
