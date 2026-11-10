@@ -2106,5 +2106,20 @@
             lucide.createIcons();
         });
     </script>
+        <script>
+    function toggleDesktopMode() {
+        let body = document.body;
+        let modeText = document.getElementById('view-mode-text');
+        
+        body.classList.toggle('desktop-view');
+        
+        if (body.classList.contains('desktop-view')) {
+            if (modeText) modeText.innerText = "Versione Mobile";
+        } else {
+            if (modeText) modeText.innerText = "Versione PC";
+        }
+    }
+        </script>
+        
 </body>
 </html>
