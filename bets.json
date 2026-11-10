@@ -375,7 +375,7 @@
     "stake": 1,
     "status": "won",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794204543454_3",
@@ -389,7 +389,7 @@
     "stake": 1,
     "status": "lost",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794218146836_0",
@@ -403,7 +403,7 @@
     "stake": 1,
     "status": "won",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794228186702_4",
