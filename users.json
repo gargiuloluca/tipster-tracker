@@ -1,14 +1,14 @@
 [
   {
-    "id": "u_1794317066265",
-    "identifier": "info@atmbetofficial.com",
-    "email": "info@atmbetofficial.com",
-    "telegram_id": "Admin",
-    "telegram_link": "https://t.me/+9RTdOGokeB00NTM0",
+    "id": "u_1793966981462",
+    "identifier": "Ale",
+    "email": "Ale",
+    "telegram_id": "IlMaestroT",
+    "telegram_link": "https://t.me/+Xy5hVri53800ZTlk",
     "plan": "pure",
-    "access_code": "ATM-1Z7NOV",
-    "created_at": "2026-11-10",
-    "expires_at": "2027-11-10",
+    "access_code": "ATM-M54QR4",
+    "created_at": "2026-11-06",
+    "expires_at": "2026-11-09",
     "status": "active"
   },
   {
@@ -22,6 +22,16 @@
     "created_at": "2026-11-05",
     "expires_at": "2026-11-12",
     "status": "active"
+  },
+  {
+    "id": "usr_admin_01",
+    "email": "admin@atmbet.com",
+    "name": "Amministratore",
+    "role": "admin",
+    "plan": "full",
+    "expires_at": "2099-12-31",
+    "telegram_link": "https://t.me/+qu_Llw2IATkxYzlk",
+    "active": true
   },
   {
     "id": "usr_test_pure",
