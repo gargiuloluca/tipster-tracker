@@ -97,18 +97,6 @@
             display: none;
         }
         * { -webkit-tap-highlight-color: transparent; }
-            /* Stile per la forzatura della Versione PC da mobile */
-    body.desktop-view {
-        min-width: 1280px !important;
-        overflow-x: auto !important;
-    }
-    body.desktop-view header,
-    body.desktop-view main,
-    body.desktop-view footer,
-    body.desktop-view .max-w-7xl {
-        width: 1280px !important;
-        max-width: none !important;
-    }
     </style>
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
@@ -157,15 +145,6 @@
 
         <!-- MENU A TENDINA MOBILE PERFETTO E SENZA EFFETTO VERDE FISSO -->
         <div id="mobile-dropdown-menu" class="hidden lg:hidden bg-slate-950 border-b border-slate-800 px-4 py-4 space-y-2">
-                <!-- TASTO CAMBIO VISTA NEL MENU A TENDINA -->
-    <button type="button" onclick="toggleDesktopMode()" class="w-full text-left px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-mono font-bold flex items-center justify-between border border-slate-800 mb-2 transition">
-        <span class="flex items-center gap-2">
-            <i data-lucide="monitor" class="w-4 h-4 text-emerald-400"></i>
-            Visualizzazione:
-        </span>
-        <span id="view-mode-text" class="text-emerald-400 font-bold">Versione PC</span>
-    </button>
-
             <a href="#metodo" onclick="toggleMobileMenu()" class="public-marketing-element block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">📍 Metodo</a>
             <a href="#simulatore" onclick="toggleMobileMenu()" class="block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">📊 Analisi & Performance</a>
             <a href="#selezioni" onclick="toggleMobileMenu()" class="block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">🔥 Pronostici di Oggi</a>
@@ -2105,38 +2084,6 @@
             renderPublicHistory();
             lucide.createIcons();
         });
-    <script>
-    // Al caricamento, controlla lo stato salvato
-    document.addEventListener("DOMContentLoaded", function() {
-        let savedMode = localStorage.getItem('atmbet_view_mode');
-        let viewportMeta = document.querySelector('meta[name="viewport"]');
-        let modeText = document.getElementById('view-mode-text');
-        
-        if (savedMode === 'pc') {
-            if (viewportMeta) viewportMeta.setAttribute('content', 'width=1280');
-            if (modeText) modeText.innerText = "Versione Mobile";
-            document.body.classList.add('desktop-view');
-        } else {
-            if (viewportMeta) viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-            if (modeText) modeText.innerText = "Versione PC";
-            document.body.classList.remove('desktop-view');
-        }
-    });
-
-    // Funzione globale richiamata dal tasto
-    window.toggleDesktopMode = function() {
-        let currentMode = localStorage.getItem('atmbet_view_mode');
-        
-        if (currentMode === 'pc') {
-            localStorage.setItem('atmbet_view_mode', 'mobile');
-        } else {
-            localStorage.setItem('atmbet_view_mode', 'pc');
-        }
-        
-        // Ricarica forzata bypassando la cache
-        window.location.reload(true);
-    }
-</script>
-
+    </script>
 </body>
 </html>
