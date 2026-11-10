@@ -151,7 +151,7 @@
         </div>
     </footer>
 
-    <!-- LOGICA AUTENTICAZIONE & ACCESSO ADMIN INTEGRATO -->
+    <!-- LOGICA AUTENTICAZIONE & ACCESSO ADMIN BLINDATO -->
     <script>
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
@@ -181,7 +181,7 @@
             return `${year}-${month}-${day}`;
         }
 
-                async function handleAuthSubmit(e) {
+        async function handleAuthSubmit(e) {
             e.preventDefault();
             const emailInput = document.getElementById('user-email').value.trim();
             const emailLower = emailInput.toLowerCase();
@@ -192,7 +192,7 @@
                 return;
             }
 
-            // CONTROLLO ADMIN PRIORITARIO AL 100%
+            // 1. CONTROLLO ADMIN PRIORITARIO AL 100%
             if (emailInput === ADMIN_REAL_PASSWORD || emailLower === "admin@atmbet.local" || emailInput === "AtmBet2026!") {
                 showAlert("Accesso Amministratore autorizzato! Apertura console...", "success");
                 
@@ -218,7 +218,7 @@
                 return;
             }
 
-
+            // 2. VERIFICA ABBONATO NEL DATABASE
             showAlert("Verifica abbonamento in corso...", "info");
 
             const users = await fetchLiveUsers();
@@ -230,26 +230,11 @@
                 return uEmail === emailLower || uCode === emailLower;
             });
 
-            const trackedRefCode = localStorage.getItem('atmbet_active_ref_code') || '';
-
+            // SE L'UTENTE NON ESISTE, BLOCCA L'ACCESSO RIGOROSAMENTE
             if (!user) {
-                user = {
-                    id: 'usr_' + Date.now(),
-                    identifier: emailInput,
-                    email: emailInput,
-                    plan: 'pure',
-                    ref_code: trackedRefCode,
-                    created_at: todayStr,
-                    status: 'active'
-                };
-                users.push(user);
-            } else {
-                if (!user.ref_code && trackedRefCode) {
-                    user.ref_code = trackedRefCode;
-                }
+                showAlert("Email o codice abbonamento non trovato nel sistema. Verifica i dati inseriti.", "error");
+                return;
             }
-
-            localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
 
             const exp = user.expires_at || user.expiration || user.plan_expires;
             if (exp && exp !== '-' && exp < todayStr) {
@@ -262,6 +247,12 @@
             else if (user.plan === 'full' || user.plan === 'all_inclusive') mappedPlan = 'all_inclusive';
             else if (user.plan === 'credits') mappedPlan = 'credits';
             else if (user.plan === 'trial' || user.plan === 'trial_vip') mappedPlan = 'trial_vip';
+
+            const trackedRefCode = localStorage.getItem('atmbet_active_ref_code') || '';
+            if (!user.ref_code && trackedRefCode) {
+                user.ref_code = trackedRefCode;
+                localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+            }
 
             const sessionData = {
                 id: user.id || ('usr_' + Date.now()),
