@@ -145,6 +145,15 @@
 
         <!-- MENU A TENDINA MOBILE PERFETTO E SENZA EFFETTO VERDE FISSO -->
         <div id="mobile-dropdown-menu" class="hidden lg:hidden bg-slate-950 border-b border-slate-800 px-4 py-4 space-y-2">
+           <!-- PULSANTE INSTALLA APP UNIVERSALE -->
+<button type="button" id="install-app-btn" onclick="triggerInstall()" class="w-full text-left px-4 py-2.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 text-xs font-mono font-bold flex items-center justify-between border border-emerald-500/30 mb-2 transition">
+    <span class="flex items-center gap-2">
+        <i data-lucide="download" class="w-4 h-4 text-emerald-400"></i>
+        Installa App Ufficiale
+    </span>
+    <span class="text-[10px] bg-emerald-500/20 px-2 py-0.5 rounded text-emerald-300">PWA</span>
+</button>
+            
             <a href="#metodo" onclick="toggleMobileMenu()" class="public-marketing-element block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">📍 Metodo</a>
             <a href="#simulatore" onclick="toggleMobileMenu()" class="block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">📊 Analisi & Performance</a>
             <a href="#selezioni" onclick="toggleMobileMenu()" class="block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80">🔥 Pronostici di Oggi</a>
@@ -2085,5 +2094,35 @@
             lucide.createIcons();
         });
     </script>
+        <script>
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+    });
+
+    function triggerInstall() {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        
+        if (isIOS) {
+            alert("Per installare l'app su iPhone/iPad:\n1. Tocca il tasto 'Condividi' (il quadrato con la freccia) in basso.\n2. Scorri e seleziona 'Aggiungi alla schermata Home'.");
+            return;
+        }
+
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('Utente ha installato la PWA');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            alert("L'app è già installata oppure puoi aggiungerla aprendo il menu del browser (i tre puntini in alto a destra) e selezionando 'Installa app' o 'Aggiungi a schermata Home'.");
+        }
+    }
+        </script>
+        
 </body>
 </html>
