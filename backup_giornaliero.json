@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "backup_date": "2026-11-10T08:47:02.820Z",
+  "backup_date": "2026-11-10T13:14:37.795Z",
   "platform": "AtmBet Official",
   "bets": [
     {
@@ -96,6 +96,20 @@
       "prediction": "Over 2,5 gol",
       "original_tipster": "Pronostici1",
       "odds": 1.4,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
+      "id": "bet_1794316470879_0",
+      "event_date": "2026-11-10 20:45",
+      "match_name": "Colchester - Ipswich U21",
+      "league": "EFL Trophy",
+      "market": "1X2 / Mercato",
+      "prediction": "X2",
+      "original_tipster": "Infoland",
+      "odds": 1.97,
       "stake": 1,
       "status": "pending",
       "is_published": true,
@@ -366,6 +380,20 @@
       "status": "pending",
       "is_published": true,
       "tg_sent": false
+    },
+    {
+      "id": "bet_1794316470880_1",
+      "event_date": "2026-11-10 11:45",
+      "match_name": "Real Madrid - Paris FC",
+      "league": "Champions League Women",
+      "market": "1X2 / Mercato",
+      "prediction": "1",
+      "original_tipster": "ZCODE",
+      "odds": 1.53,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
     },
     {
       "id": "bet_1794218146837_1",
@@ -9096,7 +9124,7 @@
     "token": "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
     "channel_pure": "-1004237267545",
     "channel_full": "-1004390945826",
-    "channel_free": "-1004426712178"
+    "channel_free": ""
   },
   "pure_tipsters": [
     "CalcioAI",
