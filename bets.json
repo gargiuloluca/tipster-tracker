@@ -1,75 +1,5 @@
 [
   {
-    "id": "bet_1794300301047_4",
-    "event_date": "2026-11-10 20:00",
-    "match_name": "Darlington - Oxford City",
-    "league": "England National League North",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.98,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794300301046_3",
-    "event_date": "2026-11-10 20:00",
-    "match_name": "Cacahuatique - Luis Angel Firpo",
-    "league": "El Salvador Primera Division",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.86,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794300301046_2",
-    "event_date": "2026-11-10 20:00",
-    "match_name": "Utah Jazz - Miami Heat",
-    "league": "NBA",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 228.5 punti",
-    "odds": 1.93,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794300301045_1",
-    "event_date": "2026-11-10 20:00",
-    "match_name": "New York Knicks - Milwaukee Bucks",
-    "league": "NBA",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "Under 219.5 punti",
-    "odds": 1.95,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794300301045_0",
-    "event_date": "2026-11-10 20:00",
-    "match_name": "Sacramento Kings - Orlando Magic",
-    "league": "NBA",
-    "original_tipster": "ZcodeAi",
-    "market": "1X2 / Mercato",
-    "prediction": "2",
-    "odds": 1.43,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794294012916_11",
     "event_date": "2026-11-13 20:45",
     "match_name": "Slovacchia - Isole Faroe",
@@ -179,7 +109,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794293854121_9",
@@ -280,6 +210,76 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1794300301047_4",
+    "event_date": "2026-11-10 20:00",
+    "match_name": "Darlington - Oxford City",
+    "league": "England National League North",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.98,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794300301046_3",
+    "event_date": "2026-11-10 20:00",
+    "match_name": "Cacahuatique - Luis Angel Firpo",
+    "league": "El Salvador Primera Division",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.86,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794300301046_2",
+    "event_date": "2026-11-10 20:00",
+    "match_name": "Utah Jazz - Miami Heat",
+    "league": "NBA",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 228.5 punti",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.93,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794300301045_1",
+    "event_date": "2026-11-10 20:00",
+    "match_name": "New York Knicks - Milwaukee Bucks",
+    "league": "NBA",
+    "market": "1X2 / Mercato",
+    "prediction": "Under 219.5 punti",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.95,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794300301045_0",
+    "event_date": "2026-11-10 20:00",
+    "match_name": "Sacramento Kings - Orlando Magic",
+    "league": "NBA",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "original_tipster": "ZcodeAi",
+    "odds": 1.43,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794294064159_0",
     "event_date": "2026-11-10 20:00",
     "match_name": "Trival Valderas - Leganés",
@@ -291,7 +291,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794293921314_1",
@@ -375,7 +375,7 @@
     "stake": 1,
     "status": "won",
     "is_published": true,
-    "tg_sent": true
+    "tg_sent": false
   },
   {
     "id": "bet_1794204543454_3",
@@ -389,7 +389,7 @@
     "stake": 1,
     "status": "lost",
     "is_published": true,
-    "tg_sent": true
+    "tg_sent": false
   },
   {
     "id": "bet_1794218146836_0",
@@ -403,7 +403,7 @@
     "stake": 1,
     "status": "won",
     "is_published": true,
-    "tg_sent": true
+    "tg_sent": false
   },
   {
     "id": "bet_1794228186702_4",
