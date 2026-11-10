@@ -1,9 +1,10 @@
 {
   "name": "AtmBet Official",
   "short_name": "AtmBet",
-  "start_url": "/index.html",
+  "start_url": "/index.html?mode=mobile",
   "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0b0f17",
   "theme_color": "#22c55e",
   "icons": [
