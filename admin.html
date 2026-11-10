@@ -1791,10 +1791,8 @@
             return res.json();
         }
 
-        // FUNZIONE AGGIORNATA PER GESTIRE LE PARTITE NOTTURNE FINO ALLE 09:00 (SOLO PER TELEGRAM)
         function getTodayBetsForTelegram(allBets) {
             const now = new Date();
-            // Spostiamo indietro di 9 ore l'orologio di riferimento per la notte
             const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
             const targetDateStr = getLocalDateString(adjustedDate);
 
@@ -1803,11 +1801,10 @@
                 const eventDateTime = String(b.event_date || '').trim();
                 const betDate = extractStandardDate(eventDateTime);
                 
-                if (!isPending || b.is_published === false || (channelType === 'pure' ? b.tg_sent_pure : b.tg_sent_full)) return false;
+                if (!isPending || b.is_published === false || b.tg_sent === true) return false;
 
                 if (betDate === targetDateStr) return true;
 
-                // Controllo per le partite che si giocano tra mezzanotte e le 09:00
                 const timePart = eventDateTime.slice(11, 16);
                 if (timePart) {
                     const [hh] = timePart.split(':').map(Number);
@@ -1884,7 +1881,7 @@
                     try {
                         const res = await sendTelegramMessage(token, chatId, msg);
                         if (res.ok) {
-                            batch.forEach(b => b.tg_sent_pure = true);
+                            batch.forEach(b => b.tg_sent = true);
                             sentCount += batch.length;
                         } else {
                             statusEl.innerText = `Errore: ${res.description}`;
@@ -1899,7 +1896,7 @@
                 }
 
                 persistBets(bets);
-                autoBackupMasterToGitHub(); // Esegue l'auto-backup su GitHub in background!
+                autoBackupMasterToGitHub();
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi a PURE!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
 
@@ -1938,7 +1935,7 @@
                     try {
                         const res = await sendTelegramMessage(token, chatId, msg);
                         if (res.ok) {
-                            batch.forEach(b => b.tg_sent_full = true);
+                            batch.forEach(b => b.tg_sent = true);
                             sentCount += batch.length;
                         } else {
                             statusEl.innerText = `Errore: ${res.description}`;
@@ -1953,13 +1950,12 @@
                 }
 
                 persistBets(bets);
-                autoBackupMasterToGitHub(); // Esegue l'auto-backup su GitHub in background!
+                autoBackupMasterToGitHub();
                 statusEl.innerText = `Inviati ${sentCount} segnali di oggi ad All-Inclusive!`;
                 setTimeout(() => { statusEl.innerText = ""; }, 5000);
             }
         }
 
-        // NUOVA FUNZIONE PER RESETTARE IL FLAG TG_SENT SELETTIVAMENTE
         function resetTelegramSentStatus(channelType) {
             const bets = loadAllBets();
             const allowedTipsters = channelType === 'pure' ? getPureSelectedTipsters() : getFullSelectedTipsters();
@@ -1998,9 +1994,9 @@
 
             if (resetCount > 0) {
                 persistBets(bets);
-                alert(`Reset completato! ${resetCount} pronostici del canale ${channelType.toUpperCase()} sono tornati a "non inviati". Ora puoi testare l'invio automatico.`);
+                alert(`Reset completato! ${resetCount} pronostici sono tornati a "non inviati".`);
             } else {
-                alert(`Nessun pronostico con flag tg_sent attivo trovato per il canale ${channelType.toUpperCase()} nella data odierna.`);
+                alert(`Nessun pronostico con flag tg_sent attivo trovato nella data odierna.`);
             }
         }
 
@@ -2038,7 +2034,7 @@
             });
 
             if (resolvedBets.length === 0) {
-                alert("Nessuna giocata refertata (Vinta/Persa) trovata per la data odierna da inserire nel resoconto.");
+                alert("Nessuna giocata refertata trovata per la data odierna.");
                 return;
             }
 
@@ -2062,9 +2058,7 @@
             const formattedDate = todayStr.split('-').reverse().join('/');
 
             let reportMsg = `📊 <b>ATMBET — RESOCONTO GIORNALIERO ${channelTitleName}</b>\n`;
-            reportMsg += `📅 <i>Data: ${formattedDate}</i>\n`;
-            reportMsg += `Un'altra giornata solida gestita con rigore statistico e approccio quantitativo. Il servizio chiude in positivo, confermando la bontà della selezione algoritmica a valore.\n\n`;
-            
+            reportMsg += `📅 <i>Data: ${formattedDate}</i>\n\n`;
             reportMsg += `📈 <b>PANORAMICA STATISTICA</b>\n`;
             reportMsg += ` * ⚡ Totale Giocate: ${totalResolved}\n`;
             reportMsg += ` * ✅ Vinte: ${wonCount}\n`;
@@ -2072,19 +2066,6 @@
             reportMsg += ` * 🎯 Win Rate: ${winRate}%\n`;
             reportMsg += ` * 📊 Profitto Netto: ${(netProfit >= 0 ? '+' : '')}${netProfit.toFixed(2)}u\n`;
             reportMsg += ` * 🔄 Yield / ROI: ${(roi >= 0 ? '+' : '')}${roi}%\n\n`;
-
-            reportMsg += `📋 <b>DETTAGLIO SEGNALI DEL GIORNO</b>\n`;
-            resolvedBets.forEach(b => {
-                const s = b.stake || 1.0;
-                let unitDiff = b.status === 'won' ? ((b.odds - 1) * s) : -s;
-                let outcomeLabel = b.status === 'won' 
-                    ? `👉 Vinta (${unitDiff >= 0 ? '+' : ''}${unitDiff.toFixed(2)}u)` 
-                    : `👉 Persa (${unitDiff.toFixed(2)}u)`;
-
-                reportMsg += ` * ${b.match_name} | ${b.prediction} @ ${parseFloat(b.odds).toFixed(2)} ${outcomeLabel}\n`;
-            });
-
-            reportMsg += `\n🔗 Analisi e statistiche complete sempre disponibili su AtmBet`;
 
             const statusEl = document.getElementById('tg_status_msg');
             if (statusEl) statusEl.innerText = "Invio resoconto in corso...";
@@ -2173,7 +2154,7 @@
                 channelLabel = "FREE SIGNAL";
                 brandSignature = "AtmBet Free Signal";
                 if (!chatId) {
-                    alert("Chat ID per il canale Free Signal non configurato nel Dispatcher Telegram.");
+                    alert("Chat ID per il canale Free Signal non configurato.");
                     return;
                 }
             } else {
@@ -2184,11 +2165,6 @@
                 brandSignature = isPure ? "AtmBet Selection" : "AtmBet Signal";
             }
 
-            if (!chatId) {
-                alert(`Chat ID mancante per ${channelLabel}.`);
-                return;
-            }
-
             let msg = targetMode === 'free' 
                 ? `🎁 <b>ATMBET | FREE SIGNAL PREVIEW</b> 🎁\n📅 <i>Data: ${b.event_date}</i>\n\n`
                 : `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA</b> ⚡\n📅 <i>Data: ${b.event_date}</i>\n\n`;
@@ -2197,12 +2173,6 @@
             msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
             msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
             msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>`;
-            
-            if (targetMode === 'free') {
-                msg += `\n\n🚀 Vuoi tutti i segnali in tempo reale? Approfitta dei 7gg gratuiti!\n`;
-                msg += `🔹 <b>Piano Pure:</b> <a href="https://t.me/tribute/app?startapp=s1by8">Attiva Pure</a>\n`;
-                msg += `🔸 <b>Piano All-Inclusive:</b> <a href="https://t.me/tribute/app?startapp=s1bxZ">Attiva All-Inclusive</a>`;
-            }
 
             try {
                 const res = await sendTelegramMessage(token, chatId, msg);
@@ -2247,6 +2217,12 @@
 
             if (inputVal === ADMIN_REAL_PASSWORD) {
                 sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
+                // SALVA ANCHE IL RUOLO ADMIN NEL LOCALSTORAGE PER PROTEGGERE IL TASTO SOS
+                const currentSession = JSON.parse(localStorage.getItem(CURRENT_SESSION_KEY) || '{}');
+                currentSession.role = 'admin';
+                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentSession));
+                localStorage.setItem('atmbet_is_admin', 'true');
+
                 unlockConsoleUI();
             } else {
                 if (errEl) errEl.classList.remove('hidden');
@@ -2274,6 +2250,12 @@
 
         function lockAdminConsole() {
             sessionStorage.removeItem(ADMIN_AUTH_SESSION_KEY);
+            // RIMUOVE IL FLAG ADMIN ALLA DISCONNESSIONE
+            localStorage.removeItem('atmbet_is_admin');
+            const currentSession = JSON.parse(localStorage.getItem(CURRENT_SESSION_KEY) || '{}');
+            delete currentSession.role;
+            localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentSession));
+
             location.reload();
         }
 
@@ -2392,7 +2374,6 @@
 
         function setupDynamicDatePresets() {
             const now = new Date();
-            // Anche qui applichiamo la finestra delle 9 ore per allineare la data di default di "Oggi"
             const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
             const todayStr = getLocalDateString(adjustedDate);
 
@@ -3004,7 +2985,7 @@
             if (lostEl) lostEl.innerText = lost + 'P';
         }
 
-            function updateClusterOptimizerSummary(allBets) {
+        function updateClusterOptimizerSummary(allBets) {
             const chEl = document.getElementById('opt-channels-count');
             const volEl = document.getElementById('opt-daily-volume');
             const wrEl = document.getElementById('opt-winrate-est');
@@ -3032,7 +3013,7 @@
             }
         }
 
-            function renderDashboard() {
+        function renderDashboard() {
             let allBets = loadAllBets();
             scanForConflictsAndDuplicates(allBets);
 
@@ -3304,7 +3285,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
@@ -3394,21 +3375,16 @@
             });
             lucide.createIcons();
         }
-// FUNZIONE DI EMERGENZA POTENZIATA (SBLOCCO UI + LOGIN)
-function emergencyResetUI() {
-    // 1. Pulisce i conflitti e la memoria locale
-    localStorage.removeItem('atmbet_confirmed_conflicts');
-    
-    // 2. Pulisce eventuali flag di sessione bloccati
-    sessionStorage.clear();
-    
-    // 3. Rimuove blocchi grafici sul body
-    document.body.style.overflow = 'auto';
-    
-    // 4. Notifica e ricarica completamente la pagina per ripulire il login
-    alert("Reset di emergenza completato! La pagina verrà ricaricata.");
-    location.reload();
-}
+
+        // FUNZIONE DI EMERGENZA SOS SICURA (Pulisce la cache UI senza toccare pronostici o utenti)
+        function emergencyResetUI() {
+            localStorage.removeItem(CONFIRMED_CONFLICTS_KEY);
+            sessionStorage.clear();
+            document.body.style.overflow = 'auto';
+            alert("Reset di emergenza completato! La pagina verrà ricaricata.");
+            location.reload();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             const bets = loadAllBets();
@@ -3416,10 +3392,19 @@ function emergencyResetUI() {
             checkAdminSession();
         });
     </script>
-<!-- PULSANTE SOS FISSO CON FEEDBACK VISIVO -->
-<button type="button" onclick="sessionStorage.setItem('atmbet_admin_authenticated', 'true'); alert('Sblocco SOS attivato con successo!'); if(typeof unlockConsoleUI === 'function') { unlockConsoleUI(); } else { location.reload(); }" style="position: fixed; bottom: 20px; right: 20px; z-index: 2147483647; background: #dc2626; color: white; border: 3px solid #ffffff; border-radius: 50%; width: 55px; height: 55px; font-weight: bold; box-shadow: 0 6px 20px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer;" title="Sblocco Rapido SOS">
-    SOS
-</button>
 
+    <!-- PULSANTE SOS FISSO PROTETTO (VISIBILE SOLO SE AUTENTICATO COME ADMIN) -->
+    <button type="button" onclick="emergencyResetUI()" id="admin-sos-button" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 2147483647; background: #dc2626; color: white; border: 3px solid #ffffff; border-radius: 50%; width: 55px; height: 55px; font-weight: bold; box-shadow: 0 6px 20px rgba(0,0,0,0.8); align-items: center; justify-content: center; font-size: 13px; cursor: pointer;" title="Reset di Emergenza SOS">
+        SOS
+    </button>
+    <script>
+        // MOSTRA IL TASTO SOS SOLO SE LA SESSIONE ADMIN È ATTIVA
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true" || localStorage.getItem('atmbet_is_admin') === 'true') {
+                const sosBtn = document.getElementById('admin-sos-button');
+                if (sosBtn) sosBtn.style.display = 'flex';
+            }
+        });
+    </script>
 </body>
 </html>
