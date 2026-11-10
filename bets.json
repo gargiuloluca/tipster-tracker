@@ -1,33 +1,5 @@
 [
   {
-    "id": "bet_1794315804715_1",
-    "event_date": "2026-11-10 11:45",
-    "match_name": "Real Madrid - Paris FC",
-    "league": "Champions League Women",
-    "original_tipster": "ZCODE",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.53,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794315804713_0",
-    "event_date": "2026-11-10 20:45",
-    "match_name": "Colchester - Ipswich U21",
-    "league": "EFL Trophy",
-    "original_tipster": "Infoland",
-    "market": "1X2 / Mercato",
-    "prediction": "X2",
-    "odds": 1.97,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794294012916_11",
     "event_date": "2026-11-13 20:45",
     "match_name": "Slovacchia - Isole Faroe",
