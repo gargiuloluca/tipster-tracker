@@ -2107,19 +2107,37 @@
         });
     </script>
         <script>
-    function toggleDesktopMode() {
-        let body = document.body;
+    <script>
+    // Al caricamento, imposta la vista corretta in base alla memoria del browser
+    document.addEventListener("DOMContentLoaded", function() {
+        let savedMode = localStorage.getItem('atmbet_view_mode');
+        let viewportMeta = document.querySelector('meta[name="viewport"]');
         let modeText = document.getElementById('view-mode-text');
         
-        body.classList.toggle('desktop-view');
-        
-        if (body.classList.contains('desktop-view')) {
+        if (savedMode === 'pc') {
+            if (viewportMeta) viewportMeta.setAttribute('content', 'width=1280');
             if (modeText) modeText.innerText = "Versione Mobile";
+            document.body.classList.add('desktop-view');
         } else {
+            if (viewportMeta) viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
             if (modeText) modeText.innerText = "Versione PC";
+            document.body.classList.remove('desktop-view');
         }
-    }
-        </script>
+    });
+
+    // Funzione per commutare e ricaricare la pagina nella modalità scelta
+    function toggleDesktopMode() {
+        let currentMode = localStorage.getItem('atmbet_view_mode');
         
+        if (currentMode === 'pc') {
+            localStorage.setItem('atmbet_view_mode', 'mobile');
+        } else {
+            localStorage.setItem('atmbet_view_mode', 'pc');
+        }
+        
+        location.reload();
+    }
+</script>
+
 </body>
 </html>
