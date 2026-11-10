@@ -2105,10 +2105,8 @@
             renderPublicHistory();
             lucide.createIcons();
         });
-    </script>
-        <script>
     <script>
-    // Al caricamento, imposta la vista corretta in base alla memoria del browser
+    // Al caricamento, controlla lo stato salvato
     document.addEventListener("DOMContentLoaded", function() {
         let savedMode = localStorage.getItem('atmbet_view_mode');
         let viewportMeta = document.querySelector('meta[name="viewport"]');
@@ -2125,8 +2123,8 @@
         }
     });
 
-    // Funzione per commutare e ricaricare la pagina nella modalità scelta
-    function toggleDesktopMode() {
+    // Funzione globale richiamata dal tasto
+    window.toggleDesktopMode = function() {
         let currentMode = localStorage.getItem('atmbet_view_mode');
         
         if (currentMode === 'pc') {
@@ -2135,7 +2133,8 @@
             localStorage.setItem('atmbet_view_mode', 'pc');
         }
         
-        location.reload();
+        // Ricarica forzata bypassando la cache
+        window.location.reload(true);
     }
 </script>
 
