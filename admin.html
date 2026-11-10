@@ -3401,10 +3401,14 @@ function emergencyResetUI() {
             checkAdminSession();
         });
     </script>
-<!-- PULSANTE SOS SICURO (Sblocco UI senza cancellare le impostazioni) -->
+<!-- PULSANTE SOS FISSO SEMPRE ATTIVO -->
 <button type="button" onclick="sessionStorage.setItem('atmbet_admin_authenticated', 'true'); if(typeof unlockConsoleUI === 'function') { unlockConsoleUI(); } else { location.reload(); }" style="position: fixed; bottom: 20px; right: 20px; z-index: 2147483647; background: #dc2626; color: white; border: 3px solid #ffffff; border-radius: 50%; width: 55px; height: 55px; font-weight: bold; box-shadow: 0 6px 20px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer;" title="Sblocco Rapido SOS">
     SOS
 </button>
+
+</body>
+</html>
+
 
 </body>
 </html>
