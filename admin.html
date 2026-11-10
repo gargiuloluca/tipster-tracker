@@ -804,7 +804,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT GESTIONALE ORIGINALE RIPRISTINATO E STABILE -->
+    <!-- SCRIPT GESTIONALE AGGIORNATO CON SINCRONIZZAZIONE AUTOMATICA DA GITHUB -->
     <script>
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
@@ -910,7 +910,6 @@
         let stagedVerificationResults = {};
         let firstServiceDate = '';
 
-        // FUNZIONI DI MODIFICA RAPIDA MATCH (ADMIN EDIT)
         function openEditBetModal(betId) {
             const bets = loadAllBets();
             const bet = bets.find(b => String(b.id) === String(betId));
@@ -952,7 +951,6 @@
             alert("Pronostico aggiornato con successo!");
         }
 
-        // BACKUP COMPLETO MASTER (Pronostici + Utenti + Configs)
         function exportFullMasterBackup() {
             const masterData = {
                 version: "2.0",
@@ -975,7 +973,6 @@
             dlAnchor.remove();
         }
 
-        // AUTO-BACKUP MASTER SU GITHUB IN BACKGROUND (Esegue il backup e sovrascrive il file giornaliero)
         async function autoBackupMasterToGitHub() {
             const repo = localStorage.getItem(GH_REPO_KEY);
             const token = localStorage.getItem(GH_TOKEN_KEY);
@@ -1034,7 +1031,6 @@
             }
         }
 
-        // RIPRISTINO DEL BACKUP COMPLETO MASTER
         function importFullMasterBackup(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1748,6 +1744,36 @@
             }
         }
 
+        // NUOVA FUNZIONE: SCARICA AUTOMATICAMENTE GLI UTENTI DA GITHUB ALL'AVVIO
+        async function fetchUsersFromGitHubAutomatic() {
+            const repo = localStorage.getItem(GH_REPO_KEY);
+            const token = localStorage.getItem(GH_TOKEN_KEY);
+            if (!repo || !token) return;
+
+            try {
+                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json?_nocache=${Date.now()}`;
+                const getRes = await fetch(getFileUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    const content = decodeURIComponent(escape(atob(fileData.content)));
+                    const parsed = JSON.parse(content);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(parsed));
+                        console.log("Abbonati sincronizzati automaticamente da GitHub!");
+                    }
+                }
+            } catch (err) {
+                console.warn("Impossibile contattare GitHub all'avvio, utilizzo dati locali.", err);
+            }
+        }
+
         function loadTelegramConfig() {
             try {
                 const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
@@ -2217,7 +2243,6 @@
 
             if (inputVal === ADMIN_REAL_PASSWORD) {
                 sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
-                // SALVA ANCHE IL RUOLO ADMIN NEL LOCALSTORAGE PER PROTEGGERE IL TASTO SOS
                 const currentSession = JSON.parse(localStorage.getItem(CURRENT_SESSION_KEY) || '{}');
                 currentSession.role = 'admin';
                 localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentSession));
@@ -2250,7 +2275,6 @@
 
         function lockAdminConsole() {
             sessionStorage.removeItem(ADMIN_AUTH_SESSION_KEY);
-            // RIMUOVE IL FLAG ADMIN ALLA DISCONNESSIONE
             localStorage.removeItem('atmbet_is_admin');
             const currentSession = JSON.parse(localStorage.getItem(CURRENT_SESSION_KEY) || '{}');
             delete currentSession.role;
@@ -3285,7 +3309,7 @@
                         ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
                         : (bet.status === 'lost'
                             ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
-                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">VOID</span>');
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
                     
                     rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
 
@@ -3376,7 +3400,6 @@
             lucide.createIcons();
         }
 
-        // FUNZIONE DI EMERGENZA SOS SICURA (Pulisce la cache UI senza toccare pronostici o utenti)
         function emergencyResetUI() {
             localStorage.removeItem(CONFIRMED_CONFLICTS_KEY);
             sessionStorage.clear();
@@ -3385,11 +3408,18 @@
             location.reload();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // AGGIORNAMENTO DEL DOM CONTENT LOADED PER SCARICARE AUTOMATICAMENTE DA GITHUB ALL'AVVIO
+        document.addEventListener('DOMContentLoaded', async () => {
             lucide.createIcons();
+            loadGitHubSettings();
+            
+            // Scarica automaticamente gli utenti aggiornati da GitHub prima di popolare la tabella
+            await fetchUsersFromGitHubAutomatic();
+
             const bets = loadAllBets();
             initAdminServiceStartDate(bets);
             checkAdminSession();
+            renderUsersTable();
         });
     </script>
 
@@ -3398,7 +3428,6 @@
         SOS
     </button>
     <script>
-        // MOSTRA IL TASTO SOS SOLO SE LA SESSIONE ADMIN È ATTIVA
         document.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true" || localStorage.getItem('atmbet_is_admin') === 'true') {
                 const sosBtn = document.getElementById('admin-sos-button');
