@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "backup_date": "2026-11-10T08:46:37.377Z",
+  "backup_date": "2026-11-10T08:47:02.820Z",
   "platform": "AtmBet Official",
   "bets": [
     {
@@ -113,7 +113,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794293854121_9",
@@ -295,7 +295,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794293921314_1",
