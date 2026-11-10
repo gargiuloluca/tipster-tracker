@@ -44,14 +44,5 @@
     "telegram_link": "https://t.me/+Xl-QWFpjHvk0YTZk",
     "status": "active",
     "active": true
-  },
-  {
-    "id": "usr_1794327099737",
-    "identifier": "admin@atmbet.local",
-    "email": "admin@atmbet.local",
-    "plan": "pure",
-    "ref_code": "",
-    "created_at": "2026-11-10",
-    "status": "active"
   }
 ]
