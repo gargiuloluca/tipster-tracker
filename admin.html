@@ -1788,7 +1788,7 @@
                 const eventDateTime = String(b.event_date || '').trim();
                 const betDate = extractStandardDate(eventDateTime);
                 
-                if (!isPending || b.is_published === false || b.tg_sent) return false;
+                if (!isPending || b.is_published === false || (channelType === 'pure' ? b.tg_sent_pure : b.tg_sent_full)) return false;
 
                 if (betDate === targetDateStr) return true;
 
@@ -1869,7 +1869,7 @@
                     try {
                         const res = await sendTelegramMessage(token, chatId, msg);
                         if (res.ok) {
-                            batch.forEach(b => b.tg_sent = true);
+                            batch.forEach(b => b.tg_sent_pure = true);
                             sentCount += batch.length;
                         } else {
                             statusEl.innerText = `Errore: ${res.description}`;
@@ -1923,7 +1923,7 @@
                     try {
                         const res = await sendTelegramMessage(token, chatId, msg);
                         if (res.ok) {
-                            batch.forEach(b => b.tg_sent = true);
+                            batch.forEach(b => b.tg_sent_full = true);
                             sentCount += batch.length;
                         } else {
                             statusEl.innerText = `Errore: ${res.description}`;
