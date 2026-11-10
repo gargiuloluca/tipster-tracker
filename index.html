@@ -765,13 +765,6 @@
             <a href="collaborazioni.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
                 <i data-lucide="award" class="w-3 h-3 text-amber-500"></i> Collaborazioni
             </a>
-            <!-- LINK AMMINISTRATIVO PROTETTO: VISIBILE SOLO SE LOGGATO COME ADMIN -->
-            <span id="admin-link-wrapper" class="hidden items-center gap-1">
-                <span>•</span>
-                <a href="admin.html" class="hover:text-emerald-400 transition flex items-center gap-1 font-mono text-emerald-400 font-bold">
-                    <i data-lucide="shield-alert" class="w-3 h-3 text-emerald-500"></i> Console Gestore (SOS)
-                </a>
-            </span>
             <span>•</span>
             <a href="legal.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
                 <i data-lucide="shield-check" class="w-3 h-3 text-amber-500"></i> Note Legali
@@ -872,19 +865,6 @@
         function applyUserExperienceMode() {
             activeUser = getActiveUserSession();
             
-            // PROTEZIONE DI SICUREZZA: MOSTRA IL LINK ADMIN/SOS SOLO SE AUTENTICATO COME AMMINISTRATORE
-            const adminWrapper = document.getElementById('admin-link-wrapper');
-            if (adminWrapper) {
-                const isAdmin = activeUser && (activeUser.role === 'admin' || localStorage.getItem('atmbet_is_admin') === 'true' || localStorage.getItem('atmbet_admin_override') === 'true');
-                if (isAdmin) {
-                    adminWrapper.classList.remove('hidden');
-                    adminWrapper.classList.add('flex');
-                } else {
-                    adminWrapper.classList.add('hidden');
-                    adminWrapper.classList.remove('flex');
-                }
-            }
-
             const marketingEls = document.querySelectorAll('.public-marketing-element');
             const vipHeader = document.getElementById('vip-user-header');
             const betsContainer = document.getElementById('public-bets-container');
