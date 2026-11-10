@@ -97,6 +97,18 @@
             display: none;
         }
         * { -webkit-tap-highlight-color: transparent; }
+            /* Stile per la forzatura della Versione PC da mobile */
+    body.desktop-view {
+        min-width: 1280px !important;
+        overflow-x: auto !important;
+    }
+    body.desktop-view header,
+    body.desktop-view main,
+    body.desktop-view footer,
+    body.desktop-view .max-w-7xl {
+        width: 1280px !important;
+        max-width: none !important;
+    }
     </style>
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
