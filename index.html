@@ -155,8 +155,8 @@
                 <i data-lucide="shield-check" class="w-4 h-4"></i> Note Legali & Conformità
             </a>
             
-            <!-- Tasti rapidi di contatto, sblocco e accesso -->
-            <div class="pt-3 border-t border-slate-800 grid grid-cols-3 gap-2">
+            <!-- Tasti rapidi con ID protetto e stabile -->
+            <div id="mobile-auth-actions" class="pt-3 border-t border-slate-800 grid grid-cols-3 gap-2">
                 <a href="contatti.html" class="text-center bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold py-2.5 rounded-xl border border-slate-800 flex items-center justify-center gap-1">
                     <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> Contatti
                 </a>
@@ -1147,12 +1147,12 @@
             lucide.createIcons();
         }
 
-            function renderNavbarUserStatus() {
+        function renderNavbarUserStatus() {
             const container = document.getElementById('nav-user-area');
             if (!container) return;
 
             activeUser = getActiveUserSession();
-            const mobileActionContainer = document.querySelector('#mobile-dropdown-menu .grid-cols-3');
+            const mobileActionContainer = document.getElementById('mobile-auth-actions');
 
             if (!activeUser) {
                 if (container) {
@@ -1240,7 +1240,6 @@
             }
             lucide.createIcons();
         }
-
 
         window.logoutUser = function() {
             localStorage.removeItem(CURRENT_SESSION_KEY);
@@ -1796,7 +1795,7 @@
             });
 
             const isUserPure = activeUser && activeUser.plan === 'pure';
-            const isUserAllInclusive = activeUser && (activeUser.plan === 'all_inclusive' || activeUser.role === 'admin' || activeUser.plan === 'elite');
+            const isUserAllInclusive = activeUser && (activeUser.plan === 'all_inclusive' || activeUser.role === 'admin' || activeUser.role === 'gestore' || activeUser.plan === 'elite');
 
             if (isUserPure) {
                 pendingBetsToday = pendingBetsToday.filter(b => b.is_pure === true);
