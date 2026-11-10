@@ -3374,16 +3374,20 @@
             });
             lucide.createIcons();
         }
-// FUNZIONE DI EMERGENZA PER SBLOCCO INTERFACCIA E CONFLITTI
+// FUNZIONE DI EMERGENZA POTENZIATA (SBLOCCO UI + LOGIN)
 function emergencyResetUI() {
-    const conflictPanel = document.getElementById('conflict-panel');
-    if (conflictPanel) conflictPanel.classList.add('hidden');
-    document.body.style.overflow = 'auto';
+    // 1. Pulisce i conflitti e la memoria locale
     localStorage.removeItem('atmbet_confirmed_conflicts');
-    if (typeof renderDashboard === 'function') {
-        renderDashboard();
-    }
-    alert("Interfaccia sbloccata con successo!");
+    
+    // 2. Pulisce eventuali flag di sessione bloccati
+    sessionStorage.clear();
+    
+    // 3. Rimuove blocchi grafici sul body
+    document.body.style.overflow = 'auto';
+    
+    // 4. Notifica e ricarica completamente la pagina per ripulire il login
+    alert("Reset di emergenza completato! La pagina verrà ricaricata.");
+    location.reload();
 }
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
