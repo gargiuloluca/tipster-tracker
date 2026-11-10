@@ -2989,7 +2989,7 @@
             if (lostEl) lostEl.innerText = lost + 'P';
         }
 
-        function updateClusterOptimizerSummary(allBets) {
+            function updateClusterOptimizerSummary(allBets) {
             const chEl = document.getElementById('opt-channels-count');
             const volEl = document.getElementById('opt-daily-volume');
             const wrEl = document.getElementById('opt-winrate-est');
@@ -3009,12 +3009,12 @@
                 wrEl.innerText = "~ 62.5% Target";
                 targetEl.innerText = "Piano Elite";
             } else {
-            const fullTipsters = getFullSelectedTipsters();
-               chEl.innerText = fullTipsters.length > 0 ? fullTipsters.join(', ') : 'Canale All-Inclusive';
-               volEL.innerText = 'Full (-30-50 / die)';
-               wrEL.innerText = '> 65.6% Target';
-               targetEl.innerText = 'Piano All-Inclusive';
-    }
+                const fullTipsters = getFullSelectedTipsters();
+                chEl.innerText = fullTipsters.length > 0 ? fullTipsters.join(', ') : 'Canale All-Inclusive';
+                volEl.innerText = 'Full (-30-50 / die)';
+                wrEl.innerText = '> 65.6% Target';
+                targetEl.innerText = 'Piano All-Inclusive';
+            }
         }
 
         function renderDashboard() {
