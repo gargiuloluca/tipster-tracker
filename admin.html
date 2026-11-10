@@ -3009,11 +3009,12 @@
                 wrEl.innerText = "~ 62.5% Target";
                 targetEl.innerText = "Piano Elite";
             } else {
-                chEl.innerText = "Tutti (Canali Connessi)";
-                volEl.innerText = "Full (~30-50 / die)";
-                wrEl.innerText = "50-60% Flusso";
-                targetEl.innerText = "All-Inclusive";
-            }
+            const fullTipsters = getFullSelectedTipsters();
+               chl.innerText = fullTipsters.length > 0 ? fullTipsters.join(', ') : 'Canale All-Inclusive';
+               volEL.innerText = 'Full (-30-50 / die)';
+               wrEL.innerText = '> 65.6% Target';
+               targetEl.innerText = 'Piano All-Inclusive';
+    }
         }
 
         function renderDashboard() {
@@ -3034,27 +3035,23 @@
             });
 
             updateClusterOptimizerSummary(allBets);
-
-            if (currentClusterMode === 'pure') {
+                if (currentClusterMode === 'pure') {
                 const allowedPure = getPureSelectedTipsters();
                 allBets = allBets.filter(b => allowedPure.includes(canonicalizeTipsterName(b.original_tipster)));
-            } else if (currentClusterMode === 'elite') {
+                } else if (currentClusterMode === 'elite') {
                 const fullArchive = loadAllBets();
                 const tipsterNetProfits = {};
-
                 fullArchive.forEach(b => {
-                    if (b.status === 'won' || b.status === 'lost') {
-                        const name = canonicalizeTipsterName(b.original_tipster);
-                        if (!tipsterNetProfits[name]) tipsterNetProfits[name] = 0;
-                        const s = b.stake || 1.0;
-                        tipsterNetProfits[name] += (b.status === 'won') ? ((b.odds - 1) * s) : -s;
-                    }
-                });
-
-                const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
-                allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
-            }
-
+                if (b.status === 'won' || b.status === 'lost') {
+                const name = canonicalizeTipsterName(b.original_tipster);
+                if (!tipsterNetProfits[name]) tipsterNetProfits[name] = 0;
+                const s = b.stake || 1.0;
+                tipsterNetProfits[name] += (b.status === 'won' ? (b.odds - 1) * s : -s);
+                }
+            });
+            const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
+            allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
+        
             const unitMultiplierEl = document.getElementById('admin-unit-multiplier');
             const unitVal = parseFloat(unitMultiplierEl ? unitMultiplierEl.value : 10) || 10;
             calculateSimulationInAdmin(allBets, unitVal);
