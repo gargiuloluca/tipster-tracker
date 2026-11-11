@@ -4,9 +4,9 @@
     "event_date": "2026-11-14 20:30",
     "match_name": "Real Madrid W - Badalona W",
     "league": "Primera Division Women",
-    "original_tipster": "NerdyTips",
     "market": "1X2 / Mercato",
     "prediction": "1",
+    "original_tipster": "NerdyTips",
     "odds": 1.32,
     "stake": 1,
     "status": "pending",
@@ -18,9 +18,9 @@
     "event_date": "2026-11-14 20:00",
     "match_name": "Angola - Sudan del Sud",
     "league": "World Cup Qualifiers",
-    "original_tipster": "NerdyTips",
     "market": "1X2 / Mercato",
     "prediction": "H1",
+    "original_tipster": "NerdyTips",
     "odds": 1.48,
     "stake": 1,
     "status": "pending",
@@ -32,9 +32,9 @@
     "event_date": "2026-11-14 17:00",
     "match_name": "Uganda - Botswana",
     "league": "World Cup Qualifiers",
-    "original_tipster": "NerdyTips",
     "market": "1X2 / Mercato",
     "prediction": "1",
+    "original_tipster": "NerdyTips",
     "odds": 1.5,
     "stake": 1,
     "status": "pending",
@@ -46,9 +46,9 @@
     "event_date": "2026-11-14 17:00",
     "match_name": "Le Havre W - Paris FC W",
     "league": "Premiere League Women",
-    "original_tipster": "NerdyTips",
     "market": "1X2 / Mercato",
     "prediction": "2",
+    "original_tipster": "NerdyTips",
     "odds": 1.4,
     "stake": 1,
     "status": "pending",
@@ -60,9 +60,9 @@
     "event_date": "2026-11-14 16:00",
     "match_name": "Carlisle - Boston Utd",
     "league": "National League",
-    "original_tipster": "NerdyTips",
     "market": "1X2 / Mercato",
     "prediction": "1",
+    "original_tipster": "NerdyTips",
     "odds": 1.47,
     "stake": 1,
     "status": "pending",
@@ -74,9 +74,9 @@
     "event_date": "2026-11-14 14:00",
     "match_name": "Bistrica - Beltinci",
     "league": "2. SNL",
-    "original_tipster": "NerdyTips",
     "market": "1X2 / Mercato",
     "prediction": "X2",
+    "original_tipster": "NerdyTips",
     "odds": 1.31,
     "stake": 1,
     "status": "pending",
@@ -88,9 +88,9 @@
     "event_date": "2026-11-14 03:00",
     "match_name": "Guatemala - Canada",
     "league": "Amichevole internazionale",
-    "original_tipster": "NerdyTips",
     "market": "1X2 / Mercato",
     "prediction": "2",
+    "original_tipster": "NerdyTips",
     "odds": 1.57,
     "stake": 1,
     "status": "pending",
@@ -235,7 +235,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794380171681_5",
@@ -249,7 +249,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794380171677_4",
@@ -263,7 +263,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794380171676_3",
@@ -277,7 +277,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794380171676_2",
@@ -291,7 +291,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794380171675_1",
@@ -305,7 +305,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794380171674_0",
@@ -319,7 +319,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794379804456_10",
@@ -459,7 +459,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794379862985_1",
@@ -473,7 +473,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794379862984_0",
@@ -487,7 +487,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794292811936_3",
