@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1794402084119_0",
+    "event_date": "2026-11-11 18:10",
+    "match_name": "Indiana Pacers - Washington Wizards",
+    "league": "NBA",
+    "original_tipster": "ZCODE",
+    "market": "1X2 / Mercato",
+    "prediction": "2",
+    "odds": 1.51,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794380548426_10",
     "event_date": "2026-11-14 20:30",
     "match_name": "Real Madrid W - Badalona W",
