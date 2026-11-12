@@ -1,19 +1,5 @@
 [
   {
-    "id": "bet_1794508806767_0",
-    "event_date": "2026-11-12 20:45",
-    "match_name": "Italia - Francia",
-    "league": "Nations League",
-    "original_tipster": "Il presidente",
-    "market": "1X2 / Mercato",
-    "prediction": "Ospite O 1.5",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794483633139_13",
     "event_date": "2026-11-14 21:30",
     "match_name": "Millonarios - A. Valledupar",
@@ -294,6 +280,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1794508806767_0",
+    "event_date": "2026-11-12 20:45",
+    "match_name": "Italia - Francia",
+    "league": "Nations League",
+    "market": "1X2 / Mercato",
+    "prediction": "Ospite O 1.5",
+    "original_tipster": "Il presidente",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794508473231_0",
     "event_date": "2026-11-12 20:45",
     "match_name": "Repubblica Ceca - Spagna",
@@ -555,7 +555,7 @@
     "original_tipster": "Pronostici1",
     "odds": 1.75,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
