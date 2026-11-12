@@ -1,5 +1,19 @@
 [
   {
+    "id": "bet_1794471986647_0",
+    "event_date": "2026-11-13 02:00",
+    "match_name": "Minnesota Timberwolves - Dallas Mavericks",
+    "league": "NBA",
+    "original_tipster": "ZcodeAi",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "odds": 1.46,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794380548426_10",
     "event_date": "2026-11-14 20:30",
     "match_name": "Real Madrid W - Badalona W",
