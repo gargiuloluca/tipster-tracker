@@ -1,47 +1,5 @@
 [
   {
-    "id": "bet_1794498060667_2",
-    "event_date": "2026-11-12 20:45",
-    "match_name": "Inghilterra - Croazia",
-    "league": "Nations League",
-    "original_tipster": "Il presidente",
-    "market": "1X2 / Mercato",
-    "prediction": "PT/FT 1-1",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794498060666_1",
-    "event_date": "2026-11-12 18:00",
-    "match_name": "Türkiye - Belgio",
-    "league": "Nations League",
-    "original_tipster": "Il presidente",
-    "market": "1X2 / Mercato",
-    "prediction": "1X",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794498060665_0",
-    "event_date": "2026-11-12 18:00",
-    "match_name": "Armenia - Cipro",
-    "league": "Nations League",
-    "original_tipster": "Il presidente",
-    "market": "1X2 / Mercato",
-    "prediction": "Gol",
-    "odds": 1.8,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794483633139_13",
     "event_date": "2026-11-14 21:30",
     "match_name": "Millonarios - A. Valledupar",
@@ -322,6 +280,20 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1794498060667_2",
+    "event_date": "2026-11-12 20:45",
+    "match_name": "Inghilterra - Croazia",
+    "league": "Nations League",
+    "market": "1X2 / Mercato",
+    "prediction": "PT/FT 1-1",
+    "original_tipster": "Il presidente",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794483476886_6",
     "event_date": "2026-11-12 20:45",
     "match_name": "Rep. Ceca - Spagna",
@@ -476,6 +448,34 @@
     "tg_sent": true
   },
   {
+    "id": "bet_1794498060666_1",
+    "event_date": "2026-11-12 18:00",
+    "match_name": "Türkiye - Belgio",
+    "league": "Nations League",
+    "market": "1X2 / Mercato",
+    "prediction": "1X",
+    "original_tipster": "Il presidente",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794498060665_0",
+    "event_date": "2026-11-12 18:00",
+    "match_name": "Armenia - Cipro",
+    "league": "Nations League",
+    "market": "1X2 / Mercato",
+    "prediction": "Gol",
+    "original_tipster": "Il presidente",
+    "odds": 1.8,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794483553131_0",
     "event_date": "2026-11-12 18:00",
     "match_name": "Türkiye - Belgium / Montenegro - Latvia",
@@ -555,7 +555,7 @@
     "original_tipster": "Infoland",
     "odds": 1.76,
     "stake": 1,
-    "status": "pending",
+    "status": "won",
     "is_published": true,
     "tg_sent": true
   },
