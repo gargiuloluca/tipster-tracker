@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "backup_date": "2026-11-12T12:05:49.661Z",
+  "backup_date": "2026-11-12T12:06:00.466Z",
   "platform": "AtmBet Official",
   "bets": [
     {
@@ -267,7 +267,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476886_8",
@@ -281,7 +281,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476886_6",
@@ -295,7 +295,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476885_5",
@@ -309,7 +309,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476884_4",
@@ -323,7 +323,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476884_3",
@@ -337,7 +337,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476883_2",
@@ -351,7 +351,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483340771_2",
@@ -407,7 +407,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483293145_0",
@@ -421,7 +421,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483553131_0",
@@ -435,7 +435,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483515832_0",
@@ -449,7 +449,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476886_7",
@@ -463,7 +463,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476883_1",
@@ -477,7 +477,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483476883_0",
@@ -491,7 +491,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794483176683_0",
