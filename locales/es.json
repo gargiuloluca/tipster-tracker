@@ -1,0 +1,14 @@
+{
+  "nav_back": "Volver a la Vitrina",
+  "auth_title": "Acceso al Área Restringida",
+  "auth_subtitle": "Acceso rápido verificado para suscriptores de la plataforma.",
+  "email_label": "Correo Electrónico o Contraseña de Admin",
+  "email_placeholder": "tu@email.com o Contraseña Admin",
+  "telegram_label": "Tu Usuario de Telegram",
+  "telegram_placeholder": "@TuUsuario",
+  "info_text": "Introduce el correo electrónico utilizado en Stripe y tu usuario de Telegram. El sistema reconocerá automáticamente tu licencia activa.",
+  "submit_btn": "Entrar al Panel VIP",
+  "no_sub": "¿Aún no tienes una suscripción activa?",
+  "choose_plan": "Elige un Plan o Prueba 7 Días",
+  "footer_copy": "AtmBet © 2026. Todos los derechos reservados."
+}
