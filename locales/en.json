@@ -215,4 +215,13 @@
   "footer_disclaimer_1": "Gambling is prohibited for minors under 18 and can cause pathological addiction. Play with moderation.",
   "footer_disclaimer_2": "If you have a gambling problem, call the",
   "footer_disclaimer_3": "(anonymous and free)"
+    "hero_badge": "Official Results Verification via API-Football",
+  "hero_title": "Don't bet on chance.<br><span class=\"text-atm-green\">Invest in Data.</span>",
+  "hero_subtitle": "Proprietary quantitative models to identify statistical odds misalignments before market shifts. Mathematical discipline, zero emotional gambling.",
+  "welcome_offer_tag": "WELCOME OFFER",
+  "welcome_no_card": "No Credit Card Required",
+  "welcome_title": "7 Days VIP + 5 Free Credits",
+  "welcome_desc": "Activate your free trial to unlock real odds, markets, and detailed analyses in your personal dashboard.",
+  "welcome_cta": "Activate Free Trial (7 Days)",
+  "welcome_redeem": "Redeem"
 }
