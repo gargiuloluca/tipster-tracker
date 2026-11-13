@@ -66,11 +66,21 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-4">
-                <a href="index.html" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition">
+                <!-- Selettore Lingua -->
+                <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 font-sans cursor-pointer">
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="de">🇩🇪 DE</option>
+                </select>
+
+                <a href="index.html" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition" data-i18n="dash_nav_showcase">
                     Vetrina
                 </a>
                 <button type="button" onclick="logout()" class="text-xs bg-slate-900 hover:bg-slate-800 text-rose-400 border border-slate-800 hover:border-rose-500/30 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1 transition">
-                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Esci
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> <span data-i18n="dash_nav_logout">Esci</span>
                 </button>
             </div>
         </div>
@@ -85,14 +95,14 @@
                 
                 <div>
                     <div class="flex items-center gap-2 mb-1">
-                        <span class="text-[10px] sm:text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold">Cruscotto Investitore</span>
+                        <span class="text-[10px] sm:text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold" data-i18n="dash_badge_dashboard">Cruscotto Investitore</span>
                         <span id="badge-portfolio-status" class="text-[9px] sm:text-[10px] font-mono uppercase font-black px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">IN ATTIVO</span>
                     </div>
-                    <h1 class="text-xl sm:text-3xl font-black text-white">Bentornato, <span id="user-display-name">Investitore</span></h1>
+                    <h1 class="text-xl sm:text-3xl font-black text-white"><span data-i18n="dash_welcome">Bentornato,</span> <span id="user-display-name">Investitore</span></h1>
                     <p class="text-[11px] sm:text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5">
                         <span id="user-display-email">...</span>
                         <span class="text-slate-600">|</span>
-                        <span>Dal: <span id="user-created-date" class="font-mono text-slate-300">...</span></span>
+                        <span><span data-i18n="dash_since">Dal:</span> <span id="user-created-date" class="font-mono text-slate-300">...</span></span>
                     </p>
                 </div>
 
@@ -103,7 +113,7 @@
                             <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                         </div>
                         <div>
-                            <div class="text-[9px] font-mono uppercase text-slate-500">Abbonamento</div>
+                            <div class="text-[9px] font-mono uppercase text-slate-500" data-i18n="dash_sub_label">Abbonamento</div>
                             <div id="badge-vip-status" class="text-xs font-black text-emerald-400">Attivo</div>
                         </div>
                     </div>
@@ -113,13 +123,13 @@
                             <i data-lucide="coins" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                         </div>
                         <div>
-                            <div class="text-[9px] font-mono uppercase text-slate-500">Crediti</div>
+                            <div class="text-[9px] font-mono uppercase text-slate-500" data-i18n="dash_credits_label">Crediti</div>
                             <div id="badge-credits-count" class="text-xs font-mono font-black text-white">5 Crediti</div>
                         </div>
                     </div>
 
                     <a href="index.html#piani" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-3.5 py-2.5 rounded-xl transition flex items-center justify-center gap-1 w-full sm:w-auto shadow-lg shadow-emerald-500/10">
-                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Ricarica
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> <span data-i18n="dash_topup_btn">Ricarica</span>
                     </a>
                 </div>
 
@@ -134,23 +144,23 @@
                         <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
                             <i data-lucide="calendar-clock" class="w-4 h-4"></i>
                         </span>
-                        <h2 class="text-sm sm:text-base font-black text-white">Simulatore di Rendimento nel Tempo</h2>
+                        <h2 class="text-sm sm:text-base font-black text-white" data-i18n="dash_sim_title">Simulatore di Rendimento nel Tempo</h2>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Simula il guadagno effettivo partendo da una data specifica.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_sim_subtitle">Simula il guadagno effettivo partendo da una data specifica.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Dal:</span>
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold" data-i18n="dash_sim_from">Dal:</span>
                         <input type="date" id="sim-start-date" onchange="applySimulationDate(this.value)"
                             class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
                     </div>
 
                     <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
-                        <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi</button>
-                        <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ieri</button>
-                        <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ultimi 7gg</button>
-                        <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
+                        <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_today">Oggi</button>
+                        <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_yesterday">Ieri</button>
+                        <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_7days">Ultimi 7gg</button>
+                        <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_all">Tutto</button>
                     </div>
                 </div>
             </div>
@@ -158,25 +168,25 @@
             <!-- Metriche Simulazione -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_profit">Profitto Periodo</span>
                     <div id="sim-profit-units" class="text-xl sm:text-2xl font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
                     <div id="sim-profit-fiat" class="text-[11px] font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Yield / ROI</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_roi">Yield / ROI</span>
                     <div id="sim-roi" class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">0.0%</div>
-                    <span class="text-[9px] text-slate-500">Giocate chiuse</span>
+                    <span class="text-[9px] text-slate-500" data-i18n="sim_metric_closed">Giocate chiuse</span>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_winrate">Win Rate</span>
                     <div id="sim-winrate" class="text-xl sm:text-2xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
-                    <span class="text-[9px] text-slate-500">Accuratezza esiti</span>
+                    <span class="text-[9px] text-slate-500" data-i18n="sim_metric_accuracy">Accuratezza esiti</span>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Chiuse</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_resolved">Chiuse</span>
                     <div id="sim-resolved-count" class="text-xl sm:text-2xl font-mono font-black text-slate-200 mt-0.5">0</div>
                     <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
                 </div>
@@ -188,9 +198,9 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="pie-chart" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Rendiconto Globale
+                        <i data-lucide="pie-chart" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> <span data-i18n="dash_global_title">Rendiconto Globale</span>
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Statistiche aggregate su tutte le selezioni chiuse.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_global_subtitle">Statistiche aggregate su tutte le selezioni chiuse.</p>
                 </div>
 
                 <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
@@ -206,37 +216,37 @@
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
                 <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
                     <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>PROFITTO NETTO</span>
+                        <span data-i18n="dash_stat_net_profit">PROFITTO NETTO</span>
                         <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-400"></i>
                     </div>
                     <div>
                         <div id="user-stat-profit" class="text-xl sm:text-3xl font-mono font-black text-emerald-400">+0.00u</div>
                         <div id="user-stat-fiat" class="text-[11px] sm:text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
                     </div>
-                    <div class="text-[9px] text-slate-500 mt-1">Guadagno netto totale</div>
+                    <div class="text-[9px] text-slate-500 mt-1" data-i18n="dash_stat_net_desc">Guadagno netto totale</div>
                 </div>
 
                 <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
                     <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>YIELD / ROI</span>
+                        <span data-i18n="dash_stat_roi">YIELD / ROI</span>
                         <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
                     </div>
                     <div id="user-stat-roi" class="text-xl sm:text-3xl font-mono font-black text-white">0.0%</div>
-                    <div class="text-[9px] text-slate-500 mt-1">Sul capitale giocato</div>
+                    <div class="text-[9px] text-slate-500 mt-1" data-i18n="dash_stat_roi_desc">Sul capitale giocato</div>
                 </div>
 
                 <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
                     <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>WIN RATE</span>
+                        <span data-i18n="dash_stat_winrate">WIN RATE</span>
                         <i data-lucide="target" class="w-3.5 h-3.5 text-amber-400"></i>
                     </div>
                     <div id="user-stat-winrate" class="text-xl sm:text-3xl font-mono font-black text-amber-400">0.0%</div>
-                    <div class="text-[9px] text-slate-500 mt-1">Rapporto vinte/chiuse</div>
+                    <div class="text-[9px] text-slate-500 mt-1" data-i18n="dash_stat_winrate_desc">Rapporto vinte/chiuse</div>
                 </div>
 
                 <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
                     <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
-                        <span>OPERAZIONI</span>
+                        <span data-i18n="dash_stat_operations">OPERAZIONI</span>
                         <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-slate-400"></i>
                     </div>
                     <div id="user-stat-resolved" class="text-xl sm:text-3xl font-mono font-black text-slate-200">0</div>
@@ -249,9 +259,9 @@
         <section class="space-y-3 pt-2 border-t border-slate-800/80">
             <div>
                 <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
-                    <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Selezioni VIP Attive
+                    <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> <span data-i18n="dash_active_title">Selezioni VIP Attive</span>
                 </h2>
-                <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio completo dei match singoli e delle multiple.</p>
+                <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_active_subtitle">Dettaglio completo dei match singoli e delle multiple.</p>
             </div>
 
             <div id="user-pending-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
@@ -264,15 +274,15 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Storico Giocate Ricevute
+                        <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> <span data-i18n="dash_history_title">Storico Giocate Ricevute</span>
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L).</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_history_subtitle">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L).</p>
                 </div>
 
                 <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800">
-                    <button type="button" onclick="filterHistory('all', this)" id="btn-hist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
-                    <button type="button" onclick="filterHistory('won', this)" id="btn-hist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
-                    <button type="button" onclick="filterHistory('lost', this)" id="btn-hist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
+                    <button type="button" onclick="filterHistory('all', this)" id="btn-hist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500" data-i18n="hist_filter_all">Tutte</button>
+                    <button type="button" onclick="filterHistory('won', this)" id="btn-hist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800" data-i18n="hist_filter_won">Vinte</button>
+                    <button type="button" onclick="filterHistory('lost', this)" id="btn-hist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800" data-i18n="hist_filter_lost">Perse</button>
                 </div>
             </div>
 
@@ -281,13 +291,13 @@
                     <table class="w-full text-left text-xs text-slate-300">
                         <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
                             <tr>
-                                <th class="py-2.5 px-3">Data</th>
-                                <th class="py-2.5 px-3">Partita</th>
-                                <th class="py-2.5 px-3">Pronostico</th>
-                                <th class="py-2.5 px-3">Quota</th>
-                                <th class="py-2.5 px-3">Stake</th>
-                                <th class="py-2.5 px-3 text-center">Esito</th>
-                                <th class="py-2.5 px-3 text-right">P/L Netto</th>
+                                <th class="py-2.5 px-3" data-i18n="table_date">Data</th>
+                                <th class="py-2.5 px-3" data-i18n="table_match">Partita</th>
+                                <th class="py-2.5 px-3" data-i18n="table_prediction">Pronostico</th>
+                                <th class="py-2.5 px-3" data-i18n="table_odds">Quota</th>
+                                <th class="py-2.5 px-3" data-i18n="table_stake">Stake</th>
+                                <th class="py-2.5 px-3 text-center" data-i18n="table_outcome">Esito</th>
+                                <th class="py-2.5 px-3 text-right" data-i18n="table_pl">P/L Netto</th>
                             </tr>
                         </thead>
                         <tbody id="user-history-tbody" class="divide-y divide-slate-800/60 font-medium">
@@ -305,7 +315,7 @@
         AtmBet &copy; 2026. Cruscotto Rendimento Certificato.
     </footer>
 
-    <!-- LOGICA DASHBOARD CON DATE DINAMICHE -->
+    <!-- LOGICA DASHBOARD CON DATE DINAMICHE E MULTILINGUA -->
     <script>
         const PRIMARY_KEY = 'tipster_tracker_v1';
         const ATMBET_KEY = 'atmbet_bets_data';
@@ -317,6 +327,39 @@
         let latestNetProfitUnits = 0;
         let currentMultiplier = 50; 
         let currentSimStartDate = '2026-10-25'; 
+
+        // GESTIONE MULTILINGUA (i18n)
+        let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
+                if (!response.ok) return;
+                const t = await response.json();
+                
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerText = t[key];
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (t[key]) el.placeholder = t[key];
+                });
+
+                const selector = document.getElementById('lang-selector');
+                if (selector) selector.value = lang;
+
+                localStorage.setItem('atmbet_lang', lang);
+                currentLang = lang;
+            } catch (e) {
+                console.error("Errore caricamento traduzioni:", e);
+            }
+        }
+
+        function changeLanguage(lang) {
+            loadTranslations(lang);
+        }
 
         function getLocalDateString(d) {
             const year = d.getFullYear();
@@ -773,7 +816,7 @@
                     <td class="py-2.5 px-3 text-center">
                         ${isWon 
                             ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
-                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-rose-500/30">PERSA</span>'}
+                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'}
                     </td>
                     <td class="py-2.5 px-3 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
                         ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
@@ -786,6 +829,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             setupDynamicDatePresets();
             initDashboard();
+            loadTranslations(currentLang);
         });
     </script>
 </body>
