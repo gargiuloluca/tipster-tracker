@@ -3273,7 +3273,125 @@
 
             lucide.createIcons();
         }
+        
+        function renderPublicHistory() {
+            const mobileContainer = document.getElementById('public-history-mobile-container');
+            const desktopTbody = document.getElementById('public-history-tbody');
+            if (!mobileContainer || !desktopTbody) return;
 
+            mobileContainer.innerHTML = '';
+            desktopTbody.innerHTML = '';
+
+            let completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
+
+            if (currentTipsterPlanFilter === 'pure') {
+                completed = completed.filter(b => b.is_pure === true);
+            }
+
+            if (currentPublicHistFilter === 'won') completed = completed.filter(b => b.status === 'won');
+            if (currentPublicHistFilter === 'lost') completed = completed.filter(b => b.status === 'lost');
+
+            const totalInFilter = completed.length;
+            const counterText = document.getElementById('history-counter-text');
+            const btnLoadMore = document.getElementById('btn-load-more-history');
+
+            if (completed.length === 0) {
+                mobileContainer.innerHTML = `<div class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna giocata nello storico pubblico per questo filtro.</div>`;
+                desktopTbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna giocata nello storico pubblico per questo filtro.</td></tr>`;
+                if (counterText) counterText.innerText = "0 pronostici presenti";
+                if (btnLoadMore) btnLoadMore.classList.add('hidden');
+                return;
+            }
+
+            const visibleSlice = completed.slice(0, historyDisplayLimit);
+            if (counterText) {
+                counterText.innerText = `Visualizzati ${visibleSlice.length} di ${totalInFilter} pronostici`;
+            }
+
+            if (btnLoadMore) {
+                if (visibleSlice.length >= totalInFilter) {
+                    btnLoadMore.classList.add('hidden');
+                } else {
+                    btnLoadMore.classList.remove('hidden');
+                }
+            }
+
+            visibleSlice.forEach(bet => {
+                const isWon = bet.status === 'won';
+                const s = bet.stake || 1.0;
+                const pl = isWon ? (bet.odds - 1) * s : -s;
+
+                const cardMob = document.createElement('div');
+                cardMob.className = `p-3 rounded-xl border transition ${
+                    isWon 
+                        ? 'bg-emerald-500/[0.04] border-emerald-500/25' 
+                        : 'bg-rose-500/[0.04] border-rose-500/25'
+                }`;
+
+                cardMob.innerHTML = `
+                    <div class="flex items-center justify-between text-[10px] text-slate-400 mb-1.5">
+                        <span class="font-mono text-slate-500">${bet.event_date}</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-slate-400 font-semibold">${bet.league}</span>
+                            ${isWon 
+                                ? '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
+                                : '<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'}
+                        </div>
+                    </div>
+                    
+                    <div class="font-bold text-white text-xs leading-snug mb-1">
+                        ${bet.match_name}
+                    </div>
+
+                    <div class="text-[10px] mb-2">
+                        <span class="${bet.is_pure ? 'text-emerald-400' : 'text-blue-400'} font-bold">${bet.public_brand}</span>
+                    </div>
+
+                    <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800/80 flex items-center justify-between">
+                        <div>
+                            <div class="text-emerald-400 font-bold text-xs">${bet.prediction}</div>
+                            <div class="text-[9px] text-slate-400 font-mono">Quota: <span class="text-white font-bold">${parseFloat(bet.odds).toFixed(2)}</span> • Stake: <span class="text-slate-300">${bet.stake.toFixed(1)}u</span></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[9px] text-slate-500 uppercase tracking-wider font-mono">P/L Netto</div>
+                            <div class="font-mono font-black text-xs sm:text-sm ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
+                                ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
+                            </div>
+                        </div>
+                    </div>
+                `;
+                mobileContainer.appendChild(cardMob);
+
+                const tr = document.createElement('tr');
+                tr.className = isWon 
+                    ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" 
+                    : "bg-rose-500/[0.02] hover:bg-rose-500/[0.05] transition";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
+                    <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
+                        <div class="break-words">${bet.match_name}</div>
+                        <div class="text-[9px] font-normal text-slate-500">${bet.league} • <span class="${bet.is_pure ? 'text-emerald-400 font-semibold' : 'text-blue-400 font-semibold'}">${bet.public_brand}</span></div>
+                    </td>
+                    <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
+                        <div class="break-words">${bet.prediction}</div>
+                        <div class="text-[9px] text-slate-500">${bet.market}</div>
+                    </td>
+                    <td class="py-2.5 px-3 font-mono font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-400">${bet.stake.toFixed(1)}u</td>
+                    <td class="py-2.5 px-3 text-center">
+                        ${isWon 
+                            ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
+                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'}
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
+                    </td>
+                `;
+                desktopTbody.appendChild(tr);
+            });
+        }
+        
         function setTipsterPlanFilter(type, element) {
             currentTipsterPlanFilter = type;
             historyDisplayLimit = 15;
@@ -3304,7 +3422,7 @@
             renderPublicHistory();
         }
 
-        document.addEventListener('DOMContentLoaded', async () => {
+            document.addEventListener('DOMContentLoaded', async () => {
             renderNavbarUserStatus();
             setupDynamicDatePresets();
             cachedAllBets = await fetchAllBets();
@@ -3321,11 +3439,18 @@
             calculateSimulationPerformance();
             calculatePlansComparison();
             renderPublicCards();
-            renderPublicHistory();
+            
+            // Assicurati che questa funzione esista o commentala se non usata:
+            if (typeof renderPublicHistory === 'function') {
+                renderPublicHistory();
+            }
+            
             lucide.createIcons();
             
+            // Caricamento traduzioni finale
             await loadTranslations(currentLang);
         });
+
     </script>
 </body>
 </html>
