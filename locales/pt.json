@@ -210,12 +210,12 @@
   "success_note_desc": "O nome de utilizador do Telegram permite-nos habilitar instantaneamente o teu perfil e desbloquear o acesso ao canal VIP associado ao teu plano.",
   "success_submit_btn": "Ativar Conta & Entrar no Painel",
 
-  "footer_responsible_gaming": "Jogo Responsável",
+    "footer_responsible_gaming": "Jogo Responsável",
   "footer_adm": "ADM (Agência de Alfândegas e Monopólios)",
   "footer_disclaimer_1": "O jogo é proibido a menores de 18 anos e pode causar dependência patológica. Joga com moderação.",
   "footer_disclaimer_2": "Se tens um problema com o jogo, liga para o",
-  "footer_disclaimer_3": "(anónimo e gratuito)"
-    "hero_badge": "Verificação Oficial de Resultados via API-Football",
+  "footer_disclaimer_3": "(anónimo e gratuito)",
+  "hero_badge": "Verificação Oficial de Resultados via API-Football",
   "hero_title": "Não apostes ao acaso.<br><span class=\"text-atm-green\">Investe em Dados.</span>",
   "hero_subtitle": "Modelos quantitativos proprietários para identificar desalinhamentos estatísticos de odds antes da variação de mercado. Disciplina matemática, zero jogo emocional.",
   "welcome_offer_tag": "OFERTA DE BENVENIDA",
