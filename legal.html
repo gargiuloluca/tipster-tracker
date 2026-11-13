@@ -59,9 +59,19 @@
                     <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-9 w-auto">
                     <span class="text-base sm:text-lg font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
                 </div>
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Selettore Lingua -->
+                    <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 font-sans cursor-pointer">
+                        <option value="it">🇮🇹 IT</option>
+                        <option value="en">🇬🇧 EN</option>
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="pt">🇵🇹 PT</option>
+                        <option value="fr">🇫🇷 FR</option>
+                        <option value="de">🇩🇪 DE</option>
+                    </select>
+
                     <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition">
-                        <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-emerald-400"></i> Torna alla Vetrina
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-emerald-400"></i> <span data-i18n="legal_nav_back">Torna alla Vetrina</span>
                     </a>
                 </div>
             </div>
@@ -76,11 +86,11 @@
                     <i data-lucide="shield-check" class="w-6 h-6"></i>
                 </div>
                 <div class="space-y-2">
-                    <div class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider">
+                    <div class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg uppercase tracking-wider" data-i18n="legal_hero_badge">
                         Compliance & Trasparenza
                     </div>
-                    <h1 class="text-xl sm:text-2xl font-black text-white tracking-wide">Note Legali, Conformità e Disclaimer di AtmBet</h1>
-                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    <h1 class="text-xl sm:text-2xl font-black text-white tracking-wide" data-i18n="legal_hero_title">Note Legali, Conformità e Disclaimer di AtmBet</h1>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed" data-i18n="legal_hero_desc">
                         La trasparenza è il pilastro del nostro approccio quantitativo. In questa sezione spieghiamo nel dettaglio la natura dei nostri servizi, il rispetto delle normative vigenti, la sicurezza dell'infrastruttura e le garanzie a tutela degli utenti.
                     </p>
                 </div>
@@ -95,13 +105,13 @@
                         <div class="p-2 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
                             <i data-lucide="cpu" class="w-5 h-5"></i>
                         </div>
-                        <h2 class="text-sm font-bold text-white">1. Natura del Servizio (Tipster Tracking)</h2>
+                        <h2 class="text-sm font-bold text-white" data-i18n="legal_card1_title">1. Natura del Servizio (Tipster Tracking)</h2>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="legal_card1_text">
                         <strong>AtmBet</strong> è una piattaforma digitale e un software di monitoraggio statistico (Tipster Tracker) progettato per l'analisi quantitativa, il tracciamento dei dati sportivi storici e l'elaborazione di metriche di rendimento (Yield, ROI, Win Rate).
                     </p>
                     <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
-                        ⚠️ <strong>Chiarimento operativo:</strong> Non siamo un bookmaker, non gestiamo conti di gioco, non raccogliamo scommesse e non movimentiamo denaro o capitali di terzi.
+                        ⚠️ <span data-i18n="legal_card1_box"><strong>Chiarimento operativo:</strong> Non siamo un bookmaker, non gestiamo conti di gioco, non raccogliamo scommesse e non movimentiamo denaro o capitali di terzi.</span>
                     </div>
                 </div>
 
@@ -111,13 +121,13 @@
                         <div class="p-2 bg-blue-500/10 rounded-xl border border-blue-500/20">
                             <i data-lucide="lock" class="w-5 h-5"></i>
                         </div>
-                        <h2 class="text-sm font-bold text-white">2. Sicurezza Infrastruttura & GDPR</h2>
+                        <h2 class="text-sm font-bold text-white" data-i18n="legal_card2_title">2. Sicurezza Infrastruttura & GDPR</h2>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        La gestione degli account, dei piani e dei codici d'accesso (tramite <code>users.json</code> e <code>bets.json</code>) avviene attraverso un sistema di sincronizzazione protetto e crittografato tramite API dirette con protocolli di autenticazione sicuri.
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="legal_card2_text">
+                        La gestione degli account, dei piani e dei codici d'accesso avviene attraverso un sistema di sincronizzazione protetto e crittografato tramite API dirette con protocolli di autenticazione sicuri.
                     </p>
                     <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
-                        🔒 <strong>Privacy:</strong> Rispettiamo rigorosamente i principi del Regolamento UE (GDPR) in materia di protezione dei dati personali. Nessun dato sensibile viene ceduto a terzi.
+                        🔒 <span data-i18n="legal_card2_box"><strong>Privacy:</strong> Rispettiamo rigorosamente i principi del Regolamento UE (GDPR) in materia di protezione dei dati personali. Nessun dato sensibile viene ceduto a terzi.</span>
                     </div>
                 </div>
 
@@ -127,13 +137,13 @@
                         <div class="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20">
                             <i data-lucide="bot" class="w-5 h-5"></i>
                         </div>
-                        <h2 class="text-sm font-bold text-white">3. Canali e Comunicazione Informativa</h2>
+                        <h2 class="text-sm font-bold text-white" data-i18n="legal_card3_title">3. Canali e Comunicazione Informativa</h2>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        Le informazioni e le selezioni statistiche condivise attraverso i nostri canali Telegram dedicati (Pure Signal, All-Inclusive e Free Signal) hanno unicamente finalità informative, educative e di reportistica statistica.
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="legal_card3_text">
+                        Le informazioni e le selezioni statistiche condivise attraverso i nostri canali Telegram dedicati hanno unicamente finalità informative, educative e di reportistica statistica.
                     </p>
                     <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
-                        🎯 <strong>Autonomia:</strong> Gli utenti mantengono il totale e assoluto controllo sulle proprie scelte personali e sulle eventuali attività autonome esterne alla piattaforma.
+                        🎯 <span data-i18n="legal_card3_box"><strong>Autonomia:</strong> Gli utenti mantengono il totale e assoluto controllo sulle proprie scelte personali e sulle eventuali attività autonome esterne alla piattaforma.</span>
                     </div>
                 </div>
 
@@ -143,13 +153,13 @@
                         <div class="p-2 bg-rose-500/10 rounded-xl border border-rose-500/20">
                             <i data-lucide="alert-triangle" class="w-5 h-5"></i>
                         </div>
-                        <h2 class="text-sm font-bold text-white">4. Disclaimer e Limitazione di Responsabilità</h2>
+                        <h2 class="text-sm font-bold text-white" data-i18n="legal_card4_title">4. Disclaimer e Limitazione di Responsabilità</h2>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="legal_card4_text">
                         I dati statistici passati, i tassi di successo (Win Rate) e i profitti storici registrati dai vari fornitori all'interno della console rappresentano simulazioni basate su dati oggettivi passati e <strong>non costituiscono alcuna garanzia matematica di profitto futuro</strong>.
                     </p>
                     <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
-                        📊 <strong>Responsabilità:</strong> L'attività legata all'analisi sportiva comporta rischi statistici. Si raccomanda un approccio basato su una rigorosa gestione del budget personale.
+                        📊 <span data-i18n="legal_card4_box"><strong>Responsabilità:</strong> L'attività legata all'analisi sportiva comporta rischi statistici. Si raccomanda un approccio basato su una rigorosa gestione del budget personale.</span>
                     </div>
                 </div>
 
@@ -159,13 +169,13 @@
                         <div class="p-2 bg-purple-500/10 rounded-xl border border-purple-500/20">
                             <i data-lucide="shield" class="w-5 h-5"></i>
                         </div>
-                        <h2 class="text-sm font-bold text-white">5. Proprietà Intellettuale</h2>
+                        <h2 class="text-sm font-bold text-white" data-i18n="legal_card5_title">5. Proprietà Intellettuale</h2>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="legal_card5_text">
                         Tutti i contenuti, i loghi, il codice sorgente, le interfacce grafiche e i modelli di analisi statistica presenti su <strong>AtmBet</strong> sono di esclusiva proprietà della piattaforma o concessi in licenza. È vietata la riproduzione non autorizzata o la rivendita dei segnali protetti da abbonamento.
                     </p>
                     <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
-                        🛡️ <strong>Tutela:</strong> Eventuali violazioni o usi impropri dei codici di accesso e dei flussi Telegram protetti comporteranno la revoca immediata dell'abbonamento senza rimborso.
+                        🛡️ <span data-i18n="legal_card5_box"><strong>Tutela:</strong> Eventuali violazioni o usi impropri dei codici di accesso e dei flussi Telegram protetti comporteranno la revoca immediata dell'abbonamento senza rimborso.</span>
                     </div>
                 </div>
 
@@ -175,13 +185,13 @@
                         <div class="p-2 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
                             <i data-lucide="database" class="w-5 h-5"></i>
                         </div>
-                        <h2 class="text-sm font-bold text-white">6. Fonti Dati e Accuratezza</h2>
+                        <h2 class="text-sm font-bold text-white" data-i18n="legal_card6_title">6. Fonti Dati e Accuratezza</h2>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
+                    <p class="text-xs text-slate-400 leading-relaxed" data-i18n="legal_card6_text">
                         I risultati delle partite e le verifiche degli esiti vengono elaborati interamente tramite integrazioni automatizzate con fornitori di dati sportivi di terze parti (tra cui API-Football). AtmBet declina ogni responsabilità per eventuali errori o ritardi di aggiornamento imputabili alle API esterne.
                     </p>
                     <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl text-[11px] text-slate-300 font-medium">
-                        ⚙️ <strong>Aggiornamenti:</strong> Il sistema effettua controlli continui per garantire la massima coerenza e trasparenza dello storico esiti.
+                        ⚙️ <span data-i18n="legal_card6_box"><strong>Aggiornamenti:</strong> Il sistema effettua controlli continui per garantire la massima coerenza e trasparenza dello storico esiti.</span>
                     </div>
                 </div>
 
@@ -189,13 +199,13 @@
 
             <!-- FOOTER INFO BOX -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-center space-y-3">
-                <div class="text-xs font-bold text-white">Hai domande sulla nostra conformità o sulla sicurezza dei servizi?</div>
-                <p class="text-xs text-slate-400 max-w-lg mx-auto">
+                <div class="text-xs font-bold text-white" data-i18n="legal_box_title">Hai domande sulla nostra conformità o sulla sicurezza dei servizi?</div>
+                <p class="text-xs text-slate-400 max-w-lg mx-auto" data-i18n="legal_box_desc">
                     Il team di AtmBet è a disposizione per chiarimenti tecnici, supporto sugli abbonamenti e trasparenza operativa.
                 </p>
                 <div class="pt-2">
                     <a href="index.html" class="inline-flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/10">
-                        <i data-lucide="home" class="w-4 h-4"></i> Torna alla Home
+                        <i data-lucide="home" class="w-4 h-4"></i> <span data-i18n="legal_box_btn">Torna alla Home</span>
                     </a>
                 </div>
             </div>
@@ -207,10 +217,10 @@
         <!-- LINK GIOCO RESPONSABILE & ADM -->
         <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-semibold">
             <a href="https://www.gioca-responsabile.it/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
-                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> Gioco Responsabile
+                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> <span data-i18n="footer_responsible_gaming">Gioco Responsabile</span>
             </a>
             <a href="https://www.adm.gov.it/portale/giochi" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition flex items-center gap-1.5">
-                <i data-lucide="landmark" class="w-4 h-4 text-amber-500"></i> ADM (Agenzia Dogane e Monopoli)
+                <i data-lucide="landmark" class="w-4 h-4 text-amber-500"></i> <span data-i18n="footer_adm">ADM (Agenzia Dogane e Monopoli)</span>
             </a>
             <div class="flex items-center gap-1.5 text-rose-400 font-bold bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20">
                 <i data-lucide="ban" class="w-3.5 h-3.5"></i> 18+
@@ -218,8 +228,8 @@
         </div>
 
         <div class="text-[11px] text-slate-500 max-w-xl mx-auto space-y-2 leading-relaxed">
-            <div>Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.</div>
-            <div class="text-slate-400 font-medium">Se hai un problema con il gioco d'azzardo, chiama il <strong class="text-emerald-400 font-mono">Telefono Verde: 800 558 822</strong> (anonimo e gratuito)</div>
+            <div data-i18n="footer_disclaimer_1">Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.</div>
+            <div class="text-slate-400 font-medium"><span data-i18n="footer_disclaimer_2">Se hai un problema con il gioco d'azzardo, chiama il</span> <strong class="text-emerald-400 font-mono">Telefono Verde: 800 558 822</strong> <span data-i18n="footer_disclaimer_3">(anonimo e gratuito)</span></div>
         </div>
 
         <div>
@@ -227,30 +237,66 @@
         </div>
         
         <div class="flex items-center justify-center gap-4 text-[11px] text-slate-500">
-            <a href="index.html" class="hover:text-slate-400 transition">Home</a>
+            <a href="index.html" class="hover:text-slate-400 transition" data-i18n="legal_footer_home">Home</a>
             <span>•</span>
-            <a href="contatti.html" class="hover:text-emerald-400 transition">Contatti</a>
+            <a href="contatti.html" class="hover:text-emerald-400 transition" data-i18n="legal_footer_contacts">Contatti</a>
             <span>•</span>
-            <a href="index.html#piani" class="hover:text-slate-400 transition">Piani VIP</a>
+            <a href="index.html#piani" class="hover:text-slate-400 transition" data-i18n="legal_footer_plans">Piani VIP</a>
             <span>•</span>
-            <a href="auth.html" class="hover:text-slate-400 transition">Area Utente</a>
+            <a href="auth.html" class="hover:text-slate-400 transition" data-i18n="legal_footer_user">Area Utente</a>
             <span>•</span>
             <a href="legal.html" class="text-amber-400 font-semibold transition flex items-center gap-1 font-mono">
-                <i data-lucide="shield-check" class="w-3 h-3 text-amber-400"></i> Note Legali
+                <i data-lucide="shield-check" class="w-3 h-3 text-amber-400"></i> <span data-i18n="legal_footer_legal">Note Legali</span>
             </a>
             <span>•</span>
             <a href="collaborazioni.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
-                <i data-lucide="award" class="w-3 h-3 text-amber-500"></i> Collaborazioni
+                <i data-lucide="award" class="w-3 h-3 text-amber-500"></i> <span data-i18n="legal_footer_collab">Collaborazioni</span>
             </a>
             <span>•</span>
             <a href="admin.html" class="hover:text-emerald-400 transition flex items-center gap-1 font-mono">
-                <i data-lucide="lock" class="w-3 h-3 text-slate-600"></i> Console Gestore
+                <i data-lucide="lock" class="w-3 h-3 text-slate-600"></i> <span data-i18n="legal_footer_admin">Console Gestore</span>
             </a>
         </div>
     </footer>
 
+    <!-- LOGICA MULTILINGUA (i18n) -->
     <script>
-        lucide.createIcons();
+        let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
+                if (!response.ok) return;
+                const t = await response.json();
+                
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerText = t[key];
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (t[key]) el.placeholder = t[key];
+                });
+
+                const selector = document.getElementById('lang-selector');
+                if (selector) selector.value = lang;
+
+                localStorage.setItem('atmbet_lang', lang);
+                currentLang = lang;
+            } catch (e) {
+                console.error("Errore caricamento traduzioni:", e);
+            }
+        }
+
+        function changeLanguage(lang) {
+            loadTranslations(lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadTranslations(currentLang);
+        });
     </script>
 </body>
 </html>
