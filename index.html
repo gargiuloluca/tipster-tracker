@@ -10,21 +10,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#22c55e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="AtmBet">
-<link rel="apple-touch-icon" href="logo.png">
+    <meta name="theme-color" content="#22c55e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AtmBet">
+    <link rel="apple-touch-icon" href="logo.png">
 
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(reg => console.log('ServiceWorker registrato con successo:', reg.scope))
-        .catch(err => console.log('Registrazione ServiceWorker fallita:', err));
-    });
-  }
-</script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('ServiceWorker registrato con successo:', reg.scope))
+            .catch(err => console.log('Registrazione ServiceWorker fallita:', err));
+        });
+      }
+    </script>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -101,7 +101,7 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
 
-        <!-- 1. NAVBAR IBRIDA RESPONSIVE OTTIMIZZATA PER MOBILE -->
+    <!-- 1. NAVBAR IBRIDA RESPONSIVE OTTIMIZZATA PER MOBILE -->
     <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -252,11 +252,11 @@
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Verifica Risultati Ufficiale via API-Football
             </div>
             
-            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight" data-i18n="hero_main_title">
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
                 Non scommettere sul caso.<br><span class="text-atm-green">Investi nei Dati.</span>
             </h1>
             
-            <p class="text-xs sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto px-2" data-i18n="hero_main_desc">
+            <p class="text-xs sm:text-base text-slate-400 leading-relaxed max-w-2xl mx-auto px-2">
                 Modelli quantitativi proprietari per identificare disallineamenti statistici di quota prima della variazione di mercato. Disciplina matematica, zero azzardo emotivo.
             </p>
             
@@ -264,17 +264,17 @@
                 <div class="inline-block bg-slate-900 border border-slate-800 p-5 rounded-2xl max-w-md w-full shadow-2xl relative overflow-hidden">
                     <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
                     <div class="flex items-center justify-between text-[11px] text-slate-400 mb-2 border-b border-slate-800 pb-2 relative z-10">
-                        <span class="flex items-center gap-1 text-emerald-400 font-bold"><i data-lucide="gift" class="w-3.5 h-3.5"></i> <span data-i18n="hero_badge_welcome">OFFERTA BENVENUTO</span></span>
-                        <span class="font-mono text-slate-500" data-i18n="hero_no_card">Zero Carta Richiesta</span>
+                        <span class="flex items-center gap-1 text-emerald-400 font-bold"><i data-lucide="gift" class="w-3.5 h-3.5"></i> OFFERTA BENVENUTO</span>
+                        <span class="font-mono text-slate-500">Zero Carta Richiesta</span>
                     </div>
-                    <div class="text-base sm:text-lg font-black text-white text-left mb-1 relative z-10" data-i18n="hero_trial_title">7 Giorni VIP + 5 Crediti Omaggio</div>
-                    <p class="text-[11px] text-slate-400 text-left mb-3.5 relative z-10" data-i18n="hero_trial_desc">Attiva la prova gratuita per sbloccare le quote reali, i mercati e le analisi dettagliate nel tuo cruscotto personale.</p>
+                    <div class="text-base sm:text-lg font-black text-white text-left mb-1 relative z-10">7 Giorni VIP + 5 Crediti Omaggio</div>
+                    <p class="text-[11px] text-slate-400 text-left mb-3.5 relative z-10">Attiva la prova gratuita per sbloccare le quote reali, i mercati e le analisi dettagliate nel tuo cruscotto personale.</p>
                     <div class="flex items-center gap-2 relative z-10">
                         <a href="https://buy.stripe.com/14AbJ31uX95f8PHd5P3Nm04" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20">
-                            <span data-i18n="hero_btn_trial">Attiva Prova Gratuita (7 Giorni)</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            Attiva Prova Gratuita (7 Giorni) <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
                         <button type="button" onclick="openLicenseModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 px-3 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1">
-                            <i data-lucide="key" class="w-3.5 h-3.5"></i> <span data-i18n="hero_btn_redeem">Riscatta</span>
+                            <i data-lucide="key" class="w-3.5 h-3.5"></i> Riscatta
                         </button>
                     </div>
                 </div>
@@ -288,19 +288,19 @@
                     <i data-lucide="info" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <div id="tg-banner-title" class="text-sm font-bold text-white flex items-center gap-2" data-i18n="tg_banner_title">
+                    <div id="tg-banner-title" class="text-sm font-bold text-white flex items-center gap-2">
                         Sei già abbonato o hai un codice?
                     </div>
-                    <p id="tg-banner-desc" class="text-xs text-slate-400 mt-0.5" data-i18n="tg_banner_desc">
+                    <p id="tg-banner-desc" class="text-xs text-slate-400 mt-0.5">
                         Clicca su <strong class="text-amber-400">"Codice Sblocco"</strong> o <strong class="text-white">"Accedi"</strong> in alto a destra per attivare subito il tuo accesso Telegram VIP.
                     </p>
                 </div>
             </div>
             <div class="flex items-center gap-2 w-full sm:w-auto shrink-0" id="tg-action-btn-container">
                 <button type="button" onclick="openLicenseModal()" class="flex-1 sm:flex-initial bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/10">
-                    <i data-lucide="key" class="w-3.5 h-3.5"></i> <span data-i18n="tg_btn_code">Inserisci Codice</span>
+                    <i data-lucide="key" class="w-3.5 h-3.5"></i> Inserisci Codice
                 </button>
-                <a href="auth.html" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5" data-i18n="nav_login">
+                <a href="auth.html" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5">
                     Accedi
                 </a>
             </div>
@@ -312,10 +312,10 @@
             
             <div class="text-center max-w-2xl mx-auto space-y-2 relative z-10">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] sm:text-[11px] font-mono uppercase tracking-widest font-bold">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> <span data-i18n="method_badge">Protocollo Matematico Certificato</span>
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Protocollo Matematico Certificato
                 </span>
-                <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight" data-i18n="method_title">Perché i Dati Batteranno Sempre l'Istinto</h2>
-                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed" data-i18n="method_subtitle">
+                <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Perché i Dati Batteranno Sempre l'Istinto</h2>
+                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
                     Il 97% degli scommettitori brucia il proprio capitale giocando a sensazione. Noi trattiamo il betting sportivo esattamente come un fondo di investimento quantitativo.
                 </p>
             </div>
@@ -325,48 +325,48 @@
                     <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold border border-emerald-500/20">
                         <i data-lucide="trending-up" class="w-4 h-4"></i>
                     </div>
-                    <h3 class="text-sm font-bold text-white" data-i18n="method_card1_title">1. Vantaggio Matematico (+EV)</h3>
-                    <p class="text-slate-400 leading-relaxed" data-i18n="method_card1_desc">Analizziamo i flussi di mercato e utilizziamo modelli statistici proprietari: entriamo a mercato solo quando la quota offerta nasconde un disallineamento di valore reale.</p>
+                    <h3 class="text-sm font-bold text-white">1. Vantaggio Matematico (+EV)</h3>
+                    <p class="text-slate-400 leading-relaxed">Analizziamo i flussi di mercato e utilizziamo modelli statistici proprietari: entriamo a mercato solo quando la quota offerta nasconde un disallineamento di valore reale.</p>
                 </div>
                 
                 <div class="bg-slate-950/90 p-5 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition space-y-2.5 shadow-lg">
                     <div class="w-9 h-9 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center font-bold border border-amber-500/20">
                         <i data-lucide="lock" class="w-4 h-4"></i>
                     </div>
-                    <h3 class="text-sm font-bold text-white" data-i18n="method_card2_title">2. Money Management Ferreo</h3>
-                    <p class="text-slate-400 leading-relaxed" data-i18n="method_card2_desc">Zero raddoppi emotivi o recuperi scriteriati. Utilizziamo esclusivamente puntate a Unità Fissa (1.0u) per proteggere la cassa e garantire una crescita costante nel tempo.</p>
+                    <h3 class="text-sm font-bold text-white">2. Money Management Ferreo</h3>
+                    <p class="text-slate-400 leading-relaxed">Zero raddoppi emotivi o recuperi scriteriati. Utilizziamo esclusivamente puntate a Unità Fissa (1.0u) per proteggere la cassa e garantire una crescita costante nel tempo.</p>
                 </div>
                 
                 <div class="bg-slate-950/90 p-5 rounded-2xl border border-slate-800 hover:border-blue-500/40 transition space-y-2.5 shadow-lg">
                     <div class="w-9 h-9 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center font-bold border border-blue-500/20">
                         <i data-lucide="cpu" class="w-4 h-4"></i>
                     </div>
-                    <h3 class="text-sm font-bold text-white" data-i18n="method_card3_title">3. Trasparenza & Sincronizzazione API</h3>
-                    <p class="text-slate-400 leading-relaxed" data-i18n="method_card3_desc">Ogni singolo pronostico viene registrato prima del fischio d'inizio e verificato in automatico tramite sincronizzazione dati protetta. Zero margini di manipolazione.</p>
+                    <h3 class="text-sm font-bold text-white">3. Trasparenza & Sincronizzazione API</h3>
+                    <p class="text-slate-400 leading-relaxed">Ogni singolo pronostico viene registrato prima del fischio d'inizio e verificato in automatico tramite sincronizzazione dati protetta. Zero margini di manipolazione.</p>
                 </div>
             </div>
 
             <!-- COMPARAZIONE PERSUASIVA -->
             <div class="mt-6 pt-6 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs relative z-10">
                 <div class="bg-rose-500/[0.03] border border-rose-500/20 p-4 sm:p-5 rounded-2xl space-y-3">
-                    <div class="text-rose-400 font-bold flex items-center gap-2 text-xs uppercase tracking-wider" data-i18n="comp_traditional_title">
+                    <div class="text-rose-400 font-bold flex items-center gap-2 text-xs uppercase tracking-wider">
                         <i data-lucide="x-circle" class="w-4 h-4"></i> Scommettitore Tradizionale
                     </div>
                     <ul class="text-slate-400 space-y-2 text-xs leading-relaxed">
-                        <li class="flex items-start gap-2"><span>❌</span> <span data-i18n="comp_trad_1">Affida le giocate al tifo, all'intuito o alla fortuna del momento.</span></li>
-                        <li class="flex items-start gap-2"><span>❌</span> <span data-i18n="comp_trad_2">Alza lo stake dopo una perdita per rifarsi, azzerando il budget.</span></li>
-                        <li class="flex items-start gap-2"><span>❌</span> <span data-i18n="comp_trad_3">Insegue multiple irrealistiche con probabilità di successo vicine allo zero.</span></li>
+                        <li class="flex items-start gap-2"><span>❌</span> <span>Affida le giocate al tifo, all'intuito o alla fortuna del momento.</span></li>
+                        <li class="flex items-start gap-2"><span>❌</span> <span>Alza lo stake dopo una perdita per rifarsi, azzerando il budget.</span></li>
+                        <li class="flex items-start gap-2"><span>❌</span> <span>Insegue multiple irrealistiche con probabilità di successo vicine allo zero.</span></li>
                     </ul>
                 </div>
 
                 <div class="bg-emerald-500/[0.03] border border-emerald-500/20 p-4 sm:p-5 rounded-2xl space-y-3 shadow-lg shadow-emerald-500/5">
-                    <div class="text-emerald-400 font-bold flex items-center gap-2 text-xs uppercase tracking-wider" data-i18n="comp_investor_title">
+                    <div class="text-emerald-400 font-bold flex items-center gap-2 text-xs uppercase tracking-wider">
                         <i data-lucide="check-circle-2" class="w-4 h-4"></i> Investitore AtmBet
                     </div>
                     <ul class="text-slate-300 space-y-2 text-xs leading-relaxed">
-                        <li class="flex items-start gap-2"><span>✅</span> <span data-i18n="comp_inv_1">Sfrutta un vantaggio statistico calcolato su migliaia di simulazioni.</span></li>
-                        <li class="flex items-start gap-2"><span>✅</span> <span data-i18n="comp_inv_2">Gestisce il capitale con una disciplina matematica impeccabile.</span></li>
-                        <li class="flex items-start gap-2"><span>✅</span> <span data-i18n="comp_inv_3">Copia in pochi click segnali d'élite ad alta probabilità (&ge;65%).</span></li>
+                        <li class="flex items-start gap-2"><span>✅</span> <span>Sfrutta un vantaggio statistico calcolato su migliaia di simulazioni.</span></li>
+                        <li class="flex items-start gap-2"><span>✅</span> <span>Gestisce il capitale con una disciplina matematica impeccabile.</span></li>
+                        <li class="flex items-start gap-2"><span>✅</span> <span>Copia in pochi click segnali d'élite ad alta probabilità (&ge;65%).</span></li>
                     </ul>
                 </div>
             </div>
@@ -380,48 +380,48 @@
                         <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
                             <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
                         </span>
-                        <h2 class="text-sm sm:text-base font-black text-white" data-i18n="nav_analysis">Analisi & Performance</h2>
+                        <h2 class="text-sm sm:text-base font-black text-white">Analisi & Performance</h2>
                     </div>
-                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="sim_main_desc">Verifica i guadagni nel tempo e confronta in tempo reale i risultati tra Selection e Signal.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Verifica i guadagni nel tempo e confronta in tempo reale i risultati tra Selection e Signal.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
                     <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
-                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold" data-i18n="sim_day_lbl">Giorno:</span>
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold">Giorno:</span>
                         <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)" oninput="applyCustomCalendarDate(this.value)"
                             class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
                     </div>
 
                     <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
-                        <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_today">Oggi</button>
-                        <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_yesterday">Ieri</button>
-                        <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_7days">Ultimi 7gg</button>
-                        <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_all">Tutto</button>
+                        <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi</button>
+                        <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ieri</button>
+                        <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ultimi 7gg</button>
+                        <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2.5 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Tutto</button>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_profit">Profitto Periodo</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
                     <div id="sim-profit-units" class="text-xl sm:text-2xl font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
                     <div id="sim-profit-fiat" class="text-[11px] font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_roi">Yield / ROI</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Yield / ROI</span>
                     <div id="sim-roi" class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">0.0%</div>
-                    <span id="sim-roi-sub" class="text-[9px] text-slate-500" data-i18n="sim_metric_closed">Giocate chiuse</span>
+                    <span id="sim-roi-sub" class="text-[9px] text-slate-500">Giocate chiuse</span>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_winrate">Win Rate</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
                     <div id="sim-winrate" class="text-xl sm:text-2xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
-                    <span id="sim-winrate-sub" class="text-[9px] text-slate-500" data-i18n="sim_metric_accuracy">Accuratezza esiti</span>
+                    <span id="sim-winrate-sub" class="text-[9px] text-slate-500">Accuratezza esiti</span>
                 </div>
 
                 <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_resolved">Operazioni Chiuse</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Operazioni Chiuse</span>
                     <div id="sim-resolved-count" class="text-xl sm:text-2xl font-mono font-black text-slate-200 mt-0.5">0</div>
                     <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
                 </div>
@@ -530,12 +530,12 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
                 <div>
                     <h2 class="text-lg sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> <span data-i18n="picks_section_title">Selezioni Operative di Oggi</span>
+                        <i data-lucide="flame" class="w-5 h-5 text-emerald-400"></i> Selezioni Operative di Oggi
                     </h2>
-                    <p class="text-xs text-slate-400 mt-0.5" data-i18n="picks_section_desc">Pronostici della giornata odierna attualmente in corso o in attesa di inizio.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Pronostici della giornata odierna attualmente in corso o in attesa di inizio.</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-bold" data-i18n="picks_auto_verify">Verifica Automatica Attiva</span>
+                    <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20 font-bold">Verifica Automatica Attiva</span>
                     <div id="cards-scroll-arrows" class="hidden items-center gap-1">
                         <button onclick="scrollPublicCards('left')" class="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition">
                             <i data-lucide="chevron-left" class="w-4 h-4"></i>
@@ -549,7 +549,7 @@
 
             <div class="relative">
                 <div id="public-bets-container" class="flex gap-4 overflow-x-auto custom-cards-scroll pb-3 pt-1 scroll-smooth snap-x snap-mandatory"></div>
-                <div id="cards-mobile-scroll-hint" class="text-[10px] text-slate-500 font-mono text-right sm:hidden" data-i18n="picks_scroll_hint">
+                <div id="cards-mobile-scroll-hint" class="text-[10px] text-slate-500 font-mono text-right sm:hidden">
                     Scorri lateralmente per vedere tutti i match &rarr;
                 </div>
             </div>
@@ -560,23 +560,23 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
                     <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
-                        <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> <span data-i18n="history_section_title">Storico Pronostici Conclusi</span>
+                        <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> Storico Pronostici Conclusi
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="history_section_desc">Archivio certificato delle operazioni concluse.</p>
+                    <p class="text-[11px] sm:text-xs text-slate-400">Archivio certificato delle operazioni concluse.</p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
                     <!-- Filtro Fornitore/Piano Pubblico -->
                     <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
-                        <button type="button" onclick="setTipsterPlanFilter('all', this)" id="btn-tipfilter-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-800 text-white border-slate-700" data-i18n="hist_filter_all_signal">Tutti (AtmBet Signal)</button>
-                        <button type="button" onclick="setTipsterPlanFilter('pure', this)" id="btn-tipfilter-pure" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800" data-i18n="hist_filter_pure_selection">Solo AtmBet Selection</button>
+                        <button type="button" onclick="setTipsterPlanFilter('all', this)" id="btn-tipfilter-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-800 text-white border-slate-700">Tutti (AtmBet Signal)</button>
+                        <button type="button" onclick="setTipsterPlanFilter('pure', this)" id="btn-tipfilter-pure" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Solo AtmBet Selection</button>
                     </div>
 
                     <!-- Filtro Esito -->
                     <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
-                        <button type="button" onclick="filterPublicHistory('all', this)" id="btn-pubhist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500" data-i18n="hist_filter_all">Tutte</button>
-                        <button type="button" onclick="filterPublicHistory('won', this)" id="btn-pubhist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800" data-i18n="hist_filter_won">Vinte</button>
-                        <button type="button" onclick="filterPublicHistory('lost', this)" id="btn-pubhist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800" data-i18n="hist_filter_lost">Perse</button>
+                        <button type="button" onclick="filterPublicHistory('all', this)" id="btn-pubhist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500">Tutte</button>
+                        <button type="button" onclick="filterPublicHistory('won', this)" id="btn-pubhist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Vinte</button>
+                        <button type="button" onclick="filterPublicHistory('lost', this)" id="btn-pubhist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800">Perse</button>
                     </div>
                 </div>
             </div>
@@ -590,13 +590,13 @@
                     <table class="w-full text-left text-xs text-slate-300">
                         <thead class="bg-slate-950 sticky top-0 z-20 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px] backdrop-blur">
                             <tr>
-                                <th class="py-2.5 px-3" data-i18n="table_date">Data</th>
-                                <th class="py-2.5 px-3" data-i18n="table_match">Partita / Evento</th>
-                                <th class="py-2.5 px-3" data-i18n="table_prediction">Pronostico</th>
-                                <th class="py-2.5 px-3" data-i18n="table_odds">Quota</th>
-                                <th class="py-2.5 px-3" data-i18n="table_stake">Stake</th>
-                                <th class="py-2.5 px-3 text-center" data-i18n="table_outcome">Esito</th>
-                                <th class="py-2.5 px-3 text-right" data-i18n="table_pl">P/L Netto</th>
+                                <th class="py-2.5 px-3">Data</th>
+                                <th class="py-2.5 px-3">Partita / Evento</th>
+                                <th class="py-2.5 px-3">Pronostico</th>
+                                <th class="py-2.5 px-3">Quota</th>
+                                <th class="py-2.5 px-3">Stake</th>
+                                <th class="py-2.5 px-3 text-center">Esito</th>
+                                <th class="py-2.5 px-3 text-right">P/L Netto</th>
                             </tr>
                         </thead>
                         <tbody id="public-history-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
@@ -608,9 +608,9 @@
                     <span id="history-counter-text" class="text-[11px] text-slate-400 font-mono">Visualizzati 0 pronostici</span>
                     <div class="flex items-center gap-2">
                         <button type="button" id="btn-load-more-history" onclick="loadMoreHistory()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-xl font-bold text-xs transition flex items-center gap-1.5">
-                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-emerald-400"></i> <span data-i18n="history_load_more">Carica Altri 15</span>
+                            <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-emerald-400"></i> Carica Altri 15
                         </button>
-                        <button type="button" id="btn-show-all-history" onclick="showAllHistory()" class="text-slate-400 hover:text-white px-2 py-1 text-[11px] transition font-semibold" data-i18n="history_show_all">
+                        <button type="button" id="btn-show-all-history" onclick="showAllHistory()" class="text-slate-400 hover:text-white px-2 py-1 text-[11px] transition font-semibold">
                             Mostra Tutti
                         </button>
                     </div>
@@ -621,81 +621,81 @@
         <!-- 8. SEZIONE PIANI & CREDITI -->
         <section id="piani" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80">
             <div class="text-center max-w-2xl mx-auto space-y-2">
-                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold" data-i18n="plans_section_badge">Piani d'Abbonamento & Crediti</span>
-                <h2 class="text-2xl sm:text-3xl font-black text-white" data-i18n="plans_section_title">Scegli la Strategia Più Adatta al Tuo Capitale</h2>
-                <p class="text-xs text-slate-400" data-i18n="plans_section_subtitle">Dalla flessibilità dei singoli crediti all'esclusività del nostro algoritmo ad altissima restrizione.</p>
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Piani d'Abbonamento & Crediti</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white">Scegli la Strategia Più Adatta al Tuo Capitale</h2>
+                <p class="text-xs text-slate-400">Dalla flessibilità dei singoli crediti all'esclusività del nostro algoritmo ad altissima restrizione.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 pt-2">
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold" data-i18n="plan1_badge">Flessibile</span>
-                        <h3 class="text-base font-black text-white" data-i18n="plan1_title">10 Crediti</h3>
+                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Flessibile</span>
+                        <h3 class="text-base font-black text-white">10 Crediti</h3>
                         <div class="text-2xl font-black font-mono text-white">9,90 €</div>
-                        <p class="text-[11px] text-slate-400" data-i18n="plan1_desc">Per sbloccare singolarmente solo i match che ti interessano.</p>
+                        <p class="text-[11px] text-slate-400">Per sbloccare singolarmente solo i match che ti interessano.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan1_li1">10 selezioni a scelta</span></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan1_li2">Crediti senza scadenza</span></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan1_li3">Zero canoni o rinnovi</span></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 10 selezioni a scelta</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Crediti senza scadenza</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Zero canoni o rinnovi</li>
                         </ul>
                     </div>
                     <a href="https://buy.stripe.com/dRmcN72z1a9j7LD0j33Nm00" target="_blank" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
-                        <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i> <span data-i18n="plan1_btn">Acquista Crediti</span>
+                        <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i> Acquista Crediti
                     </a>
                 </div>
 
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold" data-i18n="plan2_badge">Alto Volume</span>
-                        <h3 class="text-base font-black text-white" data-i18n="plan2_title">VIP All-Inclusive</h3>
-                        <div class="text-2xl font-black font-mono text-white">24,90 € <span class="text-xs text-slate-400 font-normal" data-i18n="plan_per_month">/mese</span></div>
-                        <p class="text-[11px] text-slate-400" data-i18n="plan2_desc">Tutti i pronostici generati (AtmBet Signal Full).</p>
+                        <span class="text-[10px] font-mono uppercase bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-bold">Alto Volume</span>
+                        <h3 class="text-base font-black text-white">VIP All-Inclusive</h3>
+                        <div class="text-2xl font-black font-mono text-white">24,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
+                        <p class="text-[11px] text-slate-400">Tutti i pronostici generati (AtmBet Signal Full).</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan2_li1">Tutti i canali inclusi</span></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan2_li2">Canale Telegram Dedicato</span></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan2_li3">Ideale per alto turnover</span></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i canali inclusi</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Canale Telegram Dedicato</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Ideale per alto turnover</li>
                         </ul>
                     </div>
                     <a href="https://buy.stripe.com/8x26oJgpRdlv7LDe9T3Nm01" target="_blank" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
-                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> <span data-i18n="plan2_btn">Attiva All-Inclusive</span>
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Attiva All-Inclusive
                     </a>
                 </div>
 
                 <div class="bg-gradient-to-b from-slate-900 via-slate-950 to-amber-950/20 border-2 border-amber-500 rounded-2xl p-5 flex flex-col justify-between shadow-2xl relative">
-                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[9px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow" data-i18n="plan3_top_badge">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 text-[9px] font-black uppercase px-3 py-0.5 rounded-full tracking-wider shadow">
                         Top Performer ★
                     </div>
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/30" data-i18n="plan3_badge">Ultra Restrittivo</span>
-                        <h3 class="text-base font-black text-white" data-i18n="plan3_title">AtmBet Signal PURE</h3>
-                        <div class="text-2xl font-black font-mono text-amber-400">39,90 € <span class="text-xs text-slate-400 font-normal" data-i18n="plan_per_month">/mese</span></div>
-                        <p class="text-[11px] text-slate-400" data-i18n="plan3_desc">Solo le selezioni d'élite del giorno con probabilità stimata > 65%.</p>
+                        <span class="text-[10px] font-mono uppercase bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold border border-amber-500/30">Ultra Restrittivo</span>
+                        <h3 class="text-base font-black text-white">AtmBet Signal PURE</h3>
+                        <div class="text-2xl font-black font-mono text-amber-400">39,90 € <span class="text-xs text-slate-400 font-normal">/mese</span></div>
+                        <p class="text-[11px] text-slate-400">Solo le selezioni d'élite del giorno con probabilità stimata > 65%.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong data-i18n="plan3_li1">Top Selection (Safe & Pure Signal)</strong></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong data-i18n="plan3_li2">Canale Telegram Esclusivo PURE</strong></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan3_li3">Zero fatica: copi tutto in 2 minuti</span></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <span data-i18n="plan3_li4">Minimo drawdown, massima resa</span></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Top Selection (Safe & Pure Signal)</strong></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> <strong>Canale Telegram Esclusivo PURE</strong></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Zero fatica: copi tutto in 2 minuti</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> Minimo drawdown, massima resa</li>
                         </ul>
                     </div>
                     <a href="https://buy.stripe.com/6oU6oJ0qT0yJea11n73Nm02" target="_blank" class="mt-6 w-full text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-1.5">
-                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> <span data-i18n="plan3_btn">Abbonati a Signal PURE</span>
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Abbonati a Signal PURE
                     </a>
                 </div>
 
                 <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
                     <div class="space-y-3">
-                        <span class="text-[10px] font-mono uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/20" data-i18n="plan4_badge">Risparmio 25%</span>
-                        <h3 class="text-base font-black text-white" data-i18n="plan4_title">Trimestrale PURE</h3>
-                        <div class="text-2xl font-black font-mono text-white">89,00 € <span class="text-xs text-slate-400 font-normal" data-i18n="plan_per_quarter">/3 mesi</span></div>
-                        <p class="text-[11px] text-slate-400" data-i18n="plan4_desc">Il ciclo ideale per massimizzare la crescita composta su base trimestrale.</p>
+                        <span class="text-[10px] font-mono uppercase bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/20">Risparmio 25%</span>
+                        <h3 class="text-base font-black text-white">Trimestrale PURE</h3>
+                        <div class="text-2xl font-black font-mono text-white">89,00 € <span class="text-xs text-slate-400 font-normal">/3 mesi</span></div>
+                        <p class="text-[11px] text-slate-400">Il ciclo ideale per massimizzare la crescita composta su base trimestrale.</p>
                         <ul class="text-xs text-slate-300 space-y-2 pt-2 border-t border-slate-800">
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan4_li1">Tutti i vantaggi di Signal PURE</span></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan4_li2">Canale Telegram Privato PURE</span></li>
-                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> <span data-i18n="plan4_li3">Risparmi oltre 30€ sul canone</span></li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Tutti i vantaggi di Signal PURE</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Canale Telegram Privato PURE</li>
+                            <li class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> Risparmi oltre 30€ sul canone</li>
                         </ul>
                     </div>
                     <a href="https://buy.stripe.com/bJe8wRehJdlv2rj8Pz3Nm03" target="_blank" class="mt-6 w-full text-center bg-slate-800 hover:bg-slate-700 text-white font-bold py-2.5 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
-                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> <span data-i18n="plan4_btn">Scegli Trimestrale</span>
+                        <i data-lucide="zap" class="w-3.5 h-3.5"></i> Scegli Trimestrale
                     </a>
                 </div>
             </div>
@@ -704,38 +704,38 @@
         <!-- 9. SEZIONE FAQ -->
         <section id="faq" class="public-marketing-element space-y-6 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto w-full">
             <div class="text-center space-y-2">
-                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold" data-i18n="nav_faq">Domande Frequenti</span>
-                <h2 class="text-2xl font-black text-white" data-i18n="faq_section_title">Tutto Quello che Devi Sapere</h2>
-                <p class="text-xs text-slate-400" data-i18n="faq_section_subtitle">Risposte chiare su piani, volumi e verifiche automatiche.</p>
+                <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest font-bold">Domande Frequenti</span>
+                <h2 class="text-2xl font-black text-white">Tutto Quello che Devi Sapere</h2>
+                <p class="text-xs text-slate-400">Risposte chiare su piani, volumi e verifiche automatiche.</p>
             </div>
 
             <div class="space-y-3">
                 <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
                     <summary class="font-bold text-white flex items-center justify-between">
-                        <span data-i18n="faq_q1">Qual è la differenza tra "All-Inclusive" e "Signal PURE"?</span>
+                        <span>Qual è la differenza tra "All-Inclusive" e "Signal PURE"?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
                     </summary>
-                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80" data-i18n="faq_a1">
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
                         Il piano All-Inclusive è rivolto a chi vuole operare ad alto volume e ricevere tutte le giocate elaborate (flusso <strong>AtmBet Signal</strong>). Il piano <strong>Signal PURE</strong> effettua una scrematura ferrea, selezionando <strong>solo le migliori giocate certificate (Safe & Pure Signal)</strong> con la percentuale di riuscita stimata più elevata (&gt;65%), visualizzate pubblicamente come <strong>AtmBet Selection</strong> e inviate su un canale Telegram dedicato.
                     </p>
                 </details>
 
                 <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
                     <summary class="font-bold text-white flex items-center justify-between">
-                        <span data-i18n="faq_q2">Come funziona la prova gratuita di 7 giorni?</span>
+                        <span>Come funziona la prova gratuita di 7 giorni?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
                     </summary>
-                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80" data-i18n="faq_a2">
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
                         Attivando la prova gratuita ricevi istantaneamente 7 giorni di accesso VIP illimitato e 5 crediti omaggio, senza dover inserire carte di credito o metodi di pagamento.
                     </p>
                 </details>
 
                 <details class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs transition group cursor-pointer">
                     <summary class="font-bold text-white flex items-center justify-between">
-                        <span data-i18n="faq_q3">I risultati sono verificati oggettivamente?</span>
+                        <span>I risultati sono verificati oggettivamente?</span>
                         <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition"></i>
                     </summary>
-                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80" data-i18n="faq_a3">
+                    <p class="text-slate-400 mt-2.5 leading-relaxed pt-2 border-t border-slate-800/80">
                         Sì. Tutte le quote e i match vengono inseriti a mercato aperto prima del calcio d'inizio. Al termine delle partite lo script interroga i dati ufficiali e certifica l'esito reale nello storico.
                     </p>
                 </details>
@@ -749,10 +749,10 @@
         <!-- LINK GIOCO RESPONSABILE & ADM -->
         <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-semibold font-sans">
             <a href="https://www.gioca-responsabile.it/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
-                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> <span data-i18n="footer_responsible_gaming">Gioco Responsabile</span>
+                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> Gioco Responsabile
             </a>
             <a href="https://www.adm.gov.it/portale/giochi" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition flex items-center gap-1.5">
-                <i data-lucide="landmark" class="w-4 h-4 text-amber-500"></i> <span data-i18n="footer_adm">ADM (Agenzia Dogane e Monopoli)</span>
+                <i data-lucide="landmark" class="w-4 h-4 text-amber-500"></i> ADM (Agenzia Dogane e Monopoli)
             </a>
             <div class="flex items-center gap-1.5 text-rose-400 font-bold bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20">
                 <i data-lucide="ban" class="w-3.5 h-3.5"></i> 18+
@@ -760,8 +760,8 @@
         </div>
 
         <div class="text-[11px] text-slate-400 max-w-xl mx-auto space-y-2 leading-relaxed font-sans">
-            <div data-i18n="footer_disclaimer_1">Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.</div>
-            <div class="text-slate-400 font-medium"><span data-i18n="footer_disclaimer_2">Se hai un problema con il gioco d'azzardo, chiama il</span> <strong class="text-emerald-400 font-mono">Telefono Verde: 800 558 822</strong> <span data-i18n="footer_disclaimer_3">(anonimo e gratuito)</span></div>
+            <div>Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.</div>
+            <div class="text-slate-400 font-medium">Se hai un problema con il gioco d'azzardo, chiama il <strong class="text-emerald-400 font-mono">Telefono Verde: 800 558 822</strong> (anonimo e gratuito)</div>
         </div>
 
         <div>
@@ -769,14 +769,14 @@
         </div>
         
         <div class="flex flex-wrap items-center justify-center gap-3 text-[13px] text-slate-400 pt-2">
-            <a href="index.html" class="hover:text-slate-200 transition" data-i18n="footer_link_home">Home</a>
+            <a href="index.html" class="hover:text-slate-200 transition">Home</a>
             <span>•</span>
             <a href="collaborazioni.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
-                <i data-lucide="award" class="w-3 h-3 text-amber-500"></i> <span data-i18n="footer_link_collab">Collaborazioni</span>
+                <i data-lucide="award" class="w-3 h-3 text-amber-500"></i> Collaborazioni
             </a>
             <span>•</span>
             <a href="legal.html" class="hover:text-amber-400 transition flex items-center gap-1 font-mono">
-                <i data-lucide="shield-check" class="w-3 h-3 text-amber-500"></i> <span data-i18n="footer_link_legal">Note Legali</span>
+                <i data-lucide="shield-check" class="w-3 h-3 text-amber-500"></i> Note Legali
             </a>
         </div>
     </footer>
@@ -794,7 +794,7 @@
                 
                 document.querySelectorAll('[data-i18n]').forEach(el => {
                     const key = el.getAttribute('data-i18n');
-                    if (t[key]) el.innerHTML = t[key];
+                    if (t[key]) el.innerText = t[key];
                 });
 
                 document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
@@ -2146,7 +2146,7 @@
             });
         }
 
-        // GESTIONE MULTILINGUA (i18n) - CORRETTA CON innerHTML
+        // GESTIONE MULTILINGUA (i18n)
         let currentLang = localStorage.getItem('atmbet_lang') || 'it';
 
         async function loadTranslations(lang) {
@@ -2157,7 +2157,7 @@
                 
                 document.querySelectorAll('[data-i18n]').forEach(el => {
                     const key = el.getAttribute('data-i18n');
-                    if (t[key]) el.innerHTML = t[key];
+                    if (t[key]) el.innerText = t[key];
                 });
 
                 document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
