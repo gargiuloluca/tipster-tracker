@@ -2082,6 +2082,12 @@
     <script>
         // GESTIONE MULTILINGUA (i18n)
         let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+        const PRIMARY_KEY = 'tipster_tracker_v1';
+        const ATMBET_KEY = 'atmbet_bets_data';
+        const USERS_DB_KEY = 'atmbet_users_accounts';
+        const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
+        const PURE_TIPSTERS_KEY = 'atmbet_pure_selected_tipsters';
+        
 
         async function loadTranslations(lang) {
             try {
