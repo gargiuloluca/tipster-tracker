@@ -215,4 +215,13 @@
   "footer_disclaimer_1": "Glücksspiel ist für Minderjährige unter 18 Jahren verboten und kann zu pathologischer Abhängigkeit führen. Spiele mit Maß.",
   "footer_disclaimer_2": "Wenn du ein Glücksspielproblem hast, rufe an unter",
   "footer_disclaimer_3": "(anonym und kostenlos)"
+    "hero_badge": "Offizielle Ergebnisverifizierung über API-Football",
+  "hero_title": "Wette nicht auf Glück.<br><span class=\"text-atm-green\">Investiere in Daten.</span>",
+  "hero_subtitle": "Proprietäre quantitative Modelle zur Identifizierung statistischer Quotenabweichungen vor Marktverschiebungen. Mathematische Disziplin, null emotionales Glücksspiel.",
+  "welcome_offer_tag": "WILLKOMMENSANGEBOT",
+  "welcome_no_card": "Keine Kreditkarte Erforderlich",
+  "welcome_title": "7 Tage VIP + 5 Gratis-Guthaben",
+  "welcome_desc": "Aktiviere deine kostenlose Testphase, um echte Quoten, Märkte und detaillierte Analysen in deinem persönlichen Dashboard freizuschalten.",
+  "welcome_cta": "Kostenlose Testphase Aktivieren (7 Tage)",
+  "welcome_redeem": "Einlösen"
 }
