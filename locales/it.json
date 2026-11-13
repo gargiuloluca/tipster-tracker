@@ -1,15 +1,14 @@
-
 {
-  "nav_back": "Torna alla Vetrina",
-  "auth_title": "Accedi all'Area Riservata",
-  "auth_subtitle": "Accesso rapido verificato per gli abbonati della piattaforma.",
-  "email_label": "Indirizzo Email o Password Admin",
-  "email_placeholder": "tua@email.com o Password Admin",
-  "telegram_label": "Tua Username Telegram",
-  "telegram_placeholder": "@TuaUsername",
-  "info_text": "Inserisci l'indirizzo email utilizzato su Stripe e la tua username Telegram. Il sistema riconoscerà automaticamente la tua licenza attiva.",
-  "submit_btn": "Entra nel Cruscotto VIP",
-  "no_sub": "Non possiedi ancora un abbonamento attivo?",
-  "choose_plan": "Scegli un Piano o Prova 7 Giorni",
-  "footer_copy": "AtmBet © 2026. Tutti i diritti riservati."
+    "nav_back": "Torna alla Vetrina",
+    "auth_title": "Accedi all'Area Riservata",
+    "auth_subtitle": "Accesso rapido verificato per gli abbonati della piattaforma.",
+    "email_label": "Indirizzo Email o Password Admin",
+    "email_placeholder": "tua@email.com o Password Admin",
+    "telegram_label": "Tua Username Telegram",
+    "telegram_placeholder": "@TuaUsername",
+    "info_text": "Inserisci l'indirizzo email utilizzato su Stripe e la tua username Telegram. Il sistema riconoscerà automaticamente la tua licenza attiva.",
+    "submit_btn": "Entra nel Cruscotto VIP",
+    "no_sub": "Non possiedi ancora un abbonamento attivo?",
+    "choose_plan": "Scegli un Piano o Prova 7 Giorni",
+    "footer_copy": "AtmBet © 2026. Tutti i diritti riservati."
 }
