@@ -1,0 +1,14 @@
+{
+  "nav_back": "Back to Showcase",
+  "auth_title": "Access Restricted Area",
+  "auth_subtitle": "Verified fast access for platform subscribers.",
+  "email_label": "Email Address or Admin Password",
+  "email_placeholder": "your@email.com or Admin Password",
+  "telegram_label": "Your Telegram Username",
+  "telegram_placeholder": "@YourUsername",
+  "info_text": "Enter the email address used on Stripe and your Telegram username. The system will automatically recognize your active license.",
+  "submit_btn": "Enter VIP Dashboard",
+  "no_sub": "Don't have an active subscription yet?",
+  "choose_plan": "Choose a Plan or Try 7 Days",
+  "footer_copy": "AtmBet © 2026. All rights reserved."
+}
