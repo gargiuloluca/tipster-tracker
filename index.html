@@ -3460,36 +3460,6 @@
             await loadTranslations(currentLang);
         });
 
-    </script>
-                    <script>
-    // Script universale per mappare e tradurre automaticamente le sezioni di AtmBet
-    document.addEventListener("DOMContentLoaded", () => {
-        const lang = localStorage.getItem('atmbet_lang') || 'it';
-        if (lang === 'it') return; // Se è italiano, lascia tutto com'è
-
-        fetch(`locales/${lang}.json?_t=` + Date.now())
-            .then(res => res.json())
-            .then(t => {
-                // Traduce elementi con data-i18n già presenti
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if (t[key]) el.innerHTML = t[key];
-                });
-
-                // Mappa automatica dei titoli e testi principali se non hanno ancora l'attributo
-                document.querySelectorAll('h2, h3, p, a').forEach(el => {
-                    const text = el.innerText.trim();
-                    // Esempio mappatura automatica per la sezione Metodo
-                    if (text === "Protocollo Matematico Certificato") el.innerText = t["method_badge"] || text;
-                    if (text === "Perché i Dati Batteranno Sempre l'Istinto") el.innerText = t["method_title"] || text;
-                    if (text === "Analisi & Performance") el.innerText = t["nav_analysis"] || text;
-                    if (text === "Selezioni Operative di Oggi") el.innerText = t["nav_picks"] || text;
-                    if (text === "Storico Pronostici Conclusi") el.innerText = t["nav_history"] || text;
-                    if (text === "Domande Frequenti") el.innerText = t["nav_faq"] || text;
-                });
-            }).catch(err => console.error("Errore script traduzione automatica:", err));
-    });
-                    </script>
-                    
+    </script>          
 </body>
 </html>
