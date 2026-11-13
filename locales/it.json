@@ -378,5 +378,24 @@
   "idx_faq_a3": "Sì. Tutte le quote e i match vengono inseriti a mercato aperto prima del calcio d'inizio. Al termine delle partite lo script interroga i dati ufficiali e certifica l'esito reale nello storico.",
   "idx_footer_copy": "AtmBet © 2026. Analisi e Modellazione Quantitativa per il Betting Sportivo.",
   "idx_footer_home": "Home",
-  "idx_footer_hotline": "Telefono Verde: 800 558 822"
+  "idx_footer_hotline": "Telefono Verde: 800 558 822",
+  "dsh_page_title": "AtmBet | Portale Utente VIP & Simulatore Rendimento",
+  "dsh_footer": "AtmBet © 2026. Cruscotto Rendimento Certificato.",
+  "dsh_default_name": "Investitore",
+  "dsh_status_active": "IN ATTIVO",
+  "dsh_status_recovery": "IN RECUPERO",
+  "dsh_vip_active_days": "Attivo ({n}gg)",
+  "dsh_vip_active_vip": "Attivo (VIP)",
+  "dsh_vip_expired": "Scaduto / Free",
+  "dsh_credits_n": "{n} Crediti",
+  "dsh_alert_no_credits": "Non hai crediti a sufficienza. Ricarica un pacchetto dalla sezione prezzi.",
+  "dsh_confirm_unlock": "Vuoi utilizzare 1 credito per sbloccare questa selezione?",
+  "dsh_event_n": "Evento {n}",
+  "dsh_vip_selection": "Selezione VIP:",
+  "dsh_market_label": "Mercato:",
+  "dsh_locked": "Contenuto Riservato",
+  "dsh_unlock_btn": "Sblocca (1c)",
+  "dsh_no_pending": "Nessuna giocata in corso al momento.",
+  "dsh_no_history": "Nessuna giocata nello storico per questo filtro."
+  
 }
