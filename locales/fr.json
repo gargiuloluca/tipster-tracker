@@ -214,8 +214,8 @@
   "footer_adm": "ADM (Agence des Douanes et des Monopoles)",
   "footer_disclaimer_1": "Les jeux d'argent sont interdits aux mineurs de moins de 18 ans et peuvent entraîner une dépendance pathologique. Jouez avec modération.",
   "footer_disclaimer_2": "Si vous avez un problème avec le jeu, appelez le",
-  "footer_disclaimer_3": "(anonyme et gratuit)"
-    "hero_badge": "Vérification Officielle des Résultats via API-Football",
+  "footer_disclaimer_3": "(anonyme et gratuit)",
+  "hero_badge": "Vérification Officielle des Résultats via API-Football",
   "hero_title": "Ne pariez pas sur le hasard.<br><span class=\"text-atm-green\">Investissez dans les Données.</span>",
   "hero_subtitle": "Modèles quantitatifs propriétaires pour identifier les désalignements statistiques de cotes avant la variation du marché. Discipline mathématique, zéro pari émotionnel.",
   "welcome_offer_tag": "OFFRE DE BIENVENUE",
@@ -225,3 +225,4 @@
   "welcome_cta": "Activer l'Essai Gratuit (7 Jours)",
   "welcome_redeem": "Échanger"
 }
+
