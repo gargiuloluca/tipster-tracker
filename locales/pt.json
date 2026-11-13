@@ -1,4 +1,3 @@
-
 {
   "nav_back": "Voltar à Vitrine",
   "auth_title": "Aceder à Área Restrita",
@@ -216,4 +215,13 @@
   "footer_disclaimer_1": "O jogo é proibido a menores de 18 anos e pode causar dependência patológica. Joga com moderação.",
   "footer_disclaimer_2": "Se tens um problema com o jogo, liga para o",
   "footer_disclaimer_3": "(anónimo e gratuito)"
+    "hero_badge": "Verificação Oficial de Resultados via API-Football",
+  "hero_title": "Não apostes ao acaso.<br><span class=\"text-atm-green\">Investe em Dados.</span>",
+  "hero_subtitle": "Modelos quantitativos proprietários para identificar desalinhamentos estatísticos de odds antes da variação de mercado. Disciplina matemática, zero jogo emocional.",
+  "welcome_offer_tag": "OFERTA DE BENVENIDA",
+  "welcome_no_card": "Sem Cartão Necessário",
+  "welcome_title": "7 Dias VIP + 5 Créditos Grátis",
+  "welcome_desc": "Ativa a tua prova gratuita para desbloquear as odds reais, mercados e análises detalhadas no teu painel pessoal.",
+  "welcome_cta": "Ativar Prova Gratuita (7 Dias)",
+  "welcome_redeem": "Resgatar"
 }
