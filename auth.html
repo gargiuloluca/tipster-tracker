@@ -44,16 +44,29 @@
 </head>
 <body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black auth-glow overflow-x-hidden justify-between">
 
-    <!-- Navbar Minima di Ritorno -->
+    <!-- Navbar Minima di Ritorno con Selettore Lingua -->
     <header class="w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2">
                 <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-9 w-auto">
                 <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
             </a>
-            <a href="index.html" class="text-xs text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition">
-                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Torna alla Vetrina
-            </a>
+            
+            <div class="flex items-center gap-3">
+                <!-- Selettore Lingua -->
+                <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 font-sans cursor-pointer">
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="de">🇩🇪 DE</option>
+                </select>
+
+                <a href="index.html" class="text-xs text-slate-400 hover:text-white font-semibold flex items-center gap-1 transition">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span data-i18n="nav_back">Torna alla Vetrina</span>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -66,8 +79,8 @@
                 <div class="inline-flex p-2.5 sm:p-3 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 mb-3 shadow-lg shadow-emerald-500/10">
                     <i data-lucide="shield-check" class="w-6 h-6 sm:w-7 sm:h-7"></i>
                 </div>
-                <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight">Accedi all'Area Riservata</h1>
-                <p class="text-xs text-slate-400 mt-1">Accesso rapido verificato per gli abbonati della piattaforma.</p>
+                <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight" data-i18n="auth_title">Accedi all'Area Riservata</h1>
+                <p class="text-xs text-slate-400 mt-1" data-i18n="auth_subtitle">Accesso rapido verificato per gli abbonati della piattaforma.</p>
             </div>
 
             <!-- Form di Accesso con Email e Username Telegram -->
@@ -75,20 +88,20 @@
                 
                 <!-- Email o Password Admin -->
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Indirizzo Email o Password Admin</label>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="email_label">Indirizzo Email o Password Admin</label>
                     <div class="relative">
                         <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                        <input type="text" id="user-email" required placeholder="tua@email.com o Password Admin"
+                        <input type="text" id="user-email" required data-i18n-placeholder="email_placeholder" placeholder="tua@email.com o Password Admin"
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                     </div>
                 </div>
 
                 <!-- Username Telegram -->
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Tua Username Telegram</label>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="telegram_label">Tua Username Telegram</label>
                     <div class="relative">
                         <i data-lucide="send" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                        <input type="text" id="user-telegram-handle" required placeholder="@TuaUsername"
+                        <input type="text" id="user-telegram-handle" required data-i18n-placeholder="telegram_placeholder" placeholder="@TuaUsername"
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition font-mono">
                     </div>
                 </div>
@@ -96,7 +109,7 @@
                 <!-- Istruzioni Chiare sotto i campi -->
                 <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
                     <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
-                    <span>
+                    <span data-i18n="info_text">
                         Inserisci l'<strong>indirizzo email</strong> utilizzato su Stripe e la tua <strong>username Telegram</strong>. Il sistema riconoscerà automaticamente la tua licenza attiva.
                     </span>
                 </div>
@@ -106,20 +119,20 @@
 
                 <!-- Pulsante Submit -->
                 <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10 mt-1">
-                    <span>Entra nel Cruscotto VIP</span>
+                    <span data-i18n="submit_btn">Entra nel Cruscotto VIP</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </form>
 
             <!-- Link di supporto se non ha ancora il piano -->
             <div class="mt-5 pt-4 border-t border-slate-800 text-center text-xs text-slate-400">
-                Non possiedi ancora un abbonamento attivo? 
-                <a href="index.html#piani" class="text-emerald-400 font-bold hover:underline block sm:inline mt-1 sm:mt-0 ml-1">
+                <span data-i18n="no_sub">Non possiedi ancora un abbonamento attivo?</span> 
+                <a href="index.html#piani" class="text-emerald-400 font-bold hover:underline block sm:inline mt-1 sm:mt-0 ml-1" data-i18n="choose_plan">
                     Scegli un Piano o Prova 7 Giorni &rarr;
                 </a>
             </div>
 
-            <div class="mt-5 text-center text-[11px] text-slate-500">
+            <div class="mt-5 text-center text-[11px] text-slate-500" data-i18n="footer_copy">
                 AtmBet &copy; 2026. Accesso istantaneo sincronizzato con Stripe & GitHub.
             </div>
 
@@ -151,11 +164,44 @@
         </div>
     </footer>
 
-    <!-- LOGICA AUTENTICAZIONE & ACCESSO ADMIN BLINDATO -->
+    <!-- LOGICA AUTENTICAZIONE, ADMIN & MULTILINGUA -->
     <script>
         const USERS_DB_KEY = 'atmbet_users_accounts';
         const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
         const ADMIN_REAL_PASSWORD = "AtmBet2026!";
+
+        // GESTIONE MULTILINGUA (i18n)
+        let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
+                if (!response.ok) return;
+                const t = await response.json();
+                
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerText = t[key];
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (t[key]) el.placeholder = t[key];
+                });
+
+                const selector = document.getElementById('lang-selector');
+                if (selector) selector.value = lang;
+
+                localStorage.setItem('atmbet_lang', lang);
+                currentLang = lang;
+            } catch (e) {
+                console.error("Errore caricamento traduzioni:", e);
+            }
+        }
+
+        function changeLanguage(lang) {
+            loadTranslations(lang);
+        }
 
         async function fetchLiveUsers() {
             try {
@@ -192,8 +238,8 @@
                 return;
             }
 
-            // 1. CONTROLLO ADMIN PRIORITARIO AL 100%
-            if (emailInput === ADMIN_REAL_PASSWORD || emailLower === "admin@atmbet.local" || emailInput === "AtmBet2026!") {
+            // 1. CONTROLLO ADMIN PRIORITARIO CASE-INSENSITIVE
+            if (emailInput === ADMIN_REAL_PASSWORD || emailLower === "admin@atmbet.local" || emailInput.toLowerCase() === "atmbet2026!") {
                 showAlert("Accesso Amministratore autorizzato! Apertura console...", "success");
                 
                 sessionStorage.setItem("atmbet_admin_authenticated", "true");
@@ -290,6 +336,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
+            loadTranslations(currentLang);
         });
     </script>
 </body>
