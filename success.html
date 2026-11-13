@@ -39,11 +39,21 @@
     <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
     <div class="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-    <!-- Header / Logo -->
-    <header class="w-full max-w-3xl mx-auto flex items-center justify-center pt-4 relative z-10">
+    <!-- Header / Logo & Selettore Lingua -->
+    <header class="w-full max-w-3xl mx-auto flex items-center justify-between pt-4 relative z-10">
         <a href="index.html" class="flex items-center gap-2">
             <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-10 sm:h-12 w-auto">
         </a>
+        
+        <!-- Selettore Lingua -->
+        <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 font-sans cursor-pointer">
+            <option value="it">🇮🇹 IT</option>
+            <option value="en">🇬🇧 EN</option>
+            <option value="es">🇪🇸 ES</option>
+            <option value="pt">🇵🇹 PT</option>
+            <option value="fr">🇫🇷 FR</option>
+            <option value="de">🇩🇪 DE</option>
+        </select>
     </header>
 
     <!-- Contenitore Principale Espanso -->
@@ -51,10 +61,10 @@
         
         <div class="text-center space-y-3">
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono uppercase tracking-wider font-bold">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Transazione Verificata & Sicura
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> <span data-i18n="success_badge">Transazione Verificata & Sicura</span>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Pagamento Completato!</h1>
-            <p class="text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg mx-auto">
+            <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight" data-i18n="success_title">Pagamento Completato!</h1>
+            <p class="text-sm sm:text-base text-slate-400 leading-relaxed max-w-lg mx-auto" data-i18n="success_desc">
                 Grazie per la fiducia. Per completare l'attivazione immediata del tuo profilo e sbloccare l'accesso ai canali, inserisci i dati richiesti.
             </p>
         </div>
@@ -67,8 +77,8 @@
                     <i data-lucide="check-circle-2" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <div class="text-xs font-bold text-white uppercase tracking-wider">Stato Ordine</div>
-                    <div class="text-xs text-emerald-400 font-medium">Pagamento registrato correttamente su Stripe.</div>
+                    <div class="text-xs font-bold text-white uppercase tracking-wider" data-i18n="success_order_status">Stato Ordine</div>
+                    <div class="text-xs text-emerald-400 font-medium" data-i18n="success_stripe_msg">Pagamento registrato correttamente su Stripe.</div>
                 </div>
             </div>
 
@@ -76,24 +86,24 @@
             <form onsubmit="handleActivation(event)" class="space-y-4">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <label class="block text-slate-300 text-xs font-bold">Tua Email (da Stripe)</label>
-                        <input type="email5" id="success-email" required placeholder="tua@email.it"
+                        <label class="block text-slate-300 text-xs font-bold" data-i18n="success_label_email">Tua Email (da Stripe)</label>
+                        <input type="email" id="success-email" required data-i18n-placeholder="success_ph_email" placeholder="tua@email.it"
                             class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-emerald-500">
                     </div>
                     <div class="space-y-1.5">
-                        <label class="block text-slate-300 text-xs font-bold">Tua Username Telegram</label>
-                        <input type="text" id="success-telegram" required placeholder="@TuaUsername"
+                        <label class="block text-slate-300 text-xs font-bold" data-i18n="success_label_telegram">Tua Username Telegram</label>
+                        <input type="text" id="success-telegram" required data-i18n-placeholder="success_ph_telegram" placeholder="@TuaUsername"
                             class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
                 <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 space-y-1">
-                    <span class="text-amber-400 font-bold block">💡 Nota Importante:</span>
-                    <span>La username Telegram ci permette di abilitare istantaneamente il tuo profilo e sbloccare l'accesso al canale VIP associato al tuo piano.</span>
+                    <span class="text-amber-400 font-bold block" data-i18n="success_note_title">💡 Nota Importante:</span>
+                    <span data-i18n="success_note_desc">La username Telegram ci permette di abilitare istantaneamente il tuo profilo e sbloccare l'accesso al canale VIP associato al tuo piano.</span>
                 </div>
 
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm py-4 rounded-xl transition flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/20">
-                    <span>Attiva Account & Entra in Dashboard</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    <span data-i18n="success_submit_btn">Attiva Account & Entra in Dashboard</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </button>
             </form>
         </div>
@@ -104,8 +114,42 @@
         AtmBet &copy; 2026 • Analisi Quantitativa Certificata
     </footer>
 
+    <!-- LOGICA MULTILINGUA (i18n) E ATTIVAZIONE -->
     <script>
         lucide.createIcons();
+
+        // GESTIONE MULTILINGUA (i18n)
+        let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
+                if (!response.ok) return;
+                const t = await response.json();
+                
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerText = t[key];
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (t[key]) el.placeholder = t[key];
+                });
+
+                const selector = document.getElementById('lang-selector');
+                if (selector) selector.value = lang;
+
+                localStorage.setItem('atmbet_lang', lang);
+                currentLang = lang;
+            } catch (e) {
+                console.error("Errore caricamento traduzioni:", e);
+            }
+        }
+
+        function changeLanguage(lang) {
+            loadTranslations(lang);
+        }
 
         // Legge l'email passata da Stripe nella URL (?email=...) e la pre-compila
         const urlParams = new URLSearchParams(window.location.search);
@@ -133,6 +177,10 @@
             localStorage.setItem('atmbet_active_user_session', JSON.stringify(sessionData));
             window.location.href = 'index.html';
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTranslations(currentLang);
+        });
     </script>
 </body>
 </html>
