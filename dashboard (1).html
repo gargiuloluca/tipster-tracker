@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AtmBet | Portale Utente VIP & Simulatore Rendimento</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#070a10',
+                            card: '#0e1522',
+                            border: '#1e293b',
+                            gold: '#fbbf24'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .unit-pill-active {
+            background-color: #22c55e !important;
+            color: #020617 !important;
+            border-color: #22c55e !important;
+            font-weight: 800 !important;
+        }
+        .sim-pill-active {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            border-color: #3b82f6 !important;
+            font-weight: 800 !important;
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-atm-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-emerald-500 selection:text-black overflow-x-hidden">
+
+    <!-- Navbar Utente Loggato -->
+    <nav class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <a href="index.html">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-10 w-auto">
+                </a>
+                <div>
+                    <span class="text-lg sm:text-xl font-black text-white">ATM<span class="text-atm-green">BET</span></span>
+                    <span class="ml-1 text-[9px] font-mono tracking-wider uppercase bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20 font-bold">VIP</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Selettore Lingua -->
+                <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 font-sans cursor-pointer">
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="de">🇩🇪 DE</option>
+                </select>
+
+                <a href="index.html" class="hidden sm:inline-block text-xs font-semibold text-slate-400 hover:text-white transition" data-i18n="dash_nav_showcase">
+                    Vetrina
+                </a>
+                <button type="button" onclick="logout()" class="text-xs bg-slate-900 hover:bg-slate-800 text-rose-400 border border-slate-800 hover:border-rose-500/30 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1 transition">
+                    <i data-lucide="log-out" class="w-3.5 h-3.5"></i> <span data-i18n="dash_nav_logout">Esci</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Area -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-6 sm:space-y-8 flex-1 w-full">
+
+        <!-- Welcome Banner -->
+        <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 p-4 sm:p-8 rounded-2xl sm:rounded-3xl relative overflow-hidden shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 relative z-10">
+                
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-[10px] sm:text-xs font-mono text-emerald-400 uppercase tracking-widest font-semibold" data-i18n="dash_badge_dashboard">Cruscotto Investitore</span>
+                        <span id="badge-portfolio-status" class="text-[9px] sm:text-[10px] font-mono uppercase font-black px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">IN ATTIVO</span>
+                    </div>
+                    <h1 class="text-xl sm:text-3xl font-black text-white"><span data-i18n="dash_welcome">Bentornato,</span> <span id="user-display-name">Investitore</span></h1>
+                    <p class="text-[11px] sm:text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-1.5">
+                        <span id="user-display-email">...</span>
+                        <span class="text-slate-600">|</span>
+                        <span><span data-i18n="dash_since">Dal:</span> <span id="user-created-date" class="font-mono text-slate-300">...</span></span>
+                    </p>
+                </div>
+
+                <!-- Stato Abbonamento & Crediti -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <div class="bg-slate-950/80 border border-slate-800 px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2.5 flex-1 sm:flex-initial">
+                        <div class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg">
+                            <i data-lucide="shield-check" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-[9px] font-mono uppercase text-slate-500" data-i18n="dash_sub_label">Abbonamento</div>
+                            <div id="badge-vip-status" class="text-xs font-black text-emerald-400">Attivo</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800 px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl flex items-center gap-2.5 flex-1 sm:flex-initial">
+                        <div class="p-1.5 bg-amber-500/10 text-amber-400 rounded-lg">
+                            <i data-lucide="coins" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-[9px] font-mono uppercase text-slate-500" data-i18n="dash_credits_label">Crediti</div>
+                            <div id="badge-credits-count" class="text-xs font-mono font-black text-white">5 Crediti</div>
+                        </div>
+                    </div>
+
+                    <a href="index.html#piani" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-3.5 py-2.5 rounded-xl transition flex items-center justify-center gap-1 w-full sm:w-auto shadow-lg shadow-emerald-500/10">
+                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> <span data-i18n="dash_topup_btn">Ricarica</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SIMULATORE TEMPORALE DINAMICO DASHBOARD -->
+        <section class="bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-3xl space-y-4 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="p-1.5 bg-blue-500/10 text-blue-400 rounded-lg">
+                            <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                        </span>
+                        <h2 class="text-sm sm:text-base font-black text-white" data-i18n="dash_sim_title">Simulatore di Rendimento nel Tempo</h2>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_sim_subtitle">Simula il guadagno effettivo partendo da una data specifica.</p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-2.5 py-1.5 rounded-xl">
+                        <span class="text-[10px] sm:text-[11px] text-slate-400 font-semibold" data-i18n="dash_sim_from">Dal:</span>
+                        <input type="date" id="sim-start-date" onchange="applySimulationDate(this.value)"
+                            class="bg-transparent text-xs text-blue-400 font-mono font-bold focus:outline-none cursor-pointer">
+                    </div>
+
+                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl overflow-x-auto max-w-full">
+                        <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Oggi</button>
+                        <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap">Ieri</button>
+                        <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_7days">Ultimi 7gg</button>
+                        <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2 py-1 text-[10px] sm:text-[11px] font-bold rounded-lg border border-transparent text-slate-300 transition whitespace-nowrap" data-i18n="sim_preset_all">Tutto</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metriche Simulazione -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_profit">Profitto Periodo</span>
+                    <div id="sim-profit-units" class="text-xl sm:text-2xl font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
+                    <div id="sim-profit-fiat" class="text-[11px] font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_roi">Yield / ROI</span>
+                    <div id="sim-roi" class="text-xl sm:text-2xl font-mono font-black text-white mt-0.5">0.0%</div>
+                    <span class="text-[9px] text-slate-500" data-i18n="sim_metric_closed">Giocate chiuse</span>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_winrate">Win Rate</span>
+                    <div id="sim-winrate" class="text-xl sm:text-2xl font-mono font-black text-amber-400 mt-0.5">0.0%</div>
+                    <span class="text-[9px] text-slate-500" data-i18n="sim_metric_accuracy">Accuratezza esiti</span>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 sm:p-4 rounded-xl sm:rounded-2xl">
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block" data-i18n="sim_metric_resolved">Chiuse</span>
+                    <div id="sim-resolved-count" class="text-xl sm:text-2xl font-mono font-black text-slate-200 mt-0.5">0</div>
+                    <div class="text-[9px] text-slate-500 mt-0.5"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RENDICONTO FINANZIARIO GENERALE -->
+        <section class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div>
+                    <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="pie-chart" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> <span data-i18n="dash_global_title">Rendiconto Globale</span>
+                    </h2>
+                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_global_subtitle">Statistiche aggregate su tutte le selezioni chiuse.</p>
+                </div>
+
+                <div class="flex items-center justify-between sm:justify-start gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl w-full sm:w-auto overflow-x-auto">
+                    <span class="text-[10px] text-slate-400 font-bold px-1.5 hidden sm:inline">1u =</span>
+                    <button type="button" onclick="setUnitValue(5, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">5€</button>
+                    <button type="button" onclick="setUnitValue(10, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">10€</button>
+                    <button type="button" onclick="setUnitValue(20, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">20€</button>
+                    <button type="button" onclick="setUnitValue(50, this)" id="default-unit-btn" class="unit-btn unit-pill-active flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">50€</button>
+                    <button type="button" onclick="setUnitValue(100, this)" class="unit-btn flex-1 sm:flex-initial px-2 py-1 text-xs font-mono font-bold rounded-lg border border-transparent text-slate-300 hover:text-white transition">100€</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                        <span data-i18n="dash_stat_net_profit">PROFITTO NETTO</span>
+                        <i data-lucide="wallet" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    </div>
+                    <div>
+                        <div id="user-stat-profit" class="text-xl sm:text-3xl font-mono font-black text-emerald-400">+0.00u</div>
+                        <div id="user-stat-fiat" class="text-[11px] sm:text-xs font-mono font-bold text-emerald-400 mt-0.5">≈ +0.00 €</div>
+                    </div>
+                    <div class="text-[9px] text-slate-500 mt-1" data-i18n="dash_stat_net_desc">Guadagno netto totale</div>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                        <span data-i18n="dash_stat_roi">YIELD / ROI</span>
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    </div>
+                    <div id="user-stat-roi" class="text-xl sm:text-3xl font-mono font-black text-white">0.0%</div>
+                    <div class="text-[9px] text-slate-500 mt-1" data-i18n="dash_stat_roi_desc">Sul capitale giocato</div>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                        <span data-i18n="dash_stat_winrate">WIN RATE</span>
+                        <i data-lucide="target" class="w-3.5 h-3.5 text-amber-400"></i>
+                    </div>
+                    <div id="user-stat-winrate" class="text-xl sm:text-3xl font-mono font-black text-amber-400">0.0%</div>
+                    <div class="text-[9px] text-slate-500 mt-1" data-i18n="dash_stat_winrate_desc">Rapporto vinte/chiuse</div>
+                </div>
+
+                <div class="bg-slate-900/90 border border-slate-800 p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between shadow-lg">
+                    <div class="flex items-center justify-between text-slate-400 text-[10px] sm:text-xs mb-1">
+                        <span data-i18n="dash_stat_operations">OPERAZIONI</span>
+                        <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-slate-400"></i>
+                    </div>
+                    <div id="user-stat-resolved" class="text-xl sm:text-3xl font-mono font-black text-slate-200">0</div>
+                    <div class="text-[9px] text-slate-500 mt-1"><span id="user-stat-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="user-stat-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SELEZIONI ATTIVE IN CORSO (CON ACCORDION MULTIPLE E SBLOCCO CREDITI) -->
+        <section class="space-y-3 pt-2 border-t border-slate-800/80">
+            <div>
+                <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                    <i data-lucide="flame" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> <span data-i18n="dash_active_title">Selezioni VIP Attive</span>
+                </h2>
+                <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_active_subtitle">Dettaglio completo dei match singoli e delle multiple.</p>
+            </div>
+
+            <div id="user-pending-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
+                <!-- Popolato da JS -->
+            </div>
+        </section>
+
+        <!-- STORICO DELLE GIOCATE CONCLUSE -->
+        <section class="space-y-3 pt-2 border-t border-slate-800/80">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                <div>
+                    <h2 class="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                        <i data-lucide="history" class="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400"></i> <span data-i18n="dash_history_title">Storico Giocate Ricevute</span>
+                    </h2>
+                    <p class="text-[11px] sm:text-xs text-slate-400" data-i18n="dash_history_subtitle">Dettaglio di ogni esito con bilancio di profitto/perdita (P/L).</p>
+                </div>
+
+                <div class="flex items-center gap-1.5 self-start sm:self-auto bg-slate-950 p-1 rounded-xl border border-slate-800">
+                    <button type="button" onclick="filterHistory('all', this)" id="btn-hist-all" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500" data-i18n="hist_filter_all">Tutte</button>
+                    <button type="button" onclick="filterHistory('won', this)" id="btn-hist-won" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800" data-i18n="hist_filter_won">Vinte</button>
+                    <button type="button" onclick="filterHistory('lost', this)" id="btn-hist-lost" class="text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800" data-i18n="hist_filter_lost">Perse</button>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[9px] sm:text-[10px]">
+                            <tr>
+                                <th class="py-2.5 px-3" data-i18n="table_date">Data</th>
+                                <th class="py-2.5 px-3" data-i18n="table_match">Partita</th>
+                                <th class="py-2.5 px-3" data-i18n="table_prediction">Pronostico</th>
+                                <th class="py-2.5 px-3" data-i18n="table_odds">Quota</th>
+                                <th class="py-2.5 px-3" data-i18n="table_stake">Stake</th>
+                                <th class="py-2.5 px-3 text-center" data-i18n="table_outcome">Esito</th>
+                                <th class="py-2.5 px-3 text-right" data-i18n="table_pl">P/L Netto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-history-tbody" class="divide-y divide-slate-800/60 font-medium">
+                            <!-- Popolato da JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 text-center text-xs text-slate-600 border-t border-slate-900 mt-8">
+        <span data-i18n="dsh_footer">AtmBet &copy; 2026. Cruscotto Rendimento Certificato.</span>
+    </footer>
+
+    <!-- LOGICA DASHBOARD CON DATE DINAMICHE E MULTILINGUA -->
+    <script>
+        const PRIMARY_KEY = 'tipster_tracker_v1';
+        const ATMBET_KEY = 'atmbet_bets_data';
+        const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
+        const USERS_DB_KEY = 'atmbet_users_accounts';
+
+        let currentUser = null;
+        let currentHistoryFilter = 'all';
+        let latestNetProfitUnits = 0;
+        let currentMultiplier = 50; 
+        let currentSimStartDate = '2026-10-25'; 
+
+        // GESTIONE MULTILINGUA (i18n)
+        let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+
+        // Traduzione per i testi generati dal JavaScript: usa il JSON caricato, altrimenti il testo italiano di riserva.
+        function __t(key, fallback, vars) {
+            let str = (window.currentTranslations && window.currentTranslations[key] != null && window.currentTranslations[key] !== '')
+                ? window.currentTranslations[key] : fallback;
+            if (vars) {
+                Object.keys(vars).forEach(function (k) { str = str.split('{' + k + '}').join(String(vars[k])); });
+            }
+            return str;
+        }
+
+        async function loadTranslations(lang) {
+            try {
+                window.__i18nCache = window.__i18nCache || {};
+                let t = window.__i18nCache[lang];
+                if (!t) {
+                    const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
+                    if (!response.ok) return;
+                    t = await response.json();
+                    window.__i18nCache[lang] = t;
+                }
+                window.currentTranslations = t;
+
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerText = t[key];
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (t[key]) el.placeholder = t[key];
+                });
+
+                if (t.dsh_page_title) document.title = t.dsh_page_title;
+                document.documentElement.setAttribute('lang', lang);
+
+                const selector = document.getElementById('lang-selector');
+                if (selector) selector.value = lang;
+
+                localStorage.setItem('atmbet_lang', lang);
+                currentLang = lang;
+            } catch (e) {
+                console.error("Errore caricamento traduzioni:", e);
+            }
+        }
+
+        // Cambio lingua dal vivo: ricarica il JSON, aggiorna le etichette dei preset e ridisegna i contenuti generati dal JS.
+        async function changeLanguage(lang) {
+            await loadTranslations(lang);
+            const labels = getPresetLabels();
+            const bt = document.getElementById('btn-preset-today');
+            const by = document.getElementById('btn-preset-yesterday');
+            if (bt) bt.innerText = labels.todayLabel;
+            if (by) by.innerText = labels.yesterdayLabel;
+            initDashboard();
+        }
+
+        // Etichette "Oggi (13 nov)" / "Ieri (12 nov)" nella lingua corrente.
+        function getPresetLabels() {
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const fmt = (d) => {
+                let m = '';
+                try { m = d.toLocaleDateString(currentLang, { month: 'short' }).replace('.', ''); } catch (e) {}
+                m = m.charAt(0).toUpperCase() + m.slice(1);
+                return `${d.getDate()} ${m}`.trim();
+            };
+            return {
+                todayLabel: `${__t('sim_preset_today', 'Oggi')} (${fmt(today)})`,
+                yesterdayLabel: `${__t('sim_preset_yesterday', 'Ieri')} (${fmt(yesterday)})`
+            };
+        }
+
+        function getLocalDateString(d) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function setupDynamicDatePresets() {
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+
+            const { todayLabel, yesterdayLabel } = getPresetLabels();
+
+            const btnToday = document.getElementById('btn-preset-today');
+            const btnYesterday = document.getElementById('btn-preset-yesterday');
+            const dateInput = document.getElementById('sim-start-date');
+
+            if (btnToday) btnToday.innerText = todayLabel;
+            if (btnYesterday) btnYesterday.innerText = yesterdayLabel;
+
+            const defaultDate = getLocalDateString(yesterday);
+            if (dateInput) {
+                dateInput.value = defaultDate;
+                dateInput.max = getLocalDateString(today);
+            }
+            
+            currentSimStartDate = defaultDate;
+            if (btnYesterday) {
+                document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+                btnYesterday.classList.add('sim-pill-active');
+            }
+        }
+
+        function checkAuth() {
+            const rawSession = localStorage.getItem(CURRENT_SESSION_KEY);
+            if (!rawSession) {
+                window.location.href = 'auth.html';
+                return null;
+            }
+            try {
+                return JSON.parse(rawSession);
+            } catch(e) {
+                window.location.href = 'auth.html';
+                return null;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem(CURRENT_SESSION_KEY);
+            window.location.href = 'index.html';
+        }
+
+        function getStoredBets() {
+            let bets = [];
+            const rawV1 = localStorage.getItem(PRIMARY_KEY);
+            if (rawV1) {
+                try {
+                    const parsed = JSON.parse(rawV1);
+                    if (Array.isArray(parsed) && parsed.length > 0) bets = parsed;
+                } catch(e) {}
+            }
+
+            if (bets.length === 0) {
+                const rawAtm = localStorage.getItem(ATMBET_KEY);
+                if (rawAtm) {
+                    try {
+                        const parsed = JSON.parse(rawAtm);
+                        if (Array.isArray(parsed) && parsed.length > 0) bets = parsed;
+                    } catch(e) {}
+                }
+            }
+
+            return bets.map((b, idx) => ({
+                id: String(b.id || idx),
+                event_date: b.event_date || b.date || '',
+                league: b.league || 'Generale',
+                match_name: b.match_name || b.match || 'Evento',
+                market: b.market || 'Mercato',
+                prediction: b.prediction || b.pick || '-',
+                original_tipster: 'AtmBet Selection',
+                odds: parseFloat(b.odds || b.odd || 1.80),
+                stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
+                status: b.status || 'pending',
+                is_published: b.is_published !== undefined ? b.is_published : true
+            })).filter(b => b.is_published === true);
+        }
+
+        function unlockWithCredit(betId) {
+            if (!currentUser.credits || currentUser.credits <= 0) {
+                alert(__t('dsh_alert_no_credits', "Non hai crediti a sufficienza. Ricarica un pacchetto dalla sezione prezzi."));
+                return;
+            }
+
+            if (confirm(__t('dsh_confirm_unlock', "Vuoi utilizzare 1 credito per sbloccare questa selezione?"))) {
+                currentUser.credits -= 1;
+                if (!currentUser.unlocked_bets) currentUser.unlocked_bets = [];
+                currentUser.unlocked_bets.push(String(betId));
+
+                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentUser));
+
+                let users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
+                const idx = users.findIndex(u => u.email === currentUser.email);
+                if (idx !== -1) {
+                    users[idx] = currentUser;
+                    localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
+                }
+
+                initDashboard();
+            }
+        }
+
+        function setUnitValue(val, btnElement) {
+            currentMultiplier = parseFloat(val);
+            document.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('unit-pill-active'));
+            if (btnElement) btnElement.classList.add('unit-pill-active');
+            updateMonetaryCalculations();
+            calculateSimulationPerformance();
+        }
+
+        function updateMonetaryCalculations() {
+            const fiatAmount = latestNetProfitUnits * currentMultiplier;
+            const fiatEl = document.getElementById('user-stat-fiat');
+            
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatAmount >= 0 ? '+' : ''}${fiatAmount.toFixed(2)} €`;
+                fiatEl.className = `text-[11px] sm:text-xs font-mono font-bold ${fiatAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            }
+        }
+
+        function applySimulationDate(dateStr) {
+            currentSimStartDate = dateStr;
+            document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+            calculateSimulationPerformance();
+        }
+
+        function setDynamicPreset(type, btnElement) {
+            const dateInput = document.getElementById('sim-start-date');
+            document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+            if (btnElement) btnElement.classList.add('sim-pill-active');
+
+            const today = new Date();
+
+            if (type === 'today') {
+                currentSimStartDate = getLocalDateString(today);
+            } else if (type === 'yesterday') {
+                const y = new Date();
+                y.setDate(today.getDate() - 1);
+                currentSimStartDate = getLocalDateString(y);
+            } else if (type === '7days') {
+                const d7 = new Date();
+                d7.setDate(today.getDate() - 7);
+                currentSimStartDate = getLocalDateString(d7);
+            } else if (type === 'all') {
+                currentSimStartDate = '2020-01-01';
+            }
+
+            if (dateInput && type !== 'all') {
+                dateInput.value = currentSimStartDate;
+            }
+
+            calculateSimulationPerformance();
+        }
+
+        function calculateSimulationPerformance() {
+            const bets = getStoredBets();
+            const now = new Date();
+            const trialEnd = new Date(currentUser.trial_expiry || 0);
+            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
+            const unlocked = (currentUser.unlocked_bets || []).map(String);
+
+            const simBets = bets.filter(b => {
+                const isResolved = b.status === 'won' || b.status === 'lost';
+                if (!isResolved) return false;
+                if (!isVipActive && !unlocked.includes(String(b.id))) return false;
+
+                const betDate = (b.event_date || '').slice(0, 10);
+                return betDate >= currentSimStartDate;
+            });
+
+            const total = simBets.length;
+            const won = simBets.filter(b => b.status === 'won').length;
+            const lost = simBets.filter(b => b.status === 'lost').length;
+            const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            let totalStake = 0;
+
+            simBets.forEach(b => {
+                const s = b.stake || 1.0;
+                if (b.status === 'won') {
+                    netProfit += (b.odds - 1) * s;
+                } else if (b.status === 'lost') {
+                    netProfit -= s;
+                }
+                totalStake += s;
+            });
+
+            const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
+            const fiatSimAmount = netProfit * currentMultiplier;
+
+            const profitEl = document.getElementById('sim-profit-units');
+            profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+            profitEl.className = `text-xl sm:text-2xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+
+            const fiatEl = document.getElementById('sim-profit-fiat');
+            fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
+            fiatEl.className = `text-[11px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+
+            document.getElementById('sim-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
+            document.getElementById('sim-winrate').innerText = winRate + '%';
+            document.getElementById('sim-resolved-count').innerText = total;
+            document.getElementById('sim-won-count').innerText = won + __t('idx_won_short', 'V');
+            document.getElementById('sim-lost-count').innerText = lost + __t('idx_lost_short', 'P');
+        }
+
+        function filterHistory(filterType, element) {
+            currentHistoryFilter = filterType;
+            document.querySelectorAll('#btn-hist-all, #btn-hist-won, #btn-hist-lost').forEach(btn => {
+                btn.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-slate-900 text-slate-300 border-slate-800";
+            });
+            if (element) {
+                element.className = "text-xs px-2.5 py-1 rounded-lg border font-bold bg-emerald-500 text-slate-950 border-emerald-500";
+            }
+            renderHistoryTable();
+        }
+
+        window.toggleDashboardParlay = function(betId) {
+            const box = document.getElementById('dash-submatches-' + betId);
+            const btn = document.getElementById('dash-btn-toggle-' + betId);
+            if (!box) return;
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                if (btn) btn.innerHTML = __t('idx_card_hide_multi', 'Nascondi Match ▲');
+            } else {
+                box.classList.add('hidden');
+                if (btn) btn.innerHTML = __t('idx_card_show_multi_short', 'Mostra Match Multipla ▼');
+            }
+        };
+
+        function initDashboard() {
+            currentUser = checkAuth();
+            if (!currentUser) return;
+
+            document.getElementById('user-display-name').innerText = currentUser.name || __t('dsh_default_name', 'Investitore');
+            document.getElementById('user-display-email').innerText = currentUser.email;
+            document.getElementById('user-created-date').innerText = (currentUser.created_at || '').slice(0, 10);
+            document.getElementById('badge-credits-count').innerText = __t('dsh_credits_n', '{n} Crediti', { n: (currentUser.credits || 0) });
+
+            const now = new Date();
+            const trialEnd = new Date(currentUser.trial_expiry || 0);
+            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
+
+            const vipBadge = document.getElementById('badge-vip-status');
+            if (isVipActive) {
+                const diffDays = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
+                vipBadge.innerText = diffDays > 0 ? __t('dsh_vip_active_days', 'Attivo ({n}gg)', { n: diffDays }) : __t('dsh_vip_active_vip', 'Attivo (VIP)');
+                vipBadge.className = "text-xs font-black text-emerald-400";
+            } else {
+                vipBadge.innerText = __t('dsh_vip_expired', "Scaduto / Free");
+                vipBadge.className = "text-xs font-black text-rose-400";
+            }
+
+            calculatePortfolioPerformance(isVipActive);
+            calculateSimulationPerformance();
+            renderPendingBets(isVipActive);
+            renderHistoryTable();
+        }
+
+        function calculatePortfolioPerformance(isVipActive) {
+            const bets = getStoredBets();
+            const unlocked = (currentUser.unlocked_bets || []).map(String);
+
+            const myCompletedBets = bets.filter(b => {
+                const isResolved = b.status === 'won' || b.status === 'lost';
+                if (!isResolved) return false;
+                return isVipActive || unlocked.includes(String(b.id));
+            });
+
+            const total = myCompletedBets.length;
+            const won = myCompletedBets.filter(b => b.status === 'won').length;
+            const lost = myCompletedBets.filter(b => b.status === 'lost').length;
+            const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            let totalStake = 0;
+
+            myCompletedBets.forEach(b => {
+                const s = b.stake || 1.0;
+                if (b.status === 'won') {
+                    netProfit += (b.odds - 1) * s;
+                } else if (b.status === 'lost') {
+                    netProfit -= s;
+                }
+                totalStake += s;
+            });
+
+            latestNetProfitUnits = netProfit;
+            const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
+
+            const profitEl = document.getElementById('user-stat-profit');
+            profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+            profitEl.className = `text-xl sm:text-3xl font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+            document.getElementById('user-stat-roi').innerText = (roi >= 0 ? '+' : '') + roi + '%';
+            document.getElementById('user-stat-winrate').innerText = winRate + '%';
+            document.getElementById('user-stat-resolved').innerText = total;
+            document.getElementById('user-stat-won-count').innerText = won + __t('idx_won_short', 'V');
+            document.getElementById('user-stat-lost-count').innerText = lost + __t('idx_lost_short', 'P');
+
+            const statusBadge = document.getElementById('badge-portfolio-status');
+            if (netProfit >= 0) {
+                statusBadge.innerText = __t('dsh_status_active', "IN ATTIVO");
+                statusBadge.className = "text-[9px] sm:text-[10px] font-mono uppercase font-black px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
+            } else {
+                statusBadge.innerText = __t('dsh_status_recovery', "IN RECUPERO");
+                statusBadge.className = "text-[9px] sm:text-[10px] font-mono uppercase font-black px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30";
+            }
+
+            updateMonetaryCalculations();
+        }
+
+        function renderPendingBets(isVipActive) {
+            const container = document.getElementById('user-pending-container');
+            const bets = getStoredBets();
+            container.innerHTML = '';
+
+            const pendingBets = bets.filter(b => b.status === 'pending');
+
+            if (pendingBets.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 font-medium text-xs">${__t('dsh_no_pending', 'Nessuna giocata in corso al momento.')}</div>`;
+                return;
+            }
+
+            pendingBets.forEach(bet => {
+                const unlocked = (currentUser.unlocked_bets || []).map(String);
+                const canSee = isVipActive || unlocked.includes(String(bet.id));
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-lg transition";
+
+                let submatchesHtml = '';
+                let toggleBtnHtml = '';
+                if (bet.match_name.includes('/')) {
+                    const subList = bet.match_name.split('/').map(s => s.trim()).filter(Boolean);
+                    toggleBtnHtml = `
+                        <button type="button" id="dash-btn-toggle-${bet.id}" onclick="toggleDashboardParlay('${bet.id}')" class="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 py-1 px-2 rounded bg-emerald-500/10 border border-emerald-500/20 transition mt-2">
+                            ${__t('idx_card_show_multi', 'Mostra Match Multipla ({n}) ▼', { n: subList.length })}
+                        </button>
+                    `;
+                    submatchesHtml = `
+                        <div id="dash-submatches-${bet.id}" class="hidden space-y-1.5 mt-2 pt-2 border-t border-slate-800/80">
+                            ${subList.map((m, idx) => `
+                                <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 flex items-center justify-between text-[11px]">
+                                    <span class="font-bold text-slate-200">${idx+1}. ${m}</span>
+                                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">${__t('dsh_event_n', 'Evento {n}', { n: idx + 1 })}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] font-medium">${bet.league}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>
+                        </div>
+                        <h3 class="text-sm sm:text-base font-bold text-white mb-2 leading-snug break-words">${bet.match_name}</h3>
+                        ${toggleBtnHtml}
+                        ${submatchesHtml}
+
+                        <div class="bg-slate-950/80 rounded-xl p-3 border border-slate-800/80 my-3">
+                            <div class="text-[9px] uppercase font-mono tracking-widest text-slate-500 mb-1">${__t('dsh_vip_selection', 'Selezione VIP:')}</div>
+                            ${canSee ? `
+                                <div class="space-y-1">
+                                    <div class="text-xs sm:text-sm font-bold text-emerald-400 break-words">${bet.prediction}</div>
+                                    <div class="text-[10px] text-slate-400 font-normal">${__t('dsh_market_label', 'Mercato:')} ${bet.market}</div>
+                                </div>
+                            ` : `
+                                <div class="flex items-center justify-between py-0.5">
+                                    <span class="text-xs text-slate-500">${__t('dsh_locked', 'Contenuto Riservato')}</span>
+                                    <button type="button" onclick="unlockWithCredit('${bet.id}')" class="text-[11px] bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 transition">
+                                        <i data-lucide="unlock" class="w-3 ins-3"></i> ${__t('dsh_unlock_btn', 'Sblocca (1c)')}
+                                    </button>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+
+                    <div class="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
+                        <div>
+                            <span class="text-slate-500 text-[10px]">${__t('table_odds', 'Quota')}:</span>
+                            ${canSee 
+                                ? `<span class="text-white font-mono font-bold ml-1">${parseFloat(bet.odds).toFixed(2)}</span>` 
+                                : '<span class="text-slate-600 font-mono font-bold ml-1 blur-sm select-none">1.85</span>'}
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-[10px]">${__t('table_stake', 'Stake')}:</span>
+                            <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
+                        </div>
+                        <div>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">AtmBet Selection</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function renderHistoryTable() {
+            const tbody = document.getElementById('user-history-tbody');
+            const bets = getStoredBets();
+            tbody.innerHTML = '';
+
+            let completed = bets.filter(b => b.status === 'won' || b.status === 'lost');
+
+            if (currentHistoryFilter === 'won') completed = completed.filter(b => b.status === 'won');
+            if (currentHistoryFilter === 'lost') completed = completed.filter(b => b.status === 'lost');
+
+            if (completed.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-slate-500 font-medium text-xs">${__t('dsh_no_history', 'Nessuna giocata nello storico per questo filtro.')}</td></tr>`;
+                return;
+            }
+
+            completed.forEach(bet => {
+                const tr = document.createElement('tr');
+                const isWon = bet.status === 'won';
+                const s = bet.stake || 1.0;
+                const pl = isWon ? (bet.odds - 1) * s : -s;
+
+                tr.className = isWon 
+                    ? "bg-emerald-500/[0.02] hover:bg-emerald-500/[0.05] transition" 
+                    : "bg-rose-500/[0.02] hover:bg-rose-500/[0.05] transition";
+
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
+                    <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
+                        <div class="break-words">${bet.match_name}</div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-emerald-400 font-semibold">AtmBet Selection</span></div>
+                    </td>
+                    <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
+                        <div class="break-words">${bet.prediction}</div>
+                        <div class="text-[9px] text-slate-500">${bet.market}</div>
+                    </td>
+                    <td class="py-2.5 px-3 font-mono font-bold text-white">${parseFloat(bet.odds).toFixed(2)}</td>
+                    <td class="py-2.5 px-3 font-mono text-slate-400">${bet.stake.toFixed(1)}u</td>
+                    <td class="py-2.5 px-3 text-center">
+                        ${isWon 
+                            ? '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">' + __t('idx_won_badge', 'VINTA') + '</span>'
+                            : '<span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">' + __t('idx_lost_badge', 'PERSA') + '</span>'}
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-mono font-black ${isWon ? 'text-emerald-400' : 'text-rose-400'}">
+                        ${pl >= 0 ? '+' : ''}${pl.toFixed(2)}u
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadTranslations(currentLang);
+            setupDynamicDatePresets();
+            initDashboard();
+            loadTranslations(currentLang);
+        });
+    </script>
+</body>
+</html>
