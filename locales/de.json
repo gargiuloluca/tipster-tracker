@@ -1,0 +1,14 @@
+{
+  "nav_back": "Zurück zur Startseite",
+  "auth_title": "Geschützten Bereich betreten",
+  "auth_subtitle": "Verifizierter Schnellzugriff für Plattform-Abonnenten.",
+  "email_label": "E-Mail-Adresse oder Admin-Passwort",
+  "email_placeholder": "deine@email.com oder Admin-Passwort",
+  "telegram_label": "Dein Telegram-Benutzername",
+  "telegram_placeholder": "@DeinBenutzername",
+  "info_text": "Gib die bei Stripe verwendete E-Mail-Adresse und deinen Telegram-Benutzernamen ein. Das System erkennt deine aktive Lizenz automatisch.",
+  "submit_btn": "Zum VIP-Dashboard",
+  "no_sub": "Du hast noch kein aktives Abonnement?",
+  "choose_plan": "Wähle einen Plan oder teste 7 Tage",
+  "footer_copy": "AtmBet © 2026. Alle Rechte vorbehalten."
+}
