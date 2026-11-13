@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "backup_date": "2026-11-12T12:06:00.466Z",
+  "backup_date": "2026-11-13T19:17:52.397Z",
   "platform": "AtmBet Official",
   "bets": [
     {
@@ -18,6 +18,20 @@
       "tg_sent": false
     },
     {
+      "id": "bet_1794597209276_2",
+      "event_date": "2026-11-14 20:30",
+      "match_name": "Deportivo Maldonado - Cerro",
+      "league": "Uruguay Primera Division",
+      "market": "1X2 / Mercato",
+      "prediction": "1",
+      "original_tipster": "BetMines PreMatch",
+      "odds": 1.57,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
       "id": "bet_1794380548426_10",
       "event_date": "2026-11-14 20:30",
       "match_name": "Real Madrid W - Badalona W",
@@ -26,6 +40,20 @@
       "prediction": "1",
       "original_tipster": "NerdyTips",
       "odds": 1.32,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
+      "id": "bet_1794597209275_1",
+      "event_date": "2026-11-14 20:00",
+      "match_name": "VVV-Venlo - FC Eindhoven",
+      "league": "Netherlands Eerste Divisie",
+      "market": "1X2 / Mercato",
+      "prediction": "1",
+      "original_tipster": "BetMines PreMatch",
+      "odds": 1.6,
       "stake": 1,
       "status": "pending",
       "is_published": true,
@@ -74,6 +102,20 @@
       "tg_sent": false
     },
     {
+      "id": "bet_1794597209274_0",
+      "event_date": "2026-11-14 16:00",
+      "match_name": "East Kilbride - Alloa Athletic",
+      "league": "Scotland League One",
+      "market": "1X2 / Mercato",
+      "prediction": "1",
+      "original_tipster": "BetMines PreMatch",
+      "odds": 1.55,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
       "id": "bet_1794380548424_4",
       "event_date": "2026-11-14 16:00",
       "match_name": "Carlisle - Boston Utd",
@@ -116,6 +158,20 @@
       "tg_sent": false
     },
     {
+      "id": "bet_1794597103687_0",
+      "event_date": "2026-11-14 04:00",
+      "match_name": "Sacramento Kings - Portland Trail Blazers / Los Angeles Clippers - Oklahoma City Thunder / San Antonio Spurs - Golden State Warriors",
+      "league": "NBA / NBA / NBA",
+      "market": "Multipla",
+      "prediction": "2 / 2 / 1",
+      "original_tipster": "ZcodeAi",
+      "odds": 1.78,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
       "id": "bet_1794380548424_0",
       "event_date": "2026-11-14 03:00",
       "match_name": "Guatemala - Canada",
@@ -127,7 +183,147 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046784_8",
+      "event_date": "2026-11-13 22:00",
+      "match_name": "Calor de San Pedro - Real Apodaca",
+      "league": "Liga Premier - Serie A",
+      "market": "1X2 / Mercato",
+      "prediction": "Under 3,5 gol",
+      "original_tipster": "Pronostici1",
+      "odds": 1.32,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597095341_0",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Azerbaijan - Liechtenstein / Slovakia - Isole Faroe / Serbia - Germania",
+      "league": "UEFA Nations League / UEFA Nations League / UEFA Nations League",
+      "market": "Multipla",
+      "prediction": "2 / 1 / 2",
+      "original_tipster": "ZcodeAi",
+      "odds": 2.19,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
       "tg_sent": false
+    },
+    {
+      "id": "bet_1794597087373_3",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Slovenia - Svizzera",
+      "league": "UEFA Nations League",
+      "market": "1X2 / Mercato",
+      "prediction": "2",
+      "original_tipster": "ZcodeAi",
+      "odds": 1.81,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
+      "id": "bet_1794597063572_0",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Slovakia - Faroe Islands",
+      "league": "UEFA Nations League",
+      "market": "1X2 / Mercato",
+      "prediction": "1 + Over 1.5",
+      "original_tipster": "CalcioAI",
+      "odds": 1.7,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
+      "id": "bet_1794597046784_9",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Ards - Moyola Park",
+      "league": "League Cup",
+      "market": "1X2 / Mercato",
+      "prediction": "Under 3,5 gol",
+      "original_tipster": "Pronostici1",
+      "odds": 1.5,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046782_5",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Slovenia - Svizzera",
+      "league": "Amichevole internazionale",
+      "market": "1X2 / Mercato",
+      "prediction": "Entrambe le squadre segnano: No",
+      "original_tipster": "Pronostici1",
+      "odds": 1.73,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046781_4",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Slovacchia - Fær Øer",
+      "league": "Amichevole internazionale",
+      "market": "1X2 / Mercato",
+      "prediction": "Fær Øer +1,5 Handicap Asiatico",
+      "original_tipster": "Pronostici1",
+      "odds": 1.8,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046781_3",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Paesi Bassi - Grecia",
+      "league": "Amichevole internazionale",
+      "market": "1X2 / Mercato",
+      "prediction": "Handicap Asiatico: Grecia +1,5",
+      "original_tipster": "Pronostici1",
+      "odds": 1.58,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046780_1",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Lussemburgo - Estonia",
+      "league": "Amichevole internazionale",
+      "market": "1X2 / Mercato",
+      "prediction": "Entrambe le squadre segnano: No",
+      "original_tipster": "Pronostici1",
+      "odds": 1.67,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046780_0",
+      "event_date": "2026-11-13 20:45",
+      "match_name": "Bulgaria - Islanda",
+      "league": "Amichevole internazionale",
+      "market": "1X2 / Mercato",
+      "prediction": "Entrambe le squadre segnano: No",
+      "original_tipster": "Pronostici1",
+      "odds": 1.73,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
     },
     {
       "id": "bet_1794483599421_11",
@@ -141,7 +337,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794294012916_11",
@@ -155,7 +351,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794294012916_8",
@@ -169,7 +365,119 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597078354_0",
+      "event_date": "2026-11-13 20:30",
+      "match_name": "Ospitaletto - Dolomiti Bellunesi",
+      "league": "Serie C: Girone A",
+      "market": "1X2 / Mercato",
+      "prediction": "1",
+      "original_tipster": "Stats4bets bollamaker",
+      "odds": 1.51,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597055916_0",
+      "event_date": "2026-11-13 20:30",
+      "match_name": "Calor de San Pedro - Real Apodaca / Gimnastic - Real Madrid II / Ponferradina - Cacereño",
+      "league": "Liga Premier - Serie A / Primera Federación / Copa del Rey",
+      "market": "Multipla",
+      "prediction": "Under 3,5 gol / Under 3,5 gol / Over 1,5 gol",
+      "original_tipster": "Pronostici1",
+      "odds": 2.62,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046783_7",
+      "event_date": "2026-11-13 20:30",
+      "match_name": "Gimnastic - Real Madrid II",
+      "league": "Primera Federación",
+      "market": "1X2 / Mercato",
+      "prediction": "Under 3,5 gol",
+      "original_tipster": "Pronostici1",
+      "odds": 1.33,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046783_6",
+      "event_date": "2026-11-13 20:30",
+      "match_name": "Ponferradina - Cacereño",
+      "league": "Copa del Rey",
+      "market": "1X2 / Mercato",
+      "prediction": "Over 1,5 gol",
+      "original_tipster": "Pronostici1",
+      "odds": 1.49,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597087373_2",
+      "event_date": "2026-11-13 20:00",
+      "match_name": "Vancouver - NY Rangers",
+      "league": "USA NHL",
+      "market": "1X2 / Mercato",
+      "prediction": "2",
+      "original_tipster": "ZcodeAi",
+      "odds": 1.49,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
       "tg_sent": false
+    },
+    {
+      "id": "bet_1794597087372_1",
+      "event_date": "2026-11-13 20:00",
+      "match_name": "San Antonio - Golden State",
+      "league": "NBA",
+      "market": "1X2 / Mercato",
+      "prediction": "Over 219.5 punti",
+      "original_tipster": "ZcodeAi",
+      "odds": 1.95,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
+      "id": "bet_1794597087372_0",
+      "event_date": "2026-11-13 20:00",
+      "match_name": "Orlando - Milwaukee",
+      "league": "NBA",
+      "market": "1X2 / Mercato",
+      "prediction": "Under 223.5 punti",
+      "original_tipster": "ZcodeAi",
+      "odds": 1.91,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
+      "id": "bet_1794597078354_1",
+      "event_date": "2026-11-13 20:00",
+      "match_name": "St-Philbert Gd - La Roche / Serbia - Germany / Liechtenstein - Azerbaijan",
+      "league": "Coppa di Francia / UEFA Nations League / UEFA Nations League",
+      "market": "Multipla",
+      "prediction": "2 / 2 / 2",
+      "original_tipster": "Stats4Bets Automatibet",
+      "odds": 2.06,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
     },
     {
       "id": "bet_1794483599420_5",
@@ -183,7 +491,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794380522245_4",
@@ -197,7 +505,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794294012915_4",
@@ -211,7 +519,49 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597071053_0",
+      "event_date": "2026-11-13 19:00",
+      "match_name": "HIK - B 93 / Serbia - Germany",
+      "league": "Danimarca - 2nd Division / Europa - UEFA Nations League",
+      "market": "Multipla",
+      "prediction": "+2.5 / 2",
+      "original_tipster": "BetMines Valuebet",
+      "odds": 1.96,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597125971_0",
+      "event_date": "2026-11-13 18:30",
+      "match_name": "Virtus Segafredo Bologna - Anadolu Efes",
+      "league": "EUROLIGA",
+      "market": "1X2 / Mercato",
+      "prediction": "1",
+      "original_tipster": "ZCODE",
+      "odds": 1.5,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597046781_2",
+      "event_date": "2026-11-13 18:00",
+      "match_name": "Moldavia - Kazakistan",
+      "league": "Amichevole internazionale",
+      "market": "1X2 / Mercato",
+      "prediction": "Doppia Chance: Una squadra in vantaggio - 1º tempo",
+      "original_tipster": "Pronostici1",
+      "odds": 1.8,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
     },
     {
       "id": "bet_1794294012914_3",
@@ -225,7 +575,7 @@
       "stake": 1,
       "status": "pending",
       "is_published": true,
-      "tg_sent": false
+      "tg_sent": true
     },
     {
       "id": "bet_1794294012914_2",
@@ -236,6 +586,34 @@
       "prediction": "1",
       "original_tipster": "NerdyTips",
       "odds": 1.32,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": true
+    },
+    {
+      "id": "bet_1794597063573_2",
+      "event_date": "2026-11-13 12:00",
+      "match_name": "Czechia U18 - Poland U18 / Netherlands - Greece / Singapore - Paraguay",
+      "league": "Friendlies / UEFA Nations League / Friendlies",
+      "market": "Multipla",
+      "prediction": "1 / 1 + Over 1.5 / Over 1.5",
+      "original_tipster": "CalcioAI",
+      "odds": 3.86,
+      "stake": 1,
+      "status": "pending",
+      "is_published": true,
+      "tg_sent": false
+    },
+    {
+      "id": "bet_1794597063572_1",
+      "event_date": "2026-11-13 12:00",
+      "match_name": "Czechia U18 - Poland U18 / Slovakia - Faroe Islands",
+      "league": "Friendlies / UEFA Nations League",
+      "market": "Multipla",
+      "prediction": "1 / Over 1.5",
+      "original_tipster": "CalcioAI",
+      "odds": 2.38,
       "stake": 1,
       "status": "pending",
       "is_published": true,
@@ -9841,19 +10219,16 @@
   ],
   "full_tipsters": [
     "BetMines Valuebet",
-    "Stats4bets bollamaker",
     "BetMines",
     "NerdyTips",
     "AtmBetSignal",
-    "BetMines PreMatch",
     "Upper90",
     "ZCODE",
     "Stats4Bets Automatibet",
     "Cassandra",
-    "ZcodeAi",
     "Infoland",
-    "CalcioAI",
-    "Pronostici1"
+    "Pronostici1",
+    "Stats4bets bollamaker"
   ],
   "partners": {
     "TEST": {
