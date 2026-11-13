@@ -1,47 +1,5 @@
 [
   {
-    "id": "bet_1794597209276_2",
-    "event_date": "2026-11-14 20:30",
-    "match_name": "Deportivo Maldonado - Cerro",
-    "league": "Uruguay Primera Division",
-    "original_tipster": "BetMines PreMatch",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.57,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794597209275_1",
-    "event_date": "2026-11-14 20:00",
-    "match_name": "VVV-Venlo - FC Eindhoven",
-    "league": "Netherlands Eerste Divisie",
-    "original_tipster": "BetMines PreMatch",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.6,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
-    "id": "bet_1794597209274_0",
-    "event_date": "2026-11-14 16:00",
-    "match_name": "East Kilbride - Alloa Athletic",
-    "league": "Scotland League One",
-    "original_tipster": "BetMines PreMatch",
-    "market": "1X2 / Mercato",
-    "prediction": "1",
-    "odds": 1.55,
-    "stake": 1,
-    "status": "pending",
-    "is_published": true,
-    "tg_sent": false
-  },
-  {
     "id": "bet_1794483633139_13",
     "event_date": "2026-11-14 21:30",
     "match_name": "Millonarios - A. Valledupar",
@@ -56,6 +14,20 @@
     "tg_sent": false
   },
   {
+    "id": "bet_1794597209276_2",
+    "event_date": "2026-11-14 20:30",
+    "match_name": "Deportivo Maldonado - Cerro",
+    "league": "Uruguay Primera Division",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetMines PreMatch",
+    "odds": 1.57,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
     "id": "bet_1794380548426_10",
     "event_date": "2026-11-14 20:30",
     "match_name": "Real Madrid W - Badalona W",
@@ -64,6 +36,20 @@
     "prediction": "1",
     "original_tipster": "NerdyTips",
     "odds": 1.32,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794597209275_1",
+    "event_date": "2026-11-14 20:00",
+    "match_name": "VVV-Venlo - FC Eindhoven",
+    "league": "Netherlands Eerste Divisie",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetMines PreMatch",
+    "odds": 1.6,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -106,6 +92,20 @@
     "prediction": "2",
     "original_tipster": "NerdyTips",
     "odds": 1.4,
+    "stake": 1,
+    "status": "pending",
+    "is_published": true,
+    "tg_sent": false
+  },
+  {
+    "id": "bet_1794597209274_0",
+    "event_date": "2026-11-14 16:00",
+    "match_name": "East Kilbride - Alloa Athletic",
+    "league": "Scotland League One",
+    "market": "1X2 / Mercato",
+    "prediction": "1",
+    "original_tipster": "BetMines PreMatch",
+    "odds": 1.55,
     "stake": 1,
     "status": "pending",
     "is_published": true,
@@ -179,7 +179,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046784_8",
@@ -193,7 +193,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597095341_0",
@@ -249,7 +249,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046782_5",
@@ -263,7 +263,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046781_4",
@@ -277,7 +277,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046781_3",
@@ -291,7 +291,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046780_1",
@@ -305,7 +305,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046780_0",
@@ -319,7 +319,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794483599421_11",
@@ -333,7 +333,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794294012916_11",
@@ -347,7 +347,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794294012916_8",
@@ -361,7 +361,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597078354_0",
@@ -375,7 +375,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597055916_0",
@@ -389,7 +389,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046783_7",
@@ -403,7 +403,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046783_6",
@@ -417,7 +417,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597087373_2",
@@ -473,7 +473,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794483599420_5",
@@ -487,7 +487,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794380522245_4",
@@ -501,7 +501,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794294012915_4",
@@ -515,7 +515,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597071053_0",
@@ -529,7 +529,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597125971_0",
@@ -543,7 +543,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597046781_2",
@@ -557,7 +557,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794294012914_3",
@@ -571,7 +571,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794294012914_2",
@@ -585,7 +585,7 @@
     "stake": 1,
     "status": "pending",
     "is_published": true,
-    "tg_sent": false
+    "tg_sent": true
   },
   {
     "id": "bet_1794597063573_2",
