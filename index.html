@@ -124,7 +124,7 @@
                 </a>
             </div>
 
-            <!-- AREA DESTRA DESKTOP (NASCOSTA SU MOBILE) & SELETTORE LINGUA -->
+            <!-- AREA DESTRA DESKTOP & SELETTORE LINGUA -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <!-- Selettore Lingua -->
                 <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 font-sans cursor-pointer">
@@ -153,7 +153,7 @@
             </div>
         </div>
 
-        <!-- MENU A TENDINA MOBILE PERFETTO E SENZA EFFETTO VERDE FISSO -->
+        <!-- MENU A TENDINA MOBILE -->
         <div id="mobile-dropdown-menu" class="hidden lg:hidden bg-slate-950 border-b border-slate-800 px-4 py-4 space-y-2">
             <a href="#metodo" onclick="toggleMobileMenu()" class="public-marketing-element block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80" data-i18n="nav_method">📍 Metodo</a>
             <a href="#simulatore" onclick="toggleMobileMenu()" class="block text-xs font-bold text-slate-300 hover:text-emerald-400 py-2.5 px-3 bg-slate-900/80 rounded-xl border border-slate-800/80" data-i18n="nav_analysis">📊 Analisi & Performance</a>
@@ -165,7 +165,6 @@
                 <i data-lucide="shield-check" class="w-4 h-4"></i> <span data-i18n="nav_legal">Note Legali & Conformità</span>
             </a>
             
-            <!-- Tasti rapidi con ID protetto e stabile -->
             <div id="mobile-auth-actions" class="pt-3 border-t border-slate-800 grid grid-cols-3 gap-2">
                 <a href="contatti.html" class="text-center bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold py-2.5 rounded-xl border border-slate-800 flex items-center justify-center gap-1">
                     <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> <span data-i18n="nav_contacts">Contatti</span>
@@ -748,7 +747,7 @@
     <!-- 10. FOOTER -->
     <footer class="py-8 px-4 text-center text-xs text-slate-600 border-t border-slate-900 mt-10 space-y-4">
         <!-- LINK GIOCO RESPONSABILE & ADM -->
-        <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-semibold">
+        <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-semibold font-sans">
             <a href="https://www.gioca-responsabile.it/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
                 <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> Gioco Responsabile
             </a>
@@ -760,7 +759,7 @@
             </div>
         </div>
 
-        <div class="text-[11px] text-slate-500 max-w-xl mx-auto space-y-2 leading-relaxed">
+        <div class="text-[11px] text-slate-400 max-w-xl mx-auto space-y-2 leading-relaxed font-sans">
             <div>Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.</div>
             <div class="text-slate-400 font-medium">Se hai un problema con il gioco d'azzardo, chiama il <strong class="text-emerald-400 font-mono">Telefono Verde: 800 558 822</strong> (anonimo e gratuito)</div>
         </div>
@@ -782,7 +781,7 @@
         </div>
     </footer>
 
-    <!-- LOGICA JAVASCRIPT, LICENZE & TELEGRAM -->
+    <!-- LOGICA JAVASCRIPT, LICENZE, TELEGRAM & MULTILINGUA -->
     <script>
         // GESTIONE MULTILINGUA (i18n)
         let currentLang = localStorage.getItem('atmbet_lang') || 'it';
