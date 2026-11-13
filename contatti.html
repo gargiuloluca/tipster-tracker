@@ -32,9 +32,22 @@
                 <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 w-auto">
                 <span class="text-base sm:text-lg font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
             </div>
-            <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5">
-                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Torna alla Home
-            </a>
+            
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Selettore Lingua -->
+                <select id="lang-selector" onchange="changeLanguage(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500 font-sans cursor-pointer">
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="de">🇩🇪 DE</option>
+                </select>
+
+                <a href="index.html" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1.5">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span data-i18n="contacts_nav_home">Torna alla Home</span>
+                </a>
+            </div>
         </div>
     </header>
 
@@ -44,8 +57,8 @@
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/5">
                 <i data-lucide="headset" class="w-6 h-6"></i>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-black text-white">Contatti & Supporto Ufficiale</h1>
-            <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto">Hai bisogno di assistenza tecnica, informazioni sui piani o verifica degli accessi? Compila il form sottostante o utilizza i nostri canali diretti.</p>
+            <h1 class="text-2xl sm:text-3xl font-black text-white" data-i18n="contacts_main_title">Contatti & Supporto Ufficiale</h1>
+            <p class="text-xs sm:text-sm text-slate-400 max-w-lg mx-auto" data-i18n="contacts_main_desc">Hai bisogno di assistenza tecnica, informazioni sui piani o verifica degli accessi? Compila il form sottostante o utilizza i nostri canali diretti.</p>
         </div>
 
         <!-- 3 Box Principali -->
@@ -56,7 +69,7 @@
                     <i data-lucide="mail" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Informazioni Generali</div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-i18n="contacts_box1_title">Informazioni Generali</div>
                     <div class="text-xs sm:text-sm font-bold text-white mt-1 break-all">Info@atmbetofficial.com</div>
                 </div>
             </a>
@@ -67,7 +80,7 @@
                     <i data-lucide="life-buoy" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Assistenza Tecnica</div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-i18n="contacts_box2_title">Assistenza Tecnica</div>
                     <div class="text-xs sm:text-sm font-bold text-white mt-1 break-all">Assistenza@atmbetofficial.it</div>
                 </div>
             </a>
@@ -78,7 +91,7 @@
                     <i data-lucide="send" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Canale Telegram</div>
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider" data-i18n="contacts_box3_title">Canale Telegram</div>
                     <div class="text-xs sm:text-sm font-bold text-white mt-1">@AtmBetOfficial</div>
                 </div>
             </a>
@@ -88,31 +101,31 @@
         <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl shadow-xl space-y-4">
             <div class="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <i data-lucide="message-square" class="w-5 h-5 text-emerald-400"></i>
-                <h2 class="text-sm font-bold text-white">Invia un Messaggio Diretto</h2>
+                <h2 class="text-sm font-bold text-white" data-i18n="contacts_form_title">Invia un Messaggio Diretto</h2>
             </div>
 
             <form action="mailto:Assistenza@atmbetofficial.it" method="POST" enctype="text/plain" class="space-y-4 text-xs">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-slate-400 mb-1 text-[11px]">Il tuo Nome</label>
-                        <input type="text" name="Nome" required placeholder="Mario Rossi" 
+                        <label class="block text-slate-400 mb-1 text-[11px]" data-i18n="contacts_label_name">Il tuo Nome</label>
+                        <input type="text" name="Nome" required data-i18n-placeholder="contacts_ph_name" placeholder="Mario Rossi" 
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500">
                     </div>
                     <div>
-                        <label class="block text-slate-400 mb-1 text-[11px]">Il tuo Indirizzo Email</label>
-                        <input type="email" name="Email" required placeholder="mario@gmail.com" 
+                        <label class="block text-slate-400 mb-1 text-[11px]" data-i18n="contacts_label_email">Il tuo Indirizzo Email</label>
+                        <input type="email" name="Email" required data-i18n-placeholder="contacts_ph_email" placeholder="mario@gmail.com" 
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-slate-400 mb-1 text-[11px]">Messaggio o Richiesta</label>
-                    <textarea name="Messaggio" rows="4" required placeholder="Scrivi qui la tua richiesta di assistenza o dettagli sul tuo abbonamento..." 
+                    <label class="block text-slate-400 mb-1 text-[11px]" data-i18n="contacts_label_msg">Messaggio o Richiesta</label>
+                    <textarea name="Messaggio" rows="4" required data-i18n-placeholder="contacts_ph_msg" placeholder="Scrivi qui la tua richiesta di assistenza o dettagli sul tuo abbonamento..." 
                         class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-white focus:outline-none focus:border-emerald-500"></textarea>
                 </div>
 
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3 rounded-xl transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
-                    <i data-lucide="send" class="w-4 h-4"></i> Invia Messaggio (Apri Email)
+                    <i data-lucide="send" class="w-4 h-4"></i> <span data-i18n="contacts_submit_btn">Invia Messaggio (Apri Email)</span>
                 </button>
             </form>
         </div>
@@ -120,21 +133,21 @@
         <!-- Sezione Info e Sicurezza -->
         <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
             <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                <i data-lucide="shield-check" class="w-4 h-4"></i> Tempi di Risposta & Sicurezza
+                <i data-lucide="shield-check" class="w-4 h-4"></i> <span data-i18n="contacts_sec_title">Tempi di Risposta & Sicurezza</span>
             </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-300">
                 <div class="flex items-start gap-2.5 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
                     <i data-lucide="clock" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
                     <div>
-                        <strong class="text-white block mb-0.5">Supporto Rapido</strong>
-                        Il nostro team risponde solitamente alle richieste di assistenza tecnica entro 24 ore lavorative.
+                        <strong class="text-white block mb-0.5" data-i18n="contacts_sec_fast_h">Supporto Rapido</strong>
+                        <span data-i18n="contacts_sec_fast_p">Il nostro team risponde solitamente alle richieste di assistenza tecnica entro 24 ore lavorative.</span>
                     </div>
                 </div>
                 <div class="flex items-start gap-2.5 bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
                     <i data-lucide="lock" class="w-4 h-4 text-blue-400 shrink-0 mt-0.5"></i>
                     <div>
-                        <strong class="text-white block mb-0.5">Canali Ufficiali</strong>
-                        Utilizza esclusivamente i contatti sopra indicati per qualsiasi verifica sugli abbonamenti o sui codici d'accesso.
+                        <strong class="text-white block mb-0.5" data-i18n="contacts_sec_channels_h">Canali Ufficiali</strong>
+                        <span data-i18n="contacts_sec_channels_p">Utilizza esclusivamente i contatti sopra indicati per qualsiasi verifica sugli abbonamenti o sui codici d'accesso.</span>
                     </div>
                 </div>
             </div>
@@ -143,16 +156,16 @@
         <!-- Sezione FAQ Rapida Contatti -->
         <div class="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
             <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <i data-lucide="help-circle" class="w-4 h-4 text-emerald-400"></i> Domande Frequenti sull'Assistenza
+                <i data-lucide="help-circle" class="w-4 h-4 text-emerald-400"></i> <span data-i18n="contacts_faq_title">Domande Frequenti sull'Assistenza</span>
             </h3>
             <div class="space-y-3 text-xs text-slate-300">
                 <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-1">
-                    <strong class="text-white block">Ho acquistato un piano ma non trovo il codice d'accesso, cosa faccio?</strong>
-                    <p class="text-slate-400">Compila il form sopra indicando la tua email di pagamento Stripe: verificheremo e attiveremo il tuo profilo in pochi minuti.</p>
+                    <strong class="text-white block" data-i18n="contacts_faq_q1">Ho acquistato un piano ma non trovo il codice d'accesso, cosa faccio?</strong>
+                    <p class="text-slate-400" data-i18n="contacts_faq_a1">Compila il form sopra indicando la tua email di pagamento Stripe: verificheremo e attiveremo il tuo profilo in pochi minuti.</p>
                 </div>
                 <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-1">
-                    <strong class="text-white block">Come posso accedere al canale Telegram riservato?</strong>
-                    <p class="text-slate-400">Dopo aver inserito il tuo codice di sblocco nella Home Page del sito, il sistema ti sbloccherà il link d'invito monouso dedicato al tuo piano.</p>
+                    <strong class="text-white block" data-i18n="contacts_faq_q2">Come posso accedere al canale Telegram riservato?</strong>
+                    <p class="text-slate-400" data-i18n="contacts_faq_a2">Dopo aver inserito il tuo codice di sblocco nella Home Page del sito, il sistema ti sbloccherà il link d'invito monouso dedicato al tuo piano.</p>
                 </div>
             </div>
         </div>
@@ -163,10 +176,10 @@
         <!-- LINK GIOCO RESPONSABILE & ADM -->
         <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-semibold font-sans">
             <a href="https://www.gioca-responsabile.it/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition flex items-center gap-1.5">
-                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> Gioco Responsabile
+                <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-500"></i> <span data-i18n="footer_responsible_gaming">Gioco Responsabile</span>
             </a>
             <a href="https://www.adm.gov.it/portale/giochi" target="_blank" rel="noopener noreferrer" class="hover:text-amber-400 transition flex items-center gap-1.5">
-                <i data-lucide="landmark" class="w-4 h-4 text-amber-500"></i> ADM (Agenzia Dogane e Monopoli)
+                <i data-lucide="landmark" class="w-4 h-4 text-amber-500"></i> <span data-i18n="footer_adm">ADM (Agenzia Dogane e Monopoli)</span>
             </a>
             <div class="flex items-center gap-1.5 text-rose-400 font-bold bg-rose-500/10 px-2.5 py-1 rounded-lg border border-rose-500/20">
                 <i data-lucide="ban" class="w-3.5 h-3.5"></i> 18+
@@ -174,8 +187,8 @@
         </div>
 
         <div class="text-[11px] text-slate-400 max-w-xl mx-auto space-y-2 leading-relaxed font-sans">
-            <div>Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.</div>
-            <div class="text-slate-400 font-medium">Se hai un problema con il gioco d'azzardo, chiama il <strong class="text-emerald-400 font-mono">Telefono Verde: 800 558 822</strong> (anonimo e gratuito)</div>
+            <div data-i18n="footer_disclaimer_1">Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.</div>
+            <div class="text-slate-400 font-medium"><span data-i18n="footer_disclaimer_2">Se hai un problema con il gioco d'azzardo, chiama il</span> <strong class="text-emerald-400 font-mono">Telefono Verde: 800 558 822</strong> <span data-i18n="footer_disclaimer_3">(anonimo e gratuito)</span></div>
         </div>
 
         <div>
@@ -183,8 +196,44 @@
         </div>
     </footer>
 
+    <!-- LOGICA MULTILINGUA (i18n) -->
     <script>
-        lucide.createIcons();
+        let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+
+        async function loadTranslations(lang) {
+            try {
+                const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
+                if (!response.ok) return;
+                const t = await response.json();
+                
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerText = t[key];
+                });
+
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-placeholder');
+                    if (t[key]) el.placeholder = t[key];
+                });
+
+                const selector = document.getElementById('lang-selector');
+                if (selector) selector.value = lang;
+
+                localStorage.setItem('atmbet_lang', lang);
+                currentLang = lang;
+            } catch (e) {
+                console.error("Errore caricamento traduzioni:", e);
+            }
+        }
+
+        function changeLanguage(lang) {
+            loadTranslations(lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadTranslations(currentLang);
+        });
     </script>
 </body>
 </html>
