@@ -215,4 +215,13 @@
   "footer_disclaimer_1": "El juego está prohibido a menores de 18 años y puede causar adicción patológica. Juega con moderación.",
   "footer_disclaimer_2": "Si tienes un problema con el juego, llama al",
   "footer_disclaimer_3": "(anónimo y gratuito)"
+    "hero_badge": "Verificación Oficial de Resultados vía API-Football",
+  "hero_title": "No juegues al azar.<br><span class=\"text-atm-green\">Invierte en Datos.</span>",
+  "hero_subtitle": "Modelos cuantitativos propietarios para identificar desalineaciones estadísticas de cuotas antes del cambio de mercado. Disciplina matemática, cero juego emocional.",
+  "welcome_offer_tag": "OFERTA DE BIENVENIDA",
+  "welcome_no_card": "Sin Tarjeta Requerida",
+  "welcome_title": "7 Días VIP + 5 Créditos Gratis",
+  "welcome_desc": "Activa tu prueba gratuita para desbloquear cuotas reales, mercados y análisis detallados en tu panel personal.",
+  "welcome_cta": "Activar Prueba Gratuita (7 Días)",
+  "welcome_redeem": "Canjear"
 }
