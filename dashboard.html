@@ -473,56 +473,62 @@
         // Se nel browser non ci sono giocate salvate, le scarico da bets.json (come fa l'index).
         async function loadRemoteBetsIfNeeded() {
             try {
-                const hasLocal = [PRIMARY_KEY, ATMBET_KEY].some(k => {
-                    try { const a = JSON.parse(localStorage.getItem(k) || '[]'); return Array.isArray(a) && a.length > 0; } catch(e) { return false; }
-                });
-                if (hasLocal) return false;
                 const ctrl = new AbortController();
                 const to = setTimeout(() => ctrl.abort(), 8000);
                 const res = await fetch('bets.json?_nocache=' + Date.now(), { cache: 'no-store', signal: ctrl.signal });
                 clearTimeout(to);
-                if (!res.ok) return false;
+                if (!res.ok) { console.warn('[AtmBet] bets.json non raggiungibile: HTTP ' + res.status); return false; }
                 const data = await res.json();
                 if (Array.isArray(data) && data.length > 0) { window.__remoteBets = data; return true; }
-            } catch(e) {}
+            } catch(e) { console.warn('[AtmBet] errore nel caricare bets.json', e); }
             return false;
         }
 
         function getStoredBets() {
-            let bets = [];
-            const rawV1 = localStorage.getItem(PRIMARY_KEY);
-            if (rawV1) {
+            let local = [];
+            [PRIMARY_KEY, ATMBET_KEY].forEach(k => {
+                if (local.length > 0) return;
                 try {
-                    const parsed = JSON.parse(rawV1);
-                    if (Array.isArray(parsed) && parsed.length > 0) bets = parsed;
+                    const parsed = JSON.parse(localStorage.getItem(k) || '[]');
+                    if (Array.isArray(parsed) && parsed.length > 0) local = parsed;
                 } catch(e) {}
-            }
-
-            if (bets.length === 0) {
-                const rawAtm = localStorage.getItem(ATMBET_KEY);
-                if (rawAtm) {
-                    try {
-                        const parsed = JSON.parse(rawAtm);
-                        if (Array.isArray(parsed) && parsed.length > 0) bets = parsed;
-                    } catch(e) {}
+            });
+            let bets = local;
+            const remote = Array.isArray(window.__remoteBets) ? window.__remoteBets : [];
+            if (remote.length > 0) {
+                if (local.length === 0) {
+                    bets = remote;
+                } else {
+                    const localMap = new Map(local.map(x => [String(x.id || x.match_name || x.match), x]));
+                    bets = remote.map(r => {
+                        const lv = localMap.get(String(r.id || r.match_name || r.match));
+                        return (lv && lv.status !== 'pending' && (r.status === 'pending' || !r.status)) ? lv : r;
+                    });
                 }
             }
-
-            if (bets.length === 0 && Array.isArray(window.__remoteBets)) bets = window.__remoteBets;
-
-            return bets.map((b, idx) => ({
-                id: String(b.id || idx),
-                event_date: b.event_date || b.date || '',
-                league: b.league || 'Generale',
-                match_name: b.match_name || b.match || 'Evento',
-                market: b.market || 'Mercato',
-                prediction: b.prediction || b.pick || '-',
-                original_tipster: 'AtmBet Selection',
-                odds: parseFloat(b.odds || b.odd || 1.80),
-                stake: parseFloat(b.stake || 1.0) > 10 ? 1.0 : parseFloat(b.stake || 1.0),
-                status: b.status || 'pending',
-                is_published: b.is_published !== undefined ? b.is_published : true
-            })).filter(b => b.is_published === true);
+            const out = bets.map((b, idx) => {
+                let st = String(b.status || b.result || b.outcome || 'pending').toLowerCase().trim();
+                if (st.includes('vin') || st === 'win' || st === 'won') st = 'won';
+                else if (st.includes('per') || st === 'loss' || st === 'lost') st = 'lost';
+                else if (st.includes('void') || st.includes('annull')) st = 'void';
+                else st = 'pending';
+                const stake = parseFloat(b.stake || b.units || 1.0);
+                return {
+                    id: String(b.id || idx),
+                    event_date: b.event_date || b.date || b.dateTime || '',
+                    league: b.league || b.competition || 'Generale',
+                    match_name: b.match_name || b.match || b.teams || 'Evento',
+                    market: b.market || b.type || 'Mercato',
+                    prediction: b.prediction || b.pick || b.selection || '-',
+                    original_tipster: 'AtmBet Selection',
+                    odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
+                    stake: stake > 10 ? 1.0 : stake,
+                    status: st,
+                    is_published: b.is_published !== false
+                };
+            }).filter(b => b.is_published === true);
+            if (window.__lastBetsLog !== out.length) { window.__lastBetsLog = out.length; console.info('[AtmBet] dashboard build 2026-11-13b | giocate: ' + out.length + ' (locali ' + local.length + ', bets.json ' + remote.length + ')'); }
+            return out;
         }
 
         function unlockWithCredit(betId) {
