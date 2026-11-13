@@ -215,4 +215,13 @@
   "footer_disclaimer_1": "Il gioco è vietato ai minori di 18 anni e può causare dipendenza patologica. Gioca con moderazione.",
   "footer_disclaimer_2": "Se hai un problema con il gioco d'azzardo, chiama il",
   "footer_disclaimer_3": "(anonimo e gratuito)"
+    "hero_badge": "Verifica Risultati Ufficiale via API-Football",
+  "hero_title": "Non scommettere sul caso.<br><span class=\"text-atm-green\">Investi nei Dati.</span>",
+  "hero_subtitle": "Modelli quantitativi proprietari per identificare disallineamenti statistici di quota prima della variazione di mercato. Disciplina matematica, zero azzardo emotivo.",
+  "welcome_offer_tag": "OFFERTA BENVENUTO",
+  "welcome_no_card": "Zero Carta Richiesta",
+  "welcome_title": "7 Giorni VIP + 5 Crediti Omaggio",
+  "welcome_desc": "Attiva la prova gratuita per sbloccare le quote reali, i mercati e le analisi dettagliate nel tuo cruscotto personale.",
+  "welcome_cta": "Attiva Prova Gratuita (7 Giorni)",
+  "welcome_redeem": "Riscatta"
 }
