@@ -1,0 +1,46 @@
+name: Backup giornaliero
+
+on:
+  schedule:
+    - cron: "30 21 * * *"   # ogni sera, dopo l'invio dei segnali (22:30 ora italiana in inverno)
+  workflow_dispatch: {}      # avvio manuale dal tasto "Run workflow"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Esporta i dati da Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: python3 backup.py out
+
+      - name: Salva sul repository privato
+        env:
+          BACKUP_TOKEN: ${{ secrets.BACKUP_TOKEN }}
+        run: |
+          set -e
+          DATE=$(TZ=Europe/Rome date +%F)
+          git clone "https://x-access-token:${BACKUP_TOKEN}@github.com/gargiuloluca/atmbet-backup.git" dest
+          mkdir -p "dest/daily/${DATE}" dest/latest
+          cp out/*.json "dest/daily/${DATE}/"
+          cp out/*.json dest/latest/
+          cd dest
+          git config user.name "AtmBet Backup"
+          git config user.email "backup@atmbetofficial.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da salvare"
+          else
+            git commit -m "Backup ${DATE}"
+            git push
+          fi
