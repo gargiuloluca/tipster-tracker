@@ -84,14 +84,14 @@
             </div>
 
             <!-- Schede Accedi / Registrati -->
-            <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 mb-4">
+            <div id="grp-tabs" class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 mb-4">
                 <button type="button" id="tab-login" onclick="setMode('login')" class="text-xs font-bold py-2 rounded-lg transition"><span data-i18n="auth_tab_login">Accedi</span></button>
                 <button type="button" id="tab-signup" onclick="setMode('signup')" class="text-xs font-bold py-2 rounded-lg transition"><span data-i18n="auth_tab_signup">Registrati</span></button>
             </div>
 
             <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4" novalidate>
 
-                <div>
+                <div id="grp-email">
                     <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="auth_email_label">Indirizzo email</label>
                     <div class="relative">
                         <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
@@ -101,7 +101,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="auth_pwd_label">Password</label>
+                    <label id="lbl-pwd" class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="auth_pwd_label">Password</label>
                     <div class="relative">
                         <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
                         <input type="password" id="user-password" autocomplete="current-password" data-i18n-placeholder="auth_pwd_ph" placeholder="Almeno 8 caratteri"
@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div id="grp-code">
                     <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="auth_code_label">Codice sblocco (facoltativo)</label>
                     <div class="relative">
                         <i data-lucide="key-round" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
@@ -127,7 +127,7 @@
                     </div>
                 </div>
 
-                <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
+                <div id="grp-info" class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
                     <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
                     <span id="auth-info-text" data-i18n="auth_info_login">Accedi con l'email e la password del tuo account. Il tuo piano viene verificato automaticamente.</span>
                 </div>
@@ -218,7 +218,45 @@
 
         function changeLanguage(lang) { loadTranslations(lang); }
 
+        // --- Reimpostazione password (link ricevuto per email) ---
+        let recoveryMode = false;
+        function applyRecoveryLabels() {
+            ['grp-tabs', 'grp-email', 'grp-code', 'grp-info', 'signup-only', 'auth-forgot'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const pwd = document.getElementById('user-password');
+            pwd.autocomplete = 'new-password';
+            pwd.value = '';
+            document.getElementById('lbl-pwd').innerText = tr('auth_reset_pwd_label', 'Nuova password');
+            document.getElementById('auth-submit-label').innerText = tr('auth_reset_btn', 'Salva nuova password');
+        }
+        function enterRecoveryMode() {
+            recoveryMode = true;
+            applyRecoveryLabels();
+        }
+        async function handleRecoverySubmit() {
+            const password = document.getElementById('user-password').value;
+            if (password.length < 8) { showAlert(tr('auth_err_weak', 'Password troppo debole.'), 'error'); return; }
+            setBusy(true);
+            try {
+                const { data } = await window.sb.auth.getSession();
+                if (!data || !data.session) { showAlert(tr('auth_reset_expired', 'Il link non è più valido. Richiedine uno nuovo.'), 'error'); return; }
+                const { error } = await window.sb.auth.updateUser({ password });
+                if (error) { showAlert(mapError(error), 'error'); return; }
+                showAlert(tr('auth_reset_done', 'Password aggiornata! Reindirizzamento…'), 'success');
+                const session = await window.AtmAuth.syncSession();
+                const isStaff = session && (session.role === 'admin' || session.role === 'gestore');
+                setTimeout(() => { window.location.href = isStaff ? 'admin.html' : 'index.html'; }, 1200);
+            } catch (err) {
+                showAlert(mapError(err), 'error');
+            } finally {
+                setBusy(false);
+            }
+        }
+
         function setMode(mode) {
+            if (recoveryMode) return;
             currentMode = mode;
             const on = "text-xs font-bold py-2 rounded-lg transition bg-emerald-500 text-slate-950";
             const off = "text-xs font-bold py-2 rounded-lg transition text-slate-300 hover:text-white";
@@ -281,6 +319,7 @@
 
         async function handleAuthSubmit(e) {
             e.preventDefault();
+            if (recoveryMode) { await handleRecoverySubmit(); return; }
             if (!window.sb) { showAlert(tr('auth_err_offline', 'Servizio non raggiungibile.'), 'error'); return; }
             const email = document.getElementById('user-email').value.trim().toLowerCase();
             const password = document.getElementById('user-password').value;
@@ -327,17 +366,20 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
+            // Arrivo dal link "password dimenticata": mostro solo il campo per la nuova password
+            if (/type=recovery/.test(window.location.hash + window.location.search)) enterRecoveryMode();
+            if (window.sb) window.sb.auth.onAuthStateChange((ev) => { if (ev === 'PASSWORD_RECOVERY') enterRecoveryMode(); });
             setMode('login');
             try {
                 const pre = sessionStorage.getItem('atmbet_prefill_email');
                 if (pre) { document.getElementById('user-email').value = pre; sessionStorage.removeItem('atmbet_prefill_email'); setMode('signup'); }
             } catch (e) {}
-            loadTranslations(currentLang).then(() => setMode(currentMode));
+            loadTranslations(currentLang).then(() => { if (recoveryMode) applyRecoveryLabels(); else setMode(currentMode); });
             lucide.createIcons();
             // Se sei gia dentro, vai direttamente all'area giusta
-            if (window.sb) {
+            if (window.sb && !recoveryMode) {
                 const s = await window.AtmAuth.syncSession();
-                if (s) window.location.href = (s.role === 'admin' || s.role === 'gestore') ? 'admin.html' : 'index.html';
+                if (s && !recoveryMode) window.location.href = (s.role === 'admin' || s.role === 'gestore') ? 'admin.html' : 'index.html';
             }
         });
     </script>

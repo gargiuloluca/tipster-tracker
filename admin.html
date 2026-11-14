@@ -1499,6 +1499,11 @@
             await fetchUsersFromGitHubAutomatic();
         }
 
+        // Rende innocuo il testo scritto dagli utenti (nome, username, email) prima di mostrarlo nel pannello
+        function __escHtml(v) {
+            return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
         function renderUsersTable() {
             const tbody = document.getElementById('users-tbody');
             if (!tbody) return;
@@ -1548,13 +1553,13 @@
 
                 tr.innerHTML = `
                     <td class="py-2 px-3 font-bold text-white">
-                        <div>${userIdent}</div>
-                        <div class="text-[9px] text-slate-500 font-mono">${u.role === 'admin' ? 'ADMIN · ' : ''}TG: ${u.telegram_id || '-'}</div>
+                        <div>${__escHtml(userIdent)}</div>
+                        <div class="text-[9px] text-slate-500 font-mono">${u.role === 'admin' ? 'ADMIN · ' : ''}TG: ${__escHtml(u.telegram_id || '-')}</div>
                     </td>
                     <td class="py-2 px-3">${planBadge}</td>
                     <td class="py-2 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer">${accessCode}</td>
                     <td class="py-2 px-3">${linkDisplay}</td>
-                    <td class="py-2 px-3 text-center font-mono text-slate-300">${expDate}</td>
+                    <td class="py-2 px-3 text-center font-mono text-slate-300">${__escHtml(expDate)}</td>
                     <td class="py-2 px-3 text-center">${statusBadge}</td>
                     <td class="py-2 px-3 text-right">
                         <div class="flex items-center justify-end gap-1">
