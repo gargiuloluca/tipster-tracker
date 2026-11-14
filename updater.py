@@ -1,14 +1,22 @@
 import os
 import json
 import requests
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 API_KEY = os.getenv("RAPIDAPI_KEY")
 HEADERS = {
     "x-apisports-key": API_KEY
 }
 
-BETS_FILE = "bets.json"
+# Database (Supabase). La chiave "service_role" sta SOLO nei Secrets di GitHub, mai nel sito.
+SUPABASE_URL = (os.getenv("SUPABASE_URL") or "").rstrip("/")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_KEY") or ""
+API_BASE = os.getenv("FOOTBALL_API_BASE", "https://v3.football.api-sports.io")
+SB_HEADERS = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": f"Bearer {SUPABASE_KEY}",
+    "Content-Type": "application/json",
+}
 
 def clean_tokens(text):
     unwanted = {"fc", "cf", "calcio", "as", "ss", "ac", "us", "sc", "de", "the", "vs", "-", "/", "v"}
@@ -60,34 +68,48 @@ def evaluate_single_match(prediction, market, h_goals, a_goals):
 
     return "pending"
 
+def fetch_pending_bets():
+    res = requests.get(
+        f"{SUPABASE_URL}/rest/v1/bets",
+        params={"status": "eq.pending", "select": "id,match_name,market,prediction,event_date,status"},
+        headers=SB_HEADERS, timeout=25,
+    )
+    res.raise_for_status()
+    return res.json()
+
+def save_bet_status(bet_id, new_status):
+    res = requests.patch(
+        f"{SUPABASE_URL}/rest/v1/bets",
+        params={"id": f"eq.{bet_id}", "status": "eq.pending"},   # aggiorna solo se e ancora "pending"
+        json={"status": new_status},
+        headers=SB_HEADERS, timeout=25,
+    )
+    res.raise_for_status()
+
 def run_update():
     if not API_KEY:
         print("Errore: Chiave API non configurata.")
         return
-
-    if not os.path.exists(BETS_FILE):
-        print("bets.json non trovato.")
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        print("Errore: SUPABASE_URL / SUPABASE_SERVICE_KEY non configurati nei Secrets di GitHub.")
         return
 
-    with open(BETS_FILE, "r", encoding="utf-8") as f:
-        bets = json.load(f)
-
-    pending_bets = [b for b in bets if b.get("status") == "pending"]
+    pending_bets = fetch_pending_bets()
     if not pending_bets:
         print("Nessun pronostico 'pending' da verificare.")
         return
 
     now_utc = datetime.now(timezone.utc)
-    today_str = now_utc.strftime("%Y-%m-%d")
-    url = f"https://v3.football.api-sports.io/fixtures?date={today_str}"
-
-    res = requests.get(url, headers=HEADERS, timeout=25)
-    if res.status_code != 200:
-        print("Errore API:", res.status_code)
-        return
-
-    fixtures = res.json().get("response", [])
-    print(f"Scaricati {len(fixtures)} eventi in programma oggi ({today_str}).")
+    # oggi e ieri: le partite serali finiscono spesso dopo la mezzanotte UTC
+    dates = [(now_utc - timedelta(days=1)).strftime("%Y-%m-%d"), now_utc.strftime("%Y-%m-%d")]
+    fixtures = []
+    for day in dates:
+        res = requests.get(f"{API_BASE}/fixtures?date={day}", headers=HEADERS, timeout=25)
+        if res.status_code != 200:
+            print("Errore API:", res.status_code, "per", day)
+            continue
+        fixtures.extend(res.json().get("response", []))
+    print(f"Scaricati {len(fixtures)} eventi ({dates[0]} e {dates[1]}).")
 
     updated_count = 0
 
@@ -119,14 +141,12 @@ def run_update():
                 res_eval = evaluate_single_match(bet.get("prediction", ""), bet.get("market", ""), hg, ag)
 
                 if res_eval in ["won", "lost", "void"]:
-                    bet["status"] = res_eval
+                    save_bet_status(bet["id"], res_eval)
                     updated_count += 1
                     print(f"VERIFICATA CONCLUSA: {match_raw} ({h_name} vs {a_name}) -> {res_eval.upper()} [{hg}-{ag}]")
                 break
 
     if updated_count > 0:
-        with open(BETS_FILE, "w", encoding="utf-8") as f:
-            json.dump(bets, f, ensure_ascii=False, indent=2)
         print(f"Aggiornate {updated_count} giocate terminate.")
     else:
         print("Nessuna delle partite in corso è ancora terminata al fischio finale.")

@@ -161,21 +161,11 @@
 
         async function handleActivation(e) {
             e.preventDefault();
-            const email = document.getElementById('success-email').value.trim();
-            const telegram = document.getElementById('success-telegram').value.trim();
-
-            const sessionData = {
-                name: email.split('@')[0],
-                email: email,
-                telegram_username: telegram,
-                role: 'user',
-                plan: 'all_inclusive',
-                expires_at: '2099-12-31',
-                credits: 10
-            };
-
-            localStorage.setItem('atmbet_active_user_session', JSON.stringify(sessionData));
-            window.location.href = 'index.html';
+            // Il piano NON si attiva piu dal browser: si attiva sul server (codice sblocco o conferma del pagamento).
+            // Qui si porta il cliente a creare/accedere al proprio account.
+            const email = (document.getElementById('success-email').value || '').trim();
+            try { sessionStorage.setItem('atmbet_prefill_email', email); } catch (err) {}
+            window.location.href = 'auth.html';
         }
 
         document.addEventListener('DOMContentLoaded', () => {

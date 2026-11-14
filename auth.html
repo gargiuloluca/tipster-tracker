@@ -328,6 +328,10 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             setMode('login');
+            try {
+                const pre = sessionStorage.getItem('atmbet_prefill_email');
+                if (pre) { document.getElementById('user-email').value = pre; sessionStorage.removeItem('atmbet_prefill_email'); setMode('signup'); }
+            } catch (e) {}
             loadTranslations(currentLang).then(() => setMode(currentMode));
             lucide.createIcons();
             // Se sei gia dentro, vai direttamente all'area giusta

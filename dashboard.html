@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script defer src="supabase-config.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <script>
@@ -417,6 +419,22 @@
             };
         }
 
+        // Mostra solo i pronostici di oggi e quelli di domani fino alle 08:00 (rientrano nell'invio di oggi)
+        function __inTodayWindow(eventDate) {
+            const raw = String(eventDate || '');
+            const dm = raw.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+            if (!dm) return false;
+            const day = `${dm[1]}-${String(dm[2]).padStart(2, '0')}-${String(dm[3]).padStart(2, '0')}`;
+            const now = new Date();
+            if (day === getLocalDateString(now)) return true;
+            const tm = new Date(now); tm.setDate(tm.getDate() + 1);
+            if (day === getLocalDateString(tm)) {
+                const m = raw.match(/(\d{1,2}):(\d{2})/);
+                if (m) return (parseInt(m[1], 10) * 60 + parseInt(m[2], 10)) <= 8 * 60;
+            }
+            return false;
+        }
+
         function getLocalDateString(d) {
             const year = d.getFullYear();
             const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -465,94 +483,69 @@
             }
         }
 
-        function logout() {
+        async function logout() {
+            try { if (window.AtmAuth) await window.AtmAuth.signOut(); } catch (e) {}
             localStorage.removeItem(CURRENT_SESSION_KEY);
             window.location.href = 'index.html';
         }
 
         // Se nel browser non ci sono giocate salvate, le scarico da bets.json (come fa l'index).
+        // Pronostici dal server: il database consegna solo cio che il tuo piano puo vedere.
         async function loadRemoteBetsIfNeeded() {
             try {
-                const ctrl = new AbortController();
-                const to = setTimeout(() => ctrl.abort(), 8000);
-                const res = await fetch('bets.json?_nocache=' + Date.now(), { cache: 'no-store', signal: ctrl.signal });
-                clearTimeout(to);
-                if (!res.ok) { console.warn('[AtmBet] bets.json non raggiungibile: HTTP ' + res.status); return false; }
-                const data = await res.json();
-                if (Array.isArray(data) && data.length > 0) { window.__remoteBets = data; return true; }
-            } catch(e) { console.warn('[AtmBet] errore nel caricare bets.json', e); }
+                if (!window.sb) return false;
+                const out = [];
+                for (let from = 0; ; from += 1000) {
+                    const { data, error } = await window.sb.from('bets').select('*').order('id').range(from, from + 999);
+                    if (error) throw error;
+                    out.push(...(data || []));
+                    if (!data || data.length < 1000) break;
+                }
+                window.__remoteBets = out;
+                return true;
+            } catch (e) { console.warn('[AtmBet] errore nel caricare i pronostici', e); }
             return false;
         }
 
         function getStoredBets() {
-            let local = [];
-            [PRIMARY_KEY, ATMBET_KEY].forEach(k => {
-                if (local.length > 0) return;
-                try {
-                    const parsed = JSON.parse(localStorage.getItem(k) || '[]');
-                    if (Array.isArray(parsed) && parsed.length > 0) local = parsed;
-                } catch(e) {}
-            });
-            let bets = local;
-            const remote = Array.isArray(window.__remoteBets) ? window.__remoteBets : [];
-            if (remote.length > 0) {
-                if (local.length === 0) {
-                    bets = remote;
-                } else {
-                    const localMap = new Map(local.map(x => [String(x.id || x.match_name || x.match), x]));
-                    bets = remote.map(r => {
-                        const lv = localMap.get(String(r.id || r.match_name || r.match));
-                        return (lv && lv.status !== 'pending' && (r.status === 'pending' || !r.status)) ? lv : r;
-                    });
-                }
-            }
-            const out = bets.map((b, idx) => {
-                let st = String(b.status || b.result || b.outcome || 'pending').toLowerCase().trim();
-                if (st.includes('vin') || st === 'win' || st === 'won') st = 'won';
-                else if (st.includes('per') || st === 'loss' || st === 'lost') st = 'lost';
-                else if (st.includes('void') || st.includes('annull')) st = 'void';
-                else st = 'pending';
-                const stake = parseFloat(b.stake || b.units || 1.0);
+            const bets = Array.isArray(window.__remoteBets) ? window.__remoteBets : [];
+            const __plan = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.plan : '';
+            return bets.filter(b => __plan !== 'pure' || b.is_pure === true).map((b, idx) => {
+                const stake = parseFloat(b.stake || 1.0);
+                const st = ['won', 'lost', 'void'].includes(b.status) ? b.status : 'pending';
                 return {
                     id: String(b.id || idx),
-                    event_date: b.event_date || b.date || b.dateTime || '',
-                    league: b.league || b.competition || 'Generale',
-                    match_name: b.match_name || b.match || b.teams || 'Evento',
-                    market: b.market || b.type || 'Mercato',
-                    prediction: b.prediction || b.pick || b.selection || '-',
-                    original_tipster: 'AtmBet Selection',
-                    odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
+                    event_date: b.event_date || '',
+                    league: b.league || 'Generale',
+                    match_name: b.match_name || 'Evento',
+                    market: b.market || 'Mercato',
+                    prediction: b.prediction || '-',
+                    original_tipster: b.is_pure === true ? 'AtmBet Selection' : 'AtmBet Signal',
+                    is_pure: b.is_pure === true,
+                    brand: (b.is_pure === true && !(currentUser && currentUser.plan === 'all_inclusive')) ? 'AtmBet Selection' : 'AtmBet Signal',
+                    odds: parseFloat(b.odds) || 1.80,
                     stake: stake > 10 ? 1.0 : stake,
                     status: st,
                     is_published: b.is_published !== false
                 };
             }).filter(b => b.is_published === true);
-            if (window.__lastBetsLog !== out.length) { window.__lastBetsLog = out.length; console.info('[AtmBet] dashboard build 2026-11-13b | giocate: ' + out.length + ' (locali ' + local.length + ', bets.json ' + remote.length + ')'); }
-            return out;
         }
 
-        function unlockWithCredit(betId) {
+        async function unlockWithCredit(betId) {
             if (!currentUser.credits || currentUser.credits <= 0) {
                 alert(__t('dsh_alert_no_credits', "Non hai crediti a sufficienza. Ricarica un pacchetto dalla sezione prezzi."));
                 return;
             }
-
-            if (confirm(__t('dsh_confirm_unlock', "Vuoi utilizzare 1 credito per sbloccare questa selezione?"))) {
-                currentUser.credits -= 1;
-                if (!currentUser.unlocked_bets) currentUser.unlocked_bets = [];
-                currentUser.unlocked_bets.push(String(betId));
-
-                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentUser));
-
-                let users = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || [];
-                const idx = users.findIndex(u => u.email === currentUser.email);
-                if (idx !== -1) {
-                    users[idx] = currentUser;
-                    localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
-                }
-
-                initDashboard();
+            if (!window.sb || !confirm(__t('dsh_confirm_unlock', "Vuoi utilizzare 1 credito per sbloccare questa selezione?"))) return;
+            const { data, error } = await window.sb.rpc('unlock_bet', { p_bet_id: String(betId) });
+            if (error || !data || data.ok !== true) {
+                alert((data && data.error) || __t('dsh_alert_no_credits', "Non hai crediti a sufficienza."));
+                return;
             }
+            await window.AtmAuth.syncSession();
+            currentUser = JSON.parse(localStorage.getItem(CURRENT_SESSION_KEY) || '{}');
+            await loadRemoteBetsIfNeeded();
+            initDashboard();
         }
 
         function setUnitValue(val, btnElement) {
@@ -611,7 +604,7 @@
             const bets = getStoredBets();
             const now = new Date();
             const trialEnd = new Date(currentUser.trial_expiry || 0);
-            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
+            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year' || ['pure','all_inclusive','trial_vip'].includes(currentUser.plan);
             const unlocked = (currentUser.unlocked_bets || []).map(String);
 
             const simBets = bets.filter(b => {
@@ -694,7 +687,7 @@
 
             const now = new Date();
             const trialEnd = new Date(currentUser.trial_expiry || 0);
-            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year';
+            const isVipActive = trialEnd > now || currentUser.plan === 'vip_week' || currentUser.plan === 'vip_month' || currentUser.plan === 'vip_year' || ['pure','all_inclusive','trial_vip'].includes(currentUser.plan);
 
             const vipBadge = document.getElementById('badge-vip-status');
             if (isVipActive) {
@@ -770,7 +763,7 @@
             const bets = getStoredBets();
             container.innerHTML = '';
 
-            const pendingBets = bets.filter(b => b.status === 'pending');
+            const pendingBets = bets.filter(b => b.status === 'pending' && __inTodayWindow(b.event_date));
 
             if (pendingBets.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 font-medium text-xs">${__t('dsh_no_pending', 'Nessuna giocata in corso al momento.')}</div>`;
@@ -845,7 +838,7 @@
                             <span class="text-white font-mono font-bold ml-1">${bet.stake.toFixed(1)}u</span>
                         </div>
                         <div>
-                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">AtmBet Selection</span>
+                            <span class="text-emerald-400 font-bold uppercase text-[9px] bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 truncate max-w-[110px] inline-block text-right">${bet.brand || 'AtmBet Selection'}</span>
                         </div>
                     </div>
                 `;
@@ -884,7 +877,7 @@
                     <td class="py-2.5 px-3 text-slate-400 font-mono text-[10px] whitespace-nowrap">${bet.event_date}</td>
                     <td class="py-2.5 px-3 font-bold text-white min-w-[150px]">
                         <div class="break-words">${bet.match_name}</div>
-                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-emerald-400 font-semibold">AtmBet Selection</span></div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league} • <span class="text-emerald-400 font-semibold">${bet.brand || 'AtmBet Selection'}</span></div>
                     </td>
                     <td class="py-2.5 px-3 text-slate-300 font-medium min-w-[120px]">
                         <div class="break-words">${bet.prediction}</div>
@@ -911,9 +904,10 @@
             const i18nReady = loadTranslations(currentLang);
             await Promise.race([i18nReady, new Promise(r => setTimeout(r, 1500))]);
             const translationsLate = !(window.__i18nCache && window.__i18nCache[currentLang]);
+            if (window.AtmAuth) { await Promise.race([window.AtmAuth.syncSession(), new Promise(r => setTimeout(r, 3500))]); }
             setupDynamicDatePresets();
+            await Promise.race([loadRemoteBetsIfNeeded(), new Promise(r => setTimeout(r, 6000))]);
             initDashboard();
-            loadRemoteBetsIfNeeded().then(ok => { if (ok) initDashboard(); });
             await loadTranslations(currentLang);
             if (translationsLate && window.__i18nCache && window.__i18nCache[currentLang]) {
                 const labels = getPresetLabels();

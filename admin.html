@@ -103,16 +103,12 @@
             </div>
             <div>
                 <h2 class="text-lg font-black text-white">AtmBet Console</h2>
-                <p class="text-xs text-slate-400 mt-1">Area riservata. Inserisci la password per accedere al gestionale.</p>
+                <p class="text-xs text-slate-400 mt-1">Area riservata allo staff. Accedi con un account autorizzato.</p>
             </div>
-            <form onsubmit="verifyAdminAuth(event)" class="space-y-3">
-                <input type="password" id="admin-pass-input" placeholder="Password di accesso" required autofocus
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white text-center tracking-widest placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono">
-                <div id="auth-error-msg" class="text-[11px] font-bold text-rose-400 hidden">Password errata. Riprova.</div>
-                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
-                    Sblocca Console
-                </button>
-            </form>
+            <div id="auth-error-msg" class="text-[11px] font-bold text-rose-400 hidden"></div>
+            <a href="auth.html" id="admin-login-link" class="block w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
+                Accedi con il tuo account
+            </a>
             <div class="text-[10px] text-slate-600 font-mono">AtmBet Core Protocol</div>
         </div>
     </div>
@@ -289,28 +285,21 @@
                 </div>
             </section>
 
-            <!-- BOX CONNESSIONE DIRETTA GITHUB API -->
+            <!-- BOX SINCRONIZZAZIONE SERVER (SUPABASE) -->
             <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-lg">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
                     <div class="flex items-center gap-2.5">
                         <div id="sync-status-icon" class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0"></div>
                         <div>
                             <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                                <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Sincronizzazione Dati Protetta
+                                <i data-lucide="database" class="w-3.5 h-3.5 text-emerald-400"></i> Database Protetto (Supabase)
                             </div>
-                            <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">Non configurata.</div>
+                            <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">In attesa di accesso.</div>
                         </div>
                     </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full md:w-auto">
-                        <input type="text" id="gh-repo" placeholder="username/repository" 
-                            class="bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono w-full">
-                        <input type="password" id="gh-token" placeholder="Token ghp_..." 
-                            class="bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono w-full">
-                        <button type="button" onclick="saveGitHubSettings()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-1.5 rounded-xl transition w-full">
-                            Salva
-                        </button>
-                    </div>
+                    <button type="button" onclick="syncAllFromServer()" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-bold text-xs py-1.5 px-4 rounded-xl transition">
+                        Ricarica dal server
+                    </button>
                 </div>
             </section>
 
@@ -324,7 +313,7 @@
                         <div>
                             <div class="flex items-center gap-1.5">
                                 <h2 class="text-xs sm:text-sm font-bold text-white">Abbonati & Licenze</h2>
-                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-1.5 py-0.2 rounded font-black uppercase">users.json</span>
+                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-1.5 py-0.2 rounded font-black uppercase">server</span>
                             </div>
                             <p class="text-[10px] text-slate-400">Codici, scadenze e link d'accesso Telegram monouso (Clicca per aprire/chiudere)</p>
                         </div>
@@ -440,8 +429,8 @@
                                 <tr>
                                     <th class="py-2.5 px-3">Utente</th>
                                     <th class="py-2.5 px-3">Piano</th>
-                                    <th class="py-2.5 px-3">Codice Accesso</th>
-                                    <th class="py-2.5 px-3">Link TG Monouso</th>
+                                    <th class="py-2.5 px-3">Crediti</th>
+                                    <th class="py-2.5 px-3">Telegram</th>
                                     <th class="py-2.5 px-3 text-center">Scadenza</th>
                                     <th class="py-2.5 px-3 text-center">Stato</th>
                                     <th class="py-2.5 px-3 text-right">Azioni</th>
@@ -804,9 +793,10 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-config.js"></script>
     <!-- SCRIPT GESTIONALE AGGIORNATO CON SINCRONIZZAZIONE AUTOMATICA DA GITHUB -->
     <script>
-        const ADMIN_REAL_PASSWORD = "AtmBet2026!";
         const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
         const CONFIRMED_CONFLICTS_KEY = "atmbet_confirmed_conflicts";
         const PRIMARY_KEY = 'tipster_tracker_v1';
@@ -821,7 +811,7 @@
         const AUTHORIZED_PARTNERS_KEY = 'atmbet_authorized_partners_list';
 
         const DEFAULT_TG_CONFIG = {
-            token: "8398232140:AAGBkOuMB26kyAUAn8oVWu_rQDVXh8vYQzY",
+            token: "",
             channel_pure: "-1004237267545",
             channel_full: "-1004390945826",
             channel_free: ""
@@ -974,61 +964,8 @@
         }
 
         async function autoBackupMasterToGitHub() {
-            const repo = localStorage.getItem(GH_REPO_KEY);
-            const token = localStorage.getItem(GH_TOKEN_KEY);
-            if (!repo || !token) return;
-
-            const masterData = {
-                version: "2.0",
-                backup_date: new Date().toISOString(),
-                platform: "AtmBet Official",
-                bets: loadAllBets(),
-                users: loadAllUsers(),
-                telegram_config: JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}'),
-                pure_tipsters: getPureSelectedTipsters(),
-                full_tipsters: getFullSelectedTipsters(),
-                partners: loadAuthorizedPartnersList()
-            };
-
-            const path = "backup_giornaliero.json";
-
-            try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/${path}?_nocache=${Date.now()}`;
-                let currentSha = null;
-
-                const getRes = await fetch(getFileUrl, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    currentSha = fileData.sha;
-                }
-
-                const jsonString = JSON.stringify(masterData, null, 2);
-                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-
-                const bodyPayload = {
-                    message: `Auto-backup giornaliero master [${new Date().toISOString().slice(0,10)}]`,
-                    content: base64Content
-                };
-                if (currentSha) bodyPayload.sha = currentSha;
-
-                await fetch(getFileUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(bodyPayload)
-                });
-            } catch (err) {
-                console.warn("Errore durante l'auto-backup su GitHub:", err);
-            }
+            // Disattivata: i backup non vanno piu scritti nel repository pubblico.
+            return;
         }
 
         function importFullMasterBackup(event) {
@@ -1115,6 +1052,7 @@
         function savePureSelectedTipsters(list) {
             localStorage.setItem(PURE_TIPSTERS_KEY, JSON.stringify(list));
             renderTipstersSelectors();
+            syncBetsToGitHub(loadAllBets());
         }
 
         function getFullSelectedTipsters() {
@@ -1366,19 +1304,29 @@
             alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati.`);
         }
 
+        // ===== UTENTI (profili su Supabase) =====
+        window.__profiles = [];
+
         function loadAllUsers() {
-            try {
-                const raw = localStorage.getItem(USERS_LOCAL_KEY);
-                return raw ? JSON.parse(raw) : [];
-            } catch(e) {
-                return [];
-            }
+            return (window.__profiles || []).map(p => ({
+                id: p.id,
+                identifier: p.email,
+                email: p.email,
+                telegram_id: p.telegram_username || '-',
+                telegram_link: '-',
+                plan: p.plan === 'pure' ? 'pure' : (p.plan === 'all_inclusive' ? 'full' : (p.plan === 'trial_vip' ? 'trial' : 'free')),
+                credits: p.credits || 0,
+                access_code: String(p.credits || 0),
+                expires_at: p.expires_at || '-',
+                role: p.role
+            }));
         }
 
+
+
         function persistUsers(users) {
-            localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(users));
+            // Gli utenti ora vivono sul server (Supabase): qui si aggiorna solo la tabella.
             renderUsersTable();
-            syncUsersToGitHub(users);
         }
 
         function toggleAddUserModal() {
@@ -1407,62 +1355,38 @@
         async function handleManualCreateUser(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submit-user-btn');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerText = "Generazione Link Monouso...";
-            }
-
             const ident = document.getElementById('new_user_ident').value.trim();
-            const tgId = document.getElementById('new_user_tgid').value.trim();
             const plan = document.getElementById('new_user_plan').value;
             const days = parseInt(document.getElementById('new_user_days').value) || 7;
-
-            const expDate = new Date();
-            expDate.setDate(expDate.getDate() + days);
-            const expDateStr = getLocalDateString(expDate);
-
+            const dbPlan = plan === 'pure' ? 'pure' : 'all_inclusive';
             const accessCode = 'ATM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
-            const tgConf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
-            const botToken = tgConf.token || DEFAULT_TG_CONFIG.token;
-            const targetChatId = (plan === 'pure') ? (tgConf.channel_pure || DEFAULT_TG_CONFIG.channel_pure) : (tgConf.channel_full || DEFAULT_TG_CONFIG.channel_full);
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = "Creazione codice..."; }
+
+            const { error } = await window.sb.from('access_codes').insert({
+                code: accessCode, plan: dbPlan, duration_days: days, credits: 0, max_uses: 1
+            });
 
             let oneTimeLink = '-';
-            if (botToken && targetChatId) {
-                try {
-                    oneTimeLink = await createOneTimeInviteLink(botToken, targetChatId, ident);
-                } catch(err) {
-                    console.warn("Impossibile generare link automatico monouso:", err);
+            if (!error) {
+                const tgConf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+                const botToken = tgConf.token || DEFAULT_TG_CONFIG.token;
+                const targetChatId = (dbPlan === 'pure') ? (tgConf.channel_pure || DEFAULT_TG_CONFIG.channel_pure) : (tgConf.channel_full || DEFAULT_TG_CONFIG.channel_full);
+                if (botToken && targetChatId) {
+                    try { oneTimeLink = await createOneTimeInviteLink(botToken, targetChatId, ident || accessCode); } catch (err) { console.warn(err); }
                 }
             }
 
-            const users = loadAllUsers();
-            users.unshift({
-                id: 'u_' + Date.now(),
-                identifier: ident,
-                email: ident,
-                telegram_id: tgId || '-',
-                telegram_link: oneTimeLink,
-                plan: plan,
-                access_code: accessCode,
-                created_at: getLocalDateString(new Date()),
-                expires_at: expDateStr,
-                status: 'active'
-            });
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Salva & Genera Link Monouso"; }
+            if (error) { alert("Errore: solo l'amministratore può creare codici. (" + error.message + ")"); return; }
 
-            persistUsers(users);
             e.target.reset();
             toggleAddUserModal();
-
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "Salva & Genera Link Monouso";
-            }
-
             alert(
-                `Abbonato salvato con successo (Durata ${days} giorni)!\n\n` +
-                `• Codice Accesso Web: ${accessCode}\n` +
-                `• Link Telegram Monouso: ${oneTimeLink}`
+                `Codice creato (${dbPlan === 'pure' ? 'PURE' : 'ALL-INCLUSIVE'}, ${days} giorni, 1 solo uso)${ident ? ' per ' + ident : ''}!\n\n` +
+                `• Codice da dare al cliente: ${accessCode}\n` +
+                `  (lo inserisce nel campo "Codice sblocco" quando accede)\n` +
+                `• Link Telegram monouso: ${oneTimeLink}`
             );
         }
 
@@ -1529,52 +1453,48 @@
         }
 
         async function regenerateUserOneTimeLink(userId) {
-            const users = loadAllUsers();
-            const u = users.find(x => String(x.id) === String(userId));
+            const u = loadAllUsers().find(x => String(x.id) === String(userId));
             if (!u) return;
-
             const tgConf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
             const botToken = tgConf.token || DEFAULT_TG_CONFIG.token;
             const targetChatId = (u.plan === 'pure') ? (tgConf.channel_pure || DEFAULT_TG_CONFIG.channel_pure) : (tgConf.channel_full || DEFAULT_TG_CONFIG.channel_full);
-
             if (!botToken || !targetChatId) {
                 alert("Configura prima il Bot Token e i Chat ID dei canali Telegram in alto.");
                 return;
             }
-
             try {
                 const newLink = await createOneTimeInviteLink(botToken, targetChatId, u.identifier || u.email || 'Utente');
-                u.telegram_link = newLink;
-                persistUsers(users);
                 alert(`Nuovo link monouso generato con successo:\n\n${newLink}\n\n(Valido per 1 solo ingresso)`);
             } catch(e) {
                 alert("Errore generazione link Telegram: " + e.message);
             }
         }
 
-        function extendUserDays(userId, daysToAdd) {
-            const users = loadAllUsers();
-            const u = users.find(x => String(x.id) === String(userId));
-            if (!u) return;
-
-            let curExp = new Date(u.expires_at || Date.now());
-            if (isNaN(curExp.getTime()) || curExp < new Date()) {
-                curExp = new Date();
+        async function extendUserDays(userId, daysToAdd) {
+            const p = (window.__profiles || []).find(x => String(x.id) === String(userId));
+            if (!p) return;
+            if (p.plan === 'none' || p.plan === 'credits') {
+                alert("Questo utente non ha un piano attivo. Genera un codice con 'Nuovo abbonato' e daglielo da riscattare.");
+                return;
             }
-            curExp.setDate(curExp.getDate() + daysToAdd);
-            u.expires_at = getLocalDateString(curExp);
-            u.status = 'active';
-
-            persistUsers(users);
-            alert(`Abbonamento prolungato di ${daysToAdd} giorni fino al ${u.expires_at}`);
+            const today = new Date(); today.setHours(0,0,0,0);
+            let cur = p.expires_at ? new Date(p.expires_at + 'T00:00:00') : today;
+            if (isNaN(cur.getTime()) || cur < today) cur = today;
+            cur.setDate(cur.getDate() + daysToAdd);
+            const newExp = getLocalDateString(cur);
+            const { data, error } = await window.sb.from('profiles').update({ expires_at: newExp }).eq('id', userId).select();
+            if (error || !data || data.length === 0) { alert("Impossibile modificare: solo l'amministratore può farlo."); return; }
+            await fetchUsersFromGitHubAutomatic();
+            alert(`Abbonamento prolungato di ${daysToAdd} giorni fino al ${newExp}`);
         }
 
-        function deleteUser(userId) {
-            if (confirm("Revocare e rimuovere questo utente dall'archivio?")) {
-                let users = loadAllUsers();
-                users = users.filter(x => String(x.id) !== String(userId));
-                persistUsers(users);
-            }
+        async function deleteUser(userId) {
+            const p = (window.__profiles || []).find(x => String(x.id) === String(userId));
+            if (!p) return;
+            if (!confirm("Revocare l'abbonamento di " + p.email + "? L'account resta, ma perde il piano.")) return;
+            const { data, error } = await window.sb.from('profiles').update({ plan: 'none', expires_at: null }).eq('id', userId).select();
+            if (error || !data || data.length === 0) { alert("Impossibile modificare: solo l'amministratore può farlo."); return; }
+            await fetchUsersFromGitHubAutomatic();
         }
 
         function renderUsersTable() {
@@ -1590,13 +1510,13 @@
             const planFreq = {};
 
             if (users.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun abbonato presente in users.json.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun utente registrato.</td></tr>`;
             }
 
             users.forEach(u => {
                 const userIdent = u.identifier || u.email || u.customer_email || 'Utente';
-                const accessCode = u.access_code || u.code || '-';
-                const tgLink = u.telegram_link || '-';
+                const accessCode = (u.credits || 0) + ' cr';
+                const tgLink = '-';
                 const expDate = u.expires_at || u.expiration || '-';
                 const isExpired = expDate !== '-' && expDate < todayStr;
 
@@ -1605,7 +1525,9 @@
                 const userPlan = (u.plan || 'trial').toLowerCase();
                 planFreq[userPlan] = (planFreq[userPlan] || 0) + 1;
 
-                const planBadge = userPlan === 'pure' 
+                const planBadge = userPlan === 'free'
+                    ? `<span class="bg-slate-700/40 text-slate-300 border border-slate-600/50 px-1.5 py-0.5 rounded text-[10px] font-bold">FREE</span>`
+                    : userPlan === 'pure' 
                     ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
                     : (userPlan === 'elite' 
                         ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
@@ -1625,7 +1547,7 @@
                 tr.innerHTML = `
                     <td class="py-2 px-3 font-bold text-white">
                         <div>${userIdent}</div>
-                        <div class="text-[9px] text-slate-500 font-mono">TG ID: ${u.telegram_id || '-'}</div>
+                        <div class="text-[9px] text-slate-500 font-mono">${u.role === 'admin' ? 'ADMIN · ' : ''}TG: ${u.telegram_id || '-'}</div>
                     </td>
                     <td class="py-2 px-3">${planBadge}</td>
                     <td class="py-2 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer">${accessCode}</td>
@@ -1662,116 +1584,21 @@
             lucide.createIcons();
         }
 
-        async function syncUsersToGitHub(users) {
-            const repo = localStorage.getItem(GH_REPO_KEY);
-            const token = localStorage.getItem(GH_TOKEN_KEY);
-            if (!repo || !token) return;
+        async function syncUsersToGitHub() { /* non piu usata */ }
 
-            try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json?_nocache=${Date.now()}`;
-                let currentSha = null;
-
-                const getRes = await fetch(getFileUrl, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    currentSha = fileData.sha;
-                }
-
-                const jsonString = JSON.stringify(users, null, 2);
-                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-
-                const bodyPayload = {
-                    message: `Aggiornamento automatico users.json [${new Date().toISOString()}]`,
-                    content: base64Content
-                };
-                if (currentSha) bodyPayload.sha = currentSha;
-
-                const putRes = await fetch(getFileUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(bodyPayload)
-                });
-
-                const syncEl = document.getElementById('usr-sync-status');
-                if (syncEl) syncEl.innerText = putRes.ok ? "Sincro" : "Errore";
-            } catch(e) {
-                const syncEl = document.getElementById('usr-sync-status');
-                if (syncEl) syncEl.innerText = "Offline";
-            }
-        }
-
-        async function syncUsersFromGitHub() {
-            const repo = localStorage.getItem(GH_REPO_KEY);
-            const token = localStorage.getItem(GH_TOKEN_KEY);
-            if (!repo || !token) {
-                alert("Configura prima Repository e GitHub Token in alto.");
-                return;
-            }
-
-            try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json?_nocache=${Date.now()}`;
-                const getRes = await fetch(getFileUrl, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    const content = decodeURIComponent(escape(atob(fileData.content)));
-                    const parsed = JSON.parse(content);
-                    if (Array.isArray(parsed)) {
-                        localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(parsed));
-                        renderUsersTable();
-                        alert(`Caricati ${parsed.length} abbonati da users.json!`);
-                    }
-                } else {
-                    alert("File users.json non trovato.");
-                }
-            } catch(err) {
-                alert("Errore lettura users.json: " + err.message);
-            }
-        }
+        async function syncUsersFromGitHub() { await fetchUsersFromGitHubAutomatic(); }
 
         // NUOVA FUNZIONE: SCARICA AUTOMATICAMENTE GLI UTENTI DA GITHUB ALL'AVVIO
         async function fetchUsersFromGitHubAutomatic() {
-            const repo = localStorage.getItem(GH_REPO_KEY);
-            const token = localStorage.getItem(GH_TOKEN_KEY);
-            if (!repo || !token) return;
-
+            if (!window.sb) return;
             try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/users.json?_nocache=${Date.now()}`;
-                const getRes = await fetch(getFileUrl, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Cache-Control': 'no-cache'
-                    }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    const content = decodeURIComponent(escape(atob(fileData.content)));
-                    const parsed = JSON.parse(content);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(parsed));
-                        console.log("Abbonati sincronizzati automaticamente da GitHub!");
-                    }
-                }
-            } catch (err) {
-                console.warn("Impossibile contattare GitHub all'avvio, utilizzo dati locali.", err);
-            }
+                const { data, error } = await window.sb.from('profiles').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+                window.__profiles = data || [];
+                const st = document.getElementById('usr-sync-status');
+                if (st) st.innerText = 'Server';
+            } catch (e) { console.warn('[AtmBet] profili', e); }
+            renderUsersTable();
         }
 
         function loadTelegramConfig() {
@@ -2234,25 +2061,8 @@
         }
 
         function verifyAdminAuth(e) {
-            e.preventDefault();
-            const passInput = document.getElementById('admin-pass-input');
-            const errEl = document.getElementById('auth-error-msg');
-            if (!passInput) return;
-
-            const inputVal = passInput.value.trim();
-
-            if (inputVal === ADMIN_REAL_PASSWORD) {
-                sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
-                const currentSession = JSON.parse(localStorage.getItem(CURRENT_SESSION_KEY) || '{}');
-                currentSession.role = 'admin';
-                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentSession));
-                localStorage.setItem('atmbet_is_admin', 'true');
-
-                unlockConsoleUI();
-            } else {
-                if (errEl) errEl.classList.remove('hidden');
-                passInput.value = '';
-            }
+            if (e && e.preventDefault) e.preventDefault();
+            window.location.href = 'auth.html';
         }
 
         function unlockConsoleUI() {
@@ -2273,19 +2083,24 @@
             lucide.createIcons();
         }
 
-        function lockAdminConsole() {
-            sessionStorage.removeItem(ADMIN_AUTH_SESSION_KEY);
-            localStorage.removeItem('atmbet_is_admin');
-            const currentSession = JSON.parse(localStorage.getItem(CURRENT_SESSION_KEY) || '{}');
-            delete currentSession.role;
-            localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(currentSession));
-
-            location.reload();
+        async function lockAdminConsole() {
+            try { await window.AtmAuth.signOut(); } catch (e) {}
+            window.location.href = 'auth.html';
         }
 
-        function checkAdminSession() {
-            if (sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true") {
+        async function checkAdminSession() {
+            const errEl = document.getElementById('auth-error-msg');
+            let sess = null;
+            try { sess = window.AtmAuth ? await window.AtmAuth.syncSession() : null; } catch (e) {}
+            if (sess && (sess.role === 'admin' || sess.role === 'gestore')) {
+                sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
                 unlockConsoleUI();
+                return;
+            }
+            sessionStorage.removeItem(ADMIN_AUTH_SESSION_KEY);
+            if (errEl) {
+                errEl.innerText = sess ? 'Questo account non è abilitato alla console.' : 'Devi accedere con un account staff.';
+                errEl.classList.remove('hidden');
             }
         }
 
@@ -2486,33 +2301,10 @@
         }
 
         function loadGitHubSettings() {
-            const savedRepo = localStorage.getItem(GH_REPO_KEY) || '';
-            const savedToken = localStorage.getItem(GH_TOKEN_KEY) || '';
-            const repoInput = document.getElementById('gh-repo');
-            const tokenInput = document.getElementById('gh-token');
-
-            if (repoInput && savedRepo) repoInput.value = savedRepo;
-            if (tokenInput && savedToken) tokenInput.value = savedToken;
-
-            updateSyncBadge(savedRepo && savedToken ? 'ready' : 'empty');
+            updateSyncBadge(window.sb ? 'ready' : 'empty');
         }
 
-        function saveGitHubSettings() {
-            const repo = document.getElementById('gh-repo').value.trim();
-            const token = document.getElementById('gh-token').value.trim();
-
-            if (!repo || !token) {
-                alert("Inserisci repository e token.");
-                return;
-            }
-
-            localStorage.setItem(GH_REPO_KEY, repo);
-            localStorage.setItem(GH_TOKEN_KEY, token);
-            updateSyncBadge('ready');
-            alert("Credenziali salvate!");
-            syncBetsToGitHub(loadAllBets());
-            syncUsersToGitHub(loadAllUsers());
-        }
+        function saveGitHubSettings() { /* non piu usata: la sincronizzazione e su Supabase */ }
 
         function updateSyncBadge(status, message) {
             const icon = document.getElementById('sync-status-icon');
@@ -2542,86 +2334,147 @@
             }
         }
 
+        // ===== SINCRONIZZAZIONE PRONOSTICI CON SUPABASE =====
+        window.__betSnap = {};
+        window.__betSnapReady = false;
+        let __betSyncChain = Promise.resolve();
+
+        function betToRow(b) {
+            const canon = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
+            const pureList = getPureSelectedTipsters().map(t => canonicalizeTipsterName(t));
+            const isXG = canon.toLowerCase().includes('xg');
+            const isPure = !isXG && (pureList.includes(canon) || canon === 'AtmBet Safe' || canon === 'AtmBetSignal');
+            let st = String(b.status || 'pending').toLowerCase().trim();
+            if (st.includes('vin') || st === 'win' || st === 'won') st = 'won';
+            else if (st.includes('per') || st === 'loss' || st === 'lost') st = 'lost';
+            else if (st.includes('void') || st.includes('annull')) st = 'void';
+            else st = 'pending';
+            let stake = parseFloat(b.stake || 1); if (!(stake > 0) || stake > 10) stake = 1;
+            let odds = parseFloat(b.odds || 1.8); if (!(odds > 0)) odds = 1.8;
+            return {
+                id: String(b.id),
+                event_date: String(b.event_date || ''),
+                match_name: String(b.match_name || 'Evento'),
+                league: b.league || 'Generale',
+                market: b.market || 'Mercato',
+                prediction: b.prediction || '-',
+                original_tipster: canon,
+                odds: Math.round(odds * 100) / 100,
+                stake: Math.round(stake * 100) / 100,
+                status: st,
+                is_pure: isPure,
+                is_published: b.is_published !== false,
+                tg_sent: b.tg_sent === true
+            };
+        }
+
+        async function fetchAllRemoteBets() {
+            const all = [];
+            for (let from = 0; ; from += 1000) {
+                const { data, error } = await window.sb.from('bets').select('*').order('event_date', { ascending: false }).range(from, from + 999);
+                if (error) throw error;
+                all.push(...(data || []));
+                if (!data || data.length < 1000) break;
+            }
+            return all;
+        }
+
+        function applyRemoteBetsLocally(rows) {
+            const snap = {};
+            rows.forEach(r => { snap[r.id] = JSON.stringify(betToRow(r)); });
+            window.__betSnap = snap;
+            const local = rows.map(r => ({
+                id: r.id, event_date: r.event_date, match_name: r.match_name, league: r.league, market: r.market,
+                prediction: r.prediction, original_tipster: r.original_tipster, odds: Number(r.odds), stake: Number(r.stake),
+                status: r.status, is_published: r.is_published, tg_sent: r.tg_sent
+            }));
+            localStorage.setItem(PRIMARY_KEY, JSON.stringify(local));
+            localStorage.setItem(ATMBET_KEY, JSON.stringify(local));
+        }
+
         async function syncBetsFromGitHubSilent() {
-            const repo = localStorage.getItem(GH_REPO_KEY);
-            const token = localStorage.getItem(GH_TOKEN_KEY);
-            if (!repo || !token) return;
-
-            try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/bets.json?_nocache=${Date.now()}`;
-                const getRes = await fetch(getFileUrl, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Cache-Control': 'no-cache'
-                    }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    const content = decodeURIComponent(escape(atob(fileData.content)));
-                    const parsed = JSON.parse(content);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        localStorage.setItem(PRIMARY_KEY, JSON.stringify(parsed));
-                        localStorage.setItem(ATMBET_KEY, JSON.stringify(parsed));
-                    }
-                }
-            } catch (err) {
-                console.warn("Impossibile sincronizzare i dati da remoto in background:", err);
-            }
-        }
-
-        async function syncBetsToGitHub(bets) {
-            const repo = localStorage.getItem(GH_REPO_KEY);
-            const token = localStorage.getItem(GH_TOKEN_KEY);
-            if (!repo || !token) return;
-
+            if (!window.sb) return;
             updateSyncBadge('syncing');
-
             try {
-                const getFileUrl = `https://api.github.com/repos/${repo}/contents/bets.json?_nocache=${Date.now()}`;
-                let currentSha = null;
-
-                const getRes = await fetch(getFileUrl, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
+                let rows = await fetchAllRemoteBets();
+                if (rows.length === 0) {
+                    // Prima migrazione: carico i pronostici esistenti (locali oppure da bets.json) nel database
+                    let seed = loadAllBets();
+                    if (seed.length === 0) {
+                        try {
+                            const r = await fetch('bets.json?_t=' + Date.now(), { cache: 'no-store' });
+                            if (r.ok) { const j = await r.json(); if (Array.isArray(j)) seed = j.map((b, i) => Object.assign({}, b, { id: b.id || ('b_' + i + '_' + (b.event_date || '')) })); }
+                        } catch (e) {}
                     }
-                });
-
-                if (getRes.ok) {
-                    const fileData = await getRes.json();
-                    currentSha = fileData.sha;
+                    if (seed.length > 0) {
+                        const seen = new Set();
+                        const seedRows = seed.map(betToRow).filter(r => r.id && !seen.has(r.id) && seen.add(r.id));
+                        for (let i = 0; i < seedRows.length; i += 400) {
+                            const { error } = await window.sb.from('bets').upsert(seedRows.slice(i, i + 400));
+                            if (error) throw error;
+                        }
+                        rows = await fetchAllRemoteBets();
+                    }
                 }
-
-                const jsonString = JSON.stringify(bets, null, 2);
-                const base64Content = btoa(unescape(encodeURIComponent(jsonString)));
-
-                const bodyPayload = {
-                    message: `Aggiornamento automatico bets.json [${new Date().toISOString()}]`,
-                    content: base64Content
-                };
-                if (currentSha) bodyPayload.sha = currentSha;
-
-                const putRes = await fetch(getFileUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/vnd.github.v3+json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(bodyPayload)
-                });
-
-                if (putRes.ok) updateSyncBadge('success');
-                else {
-                    const errData = await putRes.json();
-                    updateSyncBadge('error', errData.message || 'Errore commit');
-                }
+                applyRemoteBetsLocally(rows);
+                window.__betSnapReady = true;
+                updateSyncBadge('success');
             } catch (err) {
-                updateSyncBadge('error', err.message);
+                console.warn('[AtmBet] sync da server', err);
+                updateSyncBadge('error', (err && err.message) || 'Errore di rete');
             }
         }
+
+        function syncBetsToGitHub(bets) {
+            // (nome mantenuto per compatibilita) salva su Supabase solo cio che e cambiato
+            __betSyncChain = __betSyncChain.then(() => doSyncBetsToServer(bets)).catch(() => {});
+            return __betSyncChain;
+        }
+
+        async function doSyncBetsToServer(bets) {
+            if (!window.sb) return;
+            if (!window.__betSnapReady) { updateSyncBadge('error', 'Dati del server non ancora caricati: riprova tra un attimo.'); return; }
+            updateSyncBadge('syncing');
+            try {
+                const seen = new Set();
+                const rows = bets.map(betToRow).filter(r => r.id && !seen.has(r.id) && seen.add(r.id));
+                const changed = rows.filter(r => window.__betSnap[r.id] !== JSON.stringify(r));
+                const ids = new Set(rows.map(r => r.id));
+                const removed = Object.keys(window.__betSnap).filter(id => !ids.has(id));
+                // sicurezza: non cancellare mai quasi tutto per un elenco locale vuoto o parziale
+                if (removed.length > 20 && removed.length > Object.keys(window.__betSnap).length * 0.5) {
+                    updateSyncBadge('error', 'Troppe eliminazioni in una volta: operazione bloccata per sicurezza.');
+                    return;
+                }
+                for (let i = 0; i < changed.length; i += 400) {
+                    const { error } = await window.sb.from('bets').upsert(changed.slice(i, i + 400));
+                    if (error) throw error;
+                }
+                for (let i = 0; i < removed.length; i += 200) {
+                    const { error } = await window.sb.from('bets').delete().in('id', removed.slice(i, i + 200));
+                    if (error) throw error;
+                }
+                changed.forEach(r => { window.__betSnap[r.id] = JSON.stringify(r); });
+                removed.forEach(id => { delete window.__betSnap[id]; });
+                updateSyncBadge('success');
+            } catch (err) {
+                console.warn('[AtmBet] sync verso server', err);
+                updateSyncBadge('error', (err && err.message) || 'Errore di salvataggio');
+            }
+        }
+
+        async function syncAllFromServer() {
+            await syncBetsFromGitHubSilent();
+            await fetchUsersFromGitHubAutomatic();
+            renderDashboard();
+            renderTipstersSelectors();
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && window.__betSnapReady) {
+                syncBetsFromGitHubSilent().then(() => { renderDashboard(); });
+            }
+        });
 
         function loadAllBets() {
             let bets = [];
@@ -3408,18 +3261,13 @@
             location.reload();
         }
 
-        // AGGIORNAMENTO DEL DOM CONTENT LOADED PER SCARICARE AUTOMATICAMENTE DA GITHUB ALL'AVVIO
         document.addEventListener('DOMContentLoaded', async () => {
             lucide.createIcons();
             loadGitHubSettings();
-            
-            // Scarica automaticamente gli utenti aggiornati da GitHub prima di popolare la tabella
-            await fetchUsersFromGitHubAutomatic();
-
             const bets = loadAllBets();
             initAdminServiceStartDate(bets);
-            checkAdminSession();
-            renderUsersTable();
+            await checkAdminSession();
+            await fetchUsersFromGitHubAutomatic();
         });
     </script>
 

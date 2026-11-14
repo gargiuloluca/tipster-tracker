@@ -35,6 +35,9 @@
         };
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script defer src="supabase-config.js"></script>
+
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <script>
@@ -2343,91 +2346,46 @@
 
         async function handleVerifyLicense(e) {
             e.preventDefault();
-            const typedCode = document.getElementById('user-license-code').value.trim().toUpperCase();
+            const typedCode = document.getElementById('user-license-code').value.trim();
             const typedTelegram = document.getElementById('user-telegram-handle').value.trim();
             const errEl = document.getElementById('license-error-msg');
             const succEl = document.getElementById('license-success-msg');
-
             errEl.classList.add('hidden');
             succEl.classList.add('hidden');
+            const fail = (msg) => { errEl.innerText = msg; errEl.classList.remove('hidden'); };
 
+            if (!window.sb) { fail(__t('idx_lic_error', "Errore durante la verifica. Riprova.")); return; }
             try {
-                let users = [];
-                try {
-                    const res = await fetch('users.json?_t=' + Date.now(), { cache: 'no-store' });
-                    if (res.ok) users = await res.json();
-                } catch(netErr) {}
+                const { data: sess } = await window.sb.auth.getSession();
+                if (!sess || !sess.session) { window.location.href = 'auth.html'; return; }
 
-                if (!Array.isArray(users) || users.length === 0) {
-                    const localRaw = localStorage.getItem(USERS_DB_KEY);
-                    if (localRaw) users = JSON.parse(localRaw);
+                const { data, error } = await window.sb.rpc('redeem_code', { p_code: typedCode });
+                if (error || !data || data.ok !== true) {
+                    const m = String((data && data.error) || '').toLowerCase();
+                    if (m.includes('scadut')) fail(__t('idx_lic_expired', "Codice promo scaduto il {date}", { date: '' }).trim());
+                    else if (m.includes('utilizzat')) fail(__t('idx_lic_used_up', "Codice promo esaurito."));
+                    else fail(__t('idx_lic_invalid', "Codice non valido. Verifica il testo digitato."));
+                    return;
                 }
+                if (typedTelegram) { try { await window.sb.from('profiles').update({ telegram_username: typedTelegram }).eq('id', sess.session.user.id); } catch (e2) {} }
+                const session = await window.AtmAuth.syncSession();
+                cachedAllBets = await fetchAllBets();
+                activeUser = getActiveUserSession();
 
-                const todayStr = getLocalDateString(new Date());
-                
-                const match = users.find(u => {
-                    const uCode = (u.access_code || u.code || '').trim().toUpperCase();
-                    const uEmail = (u.identifier || u.email || '').trim().toUpperCase();
-                    return uCode === typedCode || uEmail === typedCode;
-                });
+                succEl.innerText = __t('idx_lic_unlocked', 'Licenza {plan} sbloccata!', { plan: String((session && session.plan) || data.plan || '').toUpperCase() });
+                succEl.classList.remove('hidden');
 
-                if (match) {
-                    if (match.status && match.status !== 'active') {
-                        errEl.innerText = __t('idx_lic_disabled', "Questo codice promozionale è disattivato.");
-                        errEl.classList.add('hidden');
-                        return;
-                    }
-
-                    const exp = match.expires_at || match.expiration;
-                    if (exp && exp !== '-' && exp < todayStr) {
-                        errEl.innerText = __t('idx_lic_expired', "Codice promo scaduto il {date}", { date: exp });
-                        errEl.classList.add('hidden');
-                        return;
-                    }
-
-                    if (match.max_uses && (match.used_count || 0) >= match.max_uses) {
-                        errEl.innerText = __t('idx_lic_used_up', "Codice promo esaurito.");
-                        errEl.classList.add('hidden');
-                        return;
-                    }
-
-                    const planType = match.plan === 'pure' ? 'pure' : (match.plan === 'full' ? 'all_inclusive' : 'elite');
-
-                    const sessionData = {
-                        name: match.identifier ? match.identifier.split('@')[0] : 'Ospite VIP',
-                        email: match.identifier || `${typedCode.toLowerCase()}@promo.atmbet`,
-                        telegram_username: typedTelegram,
-                        role: match.role || 'user',
-                        plan: planType,
-                        access_code: typedCode,
-                        expires_at: exp || '2099-12-31',
-                        credits: match.credits || 99
-                    };
-
-                    saveActiveUserSession(sessionData);
-                    if (match.role === 'admin') {
-                        localStorage.setItem('atmbet_is_admin', 'true');
-                    }
-
-                    succEl.innerText = __t('idx_lic_unlocked', 'Licenza {plan} sbloccata!', { plan: planType.toUpperCase() });
-                    succEl.classList.add('hidden');
-
-                    setTimeout(() => {
-                        closeLicenseModal();
-                        renderNavbarUserStatus();
-                        applyUserExperienceMode();
-                        updateTelegramBanner();
-                        calculateGlobalPerformance();
-                        renderPublicCards();
-                        renderPublicHistory();
-                    }, 800);
-                } else {
-                    errEl.innerText = __t('idx_lic_invalid', "Codice non valido. Verifica il testo digitato.");
-                    errEl.classList.add('hidden');
-                }
-            } catch(err) {
-                errEl.innerText = __t('idx_lic_error', "Errore durante la verifica. Riprova.");
-                errEl.classList.add('hidden');
+                setTimeout(() => {
+                    closeLicenseModal();
+                    renderNavbarUserStatus();
+                    applyUserExperienceMode();
+                    updateTelegramBanner();
+                    calculateGlobalPerformance();
+                    renderPublicCards();
+                    renderPublicHistory();
+                }, 800);
+            } catch (err) {
+                fail(__t('idx_lic_error', "Errore durante la verifica. Riprova."));
             }
         }
 
@@ -2626,12 +2584,12 @@
             loadTranslations(currentLang);
         }
 
-        window.logoutUser = function() {
+        window.logoutUser = async function() {
+            try { if (window.AtmAuth) await window.AtmAuth.signOut(); } catch (e) {}
             localStorage.removeItem(CURRENT_SESSION_KEY);
             localStorage.removeItem('atmbet_is_admin');
             localStorage.removeItem('atmbet_admin_override');
             sessionStorage.clear();
-            
             activeUser = null;
             showMarketingForVip = false;
             currentTipsterPlanFilter = 'all';
@@ -2666,25 +2624,25 @@
             return { canView: false, reason: "NO_CREDITS_OR_PLAN" };
         }
 
-        window.unlockBetWithCredit = function(betId) {
+        window.unlockBetWithCredit = async function(betId) {
             activeUser = getActiveUserSession();
-            if (!activeUser) {
+            if (!activeUser || !window.sb) {
                 window.location.href = 'auth.html';
                 return;
             }
-
             if (!activeUser.credits || activeUser.credits <= 0) {
                 alert(__t('idx_alert_no_credits', "Non hai crediti sufficienti."));
                 window.location.href = 'index.html#piani';
                 return;
             }
-
-            activeUser.credits -= 1;
-            if (!activeUser.unlocked_bets) activeUser.unlocked_bets = [];
-            activeUser.unlocked_bets.push(String(betId));
-
-            saveActiveUserSession(activeUser);
-
+            const { data, error } = await window.sb.rpc('unlock_bet', { p_bet_id: String(betId) });
+            if (error || !data || data.ok !== true) {
+                alert((data && data.error) || __t('idx_alert_no_credits', "Non hai crediti sufficienti."));
+                return;
+            }
+            await window.AtmAuth.syncSession();
+            activeUser = getActiveUserSession();
+            cachedAllBets = await fetchAllBets();
             renderNavbarUserStatus();
             updateTelegramBanner();
             renderPublicCards();
@@ -2758,81 +2716,43 @@
         }
 
         async function fetchAllBets() {
-            let bets = [];
-
+            let rows = [];
             try {
-                const timestamp = new Date().getTime();
-                const res = await fetch(`users.json?_nocache=${timestamp}`, { cache: 'no-store' });
-                const resBets = await fetch(`bets.json?_nocache=${timestamp}`, {
-                    cache: 'no-store',
-                    headers: {
-                        'Cache-Control': 'no-cache, no-store, must-revalidate',
-                        'Pragma': 'no-cache',
-                        'Expires': '0'
+                if (!window.sb) throw new Error('Supabase non disponibile');
+                const pull = async (table) => {
+                    const out = [];
+                    for (let from = 0; ; from += 1000) {
+                        const { data, error } = await window.sb.from(table).select('*').order('id').range(from, from + 999);
+                        if (error) throw error;
+                        out.push(...(data || []));
+                        if (!data || data.length < 1000) break;
                     }
-                });
-                if (resBets.ok) {
-                    const data = await resBets.json();
-                    if (Array.isArray(data) && data.length > 0) bets = data;
-                }
-            } catch(e) {}
+                    return out;
+                };
+                // "bets": cio che il tuo piano puo vedere. "bets_teaser": pronostici di oggi senza pronostico/quota (anteprima).
+                const [full, teaser] = await Promise.all([pull('bets'), pull('bets_teaser')]);
+                const seen = new Set(full.map(r => r.id));
+                rows = full.concat(teaser.filter(r => !seen.has(r.id)).map(r => Object.assign({}, r, { prediction: '-', odds: 0, stake: 1, original_tipster: null })));
+            } catch (e) { console.warn('[AtmBet] impossibile caricare i pronostici', e); }
 
-            const rawV1 = localStorage.getItem(PRIMARY_KEY) || localStorage.getItem(ATMBET_KEY);
-            if (rawV1) {
-                try {
-                    const localBets = JSON.parse(rawV1);
-                    if (Array.isArray(localBets) && localBets.length > 0) {
-                        if (bets.length === 0) {
-                            bets = localBets;
-                        } else {
-                            const localMap = new Map(localBets.map(b => [String(b.id || b.match_name || b.match), b]));
-                            bets = bets.map(remoteBet => {
-                                const key = String(remoteBet.id || remoteBet.match_name || remoteBet.match);
-                                const localVersion = localMap.get(key);
-                                if (localVersion && (localVersion.status !== 'pending' && (remoteBet.status === 'pending' || !remoteBet.status))) {
-                                    return localVersion;
-                                }
-                                return remoteBet;
-                            });
-                        }
-                    }
-                } catch(e) {}
-            }
-
-            const pureTipstersList = getActivePureTipsters().map(t => canonicalizeTipsterName(t));
-
-            return bets.map((b, idx) => {
-                const rawTipster = (b.original_tipster || b.tipster || b.source || 'AtmBetSignal').trim();
-                const canonTipster = canonicalizeTipsterName(rawTipster);
-                const isXG = canonTipster.toLowerCase().includes('xg');
-
-                const isPureCandidate = !isXG && (
-                    b.isPure === true ||
-                    pureTipstersList.includes(canonTipster) ||
-                    canonTipster === 'AtmBet Safe' ||
-                    canonTipster === 'AtmBetSignal'
-                );
-
-                let rawStatus = String(b.status || b.result || b.outcome || 'pending').toLowerCase().trim();
-                if (rawStatus.includes('vin') || rawStatus === 'win' || rawStatus === 'won') rawStatus = 'won';
-                else if (rawStatus.includes('per') || rawStatus === 'loss' || rawStatus === 'lost') rawStatus = 'lost';
-                else if (rawStatus.includes('void') || rawStatus.includes('annull')) rawStatus = 'void';
-                else rawStatus = 'pending';
-
-                const matchTitle = b.match_name || b.match || b.teams || 'Evento';
-
+            return rows.map((b, idx) => {
+                const isPure = b.is_pure === true;
+                const tip = b.original_tipster ? canonicalizeTipsterName(b.original_tipster) : (isPure ? 'AtmBet Selection' : 'AtmBet Signal');
+                let rawStatus = String(b.status || 'pending').toLowerCase().trim();
+                if (rawStatus !== 'won' && rawStatus !== 'lost' && rawStatus !== 'void') rawStatus = 'pending';
+                const stake = parseFloat(b.stake || 1);
                 return {
                     id: String(b.id || idx),
-                    event_date: b.event_date || b.date || b.dateTime || '',
-                    league: b.league || b.competition || 'Generale',
-                    match_name: matchTitle,
-                    market: b.market || b.type || 'Mercato',
-                    prediction: b.prediction || b.pick || b.selection || '-',
-                    original_tipster: canonTipster,
-                    is_pure: isPureCandidate,
-                    public_brand: isPureCandidate ? 'AtmBet Selection' : 'AtmBet Signal',
-                    odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
-                    stake: parseFloat(b.stake || b.units || 1.0) > 10 ? 1.0 : parseFloat(b.stake || b.units || 1.0),
+                    event_date: b.event_date || '',
+                    league: b.league || 'Generale',
+                    match_name: b.match_name || 'Evento',
+                    market: b.market || 'Mercato',
+                    prediction: b.prediction || '-',
+                    original_tipster: tip,
+                    is_pure: isPure,
+                    public_brand: isPure ? 'AtmBet Selection' : 'AtmBet Signal',
+                    odds: parseFloat(b.odds) || 0,
+                    stake: stake > 10 ? 1.0 : stake,
                     status: rawStatus,
                     is_published: b.is_published !== false
                 };
@@ -3506,6 +3426,8 @@
             const i18nReady = loadTranslations(currentLang);
             await Promise.race([i18nReady, new Promise(r => setTimeout(r, 1500))]);
             const translationsLate = !(window.__i18nCache && window.__i18nCache[currentLang]);
+            // La sessione vera arriva dal server: il piano scritto nel browser non conta nulla
+            if (window.AtmAuth) { await Promise.race([window.AtmAuth.syncSession(), new Promise(r => setTimeout(r, 3500))]); }
             renderNavbarUserStatus();
             setupDynamicDatePresets();
             cachedAllBets = await fetchAllBets();
