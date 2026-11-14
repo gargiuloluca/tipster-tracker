@@ -424,5 +424,9 @@
   "auth_ok_reset": "We sent you a link to reset your password.",
   "auth_need_email": "Enter your email first, then tap 'Forgot your password?'.",
   "auth_code_ok": "Code activated!",
-  "auth_code_bad": "Invalid or already used code."
+  "auth_code_bad": "Invalid or already used code.",
+  "auth_reset_pwd_label": "New password",
+  "auth_reset_btn": "Save new password",
+  "auth_reset_done": "Password updated! Redirecting…",
+  "auth_reset_expired": "This link is no longer valid. Request a new one."
 }

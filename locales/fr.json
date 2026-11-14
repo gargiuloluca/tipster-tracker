@@ -424,5 +424,9 @@
   "auth_ok_reset": "Nous vous avons envoyé un lien pour réinitialiser le mot de passe.",
   "auth_need_email": "Saisissez d'abord votre e-mail, puis touchez 'Mot de passe oublié ?'.",
   "auth_code_ok": "Code activé !",
-  "auth_code_bad": "Code invalide ou déjà utilisé."
+  "auth_code_bad": "Code invalide ou déjà utilisé.",
+  "auth_reset_pwd_label": "Nouveau mot de passe",
+  "auth_reset_btn": "Enregistrer le nouveau mot de passe",
+  "auth_reset_done": "Mot de passe mis à jour ! Redirection…",
+  "auth_reset_expired": "Ce lien n'est plus valide. Demandez-en un nouveau."
 }

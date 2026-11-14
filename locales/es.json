@@ -424,5 +424,9 @@
   "auth_ok_reset": "Te hemos enviado un enlace para restablecer la contraseña.",
   "auth_need_email": "Escribe primero tu correo y luego toca '¿Olvidaste tu contraseña?'.",
   "auth_code_ok": "¡Código activado!",
-  "auth_code_bad": "Código no válido o ya utilizado."
+  "auth_code_bad": "Código no válido o ya utilizado.",
+  "auth_reset_pwd_label": "Nueva contraseña",
+  "auth_reset_btn": "Guardar nueva contraseña",
+  "auth_reset_done": "¡Contraseña actualizada! Redirigiendo…",
+  "auth_reset_expired": "El enlace ya no es válido. Solicita uno nuevo."
 }

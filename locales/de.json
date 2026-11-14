@@ -424,5 +424,9 @@
   "auth_ok_reset": "Wir haben dir einen Link zum Zurücksetzen des Passworts geschickt.",
   "auth_need_email": "Gib zuerst deine E-Mail ein und tippe dann auf 'Passwort vergessen?'.",
   "auth_code_ok": "Code aktiviert!",
-  "auth_code_bad": "Ungültiger oder bereits verwendeter Code."
+  "auth_code_bad": "Ungültiger oder bereits verwendeter Code.",
+  "auth_reset_pwd_label": "Neues Passwort",
+  "auth_reset_btn": "Neues Passwort speichern",
+  "auth_reset_done": "Passwort aktualisiert! Weiterleitung…",
+  "auth_reset_expired": "Dieser Link ist nicht mehr gültig. Fordere einen neuen an."
 }

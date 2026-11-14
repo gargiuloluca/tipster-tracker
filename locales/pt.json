@@ -424,5 +424,9 @@
   "auth_ok_reset": "Enviámos-te um link para redefinir a palavra-passe.",
   "auth_need_email": "Escreve primeiro o teu email e depois toca em 'Esqueceste a palavra-passe?'.",
   "auth_code_ok": "Código ativado!",
-  "auth_code_bad": "Código inválido ou já utilizado."
+  "auth_code_bad": "Código inválido ou já utilizado.",
+  "auth_reset_pwd_label": "Nova palavra-passe",
+  "auth_reset_btn": "Guardar nova palavra-passe",
+  "auth_reset_done": "Palavra-passe atualizada! A redirecionar…",
+  "auth_reset_expired": "A ligação já não é válida. Pede uma nova."
 }
