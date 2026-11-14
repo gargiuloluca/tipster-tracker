@@ -438,5 +438,8 @@
   "partner_status_pending": "Offen",
   "partner_status_paid": "Bezahlt",
   "partner_due_lbl": "Auszuzahlen: ",
-  "partner_copied": "Kopiert!"
+  "partner_copied": "Kopiert!",
+  "legal_card7_title": "7. Personenbezogene Daten und Dienstleister",
+  "legal_card7_text": "Zur Bereitstellung des Dienstes verarbeiten wir deine E-Mail-Adresse, deinen Telegram-Benutzernamen (falls angegeben), deinen Tarif samt Ablaufdatum und, bei Nutzern, die über einen Partner-Creator kommen, dessen Code. Zahlungskartendaten speichern wir nicht. Wir setzen Dienstleister ein, die Daten in unserem Auftrag verarbeiten: <strong>Supabase</strong> (Datenbank und Anmeldung), <strong>Stripe</strong> (Zahlungen), <strong>Resend</strong> (Service-E-Mails), <strong>Telegram</strong> (private Kanäle) und <strong>GitHub</strong> (Hosting der Website). In deinem Browser speichert die Website 30 Tage lang den Creator-Code des Links, über den du gekommen bist, sowie Sprache und Anmeldesitzung.",
+  "legal_card7_box": "<strong>Deine Rechte:</strong> Du kannst Auskunft, Berichtigung oder Löschung deiner Daten verlangen, indem du an assistenza@atmbetofficial.com schreibst."
 }

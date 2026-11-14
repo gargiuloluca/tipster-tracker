@@ -438,5 +438,8 @@
   "partner_status_pending": "To be paid",
   "partner_status_paid": "Paid",
   "partner_due_lbl": "To collect: ",
-  "partner_copied": "Copied!"
+  "partner_copied": "Copied!",
+  "legal_card7_title": "7. Personal Data and Service Providers",
+  "legal_card7_text": "To provide the service we process your email address, your Telegram username (if you give one), your plan and subscription expiry and, for users coming from a creator partner, the code of that creator. We do not store payment card data. We use providers that process data on our behalf: <strong>Supabase</strong> (database and sign-in), <strong>Stripe</strong> (payments), <strong>Resend</strong> (service emails), <strong>Telegram</strong> (private channels) and <strong>GitHub</strong> (site hosting). In your browser the site stores, for 30 days, the creator code of the link you arrived from, together with your language and sign-in session.",
+  "legal_card7_box": "<strong>Your rights:</strong> you can request access to, correction or deletion of your data by writing to assistenza@atmbetofficial.com."
 }
