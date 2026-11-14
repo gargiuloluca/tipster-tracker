@@ -1,0 +1,22 @@
+name: Report settimanale utenti in scadenza
+
+on:
+  schedule:
+    - cron: "30 6 * * 1"   # ogni lunedi alle 07:30 italiane (08:30 in estate)
+  workflow_dispatch: {}      # avvio manuale dal tasto "Run workflow"
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Invia il report
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        run: python3 weekly_report.py
