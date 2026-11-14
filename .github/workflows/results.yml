@@ -10,7 +10,7 @@ jobs:
   update-bets:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Permesso di aggiornare bets.json
+      contents: read # non scrive piu nel repository: aggiorna il database
 
     steps:
       - name: Scarica Repository
@@ -27,12 +27,6 @@ jobs:
       - name: Esegui Controllo Risultati
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: python updater.py
-
-      - name: Salva Modifiche se presenti
-        run: |
-          git config --global user.name "AtmBet Bot"
-          git config --global user.email "bot@atmbet.local"
-          git add bets.json
-          git commit -m "Automazione: esiti match aggiornati [skip ci]" || exit 0
-          git push
