@@ -1,0 +1,3341 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AtmBet Console | Tipster Tracker & Direct GitHub Sync</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png?v=2">
+    <link rel="icon" type="image/png" sizes="192x192" href="logo.png?v=2">
+    <link rel="apple-touch-icon" href="logo.png?v=2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#22c55e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AtmBet Admin">
+<link rel="apple-touch-icon" href="logo.png">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.log(err));
+    });
+  }
+</script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        atm: {
+                            green: '#22c55e',
+                            darkGreen: '#15803d',
+                            bg: '#0b0f17',
+                            card: '#111827',
+                            border: '#1f2937',
+                            gold: '#facc15'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .filter-btn-active {
+            background-color: #22c55e !important;
+            color: #020617 !important;
+            border-color: #22c55e !important;
+            font-weight: 800 !important;
+        }
+        .sim-pill-active {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            border-color: #3b82f6 !important;
+            font-weight: 800 !important;
+        }
+        .cluster-pill-active {
+            background-color: #f59e0b !important;
+            color: #020617 !important;
+            border-color: #f59e0b !important;
+            font-weight: 800 !important;
+        }
+        .row-won {
+            background-color: rgba(34, 197, 94, 0.08) !important;
+            border-left: 4px solid #22c55e !important;
+        }
+        .row-lost {
+            background-color: rgba(244, 63, 94, 0.08) !important;
+            border-left: 4px solid #f43f5e !important;
+        }
+        .row-pending {
+            border-left: 4px solid #475569 !important;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #0b0f17;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        * { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased pb-12 overflow-x-hidden">
+
+    <!-- MODALE DI AUTENTICAZIONE PASSWORD -->
+    <div id="admin-auth-overlay" class="fixed inset-0 bg-slate-950 z-[9999] flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-sm w-full shadow-2xl text-center space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                <i data-lucide="lock" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h2 class="text-lg font-black text-white">AtmBet Console</h2>
+                <p class="text-xs text-slate-400 mt-1">Area riservata allo staff. Accedi con un account autorizzato.</p>
+            </div>
+            <div id="auth-error-msg" class="text-[11px] font-bold text-rose-400 hidden"></div>
+            <a href="auth.html" id="admin-login-link" class="block w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
+                Accedi con il tuo account
+            </a>
+            <div class="text-[10px] text-slate-600 font-mono">AtmBet Core Protocol</div>
+        </div>
+    </div>
+
+    <!-- MODALE MODIFICA RAPIDA PRONOSTICO -->
+    <div id="edit-bet-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9999] hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-5 sm:p-6 rounded-3xl max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
+                        <i data-lucide="edit-3" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs sm:text-sm font-bold text-white">Modifica Pronostico</h3>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Correggi data, orario o dettagli della giocata</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeEditBetModal()" class="text-slate-500 hover:text-white p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form onsubmit="saveEditedBet(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="edit_bet_id">
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[10px]">Data e Ora (Es. 2026-11-08 20:45)</label>
+                    <input type="text" id="edit_bet_date" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[10px]">Partita / Evento</label>
+                    <input type="text" id="edit_bet_match" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[10px]">Pronostico</label>
+                        <input type="text" id="edit_bet_pred" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-bold text-emerald-400 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[10px]">Campionato / Lega</label>
+                        <input type="text" id="edit_bet_league" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[10px]">Quota</label>
+                        <input type="number" step="0.01" id="edit_bet_odds" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1 text-[10px]">Stake (Unità)</label>
+                        <input type="number" step="0.1" id="edit_bet_stake" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1 text-[10px]">Fornitore</label>
+                    <input type="text" id="edit_bet_tipster" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                    <button type="button" onclick="closeEditBetModal()" class="px-3 py-2 text-slate-400 hover:text-white transition">Annulla</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-black px-4 py-2 rounded-xl transition shadow">
+                        Salva Modifiche
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODALE VERIFICA RISULTATI API -->
+    <div id="results-verify-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9998] hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-4 sm:p-6 rounded-3xl max-w-lg w-full shadow-2xl space-y-3 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                        <i data-lucide="check-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs sm:text-sm font-bold text-white">Controllo Risultati Automatico</h3>
+                        <p class="text-[10px] sm:text-[11px] text-slate-400">Verifica giocate terminate e refertazione</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeResultsModal()" class="text-slate-500 hover:text-white p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scroll" id="pending-verification-list"></div>
+
+            <div class="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2">
+                <span id="verify-summary-badge" class="text-[10px] sm:text-[11px] font-mono text-slate-400">0 giocate da refertare</span>
+                <button type="button" onclick="applyVerifiedResults()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition shadow flex items-center justify-center gap-1.5">
+                    <i data-lucide="save" class="w-4 h-4"></i> Salva & Sincronizza
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENUTO AMMINISTRATIVO -->
+    <div id="admin-main-content" class="hidden">
+
+        <!-- Top Navbar Admin (Mobile Ready) -->
+        <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-50 backdrop-blur">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 h-16 flex items-center justify-between gap-2">
+                <div class="flex items-center space-x-2">
+                    <img src="logo.png" onerror="this.src='atmbet.png'" alt="AtmBet" class="h-8 sm:h-9 w-auto">
+                    <div>
+                        <span class="text-base sm:text-lg font-black tracking-wider text-white">ATM<span class="text-emerald-500">BET</span></span>
+                        <span class="hidden sm:inline-block ml-1 text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-1.5 py-0.2 rounded font-bold uppercase">Admin</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-1 sm:space-x-2">
+                    <button type="button" onclick="openResultsModal()" class="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2.5 py-1.5 rounded-lg font-black flex items-center gap-1 transition shadow shadow-emerald-500/10">
+                        <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Verifica Risultati</span>
+                    </button>
+
+                    <!-- PULSANTE BACKUP COMPLETO MASTER -->
+                    <button type="button" onclick="exportFullMasterBackup()" title="Scarica backup completo di tutto il sistema" class="text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-lg font-black flex items-center gap-1 transition shadow">
+                        <i data-lucide="database" class="w-3.5 h-3.5"></i>
+                        <span>Backup Completo</span>
+                    </button>
+
+                    <!-- PULSANTE RIPRISTINO MASTER -->
+                    <label for="import-backup-file" title="Ripristina backup completo" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition cursor-pointer">
+                        <i data-lucide="upload" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span class="hidden md:inline">Ripristina</span>
+                        <input type="file" id="import-backup-file" class="hidden" accept=".json" onchange="importFullMasterBackup(event)">
+                    </label>
+
+                    <a href="index.html" target="_blank" class="text-xs bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 p-2 sm:px-3 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Vetrina</span>
+                    </a>
+                    <button type="button" onclick="lockAdminConsole()" title="Blocca console" class="text-xs bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 p-2 sm:px-2.5 sm:py-1.5 rounded-lg font-bold flex items-center gap-1 transition">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-7xl mx-auto px-2.5 sm:px-4 pt-3 sm:pt-6 space-y-4 sm:space-y-6">
+
+            <!-- SEZIONE TEST ABBONATI -->
+            <section class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/40 rounded-2xl p-3.5 sm:p-4 shadow-xl">
+                <div class="flex items-center justify-between cursor-pointer" onclick="toggleAdminTestPanel()">
+                    <div class="flex items-center gap-2">
+                        <div class="p-1.5 bg-amber-500/20 text-amber-400 rounded-xl border border-amber-500/30">
+                            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Pannello Test Rapido Piani (Admin Only)</h2>
+                            <p class="text-[10px] text-slate-400">Simula istantaneamente qualsiasi tipo di abbonato sulla vetrina</p>
+                        </div>
+                    </div>
+                    <button type="button" id="admin-test-toggle-btn" class="text-xs text-amber-400 font-bold flex items-center gap-1 bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">
+                        Mostra Test ▼
+                    </button>
+                </div>
+
+                <div id="admin-test-collapsible" class="hidden mt-3 pt-3 border-t border-slate-800 space-y-3">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button type="button" onclick="adminQuickTestLogin('pure')" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 p-2.5 rounded-xl text-xs font-bold transition text-center">
+                            ⚡ Signal PURE
+                        </button>
+                        <button type="button" onclick="adminQuickTestLogin('all_inclusive')" class="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 p-2.5 rounded-xl text-xs font-bold transition text-center">
+                            🌐 All-Inclusive
+                        </button>
+                        <button type="button" onclick="adminQuickTestLogin('credits')" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 p-2.5 rounded-xl text-xs font-bold transition text-center">
+                            🎟️ 10 Crediti
+                        </button>
+                        <button type="button" onclick="adminQuickTestLogout()" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 p-2.5 rounded-xl text-xs font-bold transition text-center">
+                            🚪 Reset / Logout Test
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOX SINCRONIZZAZIONE SERVER (SUPABASE) -->
+            <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-lg">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div id="sync-status-icon" class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0"></div>
+                        <div>
+                            <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                                <i data-lucide="database" class="w-3.5 h-3.5 text-emerald-400"></i> Database Protetto (Supabase)
+                            </div>
+                            <div id="sync-status-text" class="text-[10px] text-slate-400 font-mono">In attesa di accesso.</div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="syncAllFromServer()" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 font-bold text-xs py-1.5 px-4 rounded-xl transition">
+                        Ricarica dal server
+                    </button>
+                </div>
+            </section>
+
+            <!-- SEZIONE: GESTIONE ABBONATI & LICENZE (users.json) -->
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/20 border border-emerald-500/30 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-800 pb-3 cursor-pointer select-none" onclick="toggleAccordion('users-accordion-body', 'users-accordion-icon')">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20 shrink-0">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <h2 class="text-xs sm:text-sm font-bold text-white">Abbonati & Licenze</h2>
+                                <span class="text-[9px] bg-emerald-500/20 text-emerald-300 font-mono px-1.5 py-0.2 rounded font-black uppercase">server</span>
+                            </div>
+                            <p class="text-[10px] text-slate-400">Codici, scadenze e link d'accesso Telegram monouso (Clicca per aprire/chiudere)</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 self-end sm:self-auto">
+                        <button type="button" onclick="event.stopPropagation(); toggleAddUserModal();" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-black px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow">
+                            <i data-lucide="user-plus" class="w-3.5 h-3.5"></i> Nuovo
+                        </button>
+                        <button type="button" onclick="event.stopPropagation(); syncUsersFromGitHub();" title="Ricarica da remoto" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold p-2 sm:px-2.5 sm:py-1.5 rounded-xl transition flex items-center gap-1">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-blue-400"></i>
+                        </button>
+                        <i data-lucide="chevron-down" id="users-accordion-icon" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+                    </div>
+                </div>
+
+                <div id="users-accordion-body" class="hidden space-y-4 pt-2">
+                    <div id="add-user-panel" class="hidden bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                            <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                                <i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Crea Nuova Voce nel Sistema
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <label class="text-[10px] text-slate-400 font-medium">Tipo:</label>
+                                <select id="entry-type-select" onchange="switchEntryFormType(this.value)" class="bg-slate-900 border border-slate-800 text-xs font-bold text-emerald-400 rounded-lg px-2 py-1 outline-none">
+                                    <option value="user">Abbonato / Utente</option>
+                                    <option value="creator">Codice Creator Partner</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <form id="form-type-user" onsubmit="handleManualCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Nome o Email</label>
+                                <input type="text" id="new_user_ident" required placeholder="mario@gmail.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Telegram ID (Opzionale)</label>
+                                <input type="text" id="new_user_tgid" placeholder="123456789" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Piano Sottoscritto</label>
+                                <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
+                                    <option value="pure" selected>Pure Signal (Consigliato Test)</option>
+                                    <option value="elite">Cluster Elite (Bilanciato)</option>
+                                    <option value="full">All-Inclusive (Tutti)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Durata (Giorni)</label>
+                                <input type="number" id="new_user_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500 font-mono">
+                            </div>
+                            <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
+                                <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
+                                <button type="submit" id="submit-user-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">
+                                    Salva & Genera Link Monouso
+                                </button>
+                            </div>
+                        </form>
+
+                        <form id="form-type-creator" onsubmit="handleManualCreateCreator(event)" class="hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Codice Creator (Es. PROVA10)</label>
+                                <input type="text" id="new_creator_code" required placeholder="PROVA10" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono uppercase focus:outline-none focus:border-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Nome / Nickname Creator</label>
+                                <input type="text" id="new_creator_name" required placeholder="Mario Rossi" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Piano Associato</label>
+                                <select id="new_creator_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
+                                    <option value="pure" selected>Pure Signal (Consigliato)</option>
+                                    <option value="elite">Cluster Elite</option>
+                                    <option value="full">All-Inclusive</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Durata Prova (Giorni)</label>
+                                <input type="number" id="new_creator_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                            </div>
+                            <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
+                                <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
+                                <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs px-4 py-1.5 rounded-xl transition">
+                                    Salva Creator Partner
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Attivi</span>
+                            <span id="usr-active-count" class="text-sm sm:text-base font-bold text-emerald-400">0</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Scaduti</span>
+                            <span id="usr-expired-count" class="text-sm sm:text-base font-bold text-rose-400">0</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Top Piano</span>
+                            <span id="usr-top-plan" class="text-sm sm:text-base font-bold text-amber-400">-</span>
+                        </div>
+                        <div class="bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <span class="text-[9px] text-slate-500 uppercase block font-sans">Sincro</span>
+                            <span id="usr-sync-status" class="text-xs sm:text-sm font-bold text-slate-300">Locale</span>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
+                        <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[750px]">
+                            <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
+                                <tr>
+                                    <th class="py-2.5 px-3">Utente</th>
+                                    <th class="py-2.5 px-3">Piano</th>
+                                    <th class="py-2.5 px-3">Crediti</th>
+                                    <th class="py-2.5 px-3">Telegram</th>
+                                    <th class="py-2.5 px-3 text-center">Scadenza</th>
+                                    <th class="py-2.5 px-3 text-center">Stato</th>
+                                    <th class="py-2.5 px-3 text-right">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEZIONE: CONFIGURAZIONE & DISPATCHER TELEGRAM -->
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950/30 border border-blue-500/30 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-3 sm:space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20 shrink-0">
+                            <i data-lucide="bot" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Dispatcher Telegram</h2>
+                            <p class="text-[10px] text-slate-400">Invio automatico delle nuove selezioni e gestione inviti monouso</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="saveTelegramConfig()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition self-end sm:self-auto flex items-center gap-1.5 shadow">
+                        <i data-lucide="save" class="w-3.5 h-3.5"></i> Salva
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 text-xs">
+                    <div>
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Bot Token API (@BotFather)</label>
+                        <input type="password" id="tg_token" placeholder="••••••••••••••••••••••••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Chat ID Canale PURE</label>
+                        <input type="password" id="tg_channel_pure" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Chat ID Canale FULL</label>
+                        <input type="password" id="tg_channel_full" placeholder="••••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="block text-slate-400 mb-1 font-semibold text-[10px]">Chat ID Canale FREE SIGNAL</label>
+                        <input type="password" id="tg_channel_free" placeholder="-100..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white font-mono text-[11px] outline-none focus:border-slate-400">
+                    </div>
+                </div>
+
+                <!-- SELETTORE FORNITORI PURE -->
+                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleAccordion('pure-accordion-body', 'pure-accordion-icon')">
+                        <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                            <i data-lucide="sliders" class="w-4 h-4 text-amber-400"></i> Seleziona Tipster attivi per Canale PURE
+                        </span>
+                        <div class="flex items-center gap-1.5 text-slate-400 text-xs font-mono">
+                            <span id="pure-selected-count" class="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded text-[10px]">0 attivi</span>
+                            <i data-lucide="chevron-down" id="pure-accordion-icon" class="w-4 h-4 transition-transform duration-200"></i>
+                        </div>
+                    </div>
+                    <div id="pure-accordion-body" class="hidden pt-2 border-t border-slate-800/80 space-y-2">
+                        <div class="flex gap-2">
+                            <button type="button" onclick="selectAllTipsters('pure', true)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Seleziona Tutti</button>
+                            <button type="button" onclick="selectAllTipsters('pure', false)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Deseleziona Tutti</button>
+                        </div>
+                        <div id="pure-tipsters-checkboxes" class="flex flex-wrap items-center gap-1.5 pt-1"></div>
+                    </div>
+                </div>
+
+                <!-- SELETTORE FORNITORI ALL-INCLUSIVE -->
+                <div class="bg-slate-950/80 border border-slate-800 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleAccordion('full-accordion-body', 'full-accordion-icon')">
+                        <span class="text-xs font-bold text-blue-300 flex items-center gap-1.5">
+                            <i data-lucide="sliders" class="w-4 h-4 text-blue-400"></i> Seleziona Tipster attivi per Canale All-Inclusive
+                        </span>
+                        <div class="flex items-center gap-1.5 text-slate-400 text-xs font-mono">
+                            <span id="full-selected-count" class="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded text-[10px]">0 attivi</span>
+                            <i data-lucide="chevron-down" id="full-accordion-icon" class="w-4 h-4 transition-transform duration-200"></i>
+                        </div>
+                    </div>
+                    <div id="full-accordion-body" class="hidden pt-2 border-t border-slate-800/80 space-y-2">
+                        <div class="flex gap-2">
+                            <button type="button" onclick="selectAllTipsters('full', true)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Seleziona Tutti</button>
+                            <button type="button" onclick="selectAllTipsters('full', false)" class="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-2.5 py-1 rounded border border-slate-700">Deseleziona Tutti</button>
+                        </div>
+                        <div id="full-tipsters-checkboxes" class="flex flex-wrap items-center gap-1.5 pt-1"></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 pt-2 border-t border-slate-800/80">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                            <button type="button" onclick="dispatchTelegramSignals('pure')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i> Canale PURE
+                            </button>
+                            <button type="button" onclick="dispatchTelegramSignals('full')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-black px-3 py-2 rounded-xl transition flex items-center justify-center gap-1 shadow">
+                                <i data-lucide="send" class="w-3.5 h-3.5"></i> All-Inclusive
+                            </button>
+                        </div>
+                        <span id="tg_status_msg" class="text-[11px] font-mono text-emerald-400 font-bold text-center sm:text-right"></span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800/60">
+                        <span class="text-[11px] text-slate-400 font-medium">Invia Resoconto Giornaliero Esiti:</span>
+                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+                            <button type="button" onclick="dispatchDailyReport('pure')" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> Resoconto PURE
+                            </button>
+                            <button type="button" onclick="dispatchDailyReport('full')" class="bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 border border-blue-500/40 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center justify-center gap-1.5">
+                                <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> Resoconto All-Inc.
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PULSANTI AGGIUNTI PER IL RESET SELETTIVO DEI FLAG TG_SENT -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-slate-800/60">
+                        <span class="text-[11px] text-slate-400 font-medium">Resetta Stato (Test Telegram):</span>
+                        <div class="grid grid-cols-2 gap-2 w-full sm:w-auto">
+                            <button type="button" onclick="resetTelegramSentStatus('pure')" class="bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center justify-center gap-1">
+                                ↺ Reset tg_sent PURE
+                            </button>
+                            <button type="button" onclick="resetTelegramSentStatus('full')" class="bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center justify-center gap-1">
+                                ↺ Reset tg_sent All-Inc.
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CLUSTER OPTIMIZER -->
+            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/20 border border-amber-500/30 rounded-2xl p-3.5 sm:p-4 shadow-xl space-y-3">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                    <div class="flex items-center gap-2">
+                        <div class="p-1.5 bg-amber-500/10 text-amber-400 rounded-xl border border-amber-500/20 shrink-0">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Cluster Optimizer</h2>
+                            <p class="text-[10px] text-slate-400">Scrematura del flusso per gli abbonati</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-1 overflow-x-auto">
+                        <button type="button" onclick="setClusterFilter('pure', this)" id="btn-cluster-pure" class="cluster-btn px-2 py-1.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
+                            Pure Signal
+                        </button>
+                        <button type="button" onclick="setClusterFilter('elite', this)" id="btn-cluster-elite" class="cluster-btn px-2 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
+                            Elite (ROI+)
+                        </button>
+                        <button type="button" onclick="setClusterFilter('all', this)" id="btn-cluster-all" class="cluster-btn cluster-pill-active px-2 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
+                            Tutti (Full)
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cluster-metrics-bar" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-slate-800/80 text-xs font-mono">
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Canali Attivi</span>
+                        <span id="opt-channels-count" class="font-bold text-white truncate block">Tutti</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Volume Stimato</span>
+                        <span id="opt-daily-volume" class="font-bold text-amber-400">Tutti i segnali</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Win Rate Target</span>
+                        <span id="opt-winrate-est" class="font-bold text-emerald-400">-</span>
+                    </div>
+                    <div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800">
+                        <span class="text-[9px] text-slate-500 uppercase block font-sans">Profilo</span>
+                        <span id="opt-target-profile" class="font-bold text-slate-200">Full Coverage</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODULO CONFLITTI -->
+            <section id="conflict-panel" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 shadow-lg space-y-2">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                        <h3 class="text-xs font-bold text-amber-300">Sovraesposizione / Conflitto Match</h3>
+                    </div>
+                    <span id="conflict-count-badge" class="text-[9px] font-mono font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0</span>
+                </div>
+                <div id="conflict-items-container" class="space-y-1.5 pt-1"></div>
+            </section>
+
+            <!-- FILTRO DATA E RENDIMENTO -->
+            <section class="bg-slate-900 border border-slate-800 p-3.5 sm:p-5 rounded-2xl space-y-3.5 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-800 pb-3">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <i data-lucide="calendar-clock" class="w-4 h-4 text-blue-400"></i>
+                            <h2 class="text-xs sm:text-sm font-bold text-white">Filtro Temporale</h2>
+                        </div>
+                        <p class="text-[10px] text-slate-400">Simula e visualizza i risultati del periodo</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        <div class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2 py-1 rounded-xl">
+                            <span class="text-[10px] text-slate-400">Data:</span>
+                            <input type="date" id="sim-start-date" onchange="applyCustomCalendarDate(this.value)" oninput="applyCustomCalendarDate(this.value)"
+                                class="bg-transparent text-xs text-emerald-400 font-mono font-bold focus:outline-none cursor-pointer">
+                        </div>
+
+                        <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 p-1 rounded-xl">
+                            <button type="button" onclick="setDynamicPreset('today', this)" id="btn-preset-today" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Oggi</button>
+                            <button type="button" onclick="setDynamicPreset('yesterday', this)" id="btn-preset-yesterday" class="sim-btn sim-pill-active px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Ieri</button>
+                            <button type="button" onclick="setDynamicPreset('7days', this)" id="btn-preset-7days" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">7gg</button>
+                            <button type="button" onclick="setDynamicPreset('all', this)" id="btn-preset-all" class="sim-btn px-2 py-1 text-[10px] font-bold rounded-lg text-slate-300 transition">Tutto</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Profitto Periodo</span>
+                        <div id="sim-profit-units" class="text-base sm:text-lg font-mono font-black text-emerald-400 mt-0.5">+0.00u</div>
+                        <div id="sim-profit-fiat" class="text-[10px] font-mono font-bold text-emerald-400">≈ +0.00 €</div>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Yield Periodo</span>
+                        <div id="sim-roi" class="text-base sm:text-lg font-mono font-black text-white mt-0.5">0.0%</div>
+                        <span id="sim-roi-sub" class="text-[8px] text-slate-500">Sul volume</span>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Win Rate</span>
+                        <div id="sim-winrate" class="text-base sm:text-lg font-mono font-black text-amber-400 mt-0.5">0.0%</div>
+                        <span id="sim-winrate-sub" class="text-[8px] text-slate-500">Accuratezza</span>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800/80 p-2.5 sm:p-3 rounded-xl">
+                        <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Chiuse</span>
+                        <div id="sim-resolved-count" class="text-base sm:text-lg font-mono font-black text-slate-200 mt-0.5">0</div>
+                        <div class="text-[8px] text-slate-500"><span id="sim-won-count" class="text-emerald-400 font-bold">0V</span> - <span id="sim-lost-count" class="text-rose-400 font-bold">0P</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATISTICHE GLOBALI -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
+                    <span class="text-[10px] text-slate-400 block">Pronostici</span>
+                    <span id="stat-total" class="text-lg sm:text-xl font-black text-white">0</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl border-l-4 border-l-emerald-500 flex flex-col justify-between">
+                    <span class="text-[10px] text-emerald-400 font-semibold block">Win Rate</span>
+                    <span id="stat-winrate" class="text-lg sm:text-xl font-black text-white">0%</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] text-slate-400 block">Profitto</span>
+                        <span id="admin-stat-fiat" class="text-[10px] font-mono text-emerald-400 font-bold">≈ +0.00€</span>
+                    </div>
+                    <span id="stat-profit" class="text-lg sm:text-xl font-black text-amber-400">0.00u</span>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
+                    <span class="text-[10px] text-slate-400 block">Yield Totale</span>
+                    <span id="stat-yield" class="text-lg sm:text-xl font-black text-white">0%</span>
+                </div>
+            </div>
+
+            <!-- AI PARSER -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg space-y-2">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                        <i data-lucide="bot" class="text-emerald-400 w-4 h-4"></i> AI Parser & Gestione in Blocco
+                    </h2>
+                    <span class="text-[9px] text-slate-500 hidden sm:inline">Normalizzazione e filtro quote</span>
+                </div>
+                <textarea id="ai-input" rows="3" placeholder="Formato: DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;Oppure aggiorna esiti: Squadra A - Squadra B - Esito: Vinta"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
+                <div class="flex justify-end">
+                    <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="check-check" class="w-4 h-4"></i> Inserisci / Aggiorna in Blocco
+                    </button>
+                </div>
+            </section>
+
+            <!-- CLASSIFICA RENDIMENTO FORNITORI -->
+            <section class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+                        <i data-lucide="trophy" class="text-amber-400 w-4 h-4"></i> Rendimento Fornitori
+                    </h2>
+                    <span class="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20 font-bold uppercase">Report</span>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
+                    <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[650px]">
+                        <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
+                            <tr>
+                                <th class="py-2.5 px-3 text-center">Rank</th>
+                                <th class="py-2.5 px-3">Fornitore</th>
+                                <th class="py-2.5 px-3 text-center">Chiuse</th>
+                                <th class="py-2.5 px-3 text-center">Win Rate</th>
+                                <th class="py-2.5 px-3 text-center">Yield</th>
+                                <th class="py-2.5 px-3 text-right">Profitto (u)</th>
+                                <th class="py-2.5 px-3 text-right">Guadagno (€)</th>
+                                <th class="py-2.5 px-3 text-center">Elimina</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-tipsters-leaderboard-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- BARRA FILTRI + CONVERTITORE UNITA' € -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900 border border-slate-800 p-2.5 rounded-xl">
+                <div class="grid grid-cols-3 sm:flex items-center gap-1.5 w-full sm:w-auto">
+                    <button type="button" onclick="setFilter('all', this)" id="btn-filter-all" class="filter-btn text-xs py-1.5 px-2.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition text-center">Tutti</button>
+                    <button type="button" onclick="setFilter('pending', this)" id="btn-filter-pending" class="filter-btn text-xs py-1.5 px-2.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition text-center whitespace-nowrap">In Corso</button>
+                    <button type="button" onclick="setFilter('resolved', this)" id="btn-filter-resolved" class="filter-btn text-xs py-1.5 px-2.5 rounded-lg font-bold bg-slate-800 text-slate-300 border border-slate-700 transition text-center">Chiusi</button>
+                </div>
+
+                <div class="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto pt-1 sm:pt-0">
+                    <div class="flex items-center gap-1 bg-slate-950 border border-slate-800 px-2 py-1 rounded-lg">
+                        <span class="text-[10px] text-slate-400 font-semibold">1u =</span>
+                        <select id="admin-unit-multiplier" onchange="renderDashboard()" class="bg-transparent text-xs text-white font-mono font-bold focus:outline-none cursor-pointer">
+                            <option value="5">5 €</option>
+                            <option value="10" selected>10 €</option>
+                            <option value="20">20 €</option>
+                            <option value="50">50 €</option>
+                            <option value="100">100 €</option>
+                        </select>
+                    </div>
+
+                    <select id="tipster-select-filter" onchange="filterByTipster(this.value)" class="bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium flex-1 sm:flex-initial">
+                        <option value="all">Tutti i Fornitori</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SEZIONE PRONOSTICI -->
+            <section class="space-y-3">
+                <div class="block md:hidden space-y-2.5" id="admin-mobile-bets-container"></div>
+
+                <div class="hidden md:block bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300">
+                            <thead class="bg-slate-950/90 border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[10px]">
+                                <tr>
+                                    <th class="py-2.5 px-3">Data</th>
+                                    <th class="py-2.5 px-3">Partita</th>
+                                    <th class="py-2.5 px-3">Pronostico</th>
+                                    <th class="py-2.5 px-3">Quota/Stake</th>
+                                    <th class="py-2.5 px-3">Fornitore</th>
+                                    <th class="py-2.5 px-3 text-center">Vetrina</th>
+                                    <th class="py-2.5 px-3">Stato & Azione Rapida</th>
+                                    <th class="py-2.5 px-3 text-center">Telegram</th>
+                                    <th class="py-2.5 px-3 text-right">Azioni</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bets-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-config.js"></script>
+    <!-- SCRIPT GESTIONALE AGGIORNATO CON SINCRONIZZAZIONE AUTOMATICA DA GITHUB -->
+    <script>
+        const ADMIN_AUTH_SESSION_KEY = "atmbet_admin_authenticated";
+        const CONFIRMED_CONFLICTS_KEY = "atmbet_confirmed_conflicts";
+        const PRIMARY_KEY = 'tipster_tracker_v1';
+        const ATMBET_KEY = 'atmbet_bets_data';
+        const USERS_LOCAL_KEY = 'atmbet_users_accounts';
+        const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
+        const GH_REPO_KEY = 'atmbet_gh_repo';
+        const GH_TOKEN_KEY = 'atmbet_gh_token';
+        const TG_CONF_KEY = 'atmbet_tg_config';
+        const PURE_TIPSTERS_KEY = 'atmbet_pure_selected_tipsters';
+        const FULL_TIPSTERS_KEY = 'atmbet_full_selected_tipsters';
+        const AUTHORIZED_PARTNERS_KEY = 'atmbet_authorized_partners_list';
+
+        const DEFAULT_TG_CONFIG = {
+            token: "",
+            channel_pure: "-1004237267545",
+            channel_full: "-1004390945826",
+            channel_free: ""
+        };
+
+        function toggleAdminTestPanel() {
+            const panel = document.getElementById('admin-test-collapsible');
+            const btn = document.getElementById('admin-test-toggle-btn');
+            if (!panel || !btn) return;
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                btn.innerText = 'Nascondi ▲';
+            } else {
+                panel.classList.add('hidden');
+                btn.innerText = 'Mostra Test ▼';
+            }
+        }
+
+        function toggleAccordion(bodyId, iconId) {
+            const body = document.getElementById(bodyId);
+            const icon = document.getElementById(iconId);
+            if (!body || !icon) return;
+            if (body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                body.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function adminQuickTestLogin(planType) {
+            const devUser = {
+                id: 'usr_admin_test_' + planType,
+                name: 'Admin Tester (' + planType.toUpperCase() + ')',
+                email: 'admin.test@atmbet.local',
+                telegram_username: '@admin_tester',
+                role: 'user',
+                plan: planType,
+                expires_at: '2099-12-31',
+                credits: planType === 'credits' ? 10 : 5,
+                unlocked_bets: []
+            };
+            localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(devUser));
+            alert(`Simulazione attiva in localStorage: Piano ${planType.toUpperCase()}!`);
+        }
+
+        function adminQuickTestLogout() {
+            localStorage.removeItem(CURRENT_SESSION_KEY);
+            alert("Sessione di test rimossa con successo!");
+        }
+
+        function canonicalizeTipsterName(rawName) {
+            if (!rawName) return 'AtmBetSignal';
+            const clean = String(rawName).trim();
+            const lower = clean.toLowerCase().replace(/[-_.]/g, ' ').replace(/\s+/g, ' ').trim();
+
+            if (lower.includes('nerdytips') || lower.includes('nerdy tips')) return 'NerdyTips';
+            if (lower.includes('upper90') || lower.includes('upper 90')) return 'Upper90';
+            if (lower.includes('zcodeai') || lower.includes('zcode ai')) return 'ZcodeAi';
+            if (lower.includes('il presidente')) return 'Il presidente';
+            if (lower.includes('xg')) return 'AtmBetSignal XG';
+            if (lower.includes('atmbet safe') || lower.includes('safe80') || lower.includes('safe')) return 'AtmBet Safe';
+            if (lower.includes('atmbet')) return 'AtmBetSignal';
+            if (lower.includes('pronostici') || lower.includes('prono1')) return 'Pronostici1';
+            if (lower.includes('calcioai') || lower.includes('calcio ai') || lower.includes('tipsterai')) return 'CalcioAI';
+            if (lower.includes('valuebet') || lower.includes('value bet')) return 'BetMines Valuebet';
+            if (lower.includes('betmines prematch') || lower.includes('prematch')) return 'BetMines PreMatch';
+            if (lower.includes('betmines') || lower.includes('bet mines')) return 'BetMines';
+            if (lower.includes('zcode')) return 'ZCODE';
+            if (lower.includes('betexp') || lower.includes('bet exp')) return 'BetExpBot';
+            if (lower.includes('footy')) return 'FootyStats';
+            if (lower.includes('infoland') || lower.includes('info land')) return 'Infoland';
+            if (lower.includes('freak')) return 'Freak Elite VIP';
+            if (lower.includes('bollamaker')) return 'Stats4bets bollamaker';
+            if (lower.includes('automatibet')) return 'Stats4Bets Automatibet';
+
+            return clean;
+        }
+
+        let currentFilter = 'all';
+        let currentTipsterFilter = 'all';
+        let currentSimMode = 'today';
+        let currentCustomDate = '';
+        let currentClusterMode = 'all';
+        let stagedVerificationResults = {};
+        let firstServiceDate = '';
+
+        function openEditBetModal(betId) {
+            const bets = loadAllBets();
+            const bet = bets.find(b => String(b.id) === String(betId));
+            if (!bet) return;
+
+            document.getElementById('edit_bet_id').value = bet.id;
+            document.getElementById('edit_bet_date').value = bet.event_date || '';
+            document.getElementById('edit_bet_match').value = bet.match_name || '';
+            document.getElementById('edit_bet_pred').value = bet.prediction || '';
+            document.getElementById('edit_bet_league').value = bet.league || '';
+            document.getElementById('edit_bet_odds').value = bet.odds || 1.80;
+            document.getElementById('edit_bet_stake').value = bet.stake || 1.0;
+            document.getElementById('edit_bet_tipster').value = bet.original_tipster || 'AtmBetSignal';
+
+            document.getElementById('edit-bet-modal').classList.remove('hidden');
+        }
+
+        function closeEditBetModal() {
+            document.getElementById('edit-bet-modal').classList.add('hidden');
+        }
+
+        function saveEditedBet(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit_bet_id').value;
+            const bets = loadAllBets();
+            const bet = bets.find(b => String(b.id) === String(id));
+            if (!bet) return;
+
+            bet.event_date = document.getElementById('edit_bet_date').value.trim();
+            bet.match_name = document.getElementById('edit_bet_match').value.trim();
+            bet.prediction = document.getElementById('edit_bet_pred').value.trim();
+            bet.league = document.getElementById('edit_bet_league').value.trim();
+            bet.odds = parseFloat(document.getElementById('edit_bet_odds').value) || 1.80;
+            bet.stake = parseFloat(document.getElementById('edit_bet_stake').value) || 1.0;
+            bet.original_tipster = canonicalizeTipsterName(document.getElementById('edit_bet_tipster').value.trim());
+
+            persistBets(bets);
+            closeEditBetModal();
+            alert("Pronostico aggiornato con successo!");
+        }
+
+        function exportFullMasterBackup() {
+            const masterData = {
+                version: "2.0",
+                backup_date: new Date().toISOString(),
+                platform: "AtmBet Official",
+                bets: loadAllBets(),
+                users: loadAllUsers(),
+                telegram_config: JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}'),
+                pure_tipsters: getPureSelectedTipsters(),
+                full_tipsters: getFullSelectedTipsters(),
+                partners: loadAuthorizedPartnersList()
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(masterData, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `atmbet_master_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        async function autoBackupMasterToGitHub() {
+            // Disattivata: i backup non vanno piu scritti nel repository pubblico.
+            return;
+        }
+
+        function importFullMasterBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    
+                    if (imported.bets && Array.isArray(imported.bets)) {
+                        persistBets(imported.bets);
+                        if (Array.isArray(imported.users)) {
+                            localStorage.setItem(USERS_LOCAL_KEY, JSON.stringify(imported.users));
+                        }
+                        if (imported.telegram_config) {
+                            localStorage.setItem(TG_CONF_KEY, JSON.stringify(imported.telegram_config));
+                        }
+                        if (Array.isArray(imported.pure_tipsters)) {
+                            localStorage.setItem(PURE_TIPSTERS_KEY, JSON.stringify(imported.pure_tipsters));
+                        }
+                        if (Array.isArray(imported.full_tipsters)) {
+                            localStorage.setItem(FULL_TIPSTERS_KEY, JSON.stringify(imported.full_tipsters));
+                        }
+                        if (imported.partners) {
+                            localStorage.setItem(AUTHORIZED_PARTNERS_KEY, JSON.stringify(imported.partners));
+                        }
+
+                        renderUsersTable();
+                        renderTipstersSelectors();
+                        renderDashboard();
+                        alert(`Backup Master ripristinato con successo!\n• Pronostici: ${imported.bets.length}\n• Utenti: ${imported.users ? imported.users.length : 0}`);
+                    } else if (Array.isArray(imported)) {
+                        persistBets(imported);
+                        alert(`Archivio pronostici ripristinato (${imported.length} elementi).`);
+                    } else {
+                        alert("File di backup non valido o corrotto.");
+                    }
+                } catch (err) {
+                    alert("Errore durante la lettura del file di backup: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        async function createOneTimeInviteLink(token, chatId, userIdentifier) {
+            const url = `https://api.telegram.org/bot${token}/createChatInviteLink`;
+            const expireTimestamp = Math.floor(Date.now() / 1000) + (24 * 3600);
+            
+            const payload = {
+                chat_id: chatId,
+                name: `Sub: ${String(userIdentifier).slice(0, 20)}`,
+                expire_date: expireTimestamp,
+                member_limit: 1
+            };
+
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            const data = await res.json();
+            if (data.ok && data.result && data.result.invite_link) {
+                return data.result.invite_link;
+            } else {
+                throw new Error(data.description || "Errore generazione link monouso");
+            }
+        }
+
+        function getPureSelectedTipsters() {
+            try {
+                const raw = localStorage.getItem(PURE_TIPSTERS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            return ['AtmBetSignal', 'AtmBet Safe'];
+        }
+
+        function savePureSelectedTipsters(list) {
+            localStorage.setItem(PURE_TIPSTERS_KEY, JSON.stringify(list));
+            pushSetting('pure_tipsters', list);
+            renderTipstersSelectors();
+            syncBetsToGitHub(loadAllBets());
+        }
+
+        function getFullSelectedTipsters() {
+            try {
+                const raw = localStorage.getItem(FULL_TIPSTERS_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch(e) {}
+            const allBets = loadAllBets();
+            return [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+        }
+
+        function saveFullSelectedTipsters(list) {
+            localStorage.setItem(FULL_TIPSTERS_KEY, JSON.stringify(list));
+            pushSetting('full_tipsters', list);
+            renderTipstersSelectors();
+        }
+
+        function toggleTipster(type, tipsterName, isChecked) {
+            let current = type === 'pure' ? getPureSelectedTipsters() : getFullSelectedTipsters();
+            const canonical = canonicalizeTipsterName(tipsterName);
+
+            if (isChecked) {
+                if (!current.includes(canonical)) current.push(canonical);
+            } else {
+                current = current.filter(t => t !== canonical);
+            }
+
+            if (type === 'pure') savePureSelectedTipsters(current);
+            else saveFullSelectedTipsters(current);
+        }
+
+        function selectAllTipsters(type, selectAll) {
+            const allBets = loadAllBets();
+            const allTipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+            const guaranteed = ['AtmBetSignal', 'AtmBet Safe'];
+            guaranteed.forEach(g => { if (!allTipsters.includes(g)) allTipsters.push(g); });
+
+            const newList = selectAll ? allTipsters : [];
+            if (type === 'pure') savePureSelectedTipsters(newList);
+            else saveFullSelectedTipsters(newList);
+        }
+
+        function renderTipstersSelectors() {
+            const pureContainer = document.getElementById('pure-tipsters-checkboxes');
+            const fullContainer = document.getElementById('full-tipsters-checkboxes');
+            if (!pureContainer || !fullContainer) return;
+
+            const allBets = loadAllBets();
+            const existingTipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+            const guaranteed = ['AtmBetSignal', 'AtmBet Safe'];
+            guaranteed.forEach(g => { if (!existingTipsters.includes(g)) existingTipsters.push(g); });
+            existingTipsters.sort();
+
+            const pureSelected = getPureSelectedTipsters();
+            const fullSelected = getFullSelectedTipsters();
+
+            const pureCountEl = document.getElementById('pure-selected-count');
+            const fullCountEl = document.getElementById('full-selected-count');
+            if (pureCountEl) pureCountEl.innerText = `${pureSelected.length} attivi`;
+            if (fullCountEl) fullCountEl.innerText = `${fullSelected.length} attivi`;
+
+            pureContainer.innerHTML = '';
+            existingTipsters.forEach(t => {
+                const isChecked = pureSelected.includes(t);
+                const label = document.createElement('label');
+                label.className = `inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] cursor-pointer select-none transition ${isChecked ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'}`;
+                label.innerHTML = `
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTipster('pure', '${t.replace(/'/g, "\\'")}', this.checked)" class="accent-amber-500 rounded cursor-pointer">
+                    <span>${t}</span>
+                `;
+                pureContainer.appendChild(label);
+            });
+
+            fullContainer.innerHTML = '';
+            existingTipsters.forEach(t => {
+                const isChecked = fullSelected.includes(t);
+                const label = document.createElement('label');
+                label.className = `inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] cursor-pointer select-none transition ${isChecked ? 'bg-blue-500/20 border-blue-500/40 text-blue-300 font-bold' : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'}`;
+                label.innerHTML = `
+                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTipster('full', '${t.replace(/'/g, "\\'")}', this.checked)" class="accent-blue-500 rounded cursor-pointer">
+                    <span>${t}</span>
+                `;
+                fullContainer.appendChild(label);
+            });
+        }
+
+        function evaluatePickOutcome(predictionStr, homeScore, awayScore) {
+            const h = parseInt(homeScore);
+            const a = parseInt(awayScore);
+            if (isNaN(h) || isNaN(a)) return null;
+
+            const totalGoals = h + a;
+            const pred = predictionStr.trim().toUpperCase().replace(/\s+/g, ' ');
+
+            if (pred === '1') return h > a ? 'won' : 'lost';
+            if (pred === 'X') return h === a ? 'won' : 'lost';
+            if (pred === '2') return a > h ? 'won' : 'lost';
+            if (pred === '1X') return (h >= a) ? 'won' : 'lost';
+            if (pred === 'X2') return (a >= h) ? 'won' : 'lost';
+            if (pred === '12') return (h !== a) ? 'won' : 'lost';
+            if (pred === 'GG' || pred === 'GOAL' || pred === 'GOL') return (h > 0 && a > 0) ? 'won' : 'lost';
+            if (pred === 'NG' || pred === 'NO GOAL' || pred === 'NO GOL') return (h === 0 || a === 0) ? 'won' : 'lost';
+
+            const overMatch = pred.match(/OVER\s*(\d+(?:\.\d+)?)/i);
+            if (overMatch) return totalGoals > parseFloat(overMatch[1]) ? 'won' : 'lost';
+
+            const underMatch = pred.match(/UNDER\s*(\d+(?:\.\d+)?)/i);
+            if (underMatch) return totalGoals < parseFloat(underMatch[1]) ? 'won' : 'lost';
+
+            if (pred.includes('+')) {
+                const parts = pred.split('+').map(p => p.trim());
+                const res1 = evaluatePickOutcome(parts[0], h, a);
+                const res2 = evaluatePickOutcome(parts[1], h, a);
+                if (res1 && res2) return (res1 === 'won' && res2 === 'won') ? 'won' : 'lost';
+            }
+
+            return null;
+        }
+
+        function openResultsModal() {
+            const modal = document.getElementById('results-verify-modal');
+            const listEl = document.getElementById('pending-verification-list');
+            const badgeEl = document.getElementById('verify-summary-badge');
+            if (!modal || !listEl) return;
+
+            stagedVerificationResults = {};
+            const bets = loadAllBets();
+            const pendingBets = bets.filter(b => b.status === 'pending');
+
+            if (pendingBets.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico in corso da verificare.</div>`;
+                if (badgeEl) badgeEl.innerText = "0 giocate in attesa";
+                modal.classList.remove('hidden');
+                return;
+            }
+
+            if (badgeEl) badgeEl.innerText = `${pendingBets.length} giocate in attesa di verifica`;
+            listEl.innerHTML = '';
+
+            pendingBets.forEach(bet => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2 text-xs";
+                card.id = `verify-row-${bet.id}`;
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between text-slate-400 text-[10px]">
+                        <span class="font-mono">${bet.event_date}</span>
+                        <span class="bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-slate-300 font-semibold">${bet.league}</span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <div class="font-bold text-white text-xs">${bet.match_name}</div>
+                            <div class="text-[11px] text-emerald-400 font-semibold mt-0.5">
+                                Pick: <strong class="text-white">${bet.prediction}</strong> @ ${parseFloat(bet.odds).toFixed(2)} (${bet.original_tipster})
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
+                            <span class="text-[10px] text-slate-400">Score:</span>
+                            <input type="number" min="0" max="25" placeholder="H" id="score-h-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
+                                class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-white rounded-lg py-1 outline-none focus:border-emerald-500">
+                            <span class="text-slate-500">-</span>
+                            <input type="number" min="0" max="25" placeholder="A" id="score-a-${bet.id}" oninput="handleScoreInput('${bet.id}', '${bet.prediction}')"
+                                class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-mono font-bold text-white rounded-lg py-1 outline-none focus:border-emerald-500">
+                            
+                            <div id="eval-badge-${bet.id}" class="min-w-[65px] text-center">
+                                <span class="text-[9px] text-slate-500 font-mono italic">In attesa</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeResultsModal() {
+            const modal = document.getElementById('results-verify-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function handleScoreInput(betId, predictionStr) {
+            const inputH = document.getElementById(`score-h-${betId}`);
+            const inputA = document.getElementById(`score-a-${betId}`);
+            const badgeEl = document.getElementById(`eval-badge-${betId}`);
+            if (!inputH || !inputA || !badgeEl) return;
+
+            const hVal = inputH.value.trim();
+            const aVal = inputA.value.trim();
+
+            if (hVal === '' || aVal === '') {
+                delete stagedVerificationResults[betId];
+                badgeEl.innerHTML = `<span class="text-[9px] text-slate-500 font-mono italic">In attesa</span>`;
+                return;
+            }
+
+            const evaluated = evaluatePickOutcome(predictionStr, parseInt(hVal), parseInt(aVal));
+
+            if (evaluated === 'won') {
+                stagedVerificationResults[betId] = 'won';
+                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`;
+            } else if (evaluated === 'lost') {
+                stagedVerificationResults[betId] = 'lost';
+                badgeEl.innerHTML = `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA ✕</span>`;
+            } else {
+                badgeEl.innerHTML = `
+                    <div class="flex items-center gap-1">
+                        <button type="button" onclick="setStagedManual('${betId}', 'won')" class="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 rounded text-[9px] font-bold border border-emerald-500/30">V</button>
+                        <button type="button" onclick="setStagedManual('${betId}', 'lost')" class="px-1.5 py-0.5 bg-rose-500/20 text-rose-400 rounded text-[9px] font-bold border border-emerald-500/30">P</button>
+                    </div>
+                `;
+            }
+        }
+
+        function setStagedManual(betId, status) {
+            stagedVerificationResults[betId] = status;
+            const badgeEl = document.getElementById(`eval-badge-${betId}`);
+            if (badgeEl) {
+                badgeEl.innerHTML = status === 'won'
+                    ? `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA ✓</span>`
+                    : `<span class="px-2 py-0.5 rounded text-[9px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA ✕</span>`;
+            }
+        }
+
+        function applyVerifiedResults() {
+            const countToApply = Object.keys(stagedVerificationResults).length;
+            if (countToApply === 0) {
+                alert("Nessun risultato inserito da applicare.");
+                return;
+            }
+
+            const bets = loadAllBets();
+            let appliedCount = 0;
+
+            bets.forEach(b => {
+                if (stagedVerificationResults[b.id]) {
+                    b.status = stagedVerificationResults[b.id];
+                    appliedCount++;
+                }
+            });
+
+            persistBets(bets);
+            closeResultsModal();
+            alert(`Refertate con successo ${appliedCount} giocate! Risultati sincronizzati.`);
+        }
+
+        // ===== UTENTI (profili su Supabase) =====
+        window.__profiles = [];
+
+        function loadAllUsers() {
+            return (window.__profiles || []).map(p => ({
+                id: p.id,
+                identifier: p.email,
+                email: p.email,
+                telegram_id: p.telegram_username || '-',
+                telegram_link: '-',
+                plan: p.plan === 'pure' ? 'pure' : (p.plan === 'all_inclusive' ? 'full' : (p.plan === 'trial_vip' ? 'trial' : 'free')),
+                credits: p.credits || 0,
+                access_code: String(p.credits || 0),
+                expires_at: p.expires_at || '-',
+                role: p.role
+            }));
+        }
+
+
+
+        function persistUsers(users) {
+            // Gli utenti ora vivono sul server (Supabase): qui si aggiorna solo la tabella.
+            renderUsersTable();
+        }
+
+        function toggleAddUserModal() {
+            const panel = document.getElementById('add-user-panel');
+            if (panel) panel.classList.toggle('hidden');
+        }
+
+        function switchEntryFormType(type) {
+            const userForm = document.getElementById('form-type-user');
+            const creatorForm = document.getElementById('form-type-creator');
+            if (!userForm || !creatorForm) return;
+
+            if (type === 'creator') {
+                userForm.classList.add('hidden');
+                userForm.classList.remove('grid');
+                creatorForm.classList.remove('hidden');
+                creatorForm.classList.add('grid');
+            } else {
+                creatorForm.classList.add('hidden');
+                creatorForm.classList.remove('grid');
+                userForm.classList.remove('hidden');
+                userForm.classList.add('grid');
+            }
+        }
+
+        async function handleManualCreateUser(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submit-user-btn');
+            const ident = document.getElementById('new_user_ident').value.trim();
+            const plan = document.getElementById('new_user_plan').value;
+            const days = parseInt(document.getElementById('new_user_days').value) || 7;
+            const dbPlan = plan === 'pure' ? 'pure' : 'all_inclusive';
+            const accessCode = 'ATM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = "Creazione codice..."; }
+
+            const { error } = await window.sb.from('access_codes').insert({
+                code: accessCode, plan: dbPlan, duration_days: days, credits: 0, max_uses: 1
+            });
+
+            let oneTimeLink = '-';
+            if (!error) {
+                const tgConf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+                const botToken = tgConf.token || DEFAULT_TG_CONFIG.token;
+                const targetChatId = (dbPlan === 'pure') ? (tgConf.channel_pure || DEFAULT_TG_CONFIG.channel_pure) : (tgConf.channel_full || DEFAULT_TG_CONFIG.channel_full);
+                if (botToken && targetChatId) {
+                    try { oneTimeLink = await createOneTimeInviteLink(botToken, targetChatId, ident || accessCode); } catch (err) { console.warn(err); }
+                }
+            }
+
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = "Salva & Genera Link Monouso"; }
+            if (error) { alert("Errore: solo l'amministratore può creare codici. (" + error.message + ")"); return; }
+
+            e.target.reset();
+            toggleAddUserModal();
+            alert(
+                `Codice creato (${dbPlan === 'pure' ? 'PURE' : 'ALL-INCLUSIVE'}, ${days} giorni, 1 solo uso)${ident ? ' per ' + ident : ''}!\n\n` +
+                `• Codice da dare al cliente: ${accessCode}\n` +
+                `  (lo inserisce nel campo "Codice sblocco" quando accede)\n` +
+                `• Link Telegram monouso: ${oneTimeLink}`
+            );
+        }
+
+        function loadAuthorizedPartnersList() {
+            try {
+                const raw = localStorage.getItem(AUTHORIZED_PARTNERS_KEY);
+                if (raw) return JSON.parse(raw);
+            } catch(e) {}
+            return {
+                "TEST": { name: "Account di Test" },
+                "MARIO50": { name: "Mario Rossi" },
+                "TOWN10": { name: "Luca Bianchi" }
+            };
+        }
+
+        function handleManualCreateCreator(e) {
+            e.preventDefault();
+            const code = document.getElementById('new_creator_code').value.trim().toUpperCase();
+            const name = document.getElementById('new_creator_name').value.trim();
+            const plan = document.getElementById('new_creator_plan').value;
+            const days = parseInt(document.getElementById('new_creator_days').value) || 7;
+
+            if (!code || !name) return;
+
+            const partners = loadAuthorizedPartnersList();
+            partners[code] = { 
+                name: name,
+                plan: plan,
+                duration_days: days
+            };
+            localStorage.setItem(AUTHORIZED_PARTNERS_KEY, JSON.stringify(partners));
+
+            const expDate = new Date();
+            expDate.setDate(expDate.getDate() + days);
+            const expDateStr = getLocalDateString(expDate);
+
+            const users = loadAllUsers();
+            const existingIdx = users.findIndex(u => (u.access_code || '').trim().toUpperCase() === code);
+            const creatorUserRecord = {
+                id: 'creator_' + Date.now(),
+                identifier: `${code.toLowerCase()}@partner.atmbet`,
+                email: `${code.toLowerCase()}@partner.atmbet`,
+                name: name,
+                plan: plan,
+                access_code: code,
+                ref_code: code,
+                created_at: getLocalDateString(new Date()),
+                expires_at: expDateStr,
+                status: 'active'
+            };
+
+            if (existingIdx >= 0) {
+                users[existingIdx] = Object.assign({}, users[existingIdx], creatorUserRecord);
+            } else {
+                users.unshift(creatorUserRecord);
+            }
+
+            persistUsers(users);
+
+            e.target.reset();
+            toggleAddUserModal();
+            renderUsersTable();
+            alert(`Creator Partner "${name}" (${code}) salvato e sincronizzato con successo!\nPiano: ${plan.toUpperCase()} | Durata: ${days} giorni\nLink campagna: https://atmbetofficial.com/?ref=${code.toLowerCase()}`);
+        }
+
+        async function regenerateUserOneTimeLink(userId) {
+            const u = loadAllUsers().find(x => String(x.id) === String(userId));
+            if (!u) return;
+            const tgConf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const botToken = tgConf.token || DEFAULT_TG_CONFIG.token;
+            const targetChatId = (u.plan === 'pure') ? (tgConf.channel_pure || DEFAULT_TG_CONFIG.channel_pure) : (tgConf.channel_full || DEFAULT_TG_CONFIG.channel_full);
+            if (!botToken || !targetChatId) {
+                alert("Configura prima il Bot Token e i Chat ID dei canali Telegram in alto.");
+                return;
+            }
+            try {
+                const newLink = await createOneTimeInviteLink(botToken, targetChatId, u.identifier || u.email || 'Utente');
+                alert(`Nuovo link monouso generato con successo:\n\n${newLink}\n\n(Valido per 1 solo ingresso)`);
+            } catch(e) {
+                alert("Errore generazione link Telegram: " + e.message);
+            }
+        }
+
+        async function extendUserDays(userId, daysToAdd) {
+            const p = (window.__profiles || []).find(x => String(x.id) === String(userId));
+            if (!p) return;
+            if (p.plan === 'none' || p.plan === 'credits') {
+                alert("Questo utente non ha un piano attivo. Genera un codice con 'Nuovo abbonato' e daglielo da riscattare.");
+                return;
+            }
+            const today = new Date(); today.setHours(0,0,0,0);
+            let cur = p.expires_at ? new Date(p.expires_at + 'T00:00:00') : today;
+            if (isNaN(cur.getTime()) || cur < today) cur = today;
+            cur.setDate(cur.getDate() + daysToAdd);
+            const newExp = getLocalDateString(cur);
+            const { data, error } = await window.sb.from('profiles').update({ expires_at: newExp }).eq('id', userId).select();
+            if (error || !data || data.length === 0) { alert("Impossibile modificare: solo l'amministratore può farlo."); return; }
+            await fetchUsersFromGitHubAutomatic();
+            alert(`Abbonamento prolungato di ${daysToAdd} giorni fino al ${newExp}`);
+        }
+
+        async function deleteUser(userId) {
+            const p = (window.__profiles || []).find(x => String(x.id) === String(userId));
+            if (!p) return;
+            if (!confirm("Revocare l'abbonamento di " + p.email + "? L'account resta, ma perde il piano.")) return;
+            const { data, error } = await window.sb.from('profiles').update({ plan: 'none', expires_at: null }).eq('id', userId).select();
+            if (error || !data || data.length === 0) { alert("Impossibile modificare: solo l'amministratore può farlo."); return; }
+            await fetchUsersFromGitHubAutomatic();
+        }
+
+        function renderUsersTable() {
+            const tbody = document.getElementById('users-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const users = loadAllUsers();
+            const todayStr = getLocalDateString(new Date());
+
+            let activeCount = 0;
+            let expiredCount = 0;
+            const planFreq = {};
+
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun utente registrato.</td></tr>`;
+            }
+
+            users.forEach(u => {
+                const userIdent = u.identifier || u.email || u.customer_email || 'Utente';
+                const accessCode = (u.credits || 0) + ' cr';
+                const tgLink = '-';
+                const expDate = u.expires_at || u.expiration || '-';
+                const isExpired = expDate !== '-' && expDate < todayStr;
+
+                if (isExpired) expiredCount++; else activeCount++;
+
+                const userPlan = (u.plan || 'trial').toLowerCase();
+                planFreq[userPlan] = (planFreq[userPlan] || 0) + 1;
+
+                const planBadge = userPlan === 'free'
+                    ? `<span class="bg-slate-700/40 text-slate-300 border border-slate-600/50 px-1.5 py-0.5 rounded text-[10px] font-bold">FREE</span>`
+                    : userPlan === 'pure' 
+                    ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
+                    : (userPlan === 'elite' 
+                        ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
+                        : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.2 rounded font-bold">ALL-IN</span>`);
+
+                const statusBadge = !isExpired
+                    ? `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono text-[9px] font-bold">ATTIVO</span>`
+                    : `<span class="bg-rose-500/10 text-rose-400 border border-rose-500/30 px-1.5 py-0.2 rounded font-mono text-[9px] font-bold">SCADUTO</span>`;
+
+                const linkDisplay = tgLink.startsWith('http') 
+                    ? `<a href="${tgLink}" target="_blank" class="text-blue-400 hover:underline font-mono text-[10px] truncate max-w-[140px] inline-block" title="${tgLink}">${tgLink}</a>`
+                    : `<span class="text-slate-500 font-mono text-[10px]">-</span>`;
+
+                const tr = document.createElement('tr');
+                tr.className = isExpired ? "hover:bg-rose-500/[0.03]" : "hover:bg-emerald-500/[0.03]";
+
+                tr.innerHTML = `
+                    <td class="py-2 px-3 font-bold text-white">
+                        <div>${userIdent}</div>
+                        <div class="text-[9px] text-slate-500 font-mono">${u.role === 'admin' ? 'ADMIN · ' : ''}TG: ${u.telegram_id || '-'}</div>
+                    </td>
+                    <td class="py-2 px-3">${planBadge}</td>
+                    <td class="py-2 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer">${accessCode}</td>
+                    <td class="py-2 px-3">${linkDisplay}</td>
+                    <td class="py-2 px-3 text-center font-mono text-slate-300">${expDate}</td>
+                    <td class="py-2 px-3 text-center">${statusBadge}</td>
+                    <td class="py-2 px-3 text-right">
+                        <div class="flex items-center justify-end gap-1">
+                            <button type="button" onclick="regenerateUserOneTimeLink('${u.id}')" title="Genera nuovo link monouso Telegram" class="text-[10px] bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 border border-blue-500/30 px-2 py-0.5 rounded font-bold transition">
+                                Link TG
+                            </button>
+                            <button type="button" onclick="extendUserDays('${u.id}', 30)" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-2 py-0.5 rounded font-bold transition">
+                                +30g
+                            </button>
+                            <button type="button" onclick="deleteUser('${u.id}')" class="text-rose-400 p-1 rounded hover:bg-rose-500/10 transition">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            const activeEl = document.getElementById('usr-active-count');
+            const expiredEl = document.getElementById('usr-expired-count');
+            const topPlanEl = document.getElementById('usr-top-plan');
+
+            if (activeEl) activeEl.innerText = activeCount;
+            if (expiredEl) expiredEl.innerText = expiredCount;
+            if (topPlanEl) {
+                const topKey = Object.keys(planFreq).sort((a,b) => planFreq[b] - planFreq[a])[0];
+                topPlanEl.innerText = topKey ? topKey.toUpperCase() : '-';
+            }
+            lucide.createIcons();
+        }
+
+        async function syncUsersToGitHub() { /* non piu usata */ }
+
+        async function syncUsersFromGitHub() { await fetchUsersFromGitHubAutomatic(); }
+
+        // NUOVA FUNZIONE: SCARICA AUTOMATICAMENTE GLI UTENTI DA GITHUB ALL'AVVIO
+        async function fetchUsersFromGitHubAutomatic() {
+            if (!window.sb) return;
+            try {
+                const { data, error } = await window.sb.from('profiles').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+                window.__profiles = data || [];
+                const st = document.getElementById('usr-sync-status');
+                if (st) st.innerText = 'Server';
+            } catch (e) { console.warn('[AtmBet] profili', e); }
+            renderUsersTable();
+        }
+
+        function loadTelegramConfig() {
+            try {
+                const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+                document.getElementById('tg_token').value = conf.token || DEFAULT_TG_CONFIG.token;
+                document.getElementById('tg_channel_pure').value = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+                document.getElementById('tg_channel_full').value = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+                const freeInput = document.getElementById('tg_channel_free');
+                if (freeInput) freeInput.value = conf.channel_free || DEFAULT_TG_CONFIG.channel_free;
+            } catch(e) {
+                document.getElementById('tg_token').value = DEFAULT_TG_CONFIG.token;
+                document.getElementById('tg_channel_pure').value = DEFAULT_TG_CONFIG.channel_pure;
+                document.getElementById('tg_channel_full').value = DEFAULT_TG_CONFIG.channel_full;
+                const freeInput = document.getElementById('tg_channel_free');
+                if (freeInput) freeInput.value = DEFAULT_TG_CONFIG.channel_free;
+            }
+        }
+
+        function saveTelegramConfig() {
+            const conf = {
+                token: document.getElementById('tg_token').value.trim() || DEFAULT_TG_CONFIG.token,
+                channel_pure: document.getElementById('tg_channel_pure').value.trim() || DEFAULT_TG_CONFIG.channel_pure,
+                channel_full: document.getElementById('tg_channel_full').value.trim() || DEFAULT_TG_CONFIG.channel_full,
+                channel_free: document.getElementById('tg_channel_free') ? document.getElementById('tg_channel_free').value.trim() : ''
+            };
+            localStorage.setItem(TG_CONF_KEY, JSON.stringify(conf));
+            pushSetting('telegram_config', conf);
+            alert("Configurazione Telegram salvata sul server (visibile solo a te)!");
+        }
+
+        async function sendTelegramMessage(token, chatId, text) {
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text,
+                    parse_mode: 'HTML',
+                    disable_web_page_preview: true
+                })
+            });
+            return res.json();
+        }
+
+        function getTodayBetsForTelegram(allBets, channelType) {
+            const now = new Date();
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const targetDateStr = getLocalDateString(adjustedDate);
+
+            return allBets.filter(b => {
+                const isPending = String(b.status || 'pending').toLowerCase() === 'pending';
+                const eventDateTime = String(b.event_date || '').trim();
+                const betDate = extractStandardDate(eventDateTime);
+                
+                const alreadySent = channelType === 'pure' ? b.tg_sent_pure === true : b.tg_sent_full === true; // ogni canale ha il suo segno
+                if (!isPending || b.is_published === false || alreadySent) return false;
+
+                if (betDate === targetDateStr) return true;
+
+                const timePart = eventDateTime.slice(11, 16);
+                if (timePart) {
+                    const [hh] = timePart.split(':').map(Number);
+                    if (hh < 9) {
+                        const matchDayObj = new Date(betDate);
+                        matchDayObj.setDate(matchDayObj.getDate() - 1);
+                        if (getLocalDateString(matchDayObj) === targetDateStr) return true;
+                    }
+                }
+
+                return false;
+            });
+        }
+
+        async function dispatchTelegramSignals(channelType) {
+            const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+
+            if (!token) {
+                alert("Inserisci e salva prima il Bot Token di Telegram.");
+                return;
+            }
+
+            const chatId = channelType === 'pure' ? channelPure : channelFull;
+            if (!chatId) {
+                alert(`Chat ID mancante per il canale ${channelType.toUpperCase()}.`);
+                return;
+            }
+
+            const bets = loadAllBets();
+            const todayStr = getLocalDateString(new Date());
+
+            const pendings = getTodayBetsForTelegram(bets, channelType);
+            
+            if (pendings.length === 0) {
+                alert("Nessun nuovo pronostico programmato specificamente per OGGI da inviare su Telegram!");
+                return;
+            }
+
+            const statusEl = document.getElementById('tg_status_msg');
+            statusEl.innerText = "Invio in corso...";
+
+            if (channelType === 'pure') {
+                const allowedPureTipsters = getPureSelectedTipsters();
+
+                const toSend = pendings.filter(b => {
+                    const norm = canonicalizeTipsterName(b.original_tipster);
+                    return allowedPureTipsters.includes(norm);
+                });
+
+                if (toSend.length === 0) {
+                    alert(`Nessun segnale PURE per oggi nei canali attivi (${allowedPureTipsters.join(', ')}).`);
+                    statusEl.innerText = "";
+                    return;
+                }
+
+                const BATCH_SIZE = 10;
+                const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
+                let sentCount = 0;
+
+                for (let bIdx = 0; bIdx < totalBatches; bIdx++) {
+                    const batch = toSend.slice(bIdx * BATCH_SIZE, (bIdx + 1) * BATCH_SIZE);
+                    let msg = `⚡ <b>ATMBET SELECTION | SIGNAL PURE (${bIdx + 1}/${totalBatches})</b> ⚡\n📅 <i>Data: ${todayStr}</i>\n🎯 <i>Top Selezioni ad Alto Valore Matematico</i>\n\n`;
+                    batch.forEach((b, i) => {
+                        const globalIndex = bIdx * BATCH_SIZE + i + 1;
+                        msg += `<b>${globalIndex}. ${b.match_name}</b>\n`;
+                        msg += `🏆 ${b.league} | 🤖 <code>AtmBet Selection</code>\n`;
+                        msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
+                        msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
+                    });
+
+                    try {
+                        const res = await sendTelegramMessage(token, chatId, msg);
+                        if (res.ok) {
+                            batch.forEach(b => { b.tg_sent_pure = true; b.tg_sent = true; });
+                            sentCount += batch.length;
+                        } else {
+                            statusEl.innerText = `Errore: ${res.description}`;
+                            return;
+                        }
+                    } catch(e) {
+                        statusEl.innerText = `Errore: ${e.message}`;
+                        return;
+                    }
+
+                    await new Promise(resolve => setTimeout(resolve, 400));
+                }
+
+                persistBets(bets);
+                autoBackupMasterToGitHub();
+                statusEl.innerText = `Inviati ${sentCount} segnali di oggi a PURE!`;
+                setTimeout(() => { statusEl.innerText = ""; }, 5000);
+
+            } else {
+                const allowedFullTipsters = getFullSelectedTipsters();
+
+                const toSend = pendings.filter(b => {
+                    const norm = canonicalizeTipsterName(b.original_tipster).toLowerCase();
+                    if (!allowedFullTipsters || allowedFullTipsters.length === 0) return true;
+                    return allowedFullTipsters.some(t => canonicalizeTipsterName(t).toLowerCase() === norm);
+                });
+
+                if (toSend.length === 0) {
+                    alert(`Nessun segnale All-Inclusive per oggi nei canali attivi (${allowedFullTipsters.join(', ')}).`);
+                    statusEl.innerText = "";
+                    return;
+                }
+
+                const BATCH_SIZE = 10;
+                const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
+                let sentCount = 0;
+
+                for (let bIdx = 0; bIdx < totalBatches; bIdx++) {
+                    const batch = toSend.slice(bIdx * BATCH_SIZE, (bIdx + 1) * BATCH_SIZE);
+                    let msg = `🌐 <b>ATMBET SIGNAL | AGGIORNAMENTO ODIERNO (${bIdx + 1}/${totalBatches})</b> 🌐\n`;
+                    msg += `📅 <i>Data: ${todayStr}</i>\n\n`;
+
+                    batch.forEach((b, i) => {
+                        const globalIndex = bIdx * BATCH_SIZE + i + 1;
+                        msg += `<b>${globalIndex}. ${b.match_name}</b>\n`;
+                        msg += `🏆 ${b.league} | 🤖 <code>AtmBet Signal</code>\n`;
+                        msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
+                        msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
+                    });
+
+                    try {
+                        const res = await sendTelegramMessage(token, chatId, msg);
+                        if (res.ok) {
+                            batch.forEach(b => { b.tg_sent_full = true; b.tg_sent = true; });
+                            sentCount += batch.length;
+                        } else {
+                            statusEl.innerText = `Errore: ${res.description}`;
+                            return;
+                        }
+                    } catch(e) {
+                        statusEl.innerText = `Errore: ${e.message}`;
+                        return;
+                    }
+
+                    await new Promise(resolve => setTimeout(resolve, 400));
+                }
+
+                persistBets(bets);
+                autoBackupMasterToGitHub();
+                statusEl.innerText = `Inviati ${sentCount} segnali di oggi ad All-Inclusive!`;
+                setTimeout(() => { statusEl.innerText = ""; }, 5000);
+            }
+        }
+
+        function resetTelegramSentStatus(channelType) {
+            const bets = loadAllBets();
+            const allowedTipsters = channelType === 'pure' ? getPureSelectedTipsters() : getFullSelectedTipsters();
+            const now = new Date();
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const todayStr = getLocalDateString(adjustedDate);
+
+            let resetCount = 0;
+            bets.forEach(b => {
+                const eventDateTime = String(b.event_date || '').trim();
+                const bDate = extractStandardDate(eventDateTime);
+                
+                let isTodayOrNight = (bDate === todayStr);
+                if (!isTodayOrNight) {
+                    const timePart = eventDateTime.slice(11, 16);
+                    if (timePart) {
+                        const [hh] = timePart.split(':').map(Number);
+                        if (hh < 9) {
+                            const matchDayObj = new Date(bDate);
+                            matchDayObj.setDate(matchDayObj.getDate() - 1);
+                            if (getLocalDateString(matchDayObj) === todayStr) isTodayOrNight = true;
+                        }
+                    }
+                }
+
+                if (isTodayOrNight) {
+                    const norm = canonicalizeTipsterName(b.original_tipster).toLowerCase();
+                    const isMatched = allowedTipsters.some(t => canonicalizeTipsterName(t).toLowerCase() === norm);
+                    
+                    const flag = channelType === 'pure' ? 'tg_sent_pure' : 'tg_sent_full';
+                    if (isMatched && b[flag] === true) {
+                        b[flag] = false;
+                        b.tg_sent = (b.tg_sent_pure === true || b.tg_sent_full === true);
+                        resetCount++;
+                    }
+                }
+            });
+
+            if (resetCount > 0) {
+                persistBets(bets);
+                alert(`Reset completato! ${resetCount} pronostici sono tornati a "non inviati".`);
+            } else {
+                alert(`Nessun pronostico con flag tg_sent attivo trovato nella data odierna.`);
+            }
+        }
+
+        async function dispatchDailyReport(channelType) {
+            const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+
+            if (!token) {
+                alert("Configura prima il Bot Token di Telegram.");
+                return;
+            }
+
+            const chatId = channelType === 'pure' ? channelPure : channelFull;
+            if (!chatId) {
+                alert(`Chat ID mancante per il canale ${channelType.toUpperCase()}.`);
+                return;
+            }
+
+            const bets = loadAllBets();
+            const todayStr = getLocalDateString(new Date());
+
+            const resolvedBets = bets.filter(b => {
+                const isResolved = b.status === 'won' || b.status === 'lost';
+                const bDate = extractStandardDate(b.event_date);
+                if (!isResolved || bDate !== todayStr) return false;
+
+                const normTipster = canonicalizeTipsterName(b.original_tipster);
+                if (channelType === 'pure') {
+                    return getPureSelectedTipsters().includes(normTipster);
+                } else {
+                    return getFullSelectedTipsters().includes(normTipster);
+                }
+            });
+
+            if (resolvedBets.length === 0) {
+                alert("Nessuna giocata refertata trovata per la data odierna.");
+                return;
+            }
+
+            let wonCount = resolvedBets.filter(b => b.status === 'won').length;
+            let lostCount = resolvedBets.filter(b => b.status === 'lost').length;
+            let totalResolved = resolvedBets.length;
+            let winRate = totalResolved > 0 ? ((wonCount / totalResolved) * 100).toFixed(2) : 0;
+
+            let netProfit = 0;
+            let totalStake = 0;
+            resolvedBets.forEach(b => {
+                const s = b.stake || 1.0;
+                totalStake += s;
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
+            });
+
+            let roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(2) : 0;
+
+            const channelTitleName = channelType === 'pure' ? 'CANALE PURE' : 'CANALE ALL-INCLUSIVE';
+            const formattedDate = todayStr.split('-').reverse().join('/');
+
+            let reportMsg = `📊 <b>ATMBET — RESOCONTO GIORNALIERO ${channelTitleName}</b>\n`;
+            reportMsg += `📅 <i>Data: ${formattedDate}</i>\n\n`;
+            reportMsg += `📈 <b>PANORAMICA STATISTICA</b>\n`;
+            reportMsg += ` * ⚡ Totale Giocate: ${totalResolved}\n`;
+            reportMsg += ` * ✅ Vinte: ${wonCount}\n`;
+            reportMsg += ` * ❌ Perse: ${lostCount}\n`;
+            reportMsg += ` * 🎯 Win Rate: ${winRate}%\n`;
+            reportMsg += ` * 📊 Profitto Netto: ${(netProfit >= 0 ? '+' : '')}${netProfit.toFixed(2)}u\n`;
+            reportMsg += ` * 🔄 Yield / ROI: ${(roi >= 0 ? '+' : '')}${roi}%\n\n`;
+
+            const statusEl = document.getElementById('tg_status_msg');
+            if (statusEl) statusEl.innerText = "Invio resoconto in corso...";
+
+            try {
+                const res = await sendTelegramMessage(token, chatId, reportMsg);
+                if (res.ok) {
+                    if (statusEl) statusEl.innerText = "Resoconto giornaliero inviato con successo!";
+                    setTimeout(() => { if (statusEl) statusEl.innerText = ""; }, 5000);
+                    alert("Resoconto giornaliero inviato correttamente su Telegram!");
+                } else {
+                    alert(`Errore invio resoconto: ${res.description}`);
+                    if (statusEl) statusEl.innerText = "";
+                }
+            } catch(e) {
+                alert(`Errore di rete: ${e.message}`);
+                if (statusEl) statusEl.innerText = "";
+            }
+        }
+
+        async function sendSingleBetToTelegramManual(betId, channelType) {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(betId));
+            if (!b) return;
+
+            const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+
+            if (!token) {
+                alert("Configura prima il Bot Token di Telegram.");
+                return;
+            }
+
+            const isPure = channelType === 'pure';
+            const chatId = isPure ? channelPure : channelFull;
+            const channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
+            const brandSignature = isPure ? "AtmBet Selection" : "AtmBet Signal";
+
+            if (!chatId) {
+                alert(`Chat ID mancante per il canale ${channelLabel}.`);
+                return;
+            }
+
+            let msg = `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA (${channelLabel})</b> ⚡\n📅 <i>Data: ${b.event_date}</i>\n\n`;
+            msg += `<b>⚽ ${b.match_name}</b>\n`;
+            msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
+            msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
+            msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>`;
+
+            try {
+                const res = await sendTelegramMessage(token, chatId, msg);
+                if (res.ok) {
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
+                } else {
+                    alert(`Errore Telegram: ${res.description}`);
+                }
+            } catch(e) {
+                alert(`Errore rete: ${e.message}`);
+            }
+        }
+
+        async function sendSingleBetToTelegram(betId, targetMode = 'auto') {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(betId));
+            if (!b) return;
+
+            const conf = JSON.parse(localStorage.getItem(TG_CONF_KEY) || '{}');
+            const token = conf.token || DEFAULT_TG_CONFIG.token;
+            const channelPure = conf.channel_pure || DEFAULT_TG_CONFIG.channel_pure;
+            const channelFull = conf.channel_full || DEFAULT_TG_CONFIG.channel_full;
+            const channelFree = conf.channel_free || DEFAULT_TG_CONFIG.channel_free;
+
+            if (!token) {
+                alert("Configura prima il Bot Token di Telegram.");
+                return;
+            }
+
+            let chatId = '';
+            let channelLabel = '';
+            let brandSignature = '';
+
+            if (targetMode === 'free') {
+                chatId = channelFree;
+                channelLabel = "FREE SIGNAL";
+                brandSignature = "AtmBet Free Signal";
+                if (!chatId) {
+                    alert("Chat ID per il canale Free Signal non configurato.");
+                    return;
+                }
+            } else {
+                const allowedPure = getPureSelectedTipsters();
+                const isPure = allowedPure.includes(canonicalizeTipsterName(b.original_tipster));
+                chatId = isPure ? channelPure : channelFull;
+                channelLabel = isPure ? "PURE" : "ALL-INCLUSIVE";
+                brandSignature = isPure ? "AtmBet Selection" : "AtmBet Signal";
+            }
+
+            let msg = targetMode === 'free' 
+                ? `🎁 <b>ATMBET | FREE SIGNAL PREVIEW</b> 🎁\n📅 <i>Data: ${b.event_date}</i>\n\n`
+                : `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA</b> ⚡\n📅 <i>Data: ${b.event_date}</i>\n\n`;
+
+            msg += `<b>⚽ ${b.match_name}</b>\n`;
+            msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
+            msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
+            msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>`;
+
+            try {
+                const res = await sendTelegramMessage(token, chatId, msg);
+                if (res.ok) {
+                    if (targetMode !== 'free') {
+                        b.tg_sent = true;
+                        if (chatId === channelPure) b.tg_sent_pure = true; else b.tg_sent_full = true;
+                        persistBets(bets);
+                    }
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
+                } else {
+                    alert(`Errore Telegram: ${res.description}`);
+                }
+            } catch(e) {
+                alert(`Errore rete: ${e.message}`);
+            }
+        }
+
+        function getConfirmedConflicts() {
+            try {
+                return JSON.parse(localStorage.getItem(CONFIRMED_CONFLICTS_KEY)) || [];
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function confirmConflictMatch(groupKey) {
+            const confirmed = getConfirmedConflicts();
+            if (!confirmed.includes(groupKey)) {
+                confirmed.push(groupKey);
+                localStorage.setItem(CONFIRMED_CONFLICTS_KEY, JSON.stringify(confirmed));
+            }
+            renderDashboard();
+        }
+
+        function verifyAdminAuth(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            window.location.href = 'auth.html';
+        }
+
+        function unlockConsoleUI() {
+            document.getElementById('admin-auth-overlay').classList.add('hidden');
+            document.getElementById('admin-main-content').classList.remove('hidden');
+            setupDynamicDatePresets();
+            loadGitHubSettings();
+            loadTelegramConfig();
+            renderUsersTable();
+            renderTipstersSelectors();
+            const btnAll = document.getElementById('btn-filter-all');
+            if (btnAll) btnAll.classList.add('filter-btn-active');
+            
+            loadSettingsFromServer().then(() => syncBetsFromGitHubSilent()).then(() => {
+                renderDashboard();
+            });
+            
+            lucide.createIcons();
+        }
+
+        async function lockAdminConsole() {
+            try { await window.AtmAuth.signOut(); } catch (e) {}
+            window.location.href = 'auth.html';
+        }
+
+        async function checkAdminSession() {
+            const errEl = document.getElementById('auth-error-msg');
+            let sess = null;
+            try { sess = window.AtmAuth ? await window.AtmAuth.syncSession() : null; } catch (e) {}
+            if (sess && (sess.role === 'admin' || sess.role === 'gestore')) {
+                sessionStorage.setItem(ADMIN_AUTH_SESSION_KEY, "true");
+                unlockConsoleUI();
+                return;
+            }
+            sessionStorage.removeItem(ADMIN_AUTH_SESSION_KEY);
+            if (errEl) {
+                errEl.innerText = sess ? 'Questo account non è abilitato alla console.' : 'Devi accedere con un account staff.';
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        function setClusterFilter(mode, btnEl) {
+            currentClusterMode = mode;
+            document.querySelectorAll('.cluster-btn').forEach(b => b.classList.remove('cluster-pill-active'));
+            if (btnEl) btnEl.classList.add('cluster-pill-active');
+            renderDashboard();
+        }
+
+        function normalizeMatchText(str) {
+            if (!str) return '';
+            return str.toLowerCase().replace(/[-–—/vs\.]/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+
+        function scanForConflictsAndDuplicates(bets) {
+            const conflictPanel = document.getElementById('conflict-panel');
+            const conflictContainer = document.getElementById('conflict-items-container');
+            const badge = document.getElementById('conflict-count-badge');
+            if (!conflictPanel || !conflictContainer) return;
+
+            const activeBets = bets.filter(b => b.status === 'pending');
+            const confirmedKeys = getConfirmedConflicts();
+            
+            const matchGroups = {};
+            activeBets.forEach(bet => {
+                const norm = normalizeMatchText(bet.match_name);
+                if (!norm) return;
+
+                let foundKey = Object.keys(matchGroups).find(k => {
+                    const wordsA = k.split(' ').filter(w => w.length > 2);
+                    const wordsB = norm.split(' ').filter(w => w.length > 2);
+                    return wordsA.filter(w => wordsB.includes(w)).length >= 2;
+                });
+
+                const groupKey = foundKey || norm;
+                if (!matchGroups[groupKey]) matchGroups[groupKey] = [];
+                matchGroups[groupKey].push(bet);
+            });
+
+            const conflicts = Object.entries(matchGroups).filter(([key, items]) => items.length > 1 && !confirmedKeys.includes(key));
+
+            if (conflicts.length === 0) {
+                conflictPanel.classList.add('hidden');
+                return;
+            }
+
+            conflictPanel.classList.remove('hidden');
+            if (badge) badge.innerText = `${conflicts.length}`;
+
+            conflictContainer.innerHTML = '';
+            conflicts.forEach(([key, items]) => {
+                const uniquePicks = [...new Set(items.map(i => i.prediction.trim().toLowerCase()))];
+                const isConflict = uniquePicks.length > 1;
+
+                const box = document.createElement('div');
+                box.className = "bg-slate-950 p-2.5 rounded-xl border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-2";
+
+                let itemsListHtml = items.map(i => `
+                    <div class="text-[11px] flex items-center justify-between gap-1.5 bg-slate-900 px-2 py-1 rounded border border-slate-800">
+                        <span class="text-slate-300">${i.original_tipster}: <strong class="text-emerald-400">${i.prediction}</strong> (@${parseFloat(i.odds).toFixed(2)})</span>
+                        <button onclick="deleteBet('${i.id}')" class="text-rose-400 p-0.5 rounded text-[10px] border border-rose-500/30 px-1 bg-rose-500/10">✕</button>
+                    </div>
+                `).join('');
+
+                box.innerHTML = `
+                    <div class="space-y-0.5">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white text-xs">${items[0].match_name}</span>
+                            <span class="text-[8px] font-bold px-1.5 py-0.2 rounded font-mono ${isConflict ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'}">
+                                ${isConflict ? 'Contrapposti' : 'Duplicati'}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-1.5">
+                        <div class="space-y-1">${itemsListHtml}</div>
+                        <button type="button" onclick="confirmConflictMatch('${key}')" class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold px-2 py-1 rounded-lg">Mantieni</button>
+                    </div>
+                `;
+                conflictContainer.appendChild(box);
+            });
+
+            lucide.createIcons();
+        }
+
+        function extractStandardDate(rawDateStr) {
+            if (!rawDateStr) return '';
+            const clean = String(rawDateStr).trim();
+            
+            const dateTimeMatch = clean.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+            if (dateTimeMatch) {
+                return `${dateTimeMatch[1]}-${String(dateTimeMatch[2]).padStart(2, '0')}-${String(dateTimeMatch[3]).padStart(2, '0')}`;
+            }
+
+            const euMatch = clean.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})/);
+            if (euMatch) {
+                return `${euMatch[3]}-${String(euMatch[2]).padStart(2, '0')}-${String(euMatch[1]).padStart(2, '0')}`;
+            }
+            
+            return clean.slice(0, 10);
+        }
+
+        function getLocalDateString(d) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function setupDynamicDatePresets() {
+            const now = new Date();
+            const adjustedDate = new Date(now.getTime() - (9 * 3600 * 1000));
+            const todayStr = getLocalDateString(adjustedDate);
+
+            const btnToday = document.getElementById('btn-preset-today');
+            const dateInput = document.getElementById('sim-start-date');
+
+            if (btnToday) btnToday.innerText = `Oggi (${adjustedDate.getDate()})`;
+
+            if (dateInput) {
+                dateInput.value = todayStr;
+                dateInput.max = getLocalDateString(now);
+            }
+            
+            currentSimMode = 'today';
+            currentCustomDate = todayStr;
+
+            if (btnToday) {
+                document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+                btnToday.classList.add('sim-pill-active');
+            }
+        }
+
+        function initAdminServiceStartDate(allBets) {
+            const dateInput = document.getElementById('sim-start-date');
+            if (!dateInput || !Array.isArray(allBets) || allBets.length === 0) return;
+
+            const dates = allBets
+                .map(b => extractStandardDate(b.event_date))
+                .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
+                .sort();
+
+            if (dates.length > 0) {
+                firstServiceDate = dates[0];
+                dateInput.min = firstServiceDate;
+            }
+            dateInput.max = getLocalDateString(new Date());
+        }
+
+        function applyCustomCalendarDate(dateStr) {
+            if (!dateStr) return;
+            const stdDate = extractStandardDate(dateStr);
+
+            if (firstServiceDate && stdDate < firstServiceDate) {
+                const dateInput = document.getElementById('sim-start-date');
+                if (dateInput) dateInput.value = firstServiceDate;
+                currentCustomDate = firstServiceDate;
+            } else {
+                currentCustomDate = stdDate;
+            }
+
+            currentSimMode = 'custom';
+            document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+            renderDashboard();
+        }
+
+        function setDynamicPreset(type, btnElement) {
+            currentSimMode = type;
+            const dateInput = document.getElementById('sim-start-date');
+            document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
+            if (btnElement) btnElement.classList.add('sim-pill-active');
+
+            const today = new Date();
+            const todayStr = getLocalDateString(today);
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
+
+            if (type === 'today') {
+                if (dateInput) dateInput.value = todayStr;
+                currentCustomDate = todayStr;
+            } else if (type === 'yesterday') {
+                if (dateInput) dateInput.value = yesterdayStr;
+                currentCustomDate = yesterdayStr;
+            } else if (type === '7days') {
+                const d7 = new Date();
+                d7.setDate(today.getDate() - 7);
+                const d7Str = getLocalDateString(d7);
+                if (dateInput) dateInput.value = d7Str;
+                currentCustomDate = d7Str;
+            } else if (type === 'all') {
+                currentCustomDate = '';
+                if (dateInput) dateInput.value = '';
+            }
+
+            renderDashboard();
+        }
+
+        function loadGitHubSettings() {
+            updateSyncBadge(window.sb ? 'ready' : 'empty');
+        }
+
+        function saveGitHubSettings() { /* non piu usata: la sincronizzazione e su Supabase */ }
+
+        function updateSyncBadge(status, message) {
+            const icon = document.getElementById('sync-status-icon');
+            const text = document.getElementById('sync-status-text');
+            if (!icon || !text) return;
+
+            if (status === 'ready') {
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 animate-pulse';
+                text.innerText = 'Pronto. Sincronizzazione attiva.';
+                text.className = 'text-[10px] text-emerald-400 font-mono';
+            } else if (status === 'syncing') {
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0 animate-ping';
+                text.innerText = 'Sincronizzazione in corso...';
+                text.className = 'text-[10px] text-amber-400 font-mono';
+            } else if (status === 'success') {
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0';
+                text.innerText = `Aggiornato (${new Date().toLocaleTimeString()})`;
+                text.className = 'text-[10px] text-emerald-400 font-mono font-bold';
+            } else if (status === 'error') {
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0';
+                text.innerText = 'Errore: ' + (message || 'Verifica dati');
+                text.className = 'text-[10px] text-rose-400 font-mono font-bold';
+            } else {
+                icon.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0';
+                text.innerText = 'Non configurata.';
+                text.className = 'text-[10px] text-slate-400 font-mono';
+            }
+        }
+
+        // ===== IMPOSTAZIONI SUL SERVER (Telegram, liste tipster): solo admin, non piu nel browser =====
+        const SERVER_SETTINGS = { telegram_config: TG_CONF_KEY, pure_tipsters: PURE_TIPSTERS_KEY, full_tipsters: FULL_TIPSTERS_KEY };
+
+        async function pushSetting(key, value) {
+            if (!window.sb) return;
+            try {
+                const { error } = await window.sb.from('app_settings').upsert({ key, value });
+                if (error) console.warn('[AtmBet] impostazione non salvata', key, error.message);
+            } catch (e) { console.warn('[AtmBet] impostazione non salvata', key, e); }
+        }
+
+        async function loadSettingsFromServer() {
+            if (!window.sb) return;
+            try {
+                const { data, error } = await window.sb.from('app_settings').select('*');
+                if (error) throw error;
+                const remote = {};
+                (data || []).forEach(r => { remote[r.key] = r.value; });
+                for (const [key, lsKey] of Object.entries(SERVER_SETTINGS)) {
+                    if (remote[key] !== undefined && remote[key] !== null && Object.keys(remote[key]).length !== 0) {
+                        localStorage.setItem(lsKey, JSON.stringify(remote[key]));          // il server vince
+                    } else {
+                        // prima volta: se questo browser ha gia dei valori, li carico sul server
+                        const raw = localStorage.getItem(lsKey);
+                        if (raw) { try { await pushSetting(key, JSON.parse(raw)); } catch (e) {} }
+                    }
+                }
+                loadTelegramConfig();
+                renderTipstersSelectors();
+            } catch (e) { console.warn('[AtmBet] impostazioni dal server', e); }
+        }
+
+        // ===== SINCRONIZZAZIONE PRONOSTICI CON SUPABASE =====
+        window.__betSnap = {};
+        window.__betSnapReady = false;
+        let __betSyncChain = Promise.resolve();
+
+        function betToRow(b) {
+            const canon = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
+            const pureList = getPureSelectedTipsters().map(t => canonicalizeTipsterName(t));
+            const isXG = canon.toLowerCase().includes('xg');
+            const isPure = !isXG && (pureList.includes(canon) || canon === 'AtmBet Safe' || canon === 'AtmBetSignal');
+            let st = String(b.status || 'pending').toLowerCase().trim();
+            if (st.includes('vin') || st === 'win' || st === 'won') st = 'won';
+            else if (st.includes('per') || st === 'loss' || st === 'lost') st = 'lost';
+            else if (st.includes('void') || st.includes('annull')) st = 'void';
+            else st = 'pending';
+            let stake = parseFloat(b.stake || 1); if (!(stake > 0) || stake > 10) stake = 1;
+            let odds = parseFloat(b.odds || 1.8); if (!(odds > 0)) odds = 1.8;
+            return {
+                id: String(b.id),
+                event_date: String(b.event_date || ''),
+                match_name: String(b.match_name || 'Evento'),
+                league: b.league || 'Generale',
+                market: b.market || 'Mercato',
+                prediction: b.prediction || '-',
+                original_tipster: canon,
+                odds: Math.round(odds * 100) / 100,
+                stake: Math.round(stake * 100) / 100,
+                status: st,
+                is_pure: isPure,
+                is_published: b.is_published !== false,
+                tg_sent: b.tg_sent === true,
+                tg_sent_pure: b.tg_sent_pure === true,
+                tg_sent_full: b.tg_sent_full === true
+            };
+        }
+
+        async function fetchAllRemoteBets() {
+            const all = [];
+            for (let from = 0; ; from += 1000) {
+                const { data, error } = await window.sb.from('bets').select('*').order('event_date', { ascending: false }).range(from, from + 999);
+                if (error) throw error;
+                all.push(...(data || []));
+                if (!data || data.length < 1000) break;
+            }
+            return all;
+        }
+
+        function applyRemoteBetsLocally(rows) {
+            const snap = {};
+            rows.forEach(r => {
+                snap[r.id] = JSON.stringify({
+                    id: String(r.id), event_date: String(r.event_date || ''), match_name: String(r.match_name || 'Evento'),
+                    league: r.league || 'Generale', market: r.market || 'Mercato', prediction: r.prediction || '-',
+                    original_tipster: r.original_tipster, odds: Math.round(Number(r.odds) * 100) / 100, stake: Math.round(Number(r.stake) * 100) / 100,
+                    status: r.status, is_pure: r.is_pure === true, is_published: r.is_published !== false, tg_sent: r.tg_sent === true,
+                    tg_sent_pure: r.tg_sent_pure === true, tg_sent_full: r.tg_sent_full === true
+                });
+            });
+            window.__betSnap = snap;
+            const local = rows.map(r => ({
+                id: r.id, event_date: r.event_date, match_name: r.match_name, league: r.league, market: r.market,
+                prediction: r.prediction, original_tipster: r.original_tipster, odds: Number(r.odds), stake: Number(r.stake),
+                status: r.status, is_published: r.is_published, tg_sent: r.tg_sent,
+                tg_sent_pure: r.tg_sent_pure === true, tg_sent_full: r.tg_sent_full === true
+            }));
+            localStorage.setItem(PRIMARY_KEY, JSON.stringify(local));
+            localStorage.setItem(ATMBET_KEY, JSON.stringify(local));
+        }
+
+        async function syncBetsFromGitHubSilent() {
+            if (!window.sb) return;
+            updateSyncBadge('syncing');
+            try {
+                let rows = await fetchAllRemoteBets();
+                if (rows.length === 0) {
+                    // Prima migrazione: carico i pronostici esistenti (locali oppure da bets.json) nel database
+                    let seed = loadAllBets();
+                    if (seed.length === 0) {
+                        try {
+                            const r = await fetch('bets.json?_t=' + Date.now(), { cache: 'no-store' });
+                            if (r.ok) { const j = await r.json(); if (Array.isArray(j)) seed = j.map((b, i) => Object.assign({}, b, { id: b.id || ('b_' + i + '_' + (b.event_date || '')) })); }
+                        } catch (e) {}
+                    }
+                    if (seed.length > 0) {
+                        const seen = new Set();
+                        const seedRows = seed.map(betToRow).filter(r => r.id && !seen.has(r.id) && seen.add(r.id));
+                        for (let i = 0; i < seedRows.length; i += 400) {
+                            const { error } = await window.sb.from('bets').upsert(seedRows.slice(i, i + 400));
+                            if (error) throw error;
+                        }
+                        rows = await fetchAllRemoteBets();
+                    }
+                }
+                applyRemoteBetsLocally(rows);
+                window.__betSnapReady = true;
+                updateSyncBadge('success');
+            } catch (err) {
+                console.warn('[AtmBet] sync da server', err);
+                updateSyncBadge('error', (err && err.message) || 'Errore di rete');
+            }
+        }
+
+        function syncBetsToGitHub(bets) {
+            // (nome mantenuto per compatibilita) salva su Supabase solo cio che e cambiato
+            __betSyncChain = __betSyncChain.then(() => doSyncBetsToServer(bets)).catch(() => {});
+            return __betSyncChain;
+        }
+
+        async function doSyncBetsToServer(bets) {
+            if (!window.sb) return;
+            if (!window.__betSnapReady) { updateSyncBadge('error', 'Dati del server non ancora caricati: riprova tra un attimo.'); return; }
+            updateSyncBadge('syncing');
+            try {
+                const seen = new Set();
+                const rows = bets.map(betToRow).filter(r => r.id && !seen.has(r.id) && seen.add(r.id));
+                const changed = rows.filter(r => window.__betSnap[r.id] !== JSON.stringify(r));
+                const ids = new Set(rows.map(r => r.id));
+                const removed = Object.keys(window.__betSnap).filter(id => !ids.has(id));
+                // sicurezza: non cancellare mai quasi tutto per un elenco locale vuoto o parziale
+                if (removed.length > 20 && removed.length > Object.keys(window.__betSnap).length * 0.5) {
+                    updateSyncBadge('error', 'Troppe eliminazioni in una volta: operazione bloccata per sicurezza.');
+                    return;
+                }
+                for (let i = 0; i < changed.length; i += 400) {
+                    const { error } = await window.sb.from('bets').upsert(changed.slice(i, i + 400));
+                    if (error) throw error;
+                }
+                for (let i = 0; i < removed.length; i += 200) {
+                    const { error } = await window.sb.from('bets').delete().in('id', removed.slice(i, i + 200));
+                    if (error) throw error;
+                }
+                changed.forEach(r => { window.__betSnap[r.id] = JSON.stringify(r); });
+                removed.forEach(id => { delete window.__betSnap[id]; });
+                updateSyncBadge('success');
+            } catch (err) {
+                console.warn('[AtmBet] sync verso server', err);
+                updateSyncBadge('error', (err && err.message) || 'Errore di salvataggio');
+            }
+        }
+
+        async function syncAllFromServer() {
+            await syncBetsFromGitHubSilent();
+            await fetchUsersFromGitHubAutomatic();
+            renderDashboard();
+            renderTipstersSelectors();
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && window.__betSnapReady) {
+                syncBetsFromGitHubSilent().then(() => { renderDashboard(); });
+            }
+        });
+
+        function loadAllBets() {
+            let bets = [];
+            const rawV1 = localStorage.getItem(PRIMARY_KEY);
+            if (rawV1) {
+                try {
+                    const parsed = JSON.parse(rawV1);
+                    if (Array.isArray(parsed) && parsed.length > 0) bets = parsed;
+                } catch(e) {}
+            }
+
+            if (bets.length === 0) {
+                const alternateKeys = [ATMBET_KEY, 'bets', 'tipster_tracker_bets', 'pronostici'];
+                for (const k of alternateKeys) {
+                    const raw = localStorage.getItem(k);
+                    if (raw) {
+                        try {
+                            const parsed = JSON.parse(raw);
+                            if (Array.isArray(parsed) && parsed.length > 0) {
+                                bets = parsed;
+                                break;
+                            }
+                        } catch(e) {}
+                    }
+                }
+            }
+
+            const formatted = bets.map((b, idx) => {
+                let cleanStake = parseFloat(b.stake || b.units || 1.0);
+                if (cleanStake > 10) cleanStake = 1.0;
+
+                const matchText = String(b.match_name || b.match || b.teams || 'Evento');
+                let canonicalTipster = canonicalizeTipsterName(b.original_tipster || b.tipster || b.source);
+
+                if (canonicalTipster.toLowerCase().includes('betmines') && !canonicalTipster.toLowerCase().includes('valuebet')) {
+                    const isParlay = matchText.includes('/');
+                    canonicalTipster = isParlay ? 'BetMines' : 'BetMines PreMatch';
+                }
+
+                return {
+                    id: b.id || ('b_' + idx + '_' + (b.event_date || Date.now())),
+                    event_date: b.event_date || b.date || b.dateTime || new Date().toISOString().slice(0, 16).replace('T', ' '),
+                    match_name: matchText,
+                    league: b.league || b.competition || 'Generale',
+                    market: b.market || b.type || 'Mercato',
+                    prediction: b.prediction || b.pick || b.selection || '-',
+                    original_tipster: canonicalTipster,
+                    odds: parseFloat(b.odds || b.odd || b.quota || 1.80),
+                    stake: cleanStake,
+                    status: b.status || b.result || 'pending',
+                    is_published: b.is_published !== undefined ? b.is_published : true,
+                    tg_sent: b.tg_sent === true,
+                    tg_sent_pure: b.tg_sent_pure === true,
+                    tg_sent_full: b.tg_sent_full === true
+                };
+            });
+
+            return formatted.sort((a, b) => {
+                const dateA = new Date(a.event_date.replace(' ', 'T')).getTime() || 0;
+                const dateB = new Date(b.event_date.replace(' ', 'T')).getTime() || 0;
+                return dateB - dateA;
+            });
+        }
+
+        function persistBets(bets) {
+            localStorage.setItem(PRIMARY_KEY, JSON.stringify(bets));
+            localStorage.setItem(ATMBET_KEY, JSON.stringify(bets));
+            renderDashboard();
+            renderTipstersSelectors();
+            syncBetsToGitHub(bets);
+        }
+
+        function parseAIText() {
+            const text = document.getElementById('ai-input').value.trim();
+            if (!text) {
+                alert("Incolla prima il testo nell'area sopra!");
+                return;
+            }
+
+            const bets = loadAllBets();
+            const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+
+            let updatedCount = 0;
+            lines.forEach(line => {
+                let isWon = /esito:\s*vinta|vinta|won|win/i.test(line);
+                let isLost = /esito:\s*persa|persa|lost|lose/i.test(line);
+                let isVoid = /void|annullata|rimborso/i.test(line);
+                let isPending = /in corso|aperta|pending/i.test(line);
+
+                if (isWon || isLost || isVoid || isPending) {
+                    const targetStatus = isWon ? 'won' : (isLost ? 'lost' : (isVoid ? 'void' : 'pending'));
+                    bets.forEach(b => {
+                        const mName = b.match_name.toLowerCase();
+                        if (line.toLowerCase().includes(mName)) {
+                            b.status = targetStatus;
+                            updatedCount++;
+                        }
+                    });
+                }
+            });
+
+            if (updatedCount > 0) {
+                persistBets(bets);
+                alert(`Aggiornati esiti di ${updatedCount} giocate!`);
+                document.getElementById('ai-input').value = '';
+                return;
+            }
+
+            let addedCount = 0;
+            lines.forEach((line, idx) => {
+                if (line.includes('|')) {
+                    const parts = line.split('|').map(p => p.trim());
+                    if (parts.length >= 4) {
+                        const datePart = parts[0] || new Date().toISOString().slice(0, 16).replace('T', ' ');
+                        const matchPart = parts[1];
+                        const predPart = parts[2];
+                        const oddsPart = parseFloat(parts[3].replace(',', '.')) || 1.80;
+                        let tipsterPart = canonicalizeTipsterName(parts[4]);
+                        const leaguePart = parts[5] || 'Generale';
+
+                        if (oddsPart < 1.30) return;
+
+                        if (tipsterPart.toLowerCase().includes('betmines') && !tipsterPart.toLowerCase().includes('valuebet')) {
+                            tipsterPart = matchPart.includes('/') ? 'BetMines' : 'BetMines PreMatch';
+                        }
+
+                        const exists = bets.some(b => b.match_name.toLowerCase() === matchPart.toLowerCase() && b.prediction.toLowerCase() === predPart.toLowerCase());
+                        if (exists) return;
+
+                        bets.unshift({
+                            id: 'bet_' + Date.now() + '_' + idx,
+                            event_date: datePart,
+                            match_name: matchPart,
+                            league: leaguePart,
+                            original_tipster: tipsterPart,
+                            market: matchPart.includes('/') ? 'Multipla' : '1X2 / Mercato',
+                            prediction: predPart,
+                            odds: oddsPart,
+                            stake: 1.0,
+                            status: 'pending',
+                            is_published: true,
+                            tg_sent: false,
+                            tg_sent_pure: false,
+                            tg_sent_full: false
+                        });
+                        addedCount++;
+                    }
+                }
+            });
+
+            if (addedCount > 0) {
+                persistBets(bets);
+                alert(`Inseriti ${addedCount} nuovi pronostici in blocco!`);
+                document.getElementById('ai-input').value = '';
+            }
+        }
+
+        function updateStatus(id, newStatus) {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(id));
+            if (b) {
+                b.status = newStatus;
+                persistBets(bets);
+            }
+        }
+
+        function updateBetTipster(id, newTipster) {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(id));
+            if (b) {
+                b.original_tipster = canonicalizeTipsterName(newTipster);
+                persistBets(bets);
+            }
+        }
+
+        function togglePublish(id) {
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(id));
+            if (b) {
+                b.is_published = !b.is_published;
+                persistBets(bets);
+            }
+        }
+
+        function deleteBet(id) {
+            if (confirm('Eliminare questo pronostico?')) {
+                let bets = loadAllBets();
+                bets = bets.filter(x => String(x.id) !== String(id));
+                persistBets(bets);
+            }
+        }
+
+        function deleteTipsterAndBets(tipsterName) {
+            if (!tipsterName) return;
+
+            const canonical = canonicalizeTipsterName(tipsterName);
+            const confirmed = confirm(
+                `ATTENZIONE: Eliminare il fornitore "${canonical}"?\n\nVerranno cancellati TUTTI i suoi pronostici.`
+            );
+
+            if (!confirmed) return;
+
+            const allBets = loadAllBets();
+            const remainingBets = allBets.filter(b => canonicalizeTipsterName(b.original_tipster) !== canonical);
+            persistBets(remainingBets);
+
+            if (currentTipsterFilter.toLowerCase() === canonical.toLowerCase()) {
+                currentTipsterFilter = 'all';
+                const select = document.getElementById('tipster-select-filter');
+                if (select) select.value = 'all';
+            }
+
+            alert(`Fornitore "${canonical}" rimosso con successo!`);
+        }
+
+        function setFilter(filterType, element) {
+            currentFilter = filterType;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('filter-btn-active'));
+            if (element) element.classList.add('filter-btn-active');
+            renderDashboard();
+        }
+
+        function filterByTipster(tipsterValue) {
+            currentTipsterFilter = tipsterValue;
+            renderDashboard();
+        }
+
+        window.toggleAdminSubmatches = function(betId) {
+            const box = document.getElementById('admin-submatches-' + betId);
+            const btn = document.getElementById('admin-btn-' + betId);
+            if (!box) return;
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                if (btn) btn.innerText = 'Chiudi Match ▲';
+            } else {
+                box.classList.add('hidden');
+                if (btn) btn.innerText = 'Dettagli Match ▼';
+            }
+        };
+
+        function renderAdminTipstersLeaderboard(allBets, unitVal) {
+            const tbody = document.getElementById('admin-tipsters-leaderboard-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const allTipsterNames = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+
+            if (allTipsterNames.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun dato fornitore disponibile.</td></tr>`;
+                return;
+            }
+
+            const tipsterStats = {};
+            allTipsterNames.forEach(name => {
+                tipsterStats[name] = {
+                    name: name,
+                    total: 0,
+                    won: 0,
+                    lost: 0,
+                    netProfit: 0,
+                    totalStake: 0
+                };
+            });
+
+            const resolvedBets = allBets.filter(b => b.status === 'won' || b.status === 'lost');
+
+            resolvedBets.forEach(bet => {
+                const name = canonicalizeTipsterName(bet.original_tipster);
+                if (tipsterStats[name]) {
+                    const s = bet.stake || 1.0;
+                    tipsterStats[name].total += 1;
+                    tipsterStats[name].totalStake += s;
+
+                    if (bet.status === 'won') {
+                        tipsterStats[name].won += 1;
+                        tipsterStats[name].netProfit += (bet.odds - 1) * s;
+                    } else if (bet.status === 'lost') {
+                        tipsterStats[name].lost += 1;
+                        tipsterStats[name].netProfit -= s;
+                    }
+                }
+            });
+
+            const leaderboard = Object.values(tipsterStats).sort((a, b) => b.netProfit - a.netProfit);
+
+            leaderboard.forEach((t, index) => {
+                const winRate = t.total > 0 ? ((t.won / t.total) * 100).toFixed(1) : 0;
+                const roi = t.totalStake > 0 ? ((t.netProfit / t.totalStake) * 100).toFixed(1) : 0;
+                const fiatProfit = t.netProfit * unitVal;
+
+                let rankBadge = `<span class="font-mono text-slate-400 font-bold text-xs">${index + 1}</span>`;
+                if (t.netProfit > 0) {
+                    if (index === 0) rankBadge = `🥇`;
+                    else if (index === 1) rankBadge = `🥈`;
+                    else if (index === 2) rankBadge = `🥉`;
+                }
+
+                const escapedName = t.name.replace(/'/g, "\\'");
+
+                const tr = document.createElement('tr');
+                tr.className = t.netProfit >= 0 ? "hover:bg-emerald-500/[0.04]" : "hover:bg-rose-500/[0.04]";
+
+                tr.innerHTML = `
+                    <td class="py-2 px-3 text-center">${rankBadge}</td>
+                    <td class="py-2 px-3 font-bold text-white">${t.name}</td>
+                    <td class="py-2 px-3 text-center font-mono text-slate-300">${t.total} (${t.won}V-${t.lost}P)</td>
+                    <td class="py-2 px-3 text-center font-mono font-bold ${parseFloat(winRate) >= 55 ? 'text-amber-400' : 'text-slate-300'}">${winRate}%</td>
+                    <td class="py-2 px-3 text-center font-mono font-bold ${parseFloat(roi) >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${parseFloat(roi) >= 0 ? '+' : ''}${roi}%</td>
+                    <td class="py-2 px-3 text-right font-mono font-black ${t.netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${t.netProfit >= 0 ? '+' : ''}${t.netProfit.toFixed(2)}u</td>
+                    <td class="py-2 px-3 text-right font-mono font-black ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €</td>
+                    <td class="py-2 px-3 text-center">
+                        <button type="button" onclick="deleteTipsterAndBets('${escapedName}')" class="p-1 text-rose-400 hover:text-rose-300">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function calculateSimulationInAdmin(allBets, unitVal) {
+            const today = new Date();
+            const todayStr = getLocalDateString(today);
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
+            const d7 = new Date();
+            d7.setDate(today.getDate() - 7);
+            const d7Str = getLocalDateString(d7);
+
+            const simBets = allBets.filter(b => {
+                const isResolved = b.status === 'won' || b.status === 'lost';
+                if (!isResolved) return false;
+
+                const bDate = extractStandardDate(b.event_date);
+
+                if (currentSimMode === 'today') return bDate === todayStr;
+                if (currentSimMode === 'yesterday') return bDate === yesterdayStr;
+                if (currentSimMode === '7days') return bDate >= d7Str && bDate <= todayStr;
+                if (currentSimMode === 'all') return true;
+                if (currentSimMode === 'custom') return bDate === currentCustomDate;
+                return true;
+            });
+
+            const total = simBets.length;
+            const won = simBets.filter(b => b.status === 'won').length;
+            const lost = simBets.filter(b => b.status === 'lost').length;
+            const winRate = total > 0 ? ((won / total) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            let totalStake = 0;
+
+            simBets.forEach(b => {
+                const s = b.stake || 1.0;
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
+                totalStake += s;
+            });
+
+            const roi = totalStake > 0 ? ((netProfit / totalStake) * 100).toFixed(1) : 0;
+            const fiatSimAmount = netProfit * unitVal;
+
+            const profitEl = document.getElementById('sim-profit-units');
+            if (profitEl) {
+                profitEl.innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+                profitEl.className = `text-base sm:text-lg font-mono font-black ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+            }
+
+            const fiatEl = document.getElementById('sim-profit-fiat');
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatSimAmount >= 0 ? '+' : ''}${fiatSimAmount.toFixed(2)} €`;
+                fiatEl.className = `text-[10px] font-mono font-bold ${fiatSimAmount >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            }
+
+            const roiEl = document.getElementById('sim-roi');
+            if (roiEl) roiEl.innerText = (roi >= 0 ? '+' : '') + roi + '%';
+
+            const winEl = document.getElementById('sim-winrate');
+            if (winEl) winEl.innerText = winRate + '%';
+
+            const countEl = document.getElementById('sim-resolved-count');
+            if (countEl) countEl.innerText = total;
+
+            const wonEl = document.getElementById('sim-won-count');
+            if (wonEl) wonEl.innerText = won + 'V';
+
+            const lostEl = document.getElementById('sim-lost-count');
+            if (lostEl) lostEl.innerText = lost + 'P';
+        }
+
+        function updateClusterOptimizerSummary(allBets) {
+            const chEl = document.getElementById('opt-channels-count');
+            const volEl = document.getElementById('opt-daily-volume');
+            const wrEl = document.getElementById('opt-winrate-est');
+            const targetEl = document.getElementById('opt-target-profile');
+
+            if (!chEl || !volEl || !wrEl || !targetEl) return;
+
+            if (currentClusterMode === 'pure') {
+                const pureTipsters = getPureSelectedTipsters();
+                chEl.innerText = pureTipsters.length > 0 ? pureTipsters.join(', ') : "Canali Pure";
+                volEl.innerText = "Top Selezioni";
+                wrEl.innerText = "> 65.0% Target";
+                targetEl.innerText = "Piano 'Pure Signal'";
+            } else if (currentClusterMode === 'elite') {
+                chEl.innerText = "Top ROI+";
+                volEl.innerText = "~10-15 / die";
+                wrEl.innerText = "~ 62.5% Target";
+                targetEl.innerText = "Piano Elite";
+            } else {
+                const fullTipsters = getFullSelectedTipsters();
+                chEl.innerText = fullTipsters.length > 0 ? fullTipsters.join(', ') : 'Canale All-Inclusive';
+                volEl.innerText = 'Full (-30-50 / die)';
+                wrEl.innerText = '> 65.6% Target';
+                targetEl.innerText = 'Piano All-Inclusive';
+            }
+        }
+
+        function renderDashboard() {
+            let allBets = loadAllBets();
+            scanForConflictsAndDuplicates(allBets);
+
+            const tipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
+            const select = document.getElementById('tipster-select-filter');
+            
+            const previousVal = select.value || currentTipsterFilter;
+            select.innerHTML = '<option value="all">Tutti i Fornitori</option>';
+            tipsters.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t;
+                opt.innerText = t;
+                if (t === previousVal) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            updateClusterOptimizerSummary(allBets);
+
+            if (currentClusterMode === 'pure') {
+                const allowedPure = getPureSelectedTipsters();
+                allBets = allBets.filter(b => allowedPure.includes(canonicalizeTipsterName(b.original_tipster)));
+            } else if (currentClusterMode === 'elite') {
+                const fullArchive = loadAllBets();
+                const tipsterNetProfits = {};
+                fullArchive.forEach(b => {
+                    if (b.status === 'won' || b.status === 'lost') {
+                        const name = canonicalizeTipsterName(b.original_tipster);
+                        if (!tipsterNetProfits[name]) tipsterNetProfits[name] = 0;
+                        const s = b.stake || 1.0;
+                        tipsterNetProfits[name] += (b.status === 'won' ? (b.odds - 1) * s : -s);
+                    }
+                });
+                const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
+                allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
+            } else {
+                const allowedFull = getFullSelectedTipsters();
+                allBets = allBets.filter(b => allowedFull.includes(canonicalizeTipsterName(b.original_tipster)));
+            }
+
+            const unitMultiplierEl = document.getElementById('admin-unit-multiplier');
+            const unitVal = parseFloat(unitMultiplierEl ? unitMultiplierEl.value : 10) || 10;
+            calculateSimulationInAdmin(allBets, unitVal);
+            renderAdminTipstersLeaderboard(allBets, unitVal);
+
+            let filtered = allBets;
+            const today = new Date();
+            const todayStr = getLocalDateString(today);
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            const yesterdayStr = getLocalDateString(yesterday);
+            const d7 = new Date();
+            d7.setDate(today.getDate() - 7);
+            const d7Str = getLocalDateString(d7);
+
+            if (currentSimMode === 'today') {
+                const nowForView = new Date();
+                const adjustedViewDate = new Date(nowForView.getTime() - (9 * 3600 * 1000));
+                const targetViewStr = getLocalDateString(adjustedViewDate);
+
+                filtered = filtered.filter(b => {
+                    const bDate = extractStandardDate(b.event_date);
+                    if (bDate === targetViewStr) return true;
+
+                    const timePart = String(b.event_date || '').slice(11, 16);
+                    if (timePart) {
+                        const [hh] = timePart.split(':').map(Number);
+                        if (hh < 9) {
+                            const matchDayObj = new Date(bDate);
+                            matchDayObj.setDate(matchDayObj.getDate() - 1);
+                            if (getLocalDateString(matchDayObj) === targetViewStr) return true;
+                        }
+                    }
+                    return false;
+                });
+            } else if (currentSimMode === 'yesterday') {
+                filtered = filtered.filter(b => extractStandardDate(b.event_date) === yesterdayStr);
+            } else if (currentSimMode === '7days') {
+                filtered = filtered.filter(b => {
+                    const d = extractStandardDate(b.event_date);
+                    return d >= d7Str && d <= todayStr;
+                });
+            } else if (currentSimMode === 'custom') {
+                filtered = filtered.filter(b => extractStandardDate(b.event_date) === currentCustomDate);
+            }
+
+            if (currentFilter === 'pending') {
+                filtered = filtered.filter(b => b.status === 'pending');
+            } else if (currentFilter === 'resolved') {
+                filtered = filtered.filter(b => b.status === 'won' || b.status === 'lost' || b.status === 'void');
+            }
+
+            if (currentTipsterFilter !== 'all') {
+                filtered = filtered.filter(b => canonicalizeTipsterName(b.original_tipster).toLowerCase() === currentTipsterFilter.toLowerCase());
+            }
+
+            const total = filtered.length;
+            const resolved = filtered.filter(b => b.status === 'won' || b.status === 'lost');
+            const won = filtered.filter(b => b.status === 'won').length;
+            const winRate = resolved.length > 0 ? ((won / resolved.length) * 100).toFixed(1) : 0;
+
+            let netProfit = 0;
+            let totalResolvedStake = 0;
+
+            resolved.forEach(b => {
+                const s = b.stake || 1.0;
+                if (b.status === 'won') netProfit += (b.odds - 1) * s;
+                else if (b.status === 'lost') netProfit -= s;
+                totalResolvedStake += s;
+            });
+
+            const yieldVal = totalResolvedStake > 0 ? ((netProfit / totalResolvedStake) * 100).toFixed(1) : 0;
+            const fiatProfit = netProfit * unitVal;
+            const fiatEl = document.getElementById('admin-stat-fiat');
+            if (fiatEl) {
+                fiatEl.innerText = `≈ ${fiatProfit >= 0 ? '+' : ''}${fiatProfit.toFixed(2)} €`;
+                fiatEl.className = `text-[10px] font-mono font-bold ${fiatProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+            }
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-winrate').innerText = winRate + '%';
+            document.getElementById('stat-profit').innerText = (netProfit >= 0 ? '+' : '') + netProfit.toFixed(2) + 'u';
+            document.getElementById('stat-yield').innerText = (yieldVal >= 0 ? '+' : '') + yieldVal + '%';
+
+            renderTable(filtered);
+            renderMobileCards(filtered);
+        }
+
+        function getTipsterOptionsHtml(selectedTipster) {
+            const list = [
+                'AtmBetSignal', 'AtmBet Safe', 'AtmBetSignal XG', 'Il presidente', 'Upper90', 'ZcodeAi', 'Pronostici1', 'CalcioAI',
+                'BetMines', 'BetMines PreMatch', 'BetMines Valuebet', 'ZCODE', 'BetExpBot',
+                'FootyStats', 'Infoland', 'Freak Elite VIP', 'Stats4bets bollamaker', 'Stats4Bets Automatibet'
+            ];
+            let html = list.map(t => `<option value="${t}" ${selectedTipster === t ? 'selected' : ''}>${t}</option>`).join('');
+            if (!list.includes(selectedTipster) && selectedTipster) {
+                html += `<option value="${selectedTipster}" selected>${selectedTipster}</option>`;
+            }
+            return html;
+        }
+
+        function renderMobileCards(betsToDisplay) {
+            const container = document.getElementById('admin-mobile-bets-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (betsToDisplay.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-500 font-medium text-xs bg-slate-900 border border-slate-800 rounded-2xl">Nessun pronostico trovato.</div>`;
+                return;
+            }
+
+            betsToDisplay.forEach(bet => {
+                const card = document.createElement('div');
+                const isWon = bet.status === 'won';
+                const isLost = bet.status === 'lost';
+                const isVoid = bet.status === 'void';
+                const isPending = bet.status === 'pending';
+
+                let borderStatus = 'border-slate-800';
+                if (isWon) borderStatus = 'border-emerald-500/40 bg-emerald-500/[0.03]';
+                else if (isLost) borderStatus = 'border-rose-500/40 bg-rose-500/[0.03]';
+                else if (isVoid) borderStatus = 'border-amber-500/40 bg-amber-500/[0.03]';
+
+                card.className = `p-3.5 rounded-2xl border ${borderStatus} bg-slate-900 shadow-md space-y-2.5`;
+
+                let submatchesHtml = '';
+                if (bet.match_name.includes('/')) {
+                    const subList = bet.match_name.split('/').map(s => s.trim()).filter(Boolean);
+                    submatchesHtml = `
+                        <div class="mt-1.5 p-2 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                            ${subList.map((m, idx) => `
+                                <div class="text-[11px] text-slate-300 flex items-center justify-between">
+                                    <span>${idx+1}. ${m}</span>
+                                    <span class="text-[9px] text-emerald-400 font-mono">E${idx+1}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between text-[10px] text-slate-400">
+                        <span class="font-mono text-slate-500">${bet.event_date}</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-slate-300 font-medium truncate max-w-[120px]">${bet.league}</span>
+                            <button type="button" onclick="openEditBetModal('${bet.id}')" title="Modifica match" class="p-1 rounded bg-slate-800 text-blue-400 border border-slate-700">
+                                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
+                                ${bet.is_published ? '★ Vetrina' : 'Interno'}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="font-bold text-white text-xs sm:text-sm leading-snug">${bet.match_name}</div>
+                        ${submatchesHtml}
+                    </div>
+
+                    <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <div class="text-xs font-black text-emerald-400">${bet.prediction}</div>
+                            <div class="text-[10px] text-slate-400 font-mono mt-0.5">
+                                Quota: <strong class="text-white">@${parseFloat(bet.odds).toFixed(2)}</strong> • Stake: ${bet.stake.toFixed(1)}u
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-1">
+                            <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[9px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
+                            <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a Full" class="text-[9px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
+                            <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[9px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
+                            <button type="button" onclick="deleteBet('${bet.id}')" class="p-1 rounded-lg text-rose-400 hover:bg-rose-500/10 border border-rose-500/20">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-1 flex flex-col gap-2">
+                        <select onchange="updateBetTipster('${bet.id}', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs text-slate-300 font-medium">
+                            ${getTipsterOptionsHtml(bet.original_tipster)}
+                        </select>
+
+                        <div class="grid grid-cols-4 gap-1.5">
+                            <button type="button" onclick="updateStatus('${bet.id}', 'won')" class="py-1.5 rounded-xl font-black text-xs border transition ${isWon ? 'bg-emerald-500 text-slate-950 border-emerald-500' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'}">
+                                ✓ Vinta
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" class="py-1.5 rounded-xl font-black text-xs border transition ${isLost ? 'bg-rose-500 text-white border-rose-500' : 'bg-rose-500/10 text-rose-400 border-rose-500/30'}">
+                                ✕ Persa
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'void')" class="py-1.5 rounded-xl font-bold text-xs border transition ${isVoid ? 'bg-amber-500 text-slate-950 border-amber-500' : 'bg-amber-500/10 text-amber-400 border-amber-500/30'}">
+                                Void
+                            </button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'pending')" class="py-1.5 rounded-xl font-bold text-xs border transition ${isPending ? 'bg-slate-700 text-white border-slate-600' : 'bg-slate-800/60 text-slate-400 border-slate-700'}">
+                                In Corso
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function renderTable(betsToDisplay) {
+            const tbody = document.getElementById('bets-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (betsToDisplay.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 font-medium text-xs">Nessun pronostico trovato.</td></tr>`;
+                return;
+            }
+
+            betsToDisplay.forEach(bet => {
+                const tr = document.createElement('tr');
+                let rowClass = "row-pending transition";
+                let statusControlHtml = '';
+
+                if (bet.status === 'pending') {
+                    statusControlHtml = `
+                        <div class="flex items-center gap-1.5 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">IN CORSO</span>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'won')" class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 font-black text-xs border border-emerald-500/40">✓ V</button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'lost')" class="px-2.5 py-1 rounded bg-rose-500/20 text-rose-400 font-black text-xs border border-emerald-500/40">✕ P</button>
+                            <button type="button" onclick="updateStatus('${bet.id}', 'void')" class="px-1.5 py-1 rounded bg-amber-500/10 text-amber-400 font-bold text-[10px] border border-amber-500/20">Void</button>
+                        </div>
+                    `;
+                } else {
+                    let badge = bet.status === 'won'
+                        ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">VINTA</span>'
+                        : (bet.status === 'lost'
+                            ? '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-500/20 text-rose-400 border border-emerald-500/30">PERSA</span>'
+                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-emerald-500/30">VOID</span>');
+                    
+                    rowClass = bet.status === 'won' ? "row-won" : (bet.status === 'lost' ? "row-lost" : "");
+
+                    statusControlHtml = `
+                        <div class="flex items-center gap-1.5 whitespace-nowrap">
+                            ${badge}
+                            <select onchange="updateStatus('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1 py-0.5 text-[11px] text-slate-400">
+                                <option value="won" ${bet.status === 'won' ? 'selected' : ''}>Vinta</option>
+                                <option value="lost" ${bet.status === 'lost' ? 'selected' : ''}>Persa</option>
+                                <option value="pending" ${bet.status === 'pending' ? 'selected' : ''}>Riapri</option>
+                                <option value="void" ${bet.status === 'void' ? 'selected' : ''}>Void</option>
+                            </select>
+                        </div>
+                    `;
+                }
+
+                let submatchesHtml = '';
+                let toggleBtnHtml = '';
+                if (bet.match_name.includes('/')) {
+                    const subList = bet.match_name.split('/').map(s => s.trim()).filter(Boolean);
+                    toggleBtnHtml = `
+                        <button type="button" id="admin-btn-${bet.id}" onclick="toggleAdminSubmatches('${bet.id}')" class="text-[9px] font-bold text-emerald-400 py-0.5 px-1.5 rounded bg-emerald-500/10 border border-emerald-500/20 mt-1 block">
+                            Dettagli Match ▼
+                        </button>
+                    `;
+                    submatchesHtml = `
+                        <div id="admin-submatches-${bet.id}" class="hidden space-y-1 mt-1.5 p-1.5 bg-slate-950 rounded border border-slate-800">
+                            ${subList.map((m, idx) => `
+                                <div class="text-[10px] text-slate-300 flex items-center justify-between gap-2 border-b border-slate-800/60 pb-0.5 last:border-none">
+                                    <span>${idx+1}. ${m}</span>
+                                    <span class="text-[8px] text-emerald-400 font-mono">E${idx+1}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                let tgColumnHtml = `
+                    <div class="flex items-center gap-1 justify-center">
+                        <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
+                        <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a All-Inclusive" class="text-[10px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
+                        <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[10px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
+                    </div>
+                `;
+
+                tr.className = rowClass;
+                tr.innerHTML = `
+                    <td class="py-2.5 px-3 text-slate-400 whitespace-nowrap font-mono text-[11px]">${bet.event_date}</td>
+                    <td class="py-2.5 px-3 font-bold text-white min-w-[200px]">
+                        <div>${bet.match_name}</div>
+                        <div class="text-[9px] text-slate-500 font-normal">${bet.league}</div>
+                        ${toggleBtnHtml}
+                        ${submatchesHtml}
+                    </td>
+                    <td class="py-2.5 px-3 min-w-[150px]">
+                        <div class="font-bold text-emerald-400 text-xs">${bet.prediction}</div>
+                        <div class="text-[9px] text-slate-400">${bet.market}</div>
+                    </td>
+                    <td class="py-2.5 px-3 whitespace-nowrap">
+                        <span class="font-bold text-white font-mono">${parseFloat(bet.odds).toFixed(2)}</span>
+                        <span class="text-slate-500 text-[10px] font-mono">(${bet.stake.toFixed(1)}u)</span>
+                    </td>
+                    <td class="py-2.5 px-3 whitespace-nowrap">
+                        <select onchange="updateBetTipster('${bet.id}', this.value)" class="bg-slate-950 border border-slate-800 rounded px-1.5 py-1 text-[10px] text-slate-300 font-medium">
+                            ${getTipsterOptionsHtml(bet.original_tipster)}
+                        </select>
+                    </td>
+                    <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                        <button type="button" onclick="togglePublish('${bet.id}')" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
+                            ${bet.is_published ? '★ Vetrina' : 'Interno'}
+                        </button>
+                    </td>
+                    <td class="py-2.5 px-3">${statusControlHtml}</td>
+                    <td class="py-2.5 px-3 text-center whitespace-nowrap">${tgColumnHtml}</td>
+                    <td class="py-2.5 px-3 text-right whitespace-nowrap">
+                        <div class="flex items-center justify-end gap-1">
+                            <button type="button" onclick="openEditBetModal('${bet.id}')" title="Modifica rapida" class="p-1 rounded bg-slate-800 text-blue-400 hover:bg-slate-700">
+                                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button type="button" onclick="deleteBet('${bet.id}')" class="p-1 rounded text-rose-400 hover:bg-rose-500/10">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        function emergencyResetUI() {
+            localStorage.removeItem(CONFIRMED_CONFLICTS_KEY);
+            sessionStorage.clear();
+            document.body.style.overflow = 'auto';
+            alert("Reset di emergenza completato! La pagina verrà ricaricata.");
+            location.reload();
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            lucide.createIcons();
+            loadGitHubSettings();
+            const bets = loadAllBets();
+            initAdminServiceStartDate(bets);
+            await checkAdminSession();
+            await fetchUsersFromGitHubAutomatic();
+        });
+    </script>
+
+    <!-- PULSANTE SOS FISSO PROTETTO (VISIBILE SOLO SE AUTENTICATO COME ADMIN) -->
+    <button type="button" onclick="emergencyResetUI()" id="admin-sos-button" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 2147483647; background: #dc2626; color: white; border: 3px solid #ffffff; border-radius: 50%; width: 55px; height: 55px; font-weight: bold; box-shadow: 0 6px 20px rgba(0,0,0,0.8); align-items: center; justify-content: center; font-size: 13px; cursor: pointer;" title="Reset di Emergenza SOS">
+        SOS
+    </button>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem(ADMIN_AUTH_SESSION_KEY) === "true" || localStorage.getItem('atmbet_is_admin') === 'true') {
+                const sosBtn = document.getElementById('admin-sos-button');
+                if (sosBtn) sosBtn.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>
