@@ -83,45 +83,65 @@
                 <p class="text-xs text-slate-400 mt-1" data-i18n="auth_subtitle">Accesso rapido verificato per gli abbonati della piattaforma.</p>
             </div>
 
-            <!-- Form di Accesso con Email e Username Telegram -->
-            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-                
-                <!-- Email o Password Admin -->
+            <!-- Schede Accedi / Registrati -->
+            <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 mb-4">
+                <button type="button" id="tab-login" onclick="setMode('login')" class="text-xs font-bold py-2 rounded-lg transition"><span data-i18n="auth_tab_login">Accedi</span></button>
+                <button type="button" id="tab-signup" onclick="setMode('signup')" class="text-xs font-bold py-2 rounded-lg transition"><span data-i18n="auth_tab_signup">Registrati</span></button>
+            </div>
+
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4" novalidate>
+
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="email_label">Indirizzo Email o Password Admin</label>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="auth_email_label">Indirizzo email</label>
                     <div class="relative">
                         <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                        <input type="text" id="user-email" required data-i18n-placeholder="email_placeholder" placeholder="tua@email.com o Password Admin"
+                        <input type="email" id="user-email" autocomplete="email" inputmode="email" data-i18n-placeholder="auth_email_ph" placeholder="tua@email.com"
                             class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                     </div>
                 </div>
 
-                <!-- Username Telegram -->
                 <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="telegram_label">Tua Username Telegram</label>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="auth_pwd_label">Password</label>
                     <div class="relative">
-                        <i data-lucide="send" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                        <input type="text" id="user-telegram-handle" required data-i18n-placeholder="telegram_placeholder" placeholder="@TuaUsername"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition font-mono">
+                        <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input type="password" id="user-password" autocomplete="current-password" data-i18n-placeholder="auth_pwd_ph" placeholder="Almeno 8 caratteri"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
                     </div>
                 </div>
 
-                <!-- Istruzioni Chiare sotto i campi -->
-                <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
-                    <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
-                    <span data-i18n="info_text">
-                        Inserisci l'<strong>indirizzo email</strong> utilizzato su Stripe e la tua <strong>username Telegram</strong>. Il sistema riconoscerà automaticamente la tua licenza attiva.
-                    </span>
+                <div id="signup-only" class="hidden">
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="telegram_label">Tua Username Telegram</label>
+                    <div class="relative">
+                        <i data-lucide="send" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input type="text" id="user-telegram-handle" autocomplete="off" data-i18n-placeholder="telegram_placeholder" placeholder="@TuaUsername"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition">
+                    </div>
                 </div>
 
-                <!-- Messaggio di Errore / Successo -->
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1" data-i18n="auth_code_label">Codice sblocco (facoltativo)</label>
+                    <div class="relative">
+                        <i data-lucide="key-round" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input type="text" id="user-code" autocomplete="off" autocapitalize="characters" data-i18n-placeholder="auth_code_ph" placeholder="Inserisci il codice"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition uppercase">
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400 leading-relaxed flex items-start gap-2">
+                    <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                    <span id="auth-info-text" data-i18n="auth_info_login">Accedi con l'email e la password del tuo account. Il tuo piano viene verificato automaticamente.</span>
+                </div>
+
                 <div id="auth-alert" class="hidden text-xs p-2.5 rounded-lg font-medium text-center"></div>
 
-                <!-- Pulsante Submit -->
-                <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/10 mt-1">
-                    <span data-i18n="submit_btn">Entra nel Cruscotto VIP</span>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 disabled:opacity-60 text-slate-950 font-black text-xs sm:text-sm py-3 px-4 rounded-xl transition duration-150 flex items-center justify-center gap-2">
+                    <span id="auth-submit-label" data-i18n="auth_btn_login">Entra nel Cruscotto</span>
                     <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
+
+                <div class="text-center">
+                    <button type="button" id="auth-forgot" onclick="handleForgot()" class="text-[11px] text-slate-400 hover:text-emerald-400 font-semibold transition"><span data-i18n="auth_forgot">Password dimenticata?</span></button>
+                </div>
             </form>
 
             <!-- Link di supporto se non ha ancora il piano -->
@@ -133,7 +153,7 @@
             </div>
 
             <div class="mt-5 text-center text-[11px] text-slate-500" data-i18n="footer_copy">
-                AtmBet &copy; 2026. Accesso istantaneo sincronizzato con Stripe & GitHub.
+                AtmBet &copy; 2026. Accesso sicuro con account personale.
             </div>
 
         </div>
@@ -164,179 +184,157 @@
         </div>
     </footer>
 
-    <!-- LOGICA AUTENTICAZIONE, ADMIN & MULTILINGUA -->
+    <!-- LOGICA AUTENTICAZIONE (Supabase) & MULTILINGUA -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-config.js"></script>
     <script>
-        const USERS_DB_KEY = 'atmbet_users_accounts';
-        const CURRENT_SESSION_KEY = 'atmbet_active_user_session';
-        const ADMIN_REAL_PASSWORD = "AtmBet2026!";
-
-        // GESTIONE MULTILINGUA (i18n)
         let currentLang = localStorage.getItem('atmbet_lang') || 'it';
+        let currentMode = 'login';
+        let T = {};
+        const tr = (k, fb) => (T && T[k]) || fb;
 
         async function loadTranslations(lang) {
             try {
                 const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
                 if (!response.ok) return;
-                const t = await response.json();
-                
+                T = await response.json();
                 document.querySelectorAll('[data-i18n]').forEach(el => {
                     const key = el.getAttribute('data-i18n');
-                    if (t[key]) el.innerText = t[key];
+                    if (T[key]) el.innerText = T[key];
                 });
-
                 document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                     const key = el.getAttribute('data-i18n-placeholder');
-                    if (t[key]) el.placeholder = t[key];
+                    if (T[key]) el.placeholder = T[key];
                 });
-
                 const selector = document.getElementById('lang-selector');
                 if (selector) selector.value = lang;
-
                 localStorage.setItem('atmbet_lang', lang);
                 currentLang = lang;
+                document.documentElement.lang = lang;
             } catch (e) {
                 console.error("Errore caricamento traduzioni:", e);
             }
         }
 
-        function changeLanguage(lang) {
-            loadTranslations(lang);
+        function changeLanguage(lang) { loadTranslations(lang); }
+
+        function setMode(mode) {
+            currentMode = mode;
+            const on = "text-xs font-bold py-2 rounded-lg transition bg-emerald-500 text-slate-950";
+            const off = "text-xs font-bold py-2 rounded-lg transition text-slate-300 hover:text-white";
+            document.getElementById('tab-login').className = mode === 'login' ? on : off;
+            document.getElementById('tab-signup').className = mode === 'signup' ? on : off;
+            document.getElementById('signup-only').classList.toggle('hidden', mode !== 'signup');
+            document.getElementById('auth-forgot').classList.toggle('hidden', mode !== 'login');
+            document.getElementById('user-password').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
+            const info = document.getElementById('auth-info-text');
+            const lab = document.getElementById('auth-submit-label');
+            info.setAttribute('data-i18n', mode === 'login' ? 'auth_info_login' : 'auth_info_signup');
+            lab.setAttribute('data-i18n', mode === 'login' ? 'auth_btn_login' : 'auth_btn_signup');
+            info.innerText = tr(mode === 'login' ? 'auth_info_login' : 'auth_info_signup', info.innerText);
+            lab.innerText = tr(mode === 'login' ? 'auth_btn_login' : 'auth_btn_signup', lab.innerText);
+            document.getElementById('auth-alert').classList.add('hidden');
         }
 
-        async function fetchLiveUsers() {
-            try {
-                const res = await fetch('users.json?_t=' + Date.now(), { cache: 'no-store' });
-                if (res.ok) {
-                    const data = await res.json();
-                    if (Array.isArray(data) && data.length > 0) return data;
-                }
-            } catch(e) {}
-
-            try {
-                const localRaw = localStorage.getItem(USERS_DB_KEY);
-                if (localRaw) return JSON.parse(localRaw);
-            } catch(e) {}
-
-            return [];
+        function showAlert(msg, type) {
+            const box = document.getElementById('auth-alert');
+            box.innerText = msg;
+            box.classList.remove('hidden');
+            if (type === 'error') box.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-rose-500/10 text-rose-400 border border-rose-500/30";
+            else if (type === 'info') box.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-blue-500/10 text-blue-400 border border-blue-500/30";
+            else box.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
         }
 
-        function getLocalDateString(d) {
-            const year = d.getFullYear();
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+        function mapError(err) {
+            const m = String((err && err.message) || '').toLowerCase();
+            if (m.includes('invalid login')) return tr('auth_err_invalid', 'Email o password errata.');
+            if (m.includes('not confirmed')) return tr('auth_err_unconfirmed', 'Conferma prima la tua email.');
+            if (m.includes('already registered') || m.includes('already been registered')) return tr('auth_err_exists', 'Esiste già un account con questa email.');
+            if (m.includes('password') && (m.includes('least') || m.includes('weak') || m.includes('short'))) return tr('auth_err_weak', 'Password troppo debole.');
+            if (m.includes('fetch') || m.includes('network')) return tr('auth_err_offline', 'Servizio non raggiungibile.');
+            return tr('auth_err_generic', 'Qualcosa è andato storto.');
+        }
+
+        function setBusy(b) {
+            const btn = document.getElementById('auth-submit-btn');
+            btn.disabled = b;
+        }
+
+        async function redeemIfAny() {
+            const code = document.getElementById('user-code').value.trim();
+            if (!code) return null;
+            const { data, error } = await window.sb.rpc('redeem_code', { p_code: code });
+            if (error || !data || data.ok !== true) return false;
+            return true;
+        }
+
+        async function finishLogin() {
+            const codeResult = await redeemIfAny();
+            const session = await window.AtmAuth.syncSession();
+            let msg = tr('auth_ok_login', 'Accesso effettuato! Reindirizzamento…');
+            if (codeResult === true) msg = tr('auth_code_ok', 'Codice attivato!') + ' ' + msg;
+            if (codeResult === false) { showAlert(tr('auth_code_bad', 'Codice non valido o già usato.'), 'error'); await new Promise(r => setTimeout(r, 1800)); }
+            else showAlert(msg, 'success');
+            const isStaff = session && (session.role === 'admin' || session.role === 'gestore');
+            setTimeout(() => { window.location.href = isStaff ? 'admin.html' : 'index.html'; }, 700);
         }
 
         async function handleAuthSubmit(e) {
             e.preventDefault();
-            const emailInput = document.getElementById('user-email').value.trim();
-            const emailLower = emailInput.toLowerCase();
-            const telegramInput = document.getElementById('user-telegram-handle').value.trim();
-
-            if (!emailInput || !telegramInput) {
-                showAlert("Inserisci sia l'email (o password admin) che la username Telegram.", "error");
-                return;
+            if (!window.sb) { showAlert(tr('auth_err_offline', 'Servizio non raggiungibile.'), 'error'); return; }
+            const email = document.getElementById('user-email').value.trim().toLowerCase();
+            const password = document.getElementById('user-password').value;
+            const telegram = document.getElementById('user-telegram-handle').value.trim();
+            if (!email || !password) { showAlert(tr('auth_err_fields', 'Inserisci email e password.'), 'error'); return; }
+            if (currentMode === 'signup') {
+                if (password.length < 8) { showAlert(tr('auth_err_weak', 'Password troppo debole.'), 'error'); return; }
+                if (!telegram) { showAlert(tr('auth_err_telegram', 'Inserisci la tua username Telegram.'), 'error'); return; }
             }
-
-            // 1. CONTROLLO ADMIN PRIORITARIO CASE-INSENSITIVE
-            if (emailInput === ADMIN_REAL_PASSWORD || emailLower === "admin@atmbet.local" || emailInput.toLowerCase() === "atmbet2026!") {
-                showAlert("Accesso Amministratore autorizzato! Apertura console...", "success");
-                
-                sessionStorage.setItem("atmbet_admin_authenticated", "true");
-                localStorage.setItem("atmbet_is_admin", "true");
-
-                const adminSession = {
-                    id: 'usr_admin_master',
-                    name: 'Amministratore',
-                    email: 'admin@atmbet.local',
-                    telegram_username: telegramInput,
-                    role: 'admin',
-                    plan: 'all_inclusive',
-                    expires_at: '2099-12-31',
-                    credits: 999,
-                    unlocked_bets: []
-                };
-                localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(adminSession));
-
-                setTimeout(() => {
-                    window.location.href = 'admin.html';
-                }, 600);
-                return;
-            }
-
-            // 2. VERIFICA ABBONATO NEL DATABASE
-            showAlert("Verifica abbonamento in corso...", "info");
-
-            const users = await fetchLiveUsers();
-            const todayStr = getLocalDateString(new Date());
-
-            let user = users.find(u => {
-                const uEmail = (u.email || u.identifier || '').trim().toLowerCase();
-                const uCode = (u.access_code || u.code || '').trim().toUpperCase();
-                return uEmail === emailLower || uCode === emailLower;
-            });
-
-            // SE L'UTENTE NON ESISTE, BLOCCA L'ACCESSO RIGOROSAMENTE
-            if (!user) {
-                showAlert("Email o codice abbonamento non trovato nel sistema. Verifica i dati inseriti.", "error");
-                return;
-            }
-
-            const exp = user.expires_at || user.expiration || user.plan_expires;
-            if (exp && exp !== '-' && exp < todayStr) {
-                showAlert("Il tuo abbonamento è scaduto il " + exp + ". Rinnovalo per continuare.", "error");
-                return;
-            }
-
-            let mappedPlan = 'all_inclusive';
-            if (user.plan === 'pure') mappedPlan = 'pure';
-            else if (user.plan === 'full' || user.plan === 'all_inclusive') mappedPlan = 'all_inclusive';
-            else if (user.plan === 'credits') mappedPlan = 'credits';
-            else if (user.plan === 'trial' || user.plan === 'trial_vip') mappedPlan = 'trial_vip';
-
-            const trackedRefCode = localStorage.getItem('atmbet_active_ref_code') || '';
-            if (!user.ref_code && trackedRefCode) {
-                user.ref_code = trackedRefCode;
-                localStorage.setItem(USERS_DB_KEY, JSON.stringify(users));
-            }
-
-            const sessionData = {
-                id: user.id || ('usr_' + Date.now()),
-                name: user.name || emailInput.split('@')[0],
-                email: user.email || emailInput,
-                telegram_username: telegramInput,
-                role: user.role || 'user',
-                plan: mappedPlan,
-                ref_code: user.ref_code || trackedRefCode,
-                expires_at: exp || '2099-12-31',
-                credits: user.credits !== undefined ? user.credits : 5,
-                unlocked_bets: user.unlocked_bets || []
-            };
-
-            localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(sessionData));
-
-            showAlert("Abbonamento verificato con successo! Reindirizzamento...", "success");
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 800);
-        }
-
-        function showAlert(msg, type) {
-            const alertBox = document.getElementById('auth-alert');
-            alertBox.innerText = msg;
-            alertBox.classList.remove('hidden');
-            if (type === 'error') {
-                alertBox.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-rose-500/10 text-rose-400 border border-rose-500/30";
-            } else if (type === 'info') {
-                alertBox.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-blue-500/10 text-blue-400 border border-blue-500/30";
-            } else {
-                alertBox.className = "text-xs p-2.5 rounded-lg font-medium text-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+            setBusy(true);
+            showAlert(tr('auth_wait', 'Attendi…'), 'info');
+            try {
+                if (currentMode === 'signup') {
+                    const { data, error } = await window.sb.auth.signUp({
+                        email, password,
+                        options: { data: { telegram_username: telegram, name: email.split('@')[0] }, emailRedirectTo: window.location.origin + '/auth.html' }
+                    });
+                    if (error) { showAlert(mapError(error), 'error'); return; }
+                    if (data && data.user && data.user.identities && data.user.identities.length === 0) { showAlert(tr('auth_err_exists', 'Esiste già un account con questa email.'), 'error'); return; }
+                    if (data && data.session) { await finishLogin(); return; }
+                    showAlert(tr('auth_ok_check_email', 'Account creato! Controlla la tua email.'), 'success');
+                    setTimeout(() => setMode('login'), 300);
+                } else {
+                    const { error } = await window.sb.auth.signInWithPassword({ email, password });
+                    if (error) { showAlert(mapError(error), 'error'); return; }
+                    await finishLogin();
+                }
+            } catch (err) {
+                showAlert(mapError(err), 'error');
+            } finally {
+                setBusy(false);
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        async function handleForgot() {
+            if (!window.sb) return;
+            const email = document.getElementById('user-email').value.trim().toLowerCase();
+            if (!email) { showAlert(tr('auth_need_email', 'Scrivi prima la tua email.'), 'error'); return; }
+            try {
+                const { error } = await window.sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/auth.html' });
+                if (error) { showAlert(mapError(error), 'error'); return; }
+                showAlert(tr('auth_ok_reset', 'Ti abbiamo inviato un link per reimpostare la password.'), 'success');
+            } catch (err) { showAlert(mapError(err), 'error'); }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            setMode('login');
+            loadTranslations(currentLang).then(() => setMode(currentMode));
             lucide.createIcons();
-            loadTranslations(currentLang);
+            // Se sei gia dentro, vai direttamente all'area giusta
+            if (window.sb) {
+                const s = await window.AtmAuth.syncSession();
+                if (s) window.location.href = (s.role === 'admin' || s.role === 'gestore') ? 'admin.html' : 'index.html';
+            }
         });
     </script>
 </body>
