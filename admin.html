@@ -1051,6 +1051,7 @@
 
         function savePureSelectedTipsters(list) {
             localStorage.setItem(PURE_TIPSTERS_KEY, JSON.stringify(list));
+            pushSetting('pure_tipsters', list);
             renderTipstersSelectors();
             syncBetsToGitHub(loadAllBets());
         }
@@ -1069,6 +1070,7 @@
 
         function saveFullSelectedTipsters(list) {
             localStorage.setItem(FULL_TIPSTERS_KEY, JSON.stringify(list));
+            pushSetting('full_tipsters', list);
             renderTipstersSelectors();
         }
 
@@ -1626,7 +1628,8 @@
                 channel_free: document.getElementById('tg_channel_free') ? document.getElementById('tg_channel_free').value.trim() : ''
             };
             localStorage.setItem(TG_CONF_KEY, JSON.stringify(conf));
-            alert("Configurazione Telegram salvata nel browser!");
+            pushSetting('telegram_config', conf);
+            alert("Configurazione Telegram salvata sul server (visibile solo a te)!");
         }
 
         async function sendTelegramMessage(token, chatId, text) {
@@ -2076,7 +2079,7 @@
             const btnAll = document.getElementById('btn-filter-all');
             if (btnAll) btnAll.classList.add('filter-btn-active');
             
-            syncBetsFromGitHubSilent().then(() => {
+            loadSettingsFromServer().then(() => syncBetsFromGitHubSilent()).then(() => {
                 renderDashboard();
             });
             
@@ -2334,6 +2337,38 @@
             }
         }
 
+        // ===== IMPOSTAZIONI SUL SERVER (Telegram, liste tipster): solo admin, non piu nel browser =====
+        const SERVER_SETTINGS = { telegram_config: TG_CONF_KEY, pure_tipsters: PURE_TIPSTERS_KEY, full_tipsters: FULL_TIPSTERS_KEY };
+
+        async function pushSetting(key, value) {
+            if (!window.sb) return;
+            try {
+                const { error } = await window.sb.from('app_settings').upsert({ key, value });
+                if (error) console.warn('[AtmBet] impostazione non salvata', key, error.message);
+            } catch (e) { console.warn('[AtmBet] impostazione non salvata', key, e); }
+        }
+
+        async function loadSettingsFromServer() {
+            if (!window.sb) return;
+            try {
+                const { data, error } = await window.sb.from('app_settings').select('*');
+                if (error) throw error;
+                const remote = {};
+                (data || []).forEach(r => { remote[r.key] = r.value; });
+                for (const [key, lsKey] of Object.entries(SERVER_SETTINGS)) {
+                    if (remote[key] !== undefined && remote[key] !== null && Object.keys(remote[key]).length !== 0) {
+                        localStorage.setItem(lsKey, JSON.stringify(remote[key]));          // il server vince
+                    } else {
+                        // prima volta: se questo browser ha gia dei valori, li carico sul server
+                        const raw = localStorage.getItem(lsKey);
+                        if (raw) { try { await pushSetting(key, JSON.parse(raw)); } catch (e) {} }
+                    }
+                }
+                loadTelegramConfig();
+                renderTipstersSelectors();
+            } catch (e) { console.warn('[AtmBet] impostazioni dal server', e); }
+        }
+
         // ===== SINCRONIZZAZIONE PRONOSTICI CON SUPABASE =====
         window.__betSnap = {};
         window.__betSnapReady = false;
@@ -2381,7 +2416,14 @@
 
         function applyRemoteBetsLocally(rows) {
             const snap = {};
-            rows.forEach(r => { snap[r.id] = JSON.stringify(betToRow(r)); });
+            rows.forEach(r => {
+                snap[r.id] = JSON.stringify({
+                    id: String(r.id), event_date: String(r.event_date || ''), match_name: String(r.match_name || 'Evento'),
+                    league: r.league || 'Generale', market: r.market || 'Mercato', prediction: r.prediction || '-',
+                    original_tipster: r.original_tipster, odds: Math.round(Number(r.odds) * 100) / 100, stake: Math.round(Number(r.stake) * 100) / 100,
+                    status: r.status, is_pure: r.is_pure === true, is_published: r.is_published !== false, tg_sent: r.tg_sent === true
+                });
+            });
             window.__betSnap = snap;
             const local = rows.map(r => ({
                 id: r.id, event_date: r.event_date, match_name: r.match_name, league: r.league, market: r.market,
