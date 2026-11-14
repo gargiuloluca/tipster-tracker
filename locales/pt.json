@@ -406,7 +406,7 @@
   "auth_code_label": "Código de desbloqueio (opcional)",
   "auth_code_ph": "Introduz o teu código",
   "auth_info_login": "Entra com o email e a palavra-passe da tua conta. O teu plano é verificado automaticamente.",
-  "auth_info_signup": "Cria a tua conta. Usa o mesmo email do pagamento Stripe para ativar o plano. Se tens um código, introduz-o abaixo.",
+  "auth_info_signup": "Cria a tua conta. Após a compra receberás um código por email: introduz-o abaixo, ou mais tarde na área reservada.",
   "auth_btn_login": "Entrar no painel",
   "auth_btn_signup": "Criar conta",
   "auth_forgot": "Esqueceste a palavra-passe?",

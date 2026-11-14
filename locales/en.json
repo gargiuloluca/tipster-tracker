@@ -406,7 +406,7 @@
   "auth_code_label": "Unlock code (optional)",
   "auth_code_ph": "Enter your code",
   "auth_info_login": "Log in with your account email and password. Your plan is verified automatically.",
-  "auth_info_signup": "Create your account. Use the same email as your Stripe payment so your plan is attached to it. If you have a code, enter it below.",
+  "auth_info_signup": "Create your account. After purchase you will receive a code by email: enter it below, or later from your account area.",
   "auth_btn_login": "Enter the dashboard",
   "auth_btn_signup": "Create account",
   "auth_forgot": "Forgot your password?",

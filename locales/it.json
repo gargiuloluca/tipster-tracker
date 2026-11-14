@@ -406,7 +406,7 @@
   "auth_code_label": "Codice sblocco (facoltativo)",
   "auth_code_ph": "Inserisci il codice",
   "auth_info_login": "Accedi con l'email e la password del tuo account. Il tuo piano viene verificato automaticamente.",
-  "auth_info_signup": "Crea il tuo account. Usa la stessa email del pagamento Stripe: il piano si attiva sul tuo account. Se hai un codice, inseriscilo qui sotto.",
+  "auth_info_signup": "Crea il tuo account. Dopo l'acquisto riceverai un codice via email: inseriscilo qui sotto, oppure più tardi dall'area riservata.",
   "auth_btn_login": "Entra nel Cruscotto",
   "auth_btn_signup": "Crea account",
   "auth_forgot": "Password dimenticata?",

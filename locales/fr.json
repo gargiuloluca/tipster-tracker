@@ -406,7 +406,7 @@
   "auth_code_label": "Code de déblocage (facultatif)",
   "auth_code_ph": "Saisissez votre code",
   "auth_info_login": "Connectez-vous avec l'e-mail et le mot de passe de votre compte. Votre offre est vérifiée automatiquement.",
-  "auth_info_signup": "Créez votre compte. Utilisez le même e-mail que pour le paiement Stripe afin d'activer votre offre. Si vous avez un code, saisissez-le ci-dessous.",
+  "auth_info_signup": "Créez votre compte. Après l'achat, vous recevrez un code par e-mail : saisissez-le ci-dessous, ou plus tard depuis l'espace réservé.",
   "auth_btn_login": "Accéder au tableau de bord",
   "auth_btn_signup": "Créer un compte",
   "auth_forgot": "Mot de passe oublié ?",

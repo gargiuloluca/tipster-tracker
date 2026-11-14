@@ -406,7 +406,7 @@
   "auth_code_label": "Freischaltcode (optional)",
   "auth_code_ph": "Code eingeben",
   "auth_info_login": "Melde dich mit E-Mail und Passwort deines Kontos an. Dein Tarif wird automatisch geprüft.",
-  "auth_info_signup": "Erstelle dein Konto. Nutze dieselbe E-Mail wie bei der Stripe-Zahlung, damit dein Tarif aktiviert wird. Hast du einen Code, gib ihn unten ein.",
+  "auth_info_signup": "Erstelle dein Konto. Nach dem Kauf erhältst du einen Code per E-Mail: gib ihn unten ein oder später im Mitgliederbereich.",
   "auth_btn_login": "Zum Dashboard",
   "auth_btn_signup": "Konto erstellen",
   "auth_forgot": "Passwort vergessen?",
