@@ -1486,7 +1486,9 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="py-2 px-3"><div class="font-bold text-white">${__escHtml(c.name)} <span class="font-mono text-amber-400">${__escHtml(c.code)}</span> <span class="text-slate-500 font-normal">${c.commission_pct}%</span></div>
-                            <div class="text-[9px] text-slate-500 font-mono">${__escHtml(c.email || '')}${c.user_id ? '' : ' · non ancora registrato'}</div></td>
+                            <div class="text-[9px] text-slate-500 font-mono">${__escHtml(c.email || '')}${c.user_id ? '' : ' · non ancora registrato'}</div>
+                            <div class="flex items-center gap-1.5 mt-1"><span class="text-[9px] text-blue-400 font-mono">atmbetofficial.com/?ref=${__escHtml(c.code)}</span>
+                            <button type="button" data-code="${__escHtml(c.code)}" onclick="copyCreatorLink(this.dataset.code)" class="text-[9px] bg-slate-800 hover:bg-slate-700 text-slate-200 px-1.5 py-0.5 rounded">Copia link</button></div></td>
                         <td class="py-2 px-3 text-center font-mono">${signups}</td>
                         <td class="py-2 px-3 text-center font-mono">${c.sales}</td>
                         <td class="py-2 px-3 text-right font-mono">${__eur(c.revenue)}</td>
@@ -1503,6 +1505,12 @@
                     (window.__creators || []).map(c => `<option value="${__escHtml(c.code)}">${__escHtml(c.code)} (${__escHtml(c.name)})</option>`).join('');
                 sel.value = cur;
             }
+        }
+
+        function copyCreatorLink(code) {
+            const link = 'https://atmbetofficial.com/?ref=' + code;
+            if (navigator.clipboard) navigator.clipboard.writeText(link).then(() => alert('Link copiato:\n' + link), () => prompt('Copia il link:', link));
+            else prompt('Copia il link:', link);
         }
 
         async function markCreatorPaid(code) {
