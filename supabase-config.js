@@ -58,6 +58,36 @@
         sessionStorage.removeItem('atmbet_admin_authenticated');
     }
 
+
+    // ---- Creator / referral: salva ?ref= per 30 giorni e lo passa a Stripe ----
+    var REF_KEY = 'atmbet_ref';
+    function cleanRef(v) { v = String(v || '').toUpperCase(); return /^[A-Z0-9_-]{3,32}$/.test(v) ? v : ''; }
+    function getRef() {
+        try {
+            var o = JSON.parse(localStorage.getItem(REF_KEY) || 'null');
+            if (o && o.code && o.exp > Date.now()) return cleanRef(o.code);
+        } catch (e) {}
+        return '';
+    }
+    try {
+        var q = cleanRef(new URLSearchParams(window.location.search).get('ref'));
+        if (q) localStorage.setItem(REF_KEY, JSON.stringify({ code: q, exp: Date.now() + 30 * 86400000 }));
+    } catch (e) {}
+    function tagStripeLinks() {
+        var r = getRef();
+        if (!r) return;
+        document.querySelectorAll('a[href^="https://buy.stripe.com/"]').forEach(function (a) {
+            try {
+                var u = new URL(a.href);
+                u.searchParams.set('client_reference_id', r);
+                a.href = u.toString();
+            } catch (e) {}
+        });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tagStripeLinks);
+    else tagStripeLinks();
+    window.AtmRef = { get: getRef, tagStripeLinks: tagStripeLinks };
+
     window.sb = client;
     window.AtmAuth = { syncSession, signOut, toLegacySession, todayRome };
 })();

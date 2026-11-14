@@ -335,7 +335,7 @@
                 if (currentMode === 'signup') {
                     const { data, error } = await window.sb.auth.signUp({
                         email, password,
-                        options: { data: { telegram_username: telegram, name: email.split('@')[0] }, emailRedirectTo: window.location.origin + '/auth.html' }
+                        options: { data: { telegram_username: telegram, name: email.split('@')[0], ref_code: (window.AtmRef ? window.AtmRef.get() : '') }, emailRedirectTo: window.location.origin + '/auth.html' }
                     });
                     if (error) { showAlert(mapError(error), 'error'); return; }
                     if (data && data.user && data.user.identities && data.user.identities.length === 0) { showAlert(tr('auth_err_exists', 'Esiste già un account con questa email.'), 'error'); return; }

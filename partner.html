@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="supabase-config.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -88,9 +90,11 @@
                 <p class="text-xs text-slate-400 mt-1" data-i18n="partner_modal_desc">Inserisci il tuo codice creator assegnato per visualizzare le statistiche.</p>
             </div>
             <form onsubmit="verifyPartnerLogin(event)" class="space-y-3">
-                <input type="text" id="partner-code-input" required data-i18n-placeholder="partner_modal_ph" placeholder="ES. MARIO50 / TOWN10" autofocus
-                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white text-center tracking-widest uppercase placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono">
-                <div id="partner-auth-error" class="text-[11px] font-bold text-rose-400 hidden" data-i18n="partner_modal_error">Codice partner non riconosciuto.</div>
+                <input type="email" id="partner-email-input" required autocomplete="email" data-i18n-placeholder="partner_email_ph" placeholder="Email" autofocus
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white text-center placeholder-slate-600 focus:outline-none focus:border-emerald-500">
+                <input type="password" id="partner-pwd-input" required autocomplete="current-password" data-i18n-placeholder="partner_pwd_ph" placeholder="Password"
+                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white text-center placeholder-slate-600 focus:outline-none focus:border-emerald-500">
+                <div id="partner-auth-error" class="text-[11px] font-bold text-rose-400 hidden" data-i18n="partner_modal_error">Accesso non riuscito.</div>
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20" data-i18n="partner_modal_btn">
                     Accedi alla Dashboard
                 </button>
@@ -134,9 +138,9 @@
             </div>
 
             <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg border-l-4 border-l-emerald-500">
-                <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider block" data-i18n="partner_kpi3_title">Il tuo Guadagno (50%)</span>
+                <span class="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider block" data-i18n="partner_kpi3_title">Il tuo Guadagno</span>
                 <div id="partner-stat-earnings" class="text-2xl font-mono font-black text-emerald-400 mt-1">0.00 €</div>
-                <span class="text-[10px] text-emerald-400/80 font-bold" data-i18n="partner_kpi3_sub">Commissione spettante</span>
+                <span class="text-[10px] text-emerald-400/80 font-bold" id="partner-stat-due"></span>
             </div>
         </div>
 
@@ -175,14 +179,15 @@
         <section class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-3">
             <h2 class="text-sm font-bold text-white" data-i18n="partner_table_title">Storico Conversioni Registrate</h2>
             <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
-                <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[600px]">
+                <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[680px]">
                     <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
                         <tr>
                             <th class="py-2.5 px-3" data-i18n="partner_th_date">Data Attivazione</th>
                             <th class="py-2.5 px-3" data-i18n="partner_th_user">Utente / Riferimento</th>
                             <th class="py-2.5 px-3" data-i18n="partner_th_plan">Piano Sottoscritto</th>
                             <th class="py-2.5 px-3 text-right" data-i18n="partner_th_value">Valore Abbonamento</th>
-                            <th class="py-2.5 px-3 text-right text-emerald-400" data-i18n="partner_th_commission">Tua Commissione (50%)</th>
+                            <th class="py-2.5 px-3 text-right text-emerald-400" data-i18n="partner_th_commission">Tua Commissione</th>
+                            <th class="py-2.5 px-3 text-center" data-i18n="partner_th_status">Stato</th>
                         </tr>
                     </thead>
                     <tbody id="partner-conversions-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
@@ -199,9 +204,6 @@
 
     <!-- SCRIPT GESTIONE PARTNER HUB E MULTILINGUA -->
     <script>
-        const CURRENT_PARTNER_SESSION = 'atmbet_active_partner_session';
-        const USERS_LOCAL_KEY = 'atmbet_users_accounts';
-        const AUTHORIZED_PARTNERS_KEY = 'atmbet_authorized_partners_list';
 
         // GESTIONE MULTILINGUA (i18n)
         let currentLang = localStorage.getItem('atmbet_lang') || 'it';
@@ -211,6 +213,7 @@
                 const response = await fetch(`locales/${lang}.json?_t=` + Date.now());
                 if (!response.ok) return;
                 const t = await response.json();
+                T = t;
                 
                 document.querySelectorAll('[data-i18n]').forEach(el => {
                     const key = el.getAttribute('data-i18n');
@@ -227,6 +230,7 @@
 
                 localStorage.setItem('atmbet_lang', lang);
                 currentLang = lang;
+                if (lastDash) renderDashboard(lastDash.sum, lastDash.rows);
             } catch (e) {
                 console.error("Errore caricamento traduzioni:", e);
             }
@@ -236,127 +240,79 @@
             loadTranslations(lang);
         }
 
-        function getAuthorizedPartners() {
-            try {
-                const raw = localStorage.getItem(AUTHORIZED_PARTNERS_KEY);
-                if (raw) return JSON.parse(raw);
-            } catch(e) {}
-            return {
-                "TEST": { name: "Account di Test" },
-                "MARIO50": { name: "Mario Rossi" },
-                "PROVA10": { name: "Creator di Prova" },
-                "TOWN10": { name: "Luca Bianchi" }
-            };
-        }
+        const eur = (c) => (Number(c || 0) / 100).toLocaleString(currentLang === 'it' ? 'it-IT' : undefined, { style: 'currency', currency: 'EUR' });
+        const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        let T = {};
 
-        function verifyPartnerLogin(e) {
+        async function verifyPartnerLogin(e) {
             e.preventDefault();
-            const code = document.getElementById('partner-code-input').value.trim().toUpperCase();
             const errEl = document.getElementById('partner-auth-error');
-
-            if (!code) return;
-
-            const authorizedPartners = getAuthorizedPartners();
-
-            if (authorizedPartners[code] || code === "TEST") {
-                errEl.classList.add('hidden');
-                const partnerData = {
-                    code: code,
-                    name: authorizedPartners[code] ? authorizedPartners[code].name : "Creator Partner"
-                };
-
-                localStorage.setItem(CURRENT_PARTNER_SESSION, JSON.stringify(partnerData));
-                loadPartnerDashboard(partnerData);
-            } else {
+            errEl.classList.add('hidden');
+            const email = document.getElementById('partner-email-input').value.trim();
+            const pwd = document.getElementById('partner-pwd-input').value;
+            const { error } = await window.sb.auth.signInWithPassword({ email, password: pwd });
+            if (error || !(await showDashboard())) {
+                if (!error) await window.sb.auth.signOut();
                 errEl.classList.remove('hidden');
             }
         }
 
-        function loadPartnerDashboard(partner) {
+        // true se l'account e' collegato a un creator attivo
+        async function showDashboard() {
+            const { data, error } = await window.sb.rpc('partner_summary');
+            if (error || !data) return false;
+            const [{ data: rows }] = await Promise.all([window.sb.from('partner_referrals').select('*').order('created_at', { ascending: false })]);
+            renderDashboard(data, rows || []);
+            return true;
+        }
+
+        let lastDash = null;
+        function renderDashboard(sum, rows) {
+            lastDash = { sum, rows };
             document.getElementById('partner-auth-overlay').classList.add('hidden');
             document.getElementById('partner-main-content').classList.remove('hidden');
-
-            document.getElementById('partner-code-badge').innerText = `Codice: ${partner.code}`;
-            document.getElementById('partner-welcome-title').innerText = `Benvenuto, ${partner.name}`;
-            document.getElementById('display-promo-code').innerText = partner.code;
-            document.getElementById('display-promo-link').innerText = `https://atmbetofficial.com/?ref=${partner.code.toLowerCase()}`;
-
-            let users = [];
-            try {
-                const raw = localStorage.getItem(USERS_LOCAL_KEY);
-                if (raw) users = JSON.parse(raw);
-            } catch(e) {}
-
-            const matchedUsers = users.filter(u => {
-                const ref = (u.ref_code || '').trim().toUpperCase();
-                const email = (u.identifier || u.email || '').toLowerCase();
-                const userId = (u.id || '').toLowerCase();
-                
-                const isTestAccount = email.includes('@partner.atmbet') || userId.startsWith('creator_');
-                
-                return ref === partner.code && !isTestAccount;
-            });
+            document.getElementById('partner-code-badge').innerText = (T.partner_code_lbl || 'Code: ') + sum.code;
+            document.getElementById('partner-welcome-title').innerText = (T.partner_welcome || 'Welcome, ') + sum.name;
+            document.getElementById('display-promo-code').innerText = sum.code;
+            document.getElementById('display-promo-link').innerText = 'https://atmbetofficial.com/?ref=' + sum.code;
+            document.getElementById('partner-stat-uses').innerText = sum.signups;
+            document.getElementById('partner-stat-volume').innerText = eur(sum.revenue_cents);
+            document.getElementById('partner-stat-earnings').innerText = eur(sum.earned_cents);
+            document.getElementById('partner-stat-due').innerText = (T.partner_due_lbl || 'To collect: ') + eur(sum.earned_cents - sum.paid_cents);
 
             const tbody = document.getElementById('partner-conversions-tbody');
-            tbody.innerHTML = '';
-
-            let totalVolume = 0;
-            const planPrices = { 'pure': 39.90, 'all_inclusive': 24.90, 'full': 24.90, 'elite': 24.90, 'credits': 9.90 };
-
-            if (matchedUsers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500 font-medium text-xs">Nessuna conversione a pagamento registrata con questo codice al momento.</td></tr>`;
+            if (!rows.length) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-500 font-medium text-xs">${esc(T.partner_none || 'No sales yet.')}</td></tr>`;
             } else {
-                matchedUsers.forEach(u => {
-                    const plan = (u.plan || 'pure').toLowerCase();
-                    const price = planPrices[plan] || 24.90;
-                    const commission = price * 0.50;
-                    totalVolume += price;
-
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-slate-950/50";
-                    tr.innerHTML = `
-                        <td class="py-2.5 px-3 font-mono text-slate-400">${u.created_at || 'Oggi'}</td>
-                        <td class="py-2.5 px-3 font-bold text-white">${u.identifier || u.email || 'Utente VIP'}</td>
-                        <td class="py-2.5 px-3 uppercase text-amber-400 font-bold">${plan}</td>
-                        <td class="py-2.5 px-3 text-right font-mono">${price.toFixed(2)} €</td>
-                        <td class="py-2.5 px-3 text-right font-mono font-black text-emerald-400">+${commission.toFixed(2)} €</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+                tbody.innerHTML = rows.map(r => `<tr class="hover:bg-slate-950/50">
+                    <td class="py-2.5 px-3 font-mono text-slate-400">${esc(String(r.created_at).slice(0, 10))}</td>
+                    <td class="py-2.5 px-3 font-bold text-white">${esc(r.customer)}</td>
+                    <td class="py-2.5 px-3 uppercase text-amber-400 font-bold">${esc(r.plan)}</td>
+                    <td class="py-2.5 px-3 text-right font-mono">${eur(r.amount_cents)}</td>
+                    <td class="py-2.5 px-3 text-right font-mono font-black text-emerald-400">+${eur(r.commission_cents)}</td>
+                    <td class="py-2.5 px-3 text-center text-[10px] font-bold ${r.status === 'paid' ? 'text-emerald-400' : 'text-slate-400'}">${esc(r.status === 'paid' ? (T.partner_status_paid || 'Paid') : (T.partner_status_pending || 'Pending'))}</td>
+                </tr>`).join('');
             }
-
-            const totalUses = matchedUsers.length;
-            const totalEarnings = totalVolume * 0.50;
-
-            document.getElementById('partner-stat-uses').innerText = totalUses;
-            document.getElementById('partner-stat-volume').innerText = totalVolume.toFixed(2) + ' €';
-            document.getElementById('partner-stat-earnings').innerText = totalEarnings.toFixed(2) + ' €';
-
             lucide.createIcons();
         }
 
-        function logoutPartner() {
-            localStorage.removeItem(CURRENT_PARTNER_SESSION);
+        async function logoutPartner() {
+            try { await window.sb.auth.signOut(); } catch (e) {}
             location.reload();
         }
 
         function copyToClipboard(elementId) {
             const text = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Copiato negli appunti con successo!");
-            });
+            navigator.clipboard.writeText(text).then(() => { alert(T.partner_copied || 'Copied!'); });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             lucide.createIcons();
-            const saved = localStorage.getItem(CURRENT_PARTNER_SESSION);
-            if (saved) {
-                try {
-                    const partner = JSON.parse(saved);
-                    loadPartnerDashboard(partner);
-                } catch(e) {}
-            }
-            loadTranslations(currentLang);
+            await loadTranslations(currentLang);
+            try {
+                const { data } = await window.sb.auth.getSession();
+                if (data && data.session) await showDashboard();
+            } catch (e) {}
         });
     </script>
 </body>

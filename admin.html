@@ -384,16 +384,12 @@
                                 <input type="text" id="new_creator_name" required placeholder="Mario Rossi" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
                             </div>
                             <div>
-                                <label class="block text-slate-400 mb-1 text-[10px]">Piano Associato</label>
-                                <select id="new_creator_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
-                                    <option value="pure" selected>Pure Signal (Consigliato)</option>
-                                    <option value="elite">Cluster Elite</option>
-                                    <option value="full">All-Inclusive</option>
-                                </select>
+                                <label class="block text-slate-400 mb-1 text-[10px]">Email del creator (per il suo accesso all'hub)</label>
+                                <input type="email" id="new_creator_email" required placeholder="creator@email.it" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
                             </div>
                             <div>
-                                <label class="block text-slate-400 mb-1 text-[10px]">Durata Prova (Giorni)</label>
-                                <input type="number" id="new_creator_days" value="7" min="1" max="365" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500 font-mono">
+                                <label class="block text-slate-400 mb-1 text-[10px]">Commissione % (primo acquisto)</label>
+                                <input type="number" id="new_creator_pct" value="50" min="0" max="100" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500 font-mono">
                             </div>
                             <div class="sm:col-span-2 md:col-span-4 flex justify-end gap-2 pt-1">
                                 <button type="button" onclick="toggleAddUserModal()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition">Annulla</button>
@@ -423,6 +419,13 @@
                         </div>
                     </div>
 
+                    <div class="flex items-center gap-2 text-xs">
+                        <label for="usr-ref-filter" class="text-slate-400">Filtra per creator:</label>
+                        <select id="usr-ref-filter" onchange="renderUsersTable()" class="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-amber-500">
+                            <option value="">Tutti gli utenti</option>
+                        </select>
+                    </div>
+
                     <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
                         <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[750px]">
                             <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
@@ -430,6 +433,7 @@
                                     <th class="py-2.5 px-3">Utente</th>
                                     <th class="py-2.5 px-3">Piano</th>
                                     <th class="py-2.5 px-3">Crediti</th>
+                                    <th class="py-2.5 px-3">Creator</th>
                                     <th class="py-2.5 px-3">Telegram</th>
                                     <th class="py-2.5 px-3 text-center">Scadenza</th>
                                     <th class="py-2.5 px-3 text-center">Stato</th>
@@ -438,6 +442,26 @@
                             </thead>
                             <tbody id="users-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
                         </table>
+                    </div>
+
+                    <div class="pt-2">
+                        <h3 class="text-xs font-black text-amber-400 uppercase tracking-wider mb-2">Creator e commissioni</h3>
+                        <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
+                            <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[700px]">
+                                <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
+                                    <tr>
+                                        <th class="py-2.5 px-3">Creator</th>
+                                        <th class="py-2.5 px-3 text-center">Iscritti</th>
+                                        <th class="py-2.5 px-3 text-center">Vendite</th>
+                                        <th class="py-2.5 px-3 text-right">Incassato</th>
+                                        <th class="py-2.5 px-3 text-right">Da pagare</th>
+                                        <th class="py-2.5 px-3 text-right">Gia pagato</th>
+                                        <th class="py-2.5 px-3 text-right">Azioni</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="creators-tbody" class="divide-y divide-slate-800/60 font-medium"></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1320,7 +1344,8 @@
                 credits: p.credits || 0,
                 access_code: String(p.credits || 0),
                 expires_at: p.expires_at || '-',
-                role: p.role
+                role: p.role,
+                ref_code: p.ref_code || ''
             }));
         }
 
@@ -1404,54 +1429,90 @@
             };
         }
 
-        function handleManualCreateCreator(e) {
+        async function handleManualCreateCreator(e) {
             e.preventDefault();
             const code = document.getElementById('new_creator_code').value.trim().toUpperCase();
             const name = document.getElementById('new_creator_name').value.trim();
-            const plan = document.getElementById('new_creator_plan').value;
-            const days = parseInt(document.getElementById('new_creator_days').value) || 7;
-
-            if (!code || !name) return;
-
-            const partners = loadAuthorizedPartnersList();
-            partners[code] = { 
-                name: name,
-                plan: plan,
-                duration_days: days
-            };
-            localStorage.setItem(AUTHORIZED_PARTNERS_KEY, JSON.stringify(partners));
-
-            const expDate = new Date();
-            expDate.setDate(expDate.getDate() + days);
-            const expDateStr = getLocalDateString(expDate);
-
-            const users = loadAllUsers();
-            const existingIdx = users.findIndex(u => (u.access_code || '').trim().toUpperCase() === code);
-            const creatorUserRecord = {
-                id: 'creator_' + Date.now(),
-                identifier: `${code.toLowerCase()}@partner.atmbet`,
-                email: `${code.toLowerCase()}@partner.atmbet`,
-                name: name,
-                plan: plan,
-                access_code: code,
-                ref_code: code,
-                created_at: getLocalDateString(new Date()),
-                expires_at: expDateStr,
-                status: 'active'
-            };
-
-            if (existingIdx >= 0) {
-                users[existingIdx] = Object.assign({}, users[existingIdx], creatorUserRecord);
-            } else {
-                users.unshift(creatorUserRecord);
+            const email = document.getElementById('new_creator_email').value.trim();
+            const pct = parseInt(document.getElementById('new_creator_pct').value, 10);
+            if (!code || !name || !email) return;
+            const form = e.target;
+            const { data, error } = await window.sb.rpc('admin_create_partner', { p_code: code, p_name: name, p_email: email, p_pct: isNaN(pct) ? 50 : pct });
+            if (error || !data || !data.ok) {
+                alert('Creator non salvato: ' + ((data && data.error) || (error && error.message) || 'errore'));
+                return;
             }
-
-            persistUsers(users);
-
-            e.target.reset();
+            form.reset();
             toggleAddUserModal();
-            renderUsersTable();
-            alert(`Creator Partner "${name}" (${code}) salvato e sincronizzato con successo!\nPiano: ${plan.toUpperCase()} | Durata: ${days} giorni\nLink campagna: https://atmbetofficial.com/?ref=${code.toLowerCase()}`);
+            await loadCreators();
+            alert(`Creator "${name}" (${code}) creato.\nLink da dargli: https://atmbetofficial.com/?ref=${code}\n` +
+                (data.linked ? 'Ha gia un account: vede subito il suo hub in partner.html.'
+                              : `Deve registrarsi su AtmBet con l'email ${email}: poi accede al suo hub in partner.html.`));
+        }
+
+        // ===== CREATOR: elenco, statistiche, pagamento commissioni =====
+        window.__creators = [];
+        const __eur = (c) => (Number(c || 0) / 100).toLocaleString('it-IT', { style: 'currency', currency: 'EUR' });
+
+        async function loadCreators() {
+            if (!window.sb) return;
+            try {
+                const [pa, re] = await Promise.all([
+                    window.sb.from('partners').select('*').order('created_at', { ascending: false }),
+                    window.sb.from('referrals').select('partner_code,amount_cents,commission_cents,status')
+                ]);
+                if (pa.error) throw pa.error;
+                if (re.error) throw re.error;
+                window.__creators = (pa.data || []).map(p => {
+                    const rs = (re.data || []).filter(r => r.partner_code === p.code);
+                    return Object.assign({}, p, {
+                        sales: rs.filter(r => r.amount_cents > 0).length,
+                        revenue: rs.reduce((t, r) => t + r.amount_cents, 0),
+                        due: rs.filter(r => r.status === 'pending').reduce((t, r) => t + r.commission_cents, 0),
+                        paid: rs.filter(r => r.status === 'paid').reduce((t, r) => t + r.commission_cents, 0)
+                    });
+                });
+            } catch (e) { console.warn('[AtmBet] creator', e); }
+            renderCreators();
+        }
+
+        function renderCreators() {
+            const tb = document.getElementById('creators-tbody');
+            if (tb) {
+                const list = window.__creators || [];
+                tb.innerHTML = list.length ? '' : '<tr><td colspan="7" class="text-center py-4 text-slate-500 text-xs">Nessun creator.</td></tr>';
+                list.forEach(c => {
+                    const signups = (window.__profiles || []).filter(p => p.ref_code === c.code).length;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="py-2 px-3"><div class="font-bold text-white">${__escHtml(c.name)} <span class="font-mono text-amber-400">${__escHtml(c.code)}</span> <span class="text-slate-500 font-normal">${c.commission_pct}%</span></div>
+                            <div class="text-[9px] text-slate-500 font-mono">${__escHtml(c.email || '')}${c.user_id ? '' : ' · non ancora registrato'}</div></td>
+                        <td class="py-2 px-3 text-center font-mono">${signups}</td>
+                        <td class="py-2 px-3 text-center font-mono">${c.sales}</td>
+                        <td class="py-2 px-3 text-right font-mono">${__eur(c.revenue)}</td>
+                        <td class="py-2 px-3 text-right font-mono font-bold text-amber-400">${__eur(c.due)}</td>
+                        <td class="py-2 px-3 text-right font-mono text-emerald-400">${__eur(c.paid)}</td>
+                        <td class="py-2 px-3 text-right">${c.due > 0 ? `<button type="button" data-code="${__escHtml(c.code)}" onclick="markCreatorPaid(this.dataset.code)" class="text-[10px] bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-2 py-0.5 rounded font-black">Segna pagato</button>` : '<span class="text-slate-600 text-[10px]">-</span>'}</td>`;
+                    tb.appendChild(tr);
+                });
+            }
+            const sel = document.getElementById('usr-ref-filter');
+            if (sel) {
+                const cur = sel.value;
+                sel.innerHTML = '<option value="">Tutti gli utenti</option>' +
+                    (window.__creators || []).map(c => `<option value="${__escHtml(c.code)}">${__escHtml(c.code)} (${__escHtml(c.name)})</option>`).join('');
+                sel.value = cur;
+            }
+        }
+
+        async function markCreatorPaid(code) {
+            const c = (window.__creators || []).find(x => x.code === code);
+            if (!c || !confirm(`Segnare come pagati ${__eur(c.due)} a ${c.name}?`)) return;
+            const { error } = await window.sb.from('referrals')
+                .update({ status: 'paid', paid_at: new Date().toISOString() })
+                .eq('partner_code', code).eq('status', 'pending');
+            if (error) { alert('Errore: ' + error.message); return; }
+            await loadCreators();
         }
 
         async function regenerateUserOneTimeLink(userId) {
@@ -1509,7 +1570,9 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            const users = loadAllUsers();
+            let users = loadAllUsers();
+            const refFilter = (document.getElementById('usr-ref-filter') || {}).value || '';
+            if (refFilter) users = users.filter(u => (u.ref_code || '') === refFilter);
             const todayStr = getLocalDateString(new Date());
 
             let activeCount = 0;
@@ -1517,7 +1580,7 @@
             const planFreq = {};
 
             if (users.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun utente registrato.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-slate-500 font-medium text-xs">Nessun utente registrato.</td></tr>`;
             }
 
             users.forEach(u => {
@@ -1558,6 +1621,7 @@
                     </td>
                     <td class="py-2 px-3">${planBadge}</td>
                     <td class="py-2 px-3 font-mono font-bold text-amber-400 text-[11px] select-all cursor-pointer">${accessCode}</td>
+                    <td class="py-2 px-3 font-mono text-[10px] ${u.ref_code ? 'text-amber-300 font-bold' : 'text-slate-600'}">${u.ref_code ? __escHtml(u.ref_code) : '-'}</td>
                     <td class="py-2 px-3">${linkDisplay}</td>
                     <td class="py-2 px-3 text-center font-mono text-slate-300">${__escHtml(expDate)}</td>
                     <td class="py-2 px-3 text-center">${statusBadge}</td>
@@ -1606,6 +1670,7 @@
                 if (st) st.innerText = 'Server';
             } catch (e) { console.warn('[AtmBet] profili', e); }
             renderUsersTable();
+            loadCreators();
         }
 
         function loadTelegramConfig() {
