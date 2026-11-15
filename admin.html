@@ -1637,6 +1637,8 @@
                     ? `<span class="bg-slate-700/40 text-slate-300 border border-slate-600/50 px-1.5 py-0.5 rounded text-[10px] font-bold">FREE</span>`
                     : userPlan === 'pure' 
                     ? `<span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PURE</span>`
+                    : userPlan === 'trial'
+                    ? `<span class="bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">PROVA</span>`
                     : (userPlan === 'elite' 
                         ? `<span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-1.5 py-0.5 rounded text-[10px] font-bold">ELITE</span>`
                         : `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.2 rounded font-bold">ALL-IN</span>`);
