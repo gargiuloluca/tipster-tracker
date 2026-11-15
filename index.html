@@ -2265,6 +2265,7 @@
                 activeUser.plan === 'pure' || 
                 activeUser.plan === 'all_inclusive' || 
                 activeUser.plan === 'elite' || 
+                activeUser.plan === 'trial_vip' || 
                 (activeUser.credits && activeUser.credits > 0)
             );
 
@@ -2275,11 +2276,14 @@
                     const nameEl = document.getElementById('vip-welcome-name');
                     const descEl = document.getElementById('vip-status-desc');
                     const tgBtn = document.getElementById('vip-direct-tg-btn');
-                    const planBadge = activeUser.plan ? activeUser.plan.toUpperCase() : 'VIP';
+                    const isTrial = activeUser.plan === 'trial_vip';
+                    const planBadge = isTrial ? __t('idx_plan_trial', 'PROVA VIP · SELECTION') : (activeUser.plan ? activeUser.plan.toUpperCase() : 'VIP');
 
                     if (nameEl) nameEl.innerText = __t('idx_vip_area_plan', 'Area Riservata | Piano {plan}', { plan: planBadge });
                     if (descEl) {
-                        descEl.innerText = activeUser.expires_at && activeUser.plan !== 'credits'
+                        descEl.innerText = isTrial
+                            ? __t('idx_trial_desc', "Prova gratuita attiva fino al {date} ({left}). Vedi tutte le Selection d'élite del giorno.", { date: __fmtDate(activeUser.expires_at), left: __leftText(activeUser) })
+                            : activeUser.expires_at && activeUser.plan !== 'credits'
                             ? __t('idx_vip_sub_active', 'Abbonamento attivo fino al {date}. Selezioni pronte per essere giocate.', { date: activeUser.expires_at })
                             : __t('idx_vip_credits_avail', 'Hai {n} crediti operativi disponibili per sbloccare le selezioni.', { n: (activeUser.credits || 0) });
                     }
@@ -2442,7 +2446,23 @@
                         <a href="auth.html" class="flex-1 sm:flex-initial bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5">${__t('nav_login', 'Accedi')}</a>
                     </div>
                 `;
-            } else if (user.plan === 'credits' || user.plan === 'trial_vip') {
+            } else if (user.plan === 'trial_vip') {
+                box.className = "bg-gradient-to-r from-emerald-950/50 via-slate-900 to-slate-950 border border-emerald-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
+                box.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                            <i data-lucide="gift" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-white flex items-center gap-2">${__t('idx_trial_banner_title', '🎁 Prova VIP attiva: AtmBet Selection')}</div>
+                            <p class="text-xs text-slate-400 mt-0.5">${__t('idx_trial_banner_desc', "Hai accesso a tutte le selezioni d'élite del giorno fino al {date} ({left}). Poi puoi scegliere un piano per continuare.", { date: __fmtDate(user.expires_at), left: __leftText(user) })}</p>
+                        </div>
+                    </div>
+                    <a href="#piani" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 shrink-0">
+                        <i data-lucide="gem" class="w-4 h-4"></i> <span>${__t('idx_trial_banner_btn', 'Scegli il tuo piano')}</span>
+                    </a>
+                `;
+            } else if (user.plan === 'credits') {
                 box.className = "bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
                 box.innerHTML = `
                     <div class="flex items-center gap-3">
@@ -2498,6 +2518,8 @@
             const mobileActionContainer = document.getElementById('mobile-auth-actions');
 
             if (!activeUser) {
+                const __old = document.getElementById('mobile-user-info');
+                if (__old) __old.remove();
                 if (container) {
                     container.innerHTML = `
                         <a href="contatti.html" class="text-xs font-semibold text-slate-300 hover:text-white px-1.5 py-1.5 transition hidden sm:flex items-center gap-1">
@@ -2535,6 +2557,9 @@
                 } else if (activeUser.plan === 'all_inclusive') {
                     badgeLabel = '🌐 All-Inclusive';
                     badgeClass = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+                } else if (activeUser.plan === 'trial_vip') {
+                    badgeLabel = __t('idx_badge_trial', '🎁 Prova VIP · Selection');
+                    badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
                 } else if (activeUser.plan === 'credits') {
                     badgeLabel = __t('idx_badge_credits', '🎟️ {n} Crediti', { n: (activeUser.credits || 0) });
                     badgeClass = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
@@ -2568,6 +2593,19 @@
                 }
 
                 if (mobileActionContainer) {
+                    let __info = document.getElementById('mobile-user-info');
+                    if (!__info) {
+                        __info = document.createElement('div');
+                        __info.id = 'mobile-user-info';
+                        mobileActionContainer.parentNode.insertBefore(__info, mobileActionContainer);
+                    }
+                    const __e = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+                    let __extra = '';
+                    if (activeUser.plan === 'trial_vip') __extra = __t('idx_trial_menu', 'Prova fino al {date} · {left}', { date: __fmtDate(activeUser.expires_at), left: __leftText(activeUser) });
+                    else if (activeUser.plan === 'credits') __extra = __t('idx_badge_credits', '🎟️ {n} Crediti', { n: (activeUser.credits || 0) });
+                    else if (activeUser.expires_at && String(activeUser.expires_at).slice(0, 4) !== '2099') __extra = __t('idx_plan_until', 'Attivo fino al {date}', { date: __fmtDate(activeUser.expires_at) });
+                    __info.className = 'pt-3 border-t border-slate-800 flex items-center justify-between gap-2';
+                    __info.innerHTML = `<div class="min-w-0"><div class="text-xs font-bold text-white truncate">${__e(activeUser.name || activeUser.email.split('@')[0])}</div><div class="text-[10px] text-slate-400">${__e(__extra)}</div></div><span class="text-[10px] font-mono px-1.5 py-0.5 rounded border ${badgeClass} font-semibold shrink-0">${__e(badgeLabel)}</span>`;
                     mobileActionContainer.innerHTML = `
                         <a href="contatti.html" class="text-center bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-bold py-2.5 rounded-xl border border-slate-800 flex items-center justify-center gap-1">
                             <i data-lucide="headset" class="w-3.5 h-3.5 text-emerald-400"></i> <span data-i18n="nav_contacts">Contatti</span>
@@ -2606,7 +2644,7 @@
                 return { canView: true };
             }
 
-            if (user.plan === 'pure') {
+            if (user.plan === 'pure' || user.plan === 'trial_vip') {
                 if (bet.is_pure === true) {
                     return { canView: true };
                 }
@@ -2861,7 +2899,7 @@
             const d7Str = getLocalDateString(d7);
 
             activeUser = getActiveUserSession();
-            const isUserPure = activeUser && activeUser.plan === 'pure';
+            const isUserPure = activeUser && (activeUser.plan === 'pure' || activeUser.plan === 'trial_vip');
 
             const simBets = cachedAllBets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
@@ -2947,7 +2985,7 @@
 
         function calculateGlobalPerformance() {
             activeUser = getActiveUserSession();
-            const isUserPure = activeUser && activeUser.plan === 'pure';
+            const isUserPure = activeUser && (activeUser.plan === 'pure' || activeUser.plan === 'trial_vip');
 
             let completed = cachedAllBets.filter(b => b.status === 'won' || b.status === 'lost');
             const subTitleEl = document.getElementById('stat-global-subtitle');
@@ -3099,6 +3137,17 @@
             }
             return false;
         }
+        function __fmtDate(s) {
+            const m = String(s || '').slice(0, 10).split('-');
+            return m.length === 3 ? m[2] + '/' + m[1] + '/' + m[0] : String(s || '');
+        }
+        function __leftText(u) {
+            if (!u || !u.expires_at || String(u.expires_at).slice(0, 4) === '2099') return '';
+            const today = (window.AtmAuth && window.AtmAuth.todayRome) ? window.AtmAuth.todayRome() : getLocalDateString(new Date());
+            const n = Math.round((new Date(String(u.expires_at).slice(0, 10) + 'T00:00:00Z') - new Date(today + 'T00:00:00Z')) / 86400000);
+            if (n <= 0) return __t('idx_last_day', 'ultimo giorno');
+            return n === 1 ? __t('idx_one_day_left', '1 giorno rimasto') : __t('idx_days_left', '{n} giorni rimasti', { n: n });
+        }
         function __planOf(u) {
             if (!u) return '';
             if (u.role === 'admin' || u.role === 'gestore') return 'staff';
@@ -3123,7 +3172,7 @@
                 return __inTodayWindow(b.event_date);
             });
 
-            const isUserPure = activeUser && activeUser.plan === 'pure';
+            const isUserPure = activeUser && (activeUser.plan === 'pure' || activeUser.plan === 'trial_vip');
             const isUserAllInclusive = activeUser && (activeUser.plan === 'all_inclusive' || activeUser.role === 'admin' || activeUser.role === 'gestore' || activeUser.plan === 'elite');
 
             if (isUserPure) {
@@ -3133,7 +3182,9 @@
 
             const subtitleEl = document.querySelector('#selezioni p');
             if (subtitleEl) {
-                if (isUserPure) {
+                if (activeUser && activeUser.plan === 'trial_vip') {
+                    subtitleEl.innerHTML = `<span class="text-emerald-400 font-semibold">${__t('idx_picks_trial_lbl', '🎁 Prova VIP attiva:')}</span> ${__t('idx_picks_trial_body', "stai visualizzando le <strong>{n} selezioni d'élite</strong> di oggi (AtmBet Selection).", { n: pendingBetsToday.length })}`;
+                } else if (isUserPure) {
                     subtitleEl.innerHTML = `<span class="text-amber-400 font-semibold">${__t('idx_picks_pure_lbl', '⚡ Canale PURE attivo:')}</span> ${__t('idx_picks_pure_body', "stai visualizzando le <strong>{n} selezioni d'élite</strong> ad alta probabilità (≥65%).", { n: pendingBetsToday.length })}`;
                 } else if (isUserAllInclusive) {
                     subtitleEl.innerHTML = `<span class="text-blue-400 font-semibold">${__t('idx_picks_all_lbl', '🌐 Canale All-Inclusive attivo:')}</span> ${__t('idx_picks_all_body', "visualizzi tutti i <strong>{n} segnali</strong> di tutti i mercati e campionati.", { n: pendingBetsToday.length })}`;
@@ -3280,9 +3331,9 @@
 
             const __plan = __planOf(getActiveUserSession());
             const __tipBtn = document.getElementById('btn-tipfilter-all');
-            if (__tipBtn && __tipBtn.parentElement) __tipBtn.parentElement.style.display = (__plan === 'pure' || __plan === 'all_inclusive') ? 'none' : '';
+            if (__tipBtn && __tipBtn.parentElement) __tipBtn.parentElement.style.display = (__plan === 'pure' || __plan === 'trial_vip' || __plan === 'all_inclusive') ? 'none' : '';
 
-            if (__plan === 'pure' || currentTipsterPlanFilter === 'pure') {
+            if (__plan === 'pure' || __plan === 'trial_vip' || currentTipsterPlanFilter === 'pure') {
                 completed = completed.filter(b => b.is_pure === true);
             }
             completed = completed.map(__maskBetForUser);
@@ -3435,7 +3486,7 @@
             initServiceStartDate();
             
             activeUser = getActiveUserSession();
-            if (activeUser && activeUser.plan === 'pure') {
+            if (activeUser && (activeUser.plan === 'pure' || activeUser.plan === 'trial_vip')) {
                 currentTipsterPlanFilter = 'pure';
             }
 
