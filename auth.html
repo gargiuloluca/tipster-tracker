@@ -299,11 +299,18 @@
         }
 
         async function redeemIfAny() {
-            const code = document.getElementById('user-code').value.trim();
+            let code = document.getElementById('user-code').value.trim();
+            // Codice scritto in registrazione: se serviva confermare l'email viene attivato al primo accesso
+            let pending = '';
+            try { pending = localStorage.getItem('atmbet_pending_code') || ''; } catch (e) {}
+            if (!code) code = pending;
             if (!code) return null;
             const { data, error } = await window.sb.rpc('redeem_code', { p_code: code });
-            if (error || !data || data.ok !== true) return false;
-            return true;
+            const done = !error && data && data.ok === true;
+            // lo tolgo solo se e' andato a buon fine o se il codice e' definitivamente da scartare
+            const retry = !!error;
+            if (!retry) { try { localStorage.removeItem('atmbet_pending_code'); } catch (e) {} }
+            return done;
         }
 
         async function finishLogin() {
@@ -340,7 +347,11 @@
                     if (error) { showAlert(mapError(error), 'error'); return; }
                     if (data && data.user && data.user.identities && data.user.identities.length === 0) { showAlert(tr('auth_err_exists', 'Esiste già un account con questa email.'), 'error'); return; }
                     if (data && data.session) { await finishLogin(); return; }
-                    showAlert(tr('auth_ok_check_email', 'Account creato! Controlla la tua email.'), 'success');
+                    const typedCode = document.getElementById('user-code').value.trim();
+                    if (typedCode) { try { localStorage.setItem('atmbet_pending_code', typedCode); } catch (e) {} }
+                    showAlert(typedCode
+                        ? tr('auth_ok_check_email_code', 'Account creato! Conferma l\'email, poi accedi: il codice inserito verra attivato in automatico.')
+                        : tr('auth_ok_check_email', 'Account creato! Controlla la tua email.'), 'success');
                     setTimeout(() => setMode('login'), 300);
                 } else {
                     const { error } = await window.sb.auth.signInWithPassword({ email, password });
