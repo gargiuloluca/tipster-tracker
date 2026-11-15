@@ -3452,7 +3452,7 @@
         const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const TIERS = [['all', 'Tutte'], ['≤4', 'Fino a 4'], ['4–10', '4–10'], ['10–30', '10–30'], ['30+', 'Oltre 30']];
         const ICON = { WON: '✅', LOST: '❌', VOID: '➖', PENDING: '⏳' };
-        let rows = [], filter = 'all';
+        let rows = [], filter = 'all', pfilter = 'all', provsNow = [];
 
         const isNum = (x) => /^\d+([.,]\d+)?$/.test(String(x || '').trim());
         const num = (x) => parseFloat(String(x).replace(',', '.'));
@@ -3536,8 +3536,25 @@
                      need: avgOdd ? 100 / avgOdd : null, avgOdd, lw, ll };
         }
 
+        // Fornitore = campo FORNITORE della stringa (salvato in name). Raggruppo senza badare a maiuscole e spazi.
+        const provKey = (r) => String(r.name || '').trim().toLowerCase();
+        const provLabel = (r) => String(r.name || '').trim() || 'Senza fornitore';
+
+        function ensureBox(id, beforeId) {
+            let el = $(id);
+            if (!el) {
+                el = document.createElement('div'); el.id = id;
+                $(beforeId).parentNode.insertBefore(el, $(beforeId));
+            }
+            return el;
+        }
+
         function render() {
-            const list = filter === 'all' ? rows : rows.filter((r) => r.tier === filter);
+            const tierList = filter === 'all' ? rows : rows.filter((r) => r.tier === filter);
+            const provs = [];
+            tierList.forEach((r) => { if (!provs.some((p) => p.k === provKey(r))) provs.push({ k: provKey(r), l: provLabel(r) }); });
+            if (pfilter !== 'all' && !provs.some((p) => p.k === pfilter)) pfilter = 'all';
+            const list = pfilter === 'all' ? tierList : tierList.filter((r) => provKey(r) === pfilter);
             const s = stats(list);
             const f = (v, d, suf) => (v == null ? '-' : v.toFixed(d) + (suf || ''));
             $('mp-badge').textContent = s.n + ' multiple · ' + s.closed + ' chiuse';
@@ -3550,7 +3567,20 @@
                 (s.closed < 100 ? 'Con meno di 100 multiple chiuse il risultato dice poco: il caso pesa moltissimo.' : '') : '';
             $('mp-filters').innerHTML = TIERS.map(([k, l]) =>
                 `<button type="button" onclick="mpFilter('${k}')" class="px-2.5 py-1 rounded-lg border ${filter === k ? 'bg-fuchsia-500 text-slate-950 border-fuchsia-500 font-bold' : 'border-slate-700 text-slate-300'} shrink-0">${l}</button>`).join('');
-            $('mp-list').innerHTML = list.length ? list.map(card).join('') : '<p class="text-[11px] text-slate-500">Nessuna multipla in questa fascia.</p>';
+            // filtro per fornitore (sotto quello per fascia di quota) e confronto fra fornitori
+            provsNow = provs;
+            const chip = (i, k, l) => `<button type="button" onclick="mpProv(${i})" class="px-2.5 py-1 rounded-lg border ${pfilter === k ? 'bg-amber-400 text-slate-950 border-amber-400 font-bold' : 'border-slate-700 text-slate-300'} shrink-0">${esc(l)}</button>`;
+            ensureBox('mp-prov-filters', 'mp-list').className = 'flex gap-1 overflow-x-auto text-[10px]';
+            $('mp-prov-filters').innerHTML = provs.length > 1 || pfilter !== 'all' ? chip(-1, 'all', 'Tutti i fornitori') + provs.map((p, i) => chip(i, p.k, p.l)).join('') : '';
+            const box = ensureBox('mp-provtable', 'mp-prov-filters');
+            if (provs.length > 1) {
+                const fm = (v, d, suf) => (v == null ? '-' : v.toFixed(d) + (suf || ''));
+                box.className = 'overflow-x-auto';
+                box.innerHTML = '<table class="w-full text-[10px] font-mono text-slate-300"><thead><tr class="text-slate-500 text-left"><th class="py-1 pr-2 font-normal">Fornitore</th><th class="pr-2 font-normal">Multiple</th><th class="pr-2 font-normal">Chiuse</th><th class="pr-2 font-normal">Hit</th><th class="pr-2 font-normal">Quota media</th><th class="pr-2 font-normal">Profitto</th><th class="font-normal">ROI</th></tr></thead><tbody>' +
+                    provs.map((p) => { const t = stats(tierList.filter((r) => provKey(r) === p.k));
+                        return `<tr class="border-t border-slate-800"><td class="py-1 pr-2 text-white">${esc(p.l)}</td><td class="pr-2">${t.n}</td><td class="pr-2">${t.closed} (${t.won}V)</td><td class="pr-2">${fm(t.hit, 0, '%')}</td><td class="pr-2">${fm(t.avgOdd || null, 2)}</td><td class="pr-2 ${t.profit > 0 ? 'text-emerald-400' : (t.profit < 0 ? 'text-rose-400' : '')}">${fm(t.profit, 2, 'u')}</td><td>${fm(t.roi, 0, '%')}</td></tr>`; }).join('') + '</tbody></table>';
+            } else { box.className = ''; box.innerHTML = ''; }
+            $('mp-list').innerHTML = list.length ? list.map(card).join('') : '<p class="text-[11px] text-slate-500">Nessuna multipla con questi filtri.</p>';
         }
 
         function card(r) {
@@ -3577,6 +3607,7 @@
         }
 
         window.mpFilter = function (k) { filter = k; render(); };
+        window.mpProv = function (i) { pfilter = i < 0 || !provsNow[i] ? 'all' : provsNow[i].k; render(); };
 
         window.mpSavePaste = async function () {
             if (!window.sb) { setMsg('Accesso non pronto: ricarica la pagina.'); return; }
