@@ -2400,6 +2400,62 @@
             }
         }
 
+        // ---- Porta un amico: box nell'area riservata (solo piani PURE / All-Inclusive) ----
+        async function renderReferralBox() {
+            const user = getActiveUserSession();
+            let el = document.getElementById('referral-box');
+            const eligible = user && (user.plan === 'pure' || user.plan === 'all_inclusive') && window.sb;
+            if (!eligible) { if (el) el.remove(); return; }
+            const anchor = document.getElementById('telegram-connect-box');
+            if (!anchor) return;
+            if (!el) {
+                el = document.createElement('section');
+                el.id = 'referral-box';
+                anchor.insertAdjacentElement('afterend', el);
+            }
+            if (el.dataset.ready === user.email) return;
+            let info = null;
+            try {
+                const r = await window.sb.rpc('my_referral_info');
+                if (!r.error && r.data && r.data.code) info = r.data;
+            } catch (e) {}
+            if (!info) { el.remove(); return; }
+            const e2 = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const link = 'https://atmbetofficial.com/?ref=' + info.code;
+            const msg = __t('idx_ref_share_msg', "Uso AtmBet per i miei pronostici e mi trovo bene. Dai un'occhiata: {link}", { link: link });
+            el.dataset.ready = user.email;
+            el.className = 'bg-gradient-to-r from-fuchsia-950/40 via-slate-900 to-slate-950 border border-fuchsia-500/30 rounded-2xl p-4 sm:p-5 shadow-xl';
+            el.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-fuchsia-500/20 text-fuchsia-300 flex items-center justify-center shrink-0 text-lg">🤝</div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-sm font-bold text-white">${__t('idx_ref_title', 'Sei soddisfatto di AtmBet? Aiutaci a crescere e ti ripaghiamo')}</div>
+                        <p class="text-xs text-slate-400 mt-0.5">${__t('idx_ref_desc', 'Per ogni amico che si abbona con il tuo link ricevi <b class="text-white">1 mese gratis</b> sul tuo piano.')}</p>
+                        <div class="mt-3 flex flex-col sm:flex-row gap-2">
+                            <input id="ref-link-input" readonly value="${e2(link)}" class="flex-1 min-w-0 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 font-mono" onclick="this.select()">
+                            <button type="button" id="ref-copy-btn" class="bg-fuchsia-500 hover:bg-fuchsia-400 text-slate-950 font-black text-xs px-4 py-2 rounded-xl transition shrink-0">${__t('idx_ref_copy', 'Copia link')}</button>
+                        </div>
+                        <div class="mt-2 flex flex-wrap gap-2">
+                            <a href="https://wa.me/?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" class="text-[11px] font-bold px-3 py-1.5 rounded-lg border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10">WhatsApp</a>
+                            <a href="https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(msg.replace(link, '').trim())}" target="_blank" rel="noopener" class="text-[11px] font-bold px-3 py-1.5 rounded-lg border border-sky-500/40 text-sky-300 hover:bg-sky-500/10">Telegram</a>
+                        </div>
+                        <div class="mt-3 text-[11px] text-slate-400">${__t('idx_ref_stats', 'Amici abbonati: {n} · Mesi ottenuti: {m}', { n: Number(info.friends) || 0, m: Number(info.months) || 0 })}</div>
+                        <p class="mt-1 text-[10px] text-slate-500">${__t('idx_ref_rules', "Il mese viene aggiunto al tuo piano quando l'amico completa il primo acquisto a pagamento (la prova gratuita non conta). Massimo 3 mesi al mese.")}</p>
+                    </div>
+                </div>`;
+            const btn = document.getElementById('ref-copy-btn');
+            if (btn) btn.onclick = async () => {
+                const inp = document.getElementById('ref-link-input');
+                try { await navigator.clipboard.writeText(link); } catch (e3) { if (inp) { inp.select(); try { document.execCommand('copy'); } catch (e4) {} } }
+                btn.textContent = __t('idx_ref_copied', 'Copiato!');
+                setTimeout(() => { btn.textContent = __t('idx_ref_copy', 'Copia link'); }, 1800);
+            };
+        }
+        (function () {
+            const __origBanner = updateTelegramBanner;
+            updateTelegramBanner = function () { __origBanner.apply(this, arguments); try { renderReferralBox(); } catch (e) {} };
+        })();
+
         function getActiveUserSession() {
             try {
                 const raw = localStorage.getItem(CURRENT_SESSION_KEY);
