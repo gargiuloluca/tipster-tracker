@@ -3150,6 +3150,8 @@
         }
         function __planOf(u) {
             if (!u) return '';
+            // Il piano scelto decide cosa si vede in vetrina, anche per admin/gestore con un piano attivo
+            if (u.plan === 'pure' || u.plan === 'all_inclusive' || u.plan === 'trial_vip') return u.plan;
             if (u.role === 'admin' || u.role === 'gestore') return 'staff';
             return u.plan || '';
         }
