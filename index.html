@@ -2462,6 +2462,25 @@
                         <i data-lucide="gem" class="w-4 h-4"></i> <span>${__t('idx_trial_banner_btn', 'Scegli il tuo piano')}</span>
                     </a>
                 `;
+            } else if (user.plan === 'credits' && !(user.credits > 0) && !(user.unlocked_bets && user.unlocked_bets.length)) {
+                box.className = "bg-gradient-to-r from-sky-950/50 via-slate-900 to-slate-950 border border-sky-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
+                box.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0">
+                            <i data-lucide="key" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold text-white">${__t('idx_noplan_title', 'Account registrato: nessun piano attivo')}</div>
+                            <p class="text-xs text-slate-400 mt-0.5">${__t('idx_noplan_desc', "Hai acquistato la prova o un piano? Inserisci il codice ricevuto via email per attivare l'accesso.")}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto shrink-0">
+                        <button type="button" onclick="openLicenseModal()" class="flex-1 sm:flex-none bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+                            <i data-lucide="key" class="w-4 h-4"></i> <span>${__t('idx_noplan_btn', 'Inserisci codice')}</span>
+                        </button>
+                        <a href="#piani" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition flex items-center justify-center">${__t('idx_noplan_plans', 'Vedi piani')}</a>
+                    </div>
+                `;
             } else if (user.plan === 'credits') {
                 box.className = "bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 border border-amber-500/30 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl";
                 box.innerHTML = `
