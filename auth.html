@@ -307,6 +307,7 @@
             if (!code) return null;
             const { data, error } = await window.sb.rpc('redeem_code', { p_code: code });
             const done = !error && data && data.ok === true;
+            window.__lastRedeemError = (data && data.error) || (error && error.message) || '';
             // lo tolgo solo se e' andato a buon fine o se il codice e' definitivamente da scartare
             const retry = !!error;
             if (!retry) { try { localStorage.removeItem('atmbet_pending_code'); } catch (e) {} }
@@ -318,7 +319,7 @@
             const session = await window.AtmAuth.syncSession();
             let msg = tr('auth_ok_login', 'Accesso effettuato! Reindirizzamento…');
             if (codeResult === true) msg = tr('auth_code_ok', 'Codice attivato!') + ' ' + msg;
-            if (codeResult === false) { showAlert(tr('auth_code_bad', 'Codice non valido o già usato.'), 'error'); await new Promise(r => setTimeout(r, 1800)); }
+            if (codeResult === false) { showAlert(window.__lastRedeemError ? window.__lastRedeemError + '. ' + tr('auth_code_retry', 'Puoi riprovare dal menu del sito, voce Sblocco.') : tr('auth_code_bad', 'Codice non valido o già usato.'), 'error'); await new Promise(r => setTimeout(r, 1800)); }
             else showAlert(msg, 'success');
             const isStaff = session && (session.role === 'admin' || session.role === 'gestore');
             setTimeout(() => { window.location.href = isStaff ? 'admin.html' : 'index.html'; }, 700);
@@ -334,7 +335,7 @@
             if (!email || !password) { showAlert(tr('auth_err_fields', 'Inserisci email e password.'), 'error'); return; }
             if (currentMode === 'signup') {
                 if (password.length < 8) { showAlert(tr('auth_err_weak', 'Password troppo debole.'), 'error'); return; }
-                if (!telegram) { showAlert(tr('auth_err_telegram', 'Inserisci la tua username Telegram.'), 'error'); return; }
+                if (!/^[A-Za-z0-9_]{3,32}$/.test(telegram.replace(/^@+/, ''))) { showAlert(tr('auth_err_telegram', 'Inserisci la tua username Telegram (es. @mario).'), 'error'); return; }
             }
             setBusy(true);
             showAlert(tr('auth_wait', 'Attendi…'), 'info');
@@ -342,7 +343,7 @@
                 if (currentMode === 'signup') {
                     const { data, error } = await window.sb.auth.signUp({
                         email, password,
-                        options: { data: { telegram_username: telegram, name: email.split('@')[0], ref_code: (window.AtmRef ? window.AtmRef.get() : '') }, emailRedirectTo: window.location.origin + '/auth.html' }
+                        options: { data: { telegram_username: telegram.replace(/^@+/, ''), name: email.split('@')[0], ref_code: (window.AtmRef ? window.AtmRef.get() : '') }, emailRedirectTo: window.location.origin + '/auth.html' }
                     });
                     if (error) { showAlert(mapError(error), 'error'); return; }
                     if (data && data.user && data.user.identities && data.user.identities.length === 0) { showAlert(tr('auth_err_exists', 'Esiste già un account con questa email.'), 'error'); return; }

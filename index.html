@@ -2364,15 +2364,21 @@
                 const { data: sess } = await window.sb.auth.getSession();
                 if (!sess || !sess.session) { window.location.href = 'auth.html'; return; }
 
+                // La prova richiede lo username Telegram nel profilo: lo salvo PRIMA di riscattare il codice
+                const tgClean = typedTelegram.replace(/^@+/, '').trim();
+                if (tgClean) { try { await window.sb.from('profiles').update({ telegram_username: tgClean }).eq('id', sess.session.user.id); } catch (e2) {} }
+
                 const { data, error } = await window.sb.rpc('redeem_code', { p_code: typedCode });
                 if (error || !data || data.ok !== true) {
-                    const m = String((data && data.error) || '').toLowerCase();
-                    if (m.includes('scadut')) fail(__t('idx_lic_expired', "Codice promo scaduto il {date}", { date: '' }).trim());
+                    const m = String((data && data.error) || (error && error.message) || '').toLowerCase();
+                    if (m.includes('telegram')) fail(__t('idx_lic_need_tg', "Per la prova inserisci qui sotto la tua username Telegram (es. @mario) e riprova."));
+                    else if (m.includes('prova gratuita')) fail(__t('idx_lic_trial_used', "La prova gratuita è già stata utilizzata con questo account o questa username Telegram."));
+                    else if (m.includes('gia usato')) fail(__t('idx_lic_same_user', "Hai già usato questo codice con questo account."));
+                    else if (m.includes('scadut')) fail(__t('idx_lic_expired', "Codice promo scaduto il {date}", { date: '' }).trim());
                     else if (m.includes('utilizzat')) fail(__t('idx_lic_used_up', "Codice promo esaurito."));
                     else fail(__t('idx_lic_invalid', "Codice non valido. Verifica il testo digitato."));
                     return;
                 }
-                if (typedTelegram) { try { await window.sb.from('profiles').update({ telegram_username: typedTelegram }).eq('id', sess.session.user.id); } catch (e2) {} }
                 const session = await window.AtmAuth.syncSession();
                 cachedAllBets = await fetchAllBets();
                 activeUser = getActiveUserSession();
