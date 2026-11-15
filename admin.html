@@ -645,6 +645,8 @@
 
                     <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3 space-y-2">
                         <div class="text-[11px] font-bold text-white">➕ Nuova multipla</div>
+                        <textarea id="mp-paste" rows="4" placeholder="Incolla qui (facoltativo):&#10;Big sabato | 21/11 20:45 | stake 2&#10;Roma - Lazio | 1 | 1.80&#10;Inter - Milan | Over 1.5 | 1,40" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-[11px] text-slate-200 font-mono"></textarea>
+                        <button type="button" onclick="mpParse()" class="w-full py-1.5 rounded-lg border border-fuchsia-500/50 text-[11px] text-fuchsia-300">📋 Leggi il testo e compila</button>
                         <input id="mp-name" type="text" placeholder="Nome (es. Big del sabato)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white">
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -3502,6 +3504,52 @@
             const t = odds.reduce((a, o) => a * o, 1);
             $('mp-total').textContent = odds.length ? t.toFixed(2) : '-';
             $('mp-tier').textContent = odds.length ? '(fascia ' + tierOf(t) + ')' : '';
+        };
+
+        const isNum = (x) => /^\d+([.,]\d+)?$/.test(String(x || '').trim());
+        const num = (x) => parseFloat(String(x).replace(',', '.'));
+        function parseWhen(t) {
+            let m = t.match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{1,2}):(\d{2})/);
+            if (m) return `${m[1]}-${m[2]}-${m[3]}T${m[4].padStart(2, '0')}:${m[5]}`;
+            m = t.match(/(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?[ ,]+(\d{1,2})[:.](\d{2})/);
+            if (m) {
+                const y = m[3] ? (m[3].length === 2 ? '20' + m[3] : m[3]) : String(new Date().getFullYear());
+                return `${y}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}T${m[4].padStart(2, '0')}:${m[5]}`;
+            }
+            return null;
+        }
+        // Legge righe tipo "Partita | Esito | Quota" (o il formato lungo del parser: DATA | PARTITA | ESITO | QUOTA | ...)
+        // e una riga iniziale facoltativa "Nome | 21/11 20:45 | stake 2". Compila il modulo: NON salva da sola.
+        window.mpParse = function () {
+            const lines = $('mp-paste').value.split('\n').map((l) => l.trim()).filter(Boolean);
+            const legs = [];
+            let name = '', ko = null, stake = null;
+            lines.forEach((line) => {
+                const parts = line.split('|').map((p) => p.trim());
+                if (parts.length >= 4 && isNum(parts[3])) { legs.push({ match: parts[1], pick: parts[2], odd: num(parts[3]) }); const w = parseWhen(parts[0]); if (w && (!ko || w < ko)) ko = w; }
+                else if (parts.length >= 3 && isNum(parts[2])) legs.push({ match: parts[0], pick: parts[1], odd: num(parts[2]) });
+                else {
+                    parts.forEach((p, i) => {
+                        const sm = p.match(/^(?:stake|puntata)\s*[:=]?\s*(\d+([.,]\d+)?)\s*u?$/i);
+                        if (sm) stake = num(sm[1]);
+                        else if (parseWhen(p)) ko = parseWhen(p);
+                        else if (i === 0 && !name) name = p.replace(/^nome\s*:\s*/i, '');
+                    });
+                }
+            });
+            const bad = legs.filter((l) => !(l.odd > 1));
+            if (legs.length < 2 || bad.length) { setMsg('Non ho trovato almeno 2 righe valide (Partita | Esito | Quota, con quota maggiore di 1).'); return; }
+            $('mp-legs').innerHTML = '';
+            legs.forEach((l) => {
+                mpAddLeg();
+                const r = $('mp-legs').lastElementChild;
+                r.querySelector('.mp-m').value = l.match; r.querySelector('.mp-p').value = l.pick; r.querySelector('.mp-o').value = l.odd;
+            });
+            if (name) $('mp-name').value = name;
+            if (ko) $('mp-ko').value = ko;
+            if (stake) $('mp-stake').value = stake;
+            mpTotal();
+            setMsg('Letto: ' + legs.length + ' selezioni. Controlla i dati e premi Salva.');
         };
 
         function setMsg(t) { const m = $('mp-msg'); if (m) m.textContent = t || ''; }
