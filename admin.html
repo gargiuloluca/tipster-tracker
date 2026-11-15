@@ -628,6 +628,48 @@
                 </div>
             </section>
 
+
+            <!-- MULTIPLE (PROVA) - storico separato, solo admin -->
+            <section id="mp-section" class="bg-gradient-to-r from-slate-900 via-slate-900 to-fuchsia-950/20 border border-fuchsia-500/30 rounded-2xl p-3.5 sm:p-5 shadow-xl space-y-3">
+                <div class="flex items-center justify-between gap-2 cursor-pointer" onclick="document.getElementById('mp-body').classList.toggle('hidden')">
+                    <div>
+                        <h2 class="text-xs sm:text-sm font-bold text-white">🎰 Multiple a quota alta (PROVA)</h2>
+                        <p class="text-[10px] text-slate-400">Storico separato, visibile solo a te. Tocca per aprire o chiudere.</p>
+                    </div>
+                    <span id="mp-badge" class="text-[10px] font-mono text-fuchsia-300 shrink-0">-</span>
+                </div>
+                <div id="mp-body" class="hidden space-y-3">
+                    <div id="mp-msg" class="text-[11px] text-amber-300"></div>
+                    <div id="mp-kpi" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono"></div>
+                    <div id="mp-legstats" class="text-[10px] text-slate-400"></div>
+
+                    <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3 space-y-2">
+                        <div class="text-[11px] font-bold text-white">➕ Nuova multipla</div>
+                        <input id="mp-name" type="text" placeholder="Nome (es. Big del sabato)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[9px] text-slate-500 uppercase">Inizio primo match</label>
+                                <input id="mp-ko" type="datetime-local" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="text-[9px] text-slate-500 uppercase">Stake (unità)</label>
+                                <input id="mp-stake" type="number" step="0.1" min="0.1" value="1" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-2 text-xs text-white">
+                            </div>
+                        </div>
+                        <div id="mp-legs" class="space-y-2"></div>
+                        <button type="button" onclick="mpAddLeg()" class="w-full py-1.5 rounded-lg border border-slate-700 text-[11px] text-slate-300">+ Aggiungi selezione</button>
+                        <input id="mp-note" type="text" placeholder="Nota (facoltativa)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-2 text-xs text-white">
+                        <div class="flex items-center justify-between">
+                            <div class="text-xs font-mono text-white">Quota totale: <span id="mp-total" class="text-fuchsia-300 font-bold">-</span> <span id="mp-tier" class="text-slate-500"></span></div>
+                            <button type="button" onclick="mpSave()" class="px-3 py-2 rounded-lg bg-fuchsia-500 text-slate-950 text-xs font-extrabold">Salva</button>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-1 overflow-x-auto text-[10px]" id="mp-filters"></div>
+                    <div id="mp-list" class="space-y-2"></div>
+                </div>
+            </section>
+
             <!-- MODULO CONFLITTI -->
             <section id="conflict-panel" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3.5 shadow-lg space-y-2">
                 <div class="flex items-center justify-between">
@@ -3415,5 +3457,183 @@
             }
         });
     </script>
+    <!-- MULTIPLE (PROVA): codice autonomo, non modifica nulla del resto del pannello -->
+    <script>
+    (function () {
+        const $ = (id) => document.getElementById(id);
+        const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const TIERS = [['all', 'Tutte'], ['≤4', 'Fino a 4'], ['4–10', '4–10'], ['10–30', '10–30'], ['30+', 'Oltre 30']];
+        const ICON = { WON: '✅', LOST: '❌', VOID: '➖', PENDING: '⏳' };
+        let rows = [], filter = 'all', loaded = false;
+
+        function tierOf(o) { return o <= 4 ? '≤4' : (o <= 10 ? '4–10' : (o <= 30 ? '10–30' : '30+')); }
+
+        // stato e profitto di una multipla ricavati dalle sue selezioni
+        function calc(legs, stake) {
+            if (legs.some((l) => l.status === 'LOST')) return { status: 'LOST', odd: legs.reduce((a, l) => a * l.odd, 1), profit: -stake };
+            const live = legs.filter((l) => l.status !== 'VOID');
+            const odd = live.reduce((a, l) => a * l.odd, 1);
+            if (!live.length) return { status: 'VOID', odd: 1, profit: 0 };
+            if (legs.some((l) => !l.status || l.status === 'PENDING')) return { status: 'PENDING', odd, profit: 0 };
+            return { status: 'WON', odd, profit: Math.round(stake * (odd - 1) * 100) / 100 };
+        }
+
+        function legRow(i) {
+            return `<div class="grid grid-cols-12 gap-1.5 items-center" data-leg="${i}">
+                <input type="text" placeholder="Partita" class="mp-m col-span-5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white">
+                <input type="text" placeholder="Esito" class="mp-p col-span-4 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[11px] text-white">
+                <input type="number" step="0.01" min="1.01" placeholder="Quota" oninput="mpTotal()" class="mp-o col-span-2 bg-slate-900 border border-slate-700 rounded-lg px-1.5 py-1.5 text-[11px] text-white">
+                <button type="button" onclick="this.parentNode.remove(); mpTotal();" class="col-span-1 text-slate-500 text-xs">✕</button>
+            </div>`;
+        }
+        let legSeq = 0;
+        window.mpAddLeg = function () { $('mp-legs').insertAdjacentHTML('beforeend', legRow(legSeq++)); };
+
+        function readLegs() {
+            return [...document.querySelectorAll('#mp-legs [data-leg]')].map((r) => ({
+                match: r.querySelector('.mp-m').value.trim(),
+                pick: r.querySelector('.mp-p').value.trim(),
+                odd: parseFloat(r.querySelector('.mp-o').value),
+                status: 'PENDING',
+            }));
+        }
+        window.mpTotal = function () {
+            const odds = readLegs().map((l) => l.odd).filter((o) => o > 1);
+            const t = odds.reduce((a, o) => a * o, 1);
+            $('mp-total').textContent = odds.length ? t.toFixed(2) : '-';
+            $('mp-tier').textContent = odds.length ? '(fascia ' + tierOf(t) + ')' : '';
+        };
+
+        function setMsg(t) { const m = $('mp-msg'); if (m) m.textContent = t || ''; }
+
+        async function load() {
+            if (!window.sb) return false;
+            const { data, error } = await window.sb.from('multiples').select('*').order('created_at', { ascending: false });
+            if (error) {
+                setMsg(/relation|does not exist|schema cache/i.test(error.message || '')
+                    ? 'Tabella non trovata: esegui 06_multiples.sql nel SQL Editor di Supabase.' : 'Errore di caricamento: ' + error.message);
+                return false;
+            }
+            setMsg('');
+            rows = data || [];
+            loaded = true;
+            render();
+            return true;
+        }
+
+        function stats(list) {
+            const closed = list.filter((r) => r.status === 'WON' || r.status === 'LOST');
+            const won = closed.filter((r) => r.status === 'WON').length;
+            const staked = closed.reduce((a, r) => a + Number(r.stake), 0);
+            const profit = closed.reduce((a, r) => a + Number(r.profit), 0);
+            const avgOdd = closed.length ? closed.reduce((a, r) => a + Number(r.total_odd), 0) / closed.length : 0;
+            let lw = 0, ll = 0;
+            list.forEach((r) => (r.legs || []).forEach((l) => { if (l.status === 'WON') lw++; else if (l.status === 'LOST') ll++; }));
+            return { n: list.length, closed: closed.length, won, pending: list.filter((r) => r.status === 'PENDING').length,
+                     staked, profit, roi: staked ? 100 * profit / staked : null, hit: closed.length ? 100 * won / closed.length : null,
+                     need: avgOdd ? 100 / avgOdd : null, avgOdd, lw, ll };
+        }
+
+        function render() {
+            const list = filter === 'all' ? rows : rows.filter((r) => r.tier === filter);
+            const s = stats(list);
+            const f = (v, d, suf) => (v == null ? '-' : v.toFixed(d) + (suf || ''));
+            $('mp-badge').textContent = s.n + ' multiple · ' + s.closed + ' chiuse';
+            $('mp-kpi').innerHTML = [
+                ['Chiuse', s.closed + ' (' + s.won + ' vinte)'],
+                ['In corso', s.pending],
+                ['Profitto', f(s.profit, 2, 'u')],
+                ['ROI', f(s.roi, 1, '%')],
+                ['Hit rate', f(s.hit, 1, '%')],
+                ['Serve almeno', f(s.need, 1, '%')],
+                ['Quota media', f(s.avgOdd || null, 2)],
+                ['Puntato', f(s.staked, 1, 'u')],
+            ].map(([k, v]) => `<div class="bg-slate-950/80 p-2 rounded-xl border border-slate-800"><span class="text-[9px] text-slate-500 uppercase block font-sans">${k}</span><span class="font-bold text-white">${v}</span></div>`).join('');
+            const lg = s.lw + s.ll;
+            $('mp-legstats').textContent = lg ? `Singole selezioni: ${s.lw} vinte su ${lg} (${(100 * s.lw / lg).toFixed(1)}%). ` +
+                (s.closed < 100 ? 'Con meno di 100 multiple chiuse il risultato dice poco: il caso pesa moltissimo.' : '') : '';
+            $('mp-filters').innerHTML = TIERS.map(([k, l]) =>
+                `<button type="button" onclick="mpFilter('${k}')" class="px-2.5 py-1 rounded-lg border ${filter === k ? 'bg-fuchsia-500 text-slate-950 border-fuchsia-500 font-bold' : 'border-slate-700 text-slate-300'} shrink-0">${l}</button>`).join('');
+
+            $('mp-list').innerHTML = list.length ? list.map(card).join('') : '<p class="text-[11px] text-slate-500">Nessuna multipla in questa fascia.</p>';
+        }
+
+        function card(r) {
+            const created = new Date(r.created_at);
+            const ko = r.kickoff_at ? new Date(r.kickoff_at) : null;
+            const late = ko && created > ko;
+            const dt = (d) => d.toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+            const legs = (r.legs || []).map((l, i) => `<div class="flex items-center justify-between gap-1.5 py-1 border-t border-slate-800/70">
+                <div class="min-w-0"><div class="text-[11px] text-white truncate">${esc(l.match)}</div><div class="text-[10px] text-slate-400">${esc(l.pick)} @ ${Number(l.odd).toFixed(2)}</div></div>
+                <div class="flex gap-1 shrink-0">${['WON', 'LOST', 'VOID', 'PENDING'].map((s) =>
+                    `<button type="button" onclick="mpLeg('${r.id}',${i},'${s}')" class="w-7 h-7 rounded-md border ${l.status === s ? 'border-fuchsia-400 bg-fuchsia-500/20' : 'border-slate-700'} text-[11px]">${ICON[s]}</button>`).join('')}</div>
+            </div>`).join('');
+            const col = r.status === 'WON' ? 'text-emerald-400' : (r.status === 'LOST' ? 'text-rose-400' : 'text-slate-300');
+            return `<div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3">
+                <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0"><div class="text-xs font-bold text-white truncate">${esc(r.name || 'Multipla')} <span class="text-fuchsia-300 font-mono">@ ${Number(r.total_odd).toFixed(2)}</span></div>
+                    <div class="text-[10px] text-slate-500">Inserita ${dt(created)}${ko ? ' · primo match ' + dt(ko) : ''} · stake ${Number(r.stake)}u · fascia ${esc(r.tier)}</div></div>
+                    <div class="text-right shrink-0 font-mono"><div class="text-xs font-bold ${col}">${ICON[r.status]} ${r.status === 'PENDING' ? 'IN CORSO' : r.status}</div><div class="text-[10px] ${col}">${Number(r.profit) > 0 ? '+' : ''}${Number(r.profit).toFixed(2)}u</div></div>
+                </div>
+                ${late ? '<div class="text-[10px] text-amber-300 mt-1">⚠️ Inserita dopo l\'inizio del primo match: non conta come storico pulito.</div>' : ''}
+                <div class="mt-1.5">${legs}</div>
+                ${r.note ? '<div class="text-[10px] text-slate-400 mt-1">📝 ' + esc(r.note) + '</div>' : ''}
+                <div class="text-right mt-1"><button type="button" onclick="mpDelete('${r.id}')" class="text-[10px] text-slate-600">Elimina</button></div>
+            </div>`;
+        }
+
+        window.mpFilter = function (k) { filter = k; render(); };
+
+        window.mpSave = async function () {
+            if (!window.sb) { setMsg('Accesso non pronto: ricarica la pagina.'); return; }
+            const legs = readLegs().filter((l) => l.match || l.pick || l.odd);
+            if (legs.length < 2) { setMsg('Servono almeno 2 selezioni.'); return; }
+            if (legs.some((l) => !l.match || !l.pick || !(l.odd > 1))) { setMsg('Ogni selezione vuole partita, esito e quota maggiore di 1.'); return; }
+            const stake = parseFloat($('mp-stake').value) || 1;
+            const total = legs.reduce((a, l) => a * l.odd, 1);
+            const koVal = $('mp-ko').value;
+            const { error } = await window.sb.from('multiples').insert({
+                name: $('mp-name').value.trim() || null, stake, note: $('mp-note').value.trim() || null, legs,
+                total_odd: Math.round(total * 100) / 100, tier: tierOf(total),
+                kickoff_at: koVal ? new Date(koVal).toISOString() : null,
+            });
+            if (error) { setMsg('Errore di salvataggio: ' + error.message); return; }
+            setMsg('');
+            $('mp-name').value = ''; $('mp-note').value = ''; $('mp-legs').innerHTML = ''; mpAddLeg(); mpAddLeg(); mpAddLeg(); mpTotal();
+            await load();
+        };
+
+        window.mpLeg = async function (id, idx, status) {
+            const r = rows.find((x) => x.id === id);
+            if (!r) return;
+            const legs = r.legs.map((l, i) => (i === idx ? { ...l, status } : l));
+            const c = calc(legs, Number(r.stake));
+            const { error } = await window.sb.from('multiples').update({ legs, status: c.status, profit: c.profit }).eq('id', id);
+            if (error) { setMsg('Errore di aggiornamento: ' + error.message); return; }
+            Object.assign(r, { legs, status: c.status, profit: c.profit });
+            render();
+        };
+
+        window.mpDelete = async function (id) {
+            if (!confirm('Eliminare questa multipla dallo storico?')) return;
+            const { error } = await window.sb.from('multiples').delete().eq('id', id);
+            if (error) { setMsg('Errore: ' + error.message); return; }
+            rows = rows.filter((x) => x.id !== id);
+            render();
+        };
+
+        window.__mp = { calc, tierOf, stats };   // per i test
+
+        document.addEventListener('DOMContentLoaded', () => {
+            mpAddLeg(); mpAddLeg(); mpAddLeg();
+            let tries = 0;
+            const t = setInterval(async () => {
+                tries++;
+                if (window.sb) { clearInterval(t); await load(); } else if (tries > 40) { clearInterval(t); }
+            }, 500);
+        });
+    })();
+    </script>
+
 </body>
 </html>
