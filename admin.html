@@ -426,6 +426,8 @@
                         </select>
                     </div>
 
+                    <div id="usr-status-chips" class="flex flex-wrap gap-1.5 text-[11px]"></div>
+
                     <div class="overflow-x-auto rounded-xl border border-slate-800 custom-scroll">
                         <table class="w-full text-left text-xs text-slate-300 whitespace-nowrap min-w-[750px]">
                             <thead class="bg-slate-950 text-slate-400 uppercase tracking-wider text-[9px]">
@@ -1375,7 +1377,8 @@
                 access_code: String(p.credits || 0),
                 expires_at: p.expires_at || '-',
                 role: p.role,
-                ref_code: p.ref_code || ''
+                ref_code: p.ref_code || '',
+                created_at: p.created_at || ''
             }));
         }
 
@@ -1598,6 +1601,26 @@
             await fetchUsersFromGitHubAutomatic();
         }
 
+        // Elimina del tutto l'account (dati, piano, riscatti): per conti prova o non piu usati
+        async function deleteUserAccount(userId) {
+            const p = (window.__profiles || []).find(x => String(x.id) === String(userId));
+            if (!p) return;
+            if (!confirm("ELIMINARE DEFINITIVAMENTE " + p.email + "?\n\nL'account e tutti i suoi dati spariscono e non si torna indietro.\nPer togliere solo l'abbonamento usa invece il cestino.")) return;
+            const typed = prompt("Per confermare scrivi l'email dell'utente:\n" + p.email);
+            if (typed === null) return;
+            if (String(typed).trim().toLowerCase() !== String(p.email || '').trim().toLowerCase()) { alert("Email diversa: nessuna eliminazione."); return; }
+            const { data, error } = await window.sb.rpc('admin_delete_user', { p_id: userId });
+            if (error) {
+                alert(/function .*admin_delete_user|schema cache|does not exist/i.test(error.message || '')
+                    ? "Funzione mancante: esegui 10_admin_utenti.sql nel SQL Editor di Supabase."
+                    : "Impossibile eliminare: " + error.message);
+                return;
+            }
+            if (data && data.ok === false) { alert(data.error || "Eliminazione non riuscita."); return; }
+            await fetchUsersFromGitHubAutomatic();
+            alert("Utente eliminato.");
+        }
+
         // Rende innocuo il testo scritto dagli utenti (nome, username, email) prima di mostrarlo nel pannello
         function __escHtml(v) {
             return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1612,6 +1635,25 @@
             const refFilter = (document.getElementById('usr-ref-filter') || {}).value || '';
             if (refFilter) users = users.filter(u => (u.ref_code || '') === refFilter);
             const todayStr = getLocalDateString(new Date());
+
+            // Filtri per stato: Tutti / Nuovi (ultimi 7 giorni) / In scadenza (entro 7 giorni) / Scaduti / Senza piano
+            const _in7 = getLocalDateString(new Date(Date.now() + 7 * 86400000));
+            const _ago7 = Date.now() - 7 * 86400000;
+            const _isExp = u => !!u.expires_at && u.expires_at !== '-' && u.expires_at < todayStr;
+            const _tests = {
+                all: () => true,
+                new: u => u.created_at && new Date(u.created_at).getTime() >= _ago7,
+                soon: u => u.plan !== 'free' && !!u.expires_at && u.expires_at !== '-' && u.expires_at >= todayStr && u.expires_at <= _in7,
+                expired: u => _isExp(u),
+                noplan: u => u.plan === 'free'
+            };
+            const _chips = [['all', 'Tutti'], ['new', 'Nuovi'], ['soon', 'In scadenza'], ['expired', 'Scaduti'], ['noplan', 'Senza piano']];
+            window.__usrStatus = window.__usrStatus || 'all';
+            const _chipBox = document.getElementById('usr-status-chips');
+            if (_chipBox) _chipBox.innerHTML = _chips.map(([k, l]) =>
+                `<button type="button" onclick="window.__usrStatus='${k}';renderUsersTable()" class="px-2.5 py-1 rounded-lg border ${window.__usrStatus === k ? 'bg-amber-400 text-slate-950 border-amber-400 font-bold' : 'border-slate-700 text-slate-300'}">${l} <span class="font-mono">${users.filter(_tests[k]).length}</span></button>`).join('');
+            const _all = users;
+            users = users.filter(_tests[window.__usrStatus] || _tests.all);
 
             let activeCount = 0;
             let expiredCount = 0;
@@ -1628,7 +1670,7 @@
                 const expDate = u.expires_at || u.expiration || '-';
                 const isExpired = expDate !== '-' && expDate < todayStr;
 
-                if (isExpired) expiredCount++; else activeCount++;
+                // (Attivi/Scaduti sono calcolati sotto su tutti gli utenti, non sul filtro scelto)
 
                 const userPlan = (u.plan || 'trial').toLowerCase();
                 planFreq[userPlan] = (planFreq[userPlan] || 0) + 1;
@@ -1673,15 +1715,19 @@
                             <button type="button" onclick="extendUserDays('${u.id}', 30)" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 px-2 py-0.5 rounded font-bold transition">
                                 +30g
                             </button>
-                            <button type="button" onclick="deleteUser('${u.id}')" class="text-rose-400 p-1 rounded hover:bg-rose-500/10 transition">
+                            <button type="button" onclick="deleteUser('${u.id}')" title="Revoca abbonamento (l'account resta)" class="text-rose-400 p-1 rounded hover:bg-rose-500/10 transition">
                                 <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                             </button>
+                            ${(u.role === 'admin' || u.role === 'gestore') ? '' : `<button type="button" onclick="deleteUserAccount('${u.id}')" title="Elimina l'utente definitivamente" class="text-slate-400 hover:text-rose-400 p-1 rounded hover:bg-rose-500/10 transition">
+                                <i data-lucide="user-x" class="w-3.5 h-3.5"></i>
+                            </button>`}
                         </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
 
+            _all.forEach(u => { if (_isExp(u)) expiredCount++; else activeCount++; });
             const activeEl = document.getElementById('usr-active-count');
             const expiredEl = document.getElementById('usr-expired-count');
             const topPlanEl = document.getElementById('usr-top-plan');
@@ -3454,7 +3500,7 @@
         const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const TIERS = [['all', 'Tutte'], ['≤4', 'Fino a 4'], ['4–10', '4–10'], ['10–30', '10–30'], ['30+', 'Oltre 30']];
         const ICON = { WON: '✅', LOST: '❌', VOID: '➖', PENDING: '⏳' };
-        let rows = [], filter = 'all', pfilter = 'all', provsNow = [];
+        let rows = [], filter = 'all', pfilter = 'all', provsNow = [], histOpen = '', histShown = 10;
 
         const isNum = (x) => /^\d+([.,]\d+)?$/.test(String(x || '').trim());
         const num = (x) => parseFloat(String(x).replace(',', '.'));
@@ -3582,7 +3628,26 @@
                     provs.map((p) => { const t = stats(tierList.filter((r) => provKey(r) === p.k));
                         return `<tr class="border-t border-slate-800"><td class="py-1 pr-2 text-white">${esc(p.l)}</td><td class="pr-2">${t.n}</td><td class="pr-2">${t.closed} (${t.won}V)</td><td class="pr-2">${fm(t.hit, 0, '%')}</td><td class="pr-2">${fm(t.avgOdd || null, 2)}</td><td class="pr-2 ${t.profit > 0 ? 'text-emerald-400' : (t.profit < 0 ? 'text-rose-400' : '')}">${fm(t.profit, 2, 'u')}</td><td>${fm(t.roi, 0, '%')}</td></tr>`; }).join('') + '</tbody></table>';
             } else { box.className = ''; box.innerHTML = ''; }
-            $('mp-list').innerHTML = list.length ? list.map(card).join('') : '<p class="text-[11px] text-slate-500">Nessuna multipla con questi filtri.</p>';
+            // In corso sempre visibili; le chiuse stanno nello storico e si aprono toccando il numero (perse / vinte / void)
+            const open = list.filter((r) => r.status === 'PENDING');
+            const byS = (st) => list.filter((r) => r.status === st);
+            const cnt = { LOST: byS('LOST').length, WON: byS('WON').length, VOID: byS('VOID').length };
+            if (histOpen && !cnt[histOpen]) histOpen = '';
+            const hbtn = (st, label, cls) => `<button type="button" onclick="mpHist('${st}')" class="px-2.5 py-1.5 rounded-lg border ${histOpen === st ? cls + ' font-bold' : 'border-slate-700 text-slate-300'} shrink-0">${label} <span class="font-mono">${cnt[st]}</span></button>`;
+            let html = '';
+            if (!list.length) html = '<p class="text-[11px] text-slate-500">Nessuna multipla con questi filtri.</p>';
+            else {
+                html += `<div class="text-[11px] text-slate-400 font-bold">⏳ In corso (${open.length})</div>`;
+                html += open.length ? open.map(card).join('') : '<p class="text-[11px] text-slate-500">Nessuna multipla in corso.</p>';
+                html += `<div class="pt-2 text-[11px] text-slate-400 font-bold">📚 Storico (tocca per aprire)</div>
+                    <div class="flex gap-1.5 text-[11px]">${hbtn('LOST', '❌ Perse', 'bg-rose-500/20 text-rose-300 border-rose-400')}${hbtn('WON', '✅ Vinte', 'bg-emerald-500/20 text-emerald-300 border-emerald-400')}${hbtn('VOID', '➖ Void', 'bg-slate-500/20 text-slate-200 border-slate-400')}</div>`;
+                if (histOpen) {
+                    const items = byS(histOpen).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                    html += items.slice(0, histShown).map(card).join('');
+                    if (items.length > histShown) html += `<button type="button" onclick="mpMore()" class="w-full text-[11px] text-fuchsia-300 border border-slate-700 rounded-lg py-1.5">Mostra altre (${Math.min(10, items.length - histShown)} di ${items.length - histShown})</button>`;
+                }
+            }
+            $('mp-list').innerHTML = html;
         }
 
         function card(r) {
@@ -3608,7 +3673,9 @@
             </div>`;
         }
 
-        window.mpFilter = function (k) { filter = k; render(); };
+        window.mpFilter = function (k) { filter = k; histShown = 10; render(); };
+        window.mpHist = function (st) { histOpen = histOpen === st ? '' : st; histShown = 10; render(); };
+        window.mpMore = function () { histShown += 10; render(); };
         window.mpProv = function (i) { pfilter = i < 0 || !provsNow[i] ? 'all' : provsNow[i].k; render(); };
 
         window.mpSavePaste = async function () {
