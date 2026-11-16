@@ -358,7 +358,6 @@
                                 <label class="block text-slate-400 mb-1 text-[10px]">Piano Sottoscritto</label>
                                 <select id="new_user_plan" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-white focus:outline-none focus:border-emerald-500">
                                     <option value="pure" selected>Pure Signal (Consigliato Test)</option>
-                                    <option value="elite">Cluster Elite (Bilanciato)</option>
                                     <option value="full">All-Inclusive (Tutti)</option>
                                 </select>
                             </div>
@@ -602,10 +601,10 @@
                             Pure Signal
                         </button>
                         <button type="button" onclick="setClusterFilter('elite', this)" id="btn-cluster-elite" class="cluster-btn px-2 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
-                            Elite (ROI+)
+                            Full (All-Inclusive)
                         </button>
                         <button type="button" onclick="setClusterFilter('all', this)" id="btn-cluster-all" class="cluster-btn cluster-pill-active px-2 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 text-[10px] sm:text-xs font-bold transition text-center truncate">
-                            Tutti (Full)
+                            Tutti
                         </button>
                     </div>
                 </div>
@@ -1127,6 +1126,7 @@
         function saveFullSelectedTipsters(list) {
             localStorage.setItem(FULL_TIPSTERS_KEY, JSON.stringify(list));
             pushSetting('full_tipsters', list);
+            try { syncBetsToGitHub(loadAllBets()); } catch (e) { console.warn('[AtmBet] riallineo Full', e); }
             renderTipstersSelectors();
         }
 
@@ -2539,6 +2539,8 @@
             const pureList = getPureSelectedTipsters().map(t => canonicalizeTipsterName(t));
             const isXG = canon.toLowerCase().includes('xg');
             const isPure = !isXG && (pureList.includes(canon) || canon === 'AtmBet Safe' || canon === 'AtmBetSignal');
+            const fullList = getFullSelectedTipsters().map(t => canonicalizeTipsterName(t));
+            const isFull = fullList.includes(canon);
             let st = String(b.status || 'pending').toLowerCase().trim();
             if (st.includes('vin') || st === 'win' || st === 'won') st = 'won';
             else if (st.includes('per') || st === 'loss' || st === 'lost') st = 'lost';
@@ -2558,6 +2560,7 @@
                 stake: Math.round(stake * 100) / 100,
                 status: st,
                 is_pure: isPure,
+                ...(window.__hasFull ? { is_full: isFull } : {}),
                 is_published: b.is_published !== false,
                 tg_sent: b.tg_sent === true,
                 tg_sent_pure: b.tg_sent_pure === true,
@@ -2573,6 +2576,7 @@
                 all.push(...(data || []));
                 if (!data || data.length < 1000) break;
             }
+            if (all.length) window.__hasFull = ('is_full' in all[0]);   // colonna creata da 11_full_flag.sql
             return all;
         }
 
@@ -2583,7 +2587,7 @@
                     id: String(r.id), event_date: String(r.event_date || ''), match_name: String(r.match_name || 'Evento'),
                     league: r.league || 'Generale', market: r.market || 'Mercato', prediction: r.prediction || '-',
                     original_tipster: r.original_tipster, odds: Math.round(Number(r.odds) * 100) / 100, stake: Math.round(Number(r.stake) * 100) / 100,
-                    status: r.status, is_pure: r.is_pure === true, is_published: r.is_published !== false, tg_sent: r.tg_sent === true,
+                    status: r.status, is_pure: r.is_pure === true, ...(window.__hasFull ? { is_full: r.is_full === true } : {}), is_published: r.is_published !== false, tg_sent: r.tg_sent === true,
                     tg_sent_pure: r.tg_sent_pure === true, tg_sent_full: r.tg_sent_full === true
                 });
             });
@@ -2625,6 +2629,8 @@
                 applyRemoteBetsLocally(rows);
                 window.__betSnapReady = true;
                 updateSyncBadge('success');
+                // una sola volta: allinea i flag Pure/Full di tutte le giocate alle liste fornitori attuali
+                if (window.__hasFull && !window.__fullBackfillDone) { window.__fullBackfillDone = true; syncBetsToGitHub(loadAllBets()); }
             } catch (err) {
                 console.warn('[AtmBet] sync da server', err);
                 updateSyncBadge('error', (err && err.message) || 'Errore di rete');
@@ -3087,16 +3093,16 @@
                 wrEl.innerText = "> 65.0% Target";
                 targetEl.innerText = "Piano 'Pure Signal'";
             } else if (currentClusterMode === 'elite') {
-                chEl.innerText = "Top ROI+";
-                volEl.innerText = "~10-15 / die";
-                wrEl.innerText = "~ 62.5% Target";
-                targetEl.innerText = "Piano Elite";
-            } else {
                 const fullTipsters = getFullSelectedTipsters();
                 chEl.innerText = fullTipsters.length > 0 ? fullTipsters.join(', ') : 'Canale All-Inclusive';
                 volEl.innerText = 'Full (-30-50 / die)';
                 wrEl.innerText = '> 65.6% Target';
                 targetEl.innerText = 'Piano All-Inclusive';
+            } else {
+                chEl.innerText = 'Tutti i fornitori';
+                volEl.innerText = 'Nessun filtro';
+                wrEl.innerText = '-';
+                targetEl.innerText = 'Tutti i pronostici';
             }
         }
 
@@ -3123,22 +3129,11 @@
                 const allowedPure = getPureSelectedTipsters();
                 allBets = allBets.filter(b => allowedPure.includes(canonicalizeTipsterName(b.original_tipster)));
             } else if (currentClusterMode === 'elite') {
-                const fullArchive = loadAllBets();
-                const tipsterNetProfits = {};
-                fullArchive.forEach(b => {
-                    if (b.status === 'won' || b.status === 'lost') {
-                        const name = canonicalizeTipsterName(b.original_tipster);
-                        if (!tipsterNetProfits[name]) tipsterNetProfits[name] = 0;
-                        const s = b.stake || 1.0;
-                        tipsterNetProfits[name] += (b.status === 'won' ? (b.odds - 1) * s : -s);
-                    }
-                });
-                const profitableTipsters = Object.keys(tipsterNetProfits).filter(name => tipsterNetProfits[name] > 0);
-                allBets = allBets.filter(b => profitableTipsters.includes(canonicalizeTipsterName(b.original_tipster)));
-            } else {
+                // "Full (All-Inclusive)": tutti i pronostici dei fornitori del cluster All-Inclusive
                 const allowedFull = getFullSelectedTipsters();
                 allBets = allBets.filter(b => allowedFull.includes(canonicalizeTipsterName(b.original_tipster)));
             }
+            // modalita' "Tutti": nessun filtro, tutti i fornitori indistintamente
 
             const unitMultiplierEl = document.getElementById('admin-unit-multiplier');
             const unitVal = parseFloat(unitMultiplierEl ? unitMultiplierEl.value : 10) || 10;

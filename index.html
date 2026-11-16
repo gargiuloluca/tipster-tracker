@@ -2870,6 +2870,7 @@
                     prediction: b.prediction || '-',
                     original_tipster: tip,
                     is_pure: isPure,
+                    is_full: b.is_full === true,
                     public_brand: isPure ? 'AtmBet Selection' : 'AtmBet Signal',
                     odds: parseFloat(b.odds) || 0,
                     stake: stake > 10 ? 1.0 : stake,
@@ -2982,11 +2983,13 @@
             activeUser = getActiveUserSession();
             const isUserPure = activeUser && (activeUser.plan === 'pure' || activeUser.plan === 'trial_vip');
 
+            const __flagFull = (cachedAllBets || []).some(x => x.is_full === true);
             const simBets = cachedAllBets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
 
                 if (isUserPure && b.is_pure !== true) return false;
+                if (!isUserPure && __flagFull && b.is_full !== true) return false;
 
                 const bDate = extractStandardDate(b.event_date);
 
@@ -3064,6 +3067,11 @@
             if (lostEl) lostEl.innerText = lost + __t('idx_lost_short', 'P');
         }
 
+        // Signal = giocate dei fornitori del piano Full. Finche i flag non esistono nei dati, resta tutto l'archivio come prima.
+        function __sigOnly(arr) {
+            return (cachedAllBets || []).some(b => b.is_full === true) ? arr.filter(b => b.is_full === true) : arr;
+        }
+
         function calculateGlobalPerformance() {
             activeUser = getActiveUserSession();
             const isUserPure = activeUser && (activeUser.plan === 'pure' || activeUser.plan === 'trial_vip');
@@ -3077,6 +3085,7 @@
                     subTitleEl.innerHTML = `<span class="text-amber-400 font-semibold">${__t('idx_global_pure_lbl', '⚡ Archivio Pure Signal (AtmBet Selection):')}</span> ${__t('idx_global_pure_body', "performance certificate delle tue selezioni d'élite.")}`;
                 }
             } else {
+                completed = __sigOnly(completed);
                 if (subTitleEl) {
                     subTitleEl.innerText = __t('idx_global_all', "Dati cumulativi di tutto l'archivio verificato.");
                 }
@@ -3128,8 +3137,9 @@
             const pureFiat = pureNetUnits * currentMultiplier;
             const pureAvgOdds = pureBets.length > 0 ? (pureOddsSum / pureBets.length).toFixed(2) : '1.65';
 
+            const fullBets = __sigOnly(completed);
             let fullWins = 0, fullNetUnits = 0, fullStakeTotal = 0, fullOddsSum = 0;
-            completed.forEach(b => {
+            fullBets.forEach(b => {
                 const s = b.stake || 1.0;
                 fullStakeTotal += s;
                 fullOddsSum += parseFloat(b.odds || 0);
@@ -3140,10 +3150,10 @@
                     fullNetUnits -= s;
                 }
             });
-            const fullWR = completed.length > 0 ? ((fullWins / completed.length) * 100).toFixed(1) : '0.0';
+            const fullWR = fullBets.length > 0 ? ((fullWins / fullBets.length) * 100).toFixed(1) : '0.0';
             const fullROI = fullStakeTotal > 0 ? ((fullNetUnits / fullStakeTotal) * 100).toFixed(1) : '0.0';
             const fullFiat = fullNetUnits * currentMultiplier;
-            const fullAvgOdds = completed.length > 0 ? (fullOddsSum / completed.length).toFixed(2) : '1.75';
+            const fullAvgOdds = fullBets.length > 0 ? (fullOddsSum / fullBets.length).toFixed(2) : '1.75';
 
             const pureWREl = document.getElementById('comp-pure-winrate');
             const pureROIEl = document.getElementById('comp-pure-roi');
@@ -3182,7 +3192,7 @@
                 fullFiatEl.innerText = `≈ ${fullFiat >= 0 ? '+' : ''}${fullFiat.toFixed(2)} €`;
                 fullFiatEl.className = `text-base font-mono font-black ${fullFiat >= 0 ? 'text-white' : 'text-rose-400'}`;
             }
-            if (fullCountEl) fullCountEl.innerText = `${completed.length} (${fullWins}${__t('idx_won_short', 'V')} - ${completed.length - fullWins}${__t('idx_lost_short', 'P')})`;
+            if (fullCountEl) fullCountEl.innerText = `${fullBets.length} (${fullWins}${__t('idx_won_short', 'V')} - ${fullBets.length - fullWins}${__t('idx_lost_short', 'P')})`;
             if (fullAvgOddsEl) fullAvgOddsEl.innerText = __t('idx_cmp_avg_odds', 'Quota Med: {odds}', { odds: fullAvgOdds });
         }
 
@@ -3418,6 +3428,8 @@
 
             if (__plan === 'pure' || __plan === 'trial_vip' || currentTipsterPlanFilter === 'pure') {
                 completed = completed.filter(b => b.is_pure === true);
+            } else {
+                completed = __sigOnly(completed);
             }
             completed = completed.map(__maskBetForUser);
 
