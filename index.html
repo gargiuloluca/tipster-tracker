@@ -2405,8 +2405,8 @@
             const user = getActiveUserSession();
             let el = document.getElementById('referral-box');
             const eligible = user && (user.plan === 'pure' || user.plan === 'all_inclusive') && window.sb;
-            if (!eligible) { if (el) el.remove(); return; }
-            const anchor = document.getElementById('telegram-connect-box');
+            if (!eligible) { if (el) el.remove(); const h0 = document.getElementById('referral-hint'); if (h0) h0.remove(); return; }
+            const anchor = document.getElementById('storico');
             if (!anchor) return;
             if (!el) {
                 el = document.createElement('section');
@@ -2419,7 +2419,29 @@
                 const r = await window.sb.rpc('my_referral_info');
                 if (!r.error && r.data && r.data.code) info = r.data;
             } catch (e) {}
-            if (!info) { el.remove(); return; }
+            if (!info) { el.remove(); const h1 = document.getElementById('referral-hint'); if (h1) h1.remove(); return; }
+            // riga di richiamo in alto, sotto il banner Telegram: porta al box in fondo
+            const tgBox = document.getElementById('telegram-connect-box');
+            if (tgBox && !document.getElementById('referral-hint')) {
+                const hint = document.createElement('div');
+                hint.id = 'referral-hint';
+                hint.className = 'text-center -mt-4 sm:-mt-6';
+                tgBox.insertAdjacentElement('afterend', hint);
+            }
+            const hintEl = document.getElementById('referral-hint');
+            if (hintEl) {
+                hintEl.innerHTML = `<a href="#referral-box" class="inline-flex items-center gap-1.5 text-xs font-bold text-fuchsia-300 hover:text-fuchsia-200 bg-fuchsia-500/10 border border-fuchsia-500/30 rounded-full px-3.5 py-1.5 transition">🎁 <span>${__t('idx_ref_hint', 'Vuoi ottenere un mese gratis? Clicca qui')}</span></a>`;
+                const a = hintEl.querySelector('a');
+                a.onclick = function (ev) {
+                    ev.preventDefault();
+                    const box = document.getElementById('referral-box');
+                    if (box) {
+                        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        box.classList.add('ring-2', 'ring-fuchsia-400');
+                        setTimeout(() => box.classList.remove('ring-2', 'ring-fuchsia-400'), 1800);
+                    }
+                };
+            }
             const e2 = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
             const link = 'https://atmbetofficial.com/?ref=' + info.code;
             const msg = __t('idx_ref_share_msg', "Uso AtmBet per i miei pronostici e mi trovo bene. Dai un'occhiata: {link}", { link: link });
@@ -2451,9 +2473,25 @@
                 setTimeout(() => { btn.textContent = __t('idx_ref_copy', 'Copia link'); }, 1800);
             };
         }
+        // Area utente: per chi ha accesso la pagina parte dai pronostici, poi il confronto, poi lo storico
+        function applyAreaLayout() {
+            const u = getActiveUserSession();
+            const has = !!(u && (u.plan === 'pure' || u.plan === 'all_inclusive' || u.plan === 'elite' || u.plan === 'trial_vip' || (u.credits && u.credits > 0)));
+            const sim = document.getElementById('simulatore');
+            const sel = document.getElementById('selezioni');
+            if (!sim || !sel || sim.parentNode !== sel.parentNode) return;
+            const glow = ['rounded-2xl', 'sm:rounded-3xl', 'p-3', 'sm:p-5', 'border', 'border-emerald-500/40', 'bg-gradient-to-b', 'from-emerald-950/25', 'to-slate-950/0', 'shadow-lg', 'shadow-emerald-500/10'];
+            if (has) {
+                if (sel.nextElementSibling !== sim) sim.parentNode.insertBefore(sel, sim);
+                glow.forEach(c => sel.classList.add(c));
+            } else {
+                if (sim.nextElementSibling !== sel) sim.parentNode.insertBefore(sel, sim.nextSibling);
+                glow.forEach(c => sel.classList.remove(c));
+            }
+        }
         (function () {
             const __origBanner = updateTelegramBanner;
-            updateTelegramBanner = function () { __origBanner.apply(this, arguments); try { renderReferralBox(); } catch (e) {} };
+            updateTelegramBanner = function () { __origBanner.apply(this, arguments); try { applyAreaLayout(); } catch (e) {} try { renderReferralBox(); } catch (e) {} };
         })();
 
         function getActiveUserSession() {
