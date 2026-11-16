@@ -471,5 +471,9 @@
   "idx_ref_rules": "Il mese viene aggiunto al tuo piano quando l'amico completa il primo acquisto a pagamento (la prova gratuita non conta). Massimo 3 mesi al mese.",
   "auth_ok_check_email_code": "Account creato! Conferma l'email, poi accedi: il codice inserito verra attivato in automatico.",
   "auth_code_retry": "Puoi riprovare dal menu del sito, voce Sblocco.",
-  "idx_ref_hint": "Vuoi ottenere un mese gratis? Clicca qui"
+  "idx_ref_hint": "Vuoi ottenere un mese gratis? Clicca qui",
+  "idx_ref_hint_trial": "Vuoi più giorni di prova? Clicca qui",
+  "idx_ref_desc_trial": "Per ogni amico che si abbona con il tuo link ricevi <b class=\"text-white\">7 giorni di prova in più</b>.",
+  "idx_ref_stats_days": "Amici abbonati: {n} · Giorni ottenuti: {d}",
+  "idx_ref_rules_trial": "I giorni vengono aggiunti alla tua prova quando l'amico completa il primo acquisto a pagamento (la prova gratuita non conta). Massimo 3 premi al mese."
 }

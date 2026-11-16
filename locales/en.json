@@ -471,5 +471,9 @@
   "idx_ref_rules": "The month is added to your plan when your friend completes their first paid purchase (the free trial does not count). Maximum 3 months per month.",
   "auth_ok_check_email_code": "Account created! Confirm your email, then log in: the code you entered will be activated automatically.",
   "auth_code_retry": "You can try again from the site menu, under Unlock.",
-  "idx_ref_hint": "Want a free month? Click here"
+  "idx_ref_hint": "Want a free month? Click here",
+  "idx_ref_hint_trial": "Want more trial days? Click here",
+  "idx_ref_desc_trial": "For every friend who subscribes with your link you get <b class=\"text-white\">7 extra trial days</b>.",
+  "idx_ref_stats_days": "Friends subscribed: {n} · Days earned: {d}",
+  "idx_ref_rules_trial": "The days are added to your trial when your friend completes their first paid purchase (the free trial does not count). Maximum 3 rewards per month."
 }

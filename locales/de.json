@@ -471,5 +471,9 @@
   "idx_ref_rules": "Der Monat wird deinem Plan gutgeschrieben, sobald dein Freund seinen ersten bezahlten Kauf abschließt (der kostenlose Test zählt nicht). Höchstens 3 Monate pro Monat.",
   "auth_ok_check_email_code": "Konto erstellt! Bestätige deine E-Mail und melde dich an: Der eingegebene Code wird automatisch aktiviert.",
   "auth_code_retry": "Du kannst es im Menü der Seite unter „Freischalten“ erneut versuchen.",
-  "idx_ref_hint": "Möchtest du einen Monat gratis? Hier klicken"
+  "idx_ref_hint": "Möchtest du einen Monat gratis? Hier klicken",
+  "idx_ref_hint_trial": "Möchtest du mehr Testtage? Hier klicken",
+  "idx_ref_desc_trial": "Für jeden Freund, der mit deinem Link ein Abo abschließt, erhältst du <b class=\"text-white\">7 zusätzliche Testtage</b>.",
+  "idx_ref_stats_days": "Geworbene Abonnenten: {n} · Gewonnene Tage: {d}",
+  "idx_ref_rules_trial": "Die Tage werden deinem Test gutgeschrieben, sobald dein Freund seinen ersten bezahlten Kauf abschließt (der kostenlose Test zählt nicht). Höchstens 3 Prämien pro Monat."
 }

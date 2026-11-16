@@ -471,5 +471,9 @@
   "idx_ref_rules": "El mes se añade a tu plan cuando tu amigo completa su primera compra de pago (la prueba gratuita no cuenta). Máximo 3 meses al mes.",
   "auth_ok_check_email_code": "¡Cuenta creada! Confirma tu email y luego inicia sesión: el código introducido se activará automáticamente.",
   "auth_code_retry": "Puedes volver a intentarlo desde el menú del sitio, en Desbloqueo.",
-  "idx_ref_hint": "¿Quieres un mes gratis? Haz clic aquí"
+  "idx_ref_hint": "¿Quieres un mes gratis? Haz clic aquí",
+  "idx_ref_hint_trial": "¿Quieres más días de prueba? Haz clic aquí",
+  "idx_ref_desc_trial": "Por cada amigo que se suscriba con tu enlace recibes <b class=\"text-white\">7 días de prueba extra</b>.",
+  "idx_ref_stats_days": "Amigos suscritos: {n} · Días obtenidos: {d}",
+  "idx_ref_rules_trial": "Los días se añaden a tu prueba cuando tu amigo completa su primera compra de pago (la prueba gratuita no cuenta). Máximo 3 premios al mes."
 }
