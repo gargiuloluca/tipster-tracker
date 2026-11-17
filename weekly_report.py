@@ -2,6 +2,7 @@
 import html
 import json
 import os
+import urllib.error
 import urllib.request
 from datetime import date, datetime, timedelta
 from zoneinfo import ZoneInfo
@@ -48,9 +49,14 @@ def main():
             + '<p style="color:#666;font-size:12px;margin-top:20px">Lo username Telegram lo scrive l\'utente: se manca o non corrisponde, riconoscilo dall\'email.</p></div>')
     data = json.dumps({"from": FROM, "to": [TO], "subject": f"AtmBet: {len(scaduti)} scaduti, {len(in_scad)} in scadenza", "html": body}).encode()
     req = urllib.request.Request(RESEND_URL, data=data, method="POST",
-                                 headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        print("Email inviata:", r.status, f"scaduti={len(scaduti)} in_scadenza={len(in_scad)}")
+                                 headers={"Authorization": f"Bearer {RESEND_KEY}", "Content-Type": "application/json",
+                                          "User-Agent": "AtmBet-weekly-report/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            print("Email inviata:", r.status, f"scaduti={len(scaduti)} in_scadenza={len(in_scad)}")
+    except urllib.error.HTTPError as e:
+        print("Resend ha risposto", e.code, e.read().decode("utf-8", "replace")[:500])
+        raise
 
 
 if __name__ == "__main__":
