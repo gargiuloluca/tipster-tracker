@@ -2285,7 +2285,12 @@
             const badge = document.getElementById('conflict-count-badge');
             if (!conflictPanel || !conflictContainer) return;
 
-            const activeBets = bets.filter(b => b.status === 'pending');
+            // Le multiple (piu' partite nello stesso pronostico) non vanno confrontate con le singole
+            const isMultiBet = (b) => {
+                const parts = String(b.match_name || '').split('/').map(x => x.trim()).filter(Boolean);
+                return parts.length >= 2 || String(b.prediction || '').split('/').filter(x => x.trim()).length >= 2;
+            };
+            const activeBets = bets.filter(b => b.status === 'pending' && !isMultiBet(b));
             const confirmedKeys = getConfirmedConflicts();
             
             const matchGroups = {};
