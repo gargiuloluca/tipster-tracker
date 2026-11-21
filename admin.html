@@ -668,7 +668,10 @@
                         <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
                         <h3 class="text-xs font-bold text-amber-300">Sovraesposizione / Conflitto Match</h3>
                     </div>
-                    <span id="conflict-count-badge" class="text-[9px] font-mono font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0</span>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" onclick="runDedupeNow()" class="text-[10px] font-bold px-2 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">Applica regola</button>
+                        <span id="conflict-count-badge" class="text-[9px] font-mono font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full">0</span>
+                    </div>
                 </div>
                 <div id="conflict-items-container" class="space-y-1.5 pt-1"></div>
             </section>
@@ -1335,7 +1338,7 @@
             const when = r.ran_at ? new Date(r.ran_at).toLocaleString('it-IT', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
             const closed = r.closed || [], unres = r.unresolved || [], waiting = r.waiting || [];
             const closedHtml = closed.length ? `<details class="mt-1"><summary class="cursor-pointer text-emerald-400">Vedi le ${closed.length} chiuse</summary>` +
-                closed.map(c => `<div class="text-[10px] text-slate-400 py-0.5">${c.result === 'won' ? '✅' : '❌'} ${__esc(c.match)} · ${__esc(c.pick)} · ${__esc(c.score)}</div>`).join('') + '</details>' : '';
+                closed.map(c => `<div class="text-[10px] text-slate-400 py-0.5">${c.result === 'won' ? '✅' : '❌'} ${__esc(c.match)} · ${__esc(c.pick)} · ${__esc(c.score)}${c.loose ? ' · <span class="text-amber-400">abbinata per orario</span>' : ''}</div>`).join('') + '</details>' : '';
             const unresHtml = unres.length ? `
                 <div class="bg-amber-500/10 border border-amber-500/40 rounded-xl p-2.5 space-y-1.5">
                     <div class="font-bold text-amber-300">⚠ Da controllare a mano (${unres.length})</div>
@@ -2382,7 +2385,7 @@
                 const parts = String(b.match_name || '').split('/').map(x => x.trim()).filter(Boolean);
                 return parts.length >= 2 || String(b.prediction || '').split('/').filter(x => x.trim()).length >= 2;
             };
-            const activeBets = bets.filter(b => b.status === 'pending' && !isMultiBet(b));
+            const activeBets = bets.filter(b => b.status === 'pending' && !isMultiBet(b) && b.is_published !== false);
             const confirmedKeys = getConfirmedConflicts();
             
             const matchGroups = {};
@@ -2856,6 +2859,90 @@
             syncBetsToGitHub(bets);
         }
 
+        // ===== DOPPIONI E CONFLITTI TRA FORNITORI =====
+        // Stesso pronostico da fornitori diversi: se ne pubblica uno solo (gli altri passano a "Interno": restano nelle statistiche del fornitore).
+        // Pronostici diversi sulla stessa partita da fornitori diversi: resta pubblicato quello con quota 1,40-1,60 (piu probabile).
+        // Non tocca mai i pronostici gia inviati su Telegram ne quelli che hai gia messo su "Interno" a mano.
+        const AD_STOP = new Set(['fc', 'cf', 'ac', 'as', 'ss', 'us', 'sc', 'cd', 'ca', 'sv', 'fk', 'sk', 'if', 'bk', 'de', 'la', 'le', 'the', 'club', 'calcio', 'city', 'united', 'real', 'sporting', 'athletic', 'atletico', 'sport']);
+        function adNorm(t) { return String(t || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+        function adTokens(t) { return adNorm(t).split(' ').filter(w => w.length > 2 && !AD_STOP.has(w)); }
+        function adSplitMatch(name) { const m = String(name || '').trim().split(/\s+(?:-|–|—|vs\.?|v)\s+/i); return m.length === 2 ? [m[0], m[1]] : [null, null]; }
+        function adSameTeam(a, b) {
+            const na = adNorm(a), nb = adNorm(b);
+            if (!na || !nb) return false;
+            if (na === nb) return true;
+            const A = adTokens(a), B = adTokens(b);
+            if ((A.length ? A : na.split(' ')).some(x => (B.length ? B : nb.split(' ')).includes(x))) return true;
+            const [sh, lo] = na.length <= nb.length ? [na, nb] : [nb, na];
+            return sh.length >= 5 && lo.includes(sh);
+        }
+        function adDay(b) { const m = String(b.event_date || '').match(/(\d{4}-\d{2}-\d{2})/); return m ? m[1] : String(b.event_date || ''); }
+        function adSameMatch(x, y) {
+            if (adDay(x) !== adDay(y)) return false;
+            const [h1, a1] = adSplitMatch(x.match_name), [h2, a2] = adSplitMatch(y.match_name);
+            if (!h1 || !h2) return adNorm(x.match_name) === adNorm(y.match_name);
+            return adSameTeam(h1, h2) && adSameTeam(a1, a2);
+        }
+        function adPick(p) {
+            let t = String(p || '').toUpperCase().replace(/\s+/g, '');
+            t = t.replace(/^OVER/, 'O').replace(/^UNDER/, 'U').replace(/,/g, '.');
+            if (t === 'GOL' || t === 'GOAL' || t === 'BTTS') t = 'GG';
+            if (t === 'NOGOL' || t === 'NOGOAL') t = 'NG';
+            return t;
+        }
+
+        function autoDedupePublication(bets) {
+            const aud = (b) => { const r = betToRow(b); return { p: r.is_pure === true, f: r.is_full === true }; };
+            const sent = (b) => b.tg_sent === true || b.tg_sent_pure === true || b.tg_sent_full === true;
+            const prov = (b) => canonicalizeTipsterName(b.original_tipster || '');
+            const odd = (b) => parseFloat(b.odds) || 0;
+            const cand = bets.filter(b => String(b.status || 'pending').toLowerCase() === 'pending' && b.is_published !== false && !String(b.match_name || '').includes('/'));
+            const groups = [];
+            cand.forEach(b => { const g = groups.find(x => adSameMatch(x[0], b)); if (g) g.push(b); else groups.push([b]); });
+            const out = { dup: 0, conf: 0, noRange: 0, lines: [] };
+            const hide = (b, why) => { b.is_published = false; out.lines.push(`${why}: ${b.match_name} · ${b.prediction} @${odd(b).toFixed(2)} (${prov(b)})`); };
+
+            groups.forEach(g => {
+                if (g.length < 2) return;
+                // 1) stesso identico pronostico da fornitori diversi: ne resta uno solo
+                const byPick = {};
+                g.forEach(b => { (byPick[adPick(b.prediction)] = byPick[adPick(b.prediction)] || []).push(b); });
+                Object.values(byPick).forEach(list => {
+                    if (list.length < 2) return;
+                    const rank = (b) => [sent(b) ? 1 : 0, (aud(b).p ? 1 : 0) + (aud(b).f ? 1 : 0), odd(b)];
+                    const ranked = list.slice().sort((x, y) => { const a = rank(x), c = rank(y); return (c[0] - a[0]) || (c[1] - a[1]) || (c[2] - a[2]); });
+                    const kept = [];
+                    ranked.forEach(b => {
+                        const ab = aud(b);
+                        const covered = kept.some(k => { const ak = aud(k); return (!ab.p || ak.p) && (!ab.f || ak.f); });
+                        if (covered && !sent(b)) { hide(b, 'Doppione nascosto'); out.dup++; } else kept.push(b);
+                    });
+                });
+                // 2) pronostici diversi, fornitori diversi, stesso pubblico: resta quello con quota 1,40-1,60
+                const live = g.filter(b => b.is_published !== false);
+                const conflicted = live.filter(b => live.some(c => c !== b && adPick(c.prediction) !== adPick(b.prediction) && prov(c) !== prov(b)
+                    && ((aud(b).p && aud(c).p) || (aud(b).f && aud(c).f))));
+                if (new Set(conflicted.map(b => adPick(b.prediction))).size < 2) return;
+                const inRange = conflicted.filter(b => odd(b) >= 1.40 && odd(b) <= 1.60);
+                if (!inRange.length) { out.noRange++; out.lines.push(`Conflitto senza quota 1,40-1,60 (decidi tu): ${g[0].match_name}`); return; }
+                const best = inRange.slice().sort((x, y) => odd(x) - odd(y))[0];
+                conflicted.forEach(b => { if (adPick(b.prediction) !== adPick(best.prediction) && !sent(b)) { hide(b, 'Conflitto: nascosto'); out.conf++; } });
+            });
+            return out;
+        }
+
+        function dedupeSummaryText(r) {
+            if (!r || (!r.dup && !r.conf && !r.noRange)) return 'Nessun doppione o conflitto da sistemare.';
+            return `Doppioni nascosti: ${r.dup} · Conflitti risolti: ${r.conf}` + (r.noRange ? ` · Da decidere a mano: ${r.noRange}` : '') + '\n\n' + r.lines.slice(0, 12).join('\n');
+        }
+
+        function runDedupeNow() {
+            const bets = loadAllBets();
+            const r = autoDedupePublication(bets);
+            if (r.dup || r.conf) persistBets(bets);
+            alert(dedupeSummaryText(r));
+        }
+
         function parseAIText() {
             const text = document.getElementById('ai-input').value.trim();
             if (!text) {
@@ -2935,8 +3022,9 @@
             });
 
             if (addedCount > 0) {
+                const dd = autoDedupePublication(bets);
                 persistBets(bets);
-                alert(`Inseriti ${addedCount} nuovi pronostici in blocco!`);
+                alert(`Inseriti ${addedCount} nuovi pronostici in blocco!` + ((dd.dup || dd.conf || dd.noRange) ? '\n\n' + dedupeSummaryText(dd) : ''));
                 document.getElementById('ai-input').value = '';
             }
         }
