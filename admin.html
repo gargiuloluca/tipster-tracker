@@ -1301,6 +1301,8 @@
         }
 
         // ===== CONTROLLO AUTOMATICO RISULTATI (funzione check-results su Supabase) =====
+        // nome (slug) della funzione pubblicata su Supabase > Edge Functions
+        const RESULT_CHECK_FUNCTION = 'dynamic-task';
         const __esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
         function indexUnresolved(report) {
@@ -1360,7 +1362,7 @@
             if (!window.sb || !window.sb.functions) { box.innerHTML = '<div class="text-rose-400">Collegamento al server non disponibile.</div>'; return; }
             box.innerHTML = '<div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-slate-300 animate-pulse">⏳ Controllo risultati in corso...</div>';
             try {
-                const { data, error } = await window.sb.functions.invoke('check-results', { body: {} });
+                const { data, error } = await window.sb.functions.invoke(RESULT_CHECK_FUNCTION, { body: {} });
                 if (error) {
                     let msg = error.message || 'errore';
                     try { if (error.context && error.context.json) { const j = await error.context.json(); if (j && j.error) msg = j.error; } } catch (e) {}
@@ -1376,7 +1378,7 @@
                 updateResultBadge();
             } catch (e) {
                 const msg = String(e && e.message || e);
-                const hint = /not found|404|Failed to send|fetch/i.test(msg) ? ' (La funzione check-results risulta non pubblicata su Supabase.)' : '';
+                const hint = /not found|404|Failed to send|fetch/i.test(msg) ? ' (La funzione risulta non pubblicata su Supabase, oppure ha un nome diverso.)' : '';
                 box.innerHTML = `<div class="bg-rose-500/10 border border-rose-500/40 rounded-xl p-2.5 text-rose-300">Controllo non riuscito: ${__esc(msg)}${hint}<br><span class="text-slate-400">Puoi comunque inserire i risultati a mano qui sotto.</span></div>`;
             }
         }
