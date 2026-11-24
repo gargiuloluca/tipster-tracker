@@ -191,6 +191,20 @@
         </div>
     </div>
 
+    <!-- MODALE CONFLITTI DA DECIDERE -->
+    <div id="conflict-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9998] hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-4 sm:p-6 rounded-3xl max-w-lg w-full shadow-2xl space-y-3 max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div>
+                    <h3 class="text-xs sm:text-sm font-bold text-white">Conflitti da decidere</h3>
+                    <p class="text-[10px] sm:text-[11px] text-slate-400">Stessa partita, pronostici diversi, nessuna quota 1,40-1,60. Tocca quello da tenere.</p>
+                </div>
+                <button type="button" onclick="closeConflictModal()" class="text-slate-500 hover:text-white p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <div id="conflict-modal-body" class="flex-1 overflow-y-auto space-y-2 pr-1 custom-scroll text-[11px]"></div>
+        </div>
+    </div>
+
     <!-- MODALE VERIFICA RISULTATI API -->
     <div id="results-verify-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur z-[9998] hidden flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 p-4 sm:p-6 rounded-3xl max-w-lg w-full shadow-2xl space-y-3 max-h-[90vh] flex flex-col">
@@ -778,7 +792,10 @@
                 </div>
                 <textarea id="ai-input" rows="3" placeholder="Formato: DATA | PARTITA | PRONOSTICO | QUOTA | FORNITORE | CAMPIONATO&#10;Oppure aggiorna esiti: Squadra A - Squadra B - Esito: Vinta"
                     class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 font-mono"></textarea>
-                <div class="flex justify-end">
+                <div class="flex flex-col sm:flex-row sm:justify-end gap-2">
+                    <button type="button" onclick="openConflictModal()" class="w-full sm:w-auto bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-xs px-4 py-2 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
+                        <i data-lucide="scale" class="w-4 h-4"></i> Conflitti da decidere <span id="conflict-decide-badge" class="hidden bg-rose-600 text-white text-[9px] font-black rounded-full px-1.5 py-0.5 leading-none"></span>
+                    </button>
                     <button type="button" onclick="parseAIText()" class="w-full sm:w-auto bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs px-4 py-2 rounded-xl font-bold flex items-center justify-center gap-1.5 transition">
                         <i data-lucide="check-check" class="w-4 h-4"></i> Inserisci / Aggiorna in Blocco
                     </button>
@@ -3126,6 +3143,78 @@
             return out;
         }
 
+        // Conflitti che l'automatismo non puo' risolvere (nessuna quota 1,40-1,60): li decidi tu dalla finestra "Conflitti da decidere"
+        function findManualConflicts(bets) {
+            const aud = (b) => { const r = betToRow(b); return { p: r.is_pure === true, f: r.is_full === true }; };
+            const prov = (b) => canonicalizeTipsterName(b.original_tipster || '');
+            const odd = (b) => parseFloat(b.odds) || 0;
+            const cand = bets.filter(b => String(b.status || 'pending').toLowerCase() === 'pending' && b.is_published !== false && !String(b.match_name || '').includes('/'));
+            const groups = [];
+            cand.forEach(b => { const g = groups.find(x => adSameMatch(x[0], b)); if (g) g.push(b); else groups.push([b]); });
+            const out = [];
+            groups.forEach(g => {
+                if (g.length < 2) return;
+                const conflicted = g.filter(b => g.some(c => c !== b && adPick(c.prediction) !== adPick(b.prediction) && prov(c) !== prov(b)
+                    && ((aud(b).p && aud(c).p) || (aud(b).f && aud(c).f))));
+                if (new Set(conflicted.map(b => adPick(b.prediction))).size < 2) return;
+                if (conflicted.some(b => odd(b) >= 1.40 && odd(b) <= 1.60)) return;
+                out.push({ match: g[0].match_name, ids: conflicted.map(b => String(b.id)) });
+            });
+            return out;
+        }
+
+        function updateConflictBadge(n) {
+            const el = document.getElementById('conflict-decide-badge');
+            if (!el) return;
+            if (typeof n !== 'number') { try { n = findManualConflicts(loadAllBets()).length; } catch (e) { n = 0; } }
+            el.textContent = String(n);
+            el.classList.toggle('hidden', n === 0);
+        }
+
+        function closeConflictModal() { const m = document.getElementById('conflict-modal'); if (m) m.classList.add('hidden'); }
+
+        function openConflictModal() {
+            const modal = document.getElementById('conflict-modal');
+            const body = document.getElementById('conflict-modal-body');
+            if (!modal || !body) return;
+            const bets = loadAllBets();
+            const list = findManualConflicts(bets);
+            updateConflictBadge(list.length);
+            if (!list.length) {
+                body.innerHTML = '<div class="text-center py-6 text-emerald-400 text-xs font-semibold">Nessun conflitto da decidere.</div>';
+            } else {
+                body.innerHTML = list.map(c => {
+                    const items = c.ids.map(id => bets.find(b => String(b.id) === id)).filter(Boolean);
+                    return `<div class="bg-slate-950 border border-amber-500/30 rounded-xl p-2.5 space-y-1.5">
+                        <div class="text-white font-bold text-xs">${__escHtml(c.match)}</div>
+                        ${items.map(b => `<button type="button" data-id="${__escHtml(String(b.id))}" onclick="resolveConflictKeep(this.dataset.id)" class="w-full text-left bg-slate-900 hover:bg-emerald-500/10 border border-slate-800 hover:border-emerald-500/40 rounded-lg px-2.5 py-2 flex items-center justify-between gap-2">
+                            <span class="text-slate-300"><strong class="text-emerald-400">${__escHtml(b.prediction)}</strong> <span class="font-mono">@${(parseFloat(b.odds) || 0).toFixed(2)}</span><br><span class="text-[10px] text-slate-500">${__escHtml(canonicalizeTipsterName(b.original_tipster || ''))}</span></span>
+                            <span class="text-[10px] font-bold text-emerald-400 border border-emerald-500/40 rounded-lg px-2 py-1">Tieni</span>
+                        </button>`).join('')}
+                    </div>`;
+                }).join('');
+            }
+            modal.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // Tieni il pronostico scelto: gli altri della stessa partita passano a "Interno" (restano nelle statistiche del fornitore). Mai quelli gia inviati su Telegram.
+        function resolveConflictKeep(id) {
+            const bets = loadAllBets();
+            const keep = bets.find(b => String(b.id) === String(id));
+            if (!keep) return;
+            const c = findManualConflicts(bets).find(x => x.ids.includes(String(id)));
+            if (c) {
+                const sent = (b) => b.tg_sent === true || b.tg_sent_pure === true || b.tg_sent_full === true;
+                c.ids.forEach(oid => {
+                    const b = bets.find(x => String(x.id) === oid);
+                    if (b && oid !== String(id) && adPick(b.prediction) !== adPick(keep.prediction) && !sent(b)) b.is_published = false;
+                });
+                persistBets(bets);
+            }
+            openConflictModal();
+        }
+
         function dedupeSummaryText(r) {
             if (!r || (!r.dup && !r.conf && !r.noRange)) return 'Nessun doppione o conflitto da sistemare.';
             return `Doppioni nascosti: ${r.dup} · Conflitti risolti: ${r.conf}` + (r.noRange ? ` · Da decidere a mano: ${r.noRange}` : '') + '\n\n' + r.lines.slice(0, 12).join('\n');
@@ -3136,6 +3225,7 @@
             const r = autoDedupePublication(bets);
             if (r.dup || r.conf) persistBets(bets);
             alert(dedupeSummaryText(r));
+            if (r.noRange) openConflictModal();
         }
 
         function parseAIText() {
@@ -3221,6 +3311,7 @@
                 persistBets(bets);
                 alert(`Inseriti ${addedCount} nuovi pronostici in blocco!` + ((dd.dup || dd.conf || dd.noRange) ? '\n\n' + dedupeSummaryText(dd) : ''));
                 document.getElementById('ai-input').value = '';
+                if (dd.noRange) openConflictModal();
             }
         }
 
@@ -3489,6 +3580,7 @@
         function renderDashboard() {
             let allBets = loadAllBets();
             scanForConflictsAndDuplicates(allBets);
+            try { updateConflictBadge(); } catch (e) {}
 
             const tipsters = [...new Set(allBets.map(b => canonicalizeTipsterName(b.original_tipster)).filter(Boolean))];
             const select = document.getElementById('tipster-select-filter');
