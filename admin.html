@@ -2119,9 +2119,11 @@
             let t = `<b>${index != null ? index + '. ' : ''}🎰 MULTIPLA · ${legs.length} selezioni</b>\n\n`;
             legs.forEach((l, i) => {
                 t += `${nums[i] || '▫️'} <b>${tgEsc(l.match)}</b>\n`;
-                t += `      🎯 ${tgEsc(l.pick)}${l.league ? '  ·  🏆 ' + tgEsc(l.league) : ''}\n`;
+                t += `🎯 ${tgEsc(l.pick)}\n`;
+                if (l.league) t += `🏆 <i>${tgEsc(l.league)}</i>\n`;
+                t += `\n`;
             });
-            t += `\n💰 Quota totale: <b>${odd}</b>\n📊 Stake: <b>${stake}u</b> | 🤖 <code>${signature}</code>\n⚠️ <i>Vince solo se tutte le selezioni sono vincenti.</i>\n\n`;
+            t += `💰 Quota totale: <b>${odd}</b>\n📊 Stake: <b>${stake}u</b> | 🤖 <code>${signature}</code>\n⚠️ <i>Vince solo se tutte le selezioni sono vincenti.</i>\n\n`;
             return t;
         }
         // raggruppa i segnali in messaggi che non superano il limite di Telegram (4096 caratteri)
