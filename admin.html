@@ -2094,6 +2094,52 @@
             alert("Configurazione Telegram salvata sul server (visibile solo a te)!");
         }
 
+        // ===== FORMATO DEI SEGNALI TELEGRAM (singole e multiple) =====
+        function tgEsc(t) {
+            return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+        function splitMultiLegs(b) {
+            const ms = String(b.match_name || '').split('/').map(x => x.trim()).filter(Boolean);
+            const ps = String(b.prediction || '').split('/').map(x => x.trim()).filter(Boolean);
+            if (ms.length < 2 || ps.length !== ms.length) return null;   // non e' una multipla leggibile: si usa il formato classico
+            const ls = String(b.league || '').split('/').map(x => x.trim()).filter(Boolean);
+            const lab = { '1': '1 (Casa)', '2': '2 (Trasferta)', 'X': 'X (Pareggio)', '1X': '1X (Casa o pareggio)', 'X2': 'X2 (Trasferta o pareggio)', '12': '12 (Casa o trasferta)' };
+            return ms.map((m, i) => ({ match: m, pick: lab[ps[i].toUpperCase()] || ps[i], league: ls.length === ms.length ? ls[i] : (ls.length === 1 ? ls[0] : '') }));
+        }
+        // index = numero nell'elenco (messaggio con piu' segnali); index null = segnale singolo inviato da solo
+        function buildSignalBlock(b, signature, index) {
+            const odd = parseFloat(b.odds).toFixed(2);
+            const stake = (Number(b.stake) || 1).toFixed(1);
+            const legs = splitMultiLegs(b);
+            if (!legs) {
+                const head = index != null ? `${index}. ${tgEsc(b.match_name)}` : `⚽ ${tgEsc(b.match_name)}`;
+                return `<b>${head}</b>\n🏆 ${tgEsc(b.league)} | 🤖 <code>${signature}</code>\n🎯 Pronostico: <b>${tgEsc(b.prediction)}</b> @ <b>${odd}</b>\n📊 Stake: <b>${stake}u</b>\n\n`;
+            }
+            const nums = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
+            let t = `<b>${index != null ? index + '. ' : ''}🎰 MULTIPLA · ${legs.length} selezioni</b>\n\n`;
+            legs.forEach((l, i) => {
+                t += `${nums[i] || '▫️'} <b>${tgEsc(l.match)}</b>\n`;
+                t += `      🎯 ${tgEsc(l.pick)}${l.league ? '  ·  🏆 ' + tgEsc(l.league) : ''}\n`;
+            });
+            t += `\n💰 Quota totale: <b>${odd}</b>\n📊 Stake: <b>${stake}u</b> | 🤖 <code>${signature}</code>\n⚠️ <i>Vince solo se tutte le selezioni sono vincenti.</i>\n\n`;
+            return t;
+        }
+        // raggruppa i segnali in messaggi che non superano il limite di Telegram (4096 caratteri)
+        function groupSignalsForTelegram(list, signature) {
+            const groups = [];
+            let cur = null;
+            list.forEach((b, i) => {
+                const blk = buildSignalBlock(b, signature, i + 1);
+                if (!cur || cur.bets.length >= 10 || cur.text.length + blk.length > 3300) {
+                    cur = { bets: [], text: '' };
+                    groups.push(cur);
+                }
+                cur.bets.push(b);
+                cur.text += blk;
+            });
+            return groups;
+        }
+
         async function sendTelegramMessage(token, chatId, text) {
             const url = `https://api.telegram.org/bot${token}/sendMessage`;
             const res = await fetch(url, {
@@ -2171,20 +2217,14 @@
                     return;
                 }
 
-                const BATCH_SIZE = 10;
-                const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
+                const groups = groupSignalsForTelegram(toSend, 'AtmBet Selection');
+                const totalBatches = groups.length;
                 let sentCount = 0;
 
                 for (let bIdx = 0; bIdx < totalBatches; bIdx++) {
-                    const batch = toSend.slice(bIdx * BATCH_SIZE, (bIdx + 1) * BATCH_SIZE);
+                    const batch = groups[bIdx].bets;
                     let msg = `⚡ <b>ATMBET SELECTION | SIGNAL PURE (${bIdx + 1}/${totalBatches})</b> ⚡\n📅 <i>Data: ${todayStr}</i>\n🎯 <i>Top Selezioni ad Alto Valore Matematico</i>\n\n`;
-                    batch.forEach((b, i) => {
-                        const globalIndex = bIdx * BATCH_SIZE + i + 1;
-                        msg += `<b>${globalIndex}. ${b.match_name}</b>\n`;
-                        msg += `🏆 ${b.league} | 🤖 <code>AtmBet Selection</code>\n`;
-                        msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
-                        msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
-                    });
+                    msg += groups[bIdx].text;
 
                     try {
                         const res = await sendTelegramMessage(token, chatId, msg);
@@ -2223,22 +2263,15 @@
                     return;
                 }
 
-                const BATCH_SIZE = 10;
-                const totalBatches = Math.ceil(toSend.length / BATCH_SIZE);
+                const groups = groupSignalsForTelegram(toSend, 'AtmBet Signal');
+                const totalBatches = groups.length;
                 let sentCount = 0;
 
                 for (let bIdx = 0; bIdx < totalBatches; bIdx++) {
-                    const batch = toSend.slice(bIdx * BATCH_SIZE, (bIdx + 1) * BATCH_SIZE);
+                    const batch = groups[bIdx].bets;
                     let msg = `🌐 <b>ATMBET SIGNAL | AGGIORNAMENTO ODIERNO (${bIdx + 1}/${totalBatches})</b> 🌐\n`;
                     msg += `📅 <i>Data: ${todayStr}</i>\n\n`;
-
-                    batch.forEach((b, i) => {
-                        const globalIndex = bIdx * BATCH_SIZE + i + 1;
-                        msg += `<b>${globalIndex}. ${b.match_name}</b>\n`;
-                        msg += `🏆 ${b.league} | 🤖 <code>AtmBet Signal</code>\n`;
-                        msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
-                        msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>\n\n`;
-                    });
+                    msg += groups[bIdx].text;
 
                     try {
                         const res = await sendTelegramMessage(token, chatId, msg);
@@ -2411,10 +2444,7 @@
             }
 
             let msg = `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA (${channelLabel})</b> ⚡\n📅 <i>Data: ${b.event_date}</i>\n\n`;
-            msg += `<b>⚽ ${b.match_name}</b>\n`;
-            msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
-            msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
-            msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>`;
+            msg += buildSignalBlock(b, brandSignature, null).trimEnd();
 
             try {
                 const res = await sendTelegramMessage(token, chatId, msg);
@@ -2468,10 +2498,7 @@
                 ? `🎁 <b>ATMBET | FREE SIGNAL PREVIEW</b> 🎁\n📅 <i>Data: ${b.event_date}</i>\n\n`
                 : `⚡ <b>ATMBET SIGNAL | SELEZIONE RAPIDA</b> ⚡\n📅 <i>Data: ${b.event_date}</i>\n\n`;
 
-            msg += `<b>⚽ ${b.match_name}</b>\n`;
-            msg += `🏆 ${b.league} | 🤖 <code>${brandSignature}</code>\n`;
-            msg += `🎯 Pronostico: <b>${b.prediction}</b> @ <b>${parseFloat(b.odds).toFixed(2)}</b>\n`;
-            msg += `📊 Stake: <b>${b.stake.toFixed(1)}u</b>`;
+            msg += buildSignalBlock(b, brandSignature, null).trimEnd();
 
             try {
                 const res = await sendTelegramMessage(token, chatId, msg);
