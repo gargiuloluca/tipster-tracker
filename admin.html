@@ -2122,19 +2122,8 @@
                 const alreadySent = channelType === 'pure' ? b.tg_sent_pure === true : b.tg_sent_full === true; // ogni canale ha il suo segno
                 if (!isPending || b.is_published === false || alreadySent) return false;
 
-                if (betDate === targetDateStr) return true;
+                return getBettingDay(eventDateTime) === targetDateStr;   // giorno di gioco (prima delle 09:00 = giorno prima)
 
-                const timePart = eventDateTime.slice(11, 16);
-                if (timePart) {
-                    const [hh] = timePart.split(':').map(Number);
-                    if (hh < 9) {
-                        const matchDayObj = new Date(betDate);
-                        matchDayObj.setDate(matchDayObj.getDate() - 1);
-                        if (getLocalDateString(matchDayObj) === targetDateStr) return true;
-                    }
-                }
-
-                return false;
             });
         }
 
@@ -2287,18 +2276,7 @@
                 const eventDateTime = String(b.event_date || '').trim();
                 const bDate = extractStandardDate(eventDateTime);
                 
-                let isTodayOrNight = (bDate === todayStr);
-                if (!isTodayOrNight) {
-                    const timePart = eventDateTime.slice(11, 16);
-                    if (timePart) {
-                        const [hh] = timePart.split(':').map(Number);
-                        if (hh < 9) {
-                            const matchDayObj = new Date(bDate);
-                            matchDayObj.setDate(matchDayObj.getDate() - 1);
-                            if (getLocalDateString(matchDayObj) === todayStr) isTodayOrNight = true;
-                        }
-                    }
-                }
+                let isTodayOrNight = (getBettingDay(eventDateTime) === todayStr);
 
                 if (isTodayOrNight) {
                     const norm = canonicalizeTipsterName(b.original_tipster).toLowerCase();
@@ -2339,11 +2317,11 @@
             }
 
             const bets = loadAllBets();
-            const todayStr = getLocalDateString(new Date());
+            const todayStr = getBettingToday();
 
             const resolvedBets = bets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
-                const bDate = extractStandardDate(b.event_date);
+                const bDate = getBettingDay(b.event_date);
                 if (!isResolved || bDate !== todayStr) return false;
 
                 const normTipster = canonicalizeTipsterName(b.original_tipster);
@@ -2679,6 +2657,23 @@
             return clean.slice(0, 10);
         }
 
+        // GIORNO DI GIOCO: le partite prima delle 09:00 appartengono ai pronostici del giorno prima
+        const BETTING_DAY_START_HOUR = 9;
+        function addDaysStr(ymd, n) {
+            const p = String(ymd).split('-').map(Number);
+            return new Date(Date.UTC(p[0], p[1] - 1, p[2] + n)).toISOString().slice(0, 10);
+        }
+        function getBettingDay(raw) {
+            const d = extractStandardDate(raw);
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+            const m = String(raw || '').trim().match(/^\d{4}[-/]\d{1,2}[-/]\d{1,2}[T ]+(\d{1,2}):(\d{2})/);
+            if (m && parseInt(m[1], 10) < BETTING_DAY_START_HOUR) return addDaysStr(d, -1);
+            return d;
+        }
+        function getBettingToday() {
+            return getLocalDateString(new Date(Date.now() - BETTING_DAY_START_HOUR * 3600 * 1000));
+        }
+
         function getLocalDateString(d) {
             const year = d.getFullYear();
             const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -2749,11 +2744,8 @@
             document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('sim-pill-active'));
             if (btnElement) btnElement.classList.add('sim-pill-active');
 
-            const today = new Date();
-            const todayStr = getLocalDateString(today);
-            const yesterday = new Date();
-            yesterday.setDate(today.getDate() - 1);
-            const yesterdayStr = getLocalDateString(yesterday);
+            const todayStr = getBettingToday();
+            const yesterdayStr = addDaysStr(todayStr, -1);
 
             if (type === 'today') {
                 if (dateInput) dateInput.value = todayStr;
@@ -2762,9 +2754,7 @@
                 if (dateInput) dateInput.value = yesterdayStr;
                 currentCustomDate = yesterdayStr;
             } else if (type === '7days') {
-                const d7 = new Date();
-                d7.setDate(today.getDate() - 7);
-                const d7Str = getLocalDateString(d7);
+                const d7Str = addDaysStr(todayStr, -7);
                 if (dateInput) dateInput.value = d7Str;
                 currentCustomDate = d7Str;
             } else if (type === 'all') {
@@ -3489,15 +3479,18 @@
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
 
+            const todayBD = getBettingToday();
+            const yesterdayBD = addDaysStr(todayBD, -1);
+            const d7BD = addDaysStr(todayBD, -7);
             const simBets = allBets.filter(b => {
                 const isResolved = b.status === 'won' || b.status === 'lost';
                 if (!isResolved) return false;
 
-                const bDate = extractStandardDate(b.event_date);
+                const bDate = getBettingDay(b.event_date);
 
-                if (currentSimMode === 'today') return bDate === todayStr;
-                if (currentSimMode === 'yesterday') return bDate === yesterdayStr;
-                if (currentSimMode === '7days') return bDate >= d7Str && bDate <= todayStr;
+                if (currentSimMode === 'today') return bDate === todayBD;
+                if (currentSimMode === 'yesterday') return bDate === yesterdayBD;
+                if (currentSimMode === '7days') return bDate >= d7BD && bDate <= todayBD;
                 if (currentSimMode === 'all') return true;
                 if (currentSimMode === 'custom') return bDate === currentCustomDate;
                 return true;
@@ -3622,35 +3615,21 @@
             d7.setDate(today.getDate() - 7);
             const d7Str = getLocalDateString(d7);
 
+            // giorno di gioco: le partite prima delle 09:00 contano nel giorno prima
+            const todayBD = getBettingToday();
+            const yesterdayBD = addDaysStr(todayBD, -1);
+            const d7BD = addDaysStr(todayBD, -7);
             if (currentSimMode === 'today') {
-                const nowForView = new Date();
-                const adjustedViewDate = new Date(nowForView.getTime() - (9 * 3600 * 1000));
-                const targetViewStr = getLocalDateString(adjustedViewDate);
-
-                filtered = filtered.filter(b => {
-                    const bDate = extractStandardDate(b.event_date);
-                    if (bDate === targetViewStr) return true;
-
-                    const timePart = String(b.event_date || '').slice(11, 16);
-                    if (timePart) {
-                        const [hh] = timePart.split(':').map(Number);
-                        if (hh < 9) {
-                            const matchDayObj = new Date(bDate);
-                            matchDayObj.setDate(matchDayObj.getDate() - 1);
-                            if (getLocalDateString(matchDayObj) === targetViewStr) return true;
-                        }
-                    }
-                    return false;
-                });
+                filtered = filtered.filter(b => getBettingDay(b.event_date) === todayBD);
             } else if (currentSimMode === 'yesterday') {
-                filtered = filtered.filter(b => extractStandardDate(b.event_date) === yesterdayStr);
+                filtered = filtered.filter(b => getBettingDay(b.event_date) === yesterdayBD);
             } else if (currentSimMode === '7days') {
                 filtered = filtered.filter(b => {
-                    const d = extractStandardDate(b.event_date);
-                    return d >= d7Str && d <= todayStr;
+                    const d = getBettingDay(b.event_date);
+                    return d >= d7BD && d <= todayBD;
                 });
             } else if (currentSimMode === 'custom') {
-                filtered = filtered.filter(b => extractStandardDate(b.event_date) === currentCustomDate);
+                filtered = filtered.filter(b => getBettingDay(b.event_date) === currentCustomDate);
             }
 
             if (currentFilter === 'pending') {
