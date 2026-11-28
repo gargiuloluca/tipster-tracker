@@ -2505,12 +2505,19 @@
             try {
                 const res = await sendTelegramMessage(token, chatId, msg);
                 if (res.ok) {
+                    let freeNote = '';
                     if (targetMode !== 'free') {
                         b.tg_sent = true;
                         if (chatId === channelPure) b.tg_sent_pure = true; else b.tg_sent_full = true;
                         persistBets(bets);
+                    } else if (window.__hasFree) {
+                        markFreePick(bets, b);      // la giocata inviata al canale Free diventa la selezione gratuita del giorno
+                        persistBets(bets);
+                        freeNote = '\nOra e\' anche la selezione gratuita del giorno sul sito.';
+                    } else {
+                        freeNote = '\n(Per mostrarla anche sul sito esegui lo script 13_free_pick.sql su Supabase.)';
                     }
-                    alert(`Pronostico inviato con successo al canale ${channelLabel}!`);
+                    alert(`Pronostico inviato con successo al canale ${channelLabel}!` + freeNote);
                 } else {
                     alert(`Errore Telegram: ${res.description}`);
                 }
@@ -3418,24 +3425,13 @@
             }
         }
 
-        // Selezione gratuita del giorno: una sola per giorno di gioco. La vede chi e' registrato senza piano; non tocca i piani Pure e Full.
-        function toggleFreePick(id) {
-            if (!window.__hasFree) {
-                alert("Prima esegui su Supabase lo script 13_free_pick.sql (SQL Editor), poi ricarica dal server.");
-                return;
-            }
-            const bets = loadAllBets();
-            const b = bets.find(x => String(x.id) === String(id));
-            if (!b) return;
-            if (b.is_free_pick === true) {
-                b.is_free_pick = false;
-            } else {
-                const day = getBettingDay(b.event_date);
-                bets.forEach(x => { if (x !== b && x.is_free_pick === true && getBettingDay(x.event_date) === day) x.is_free_pick = false; });
-                b.is_free_pick = true;
-                if (b.is_published === false) b.is_published = true;   // per essere vista deve essere pubblicata
-            }
-            persistBets(bets);
+        // Selezione gratuita del giorno: e' la giocata inviata al canale Free. Una sola per giorno di gioco (la nuova sostituisce la precedente).
+        // La vede chi e' registrato senza piano; non tocca i piani Pure e Full.
+        function markFreePick(bets, b) {
+            const day = getBettingDay(b.event_date);
+            bets.forEach(x => { if (x !== b && x.is_free_pick === true && getBettingDay(x.event_date) === day) x.is_free_pick = false; });
+            b.is_free_pick = true;
+            if (b.is_published === false) b.is_published = true;   // per essere vista deve essere pubblicata
         }
 
         function deleteBet(id) {
@@ -3843,9 +3839,6 @@
                             <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
                                 ${bet.is_published ? '★ Vetrina' : 'Interno'}
                             </button>
-                            <button type="button" onclick="toggleFreePick('${bet.id}')" title="Selezione gratuita del giorno" class="px-2 py-0.5 rounded text-[9px] font-bold border transition ${bet.is_free_pick ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-800 text-slate-400 border-slate-700'}">
-                                🎁 Free
-                            </button>
                         </div>
                     </div>
 
@@ -3863,7 +3856,7 @@
                         </div>
 
                         <div class="flex items-center gap-1">
-                            <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[9px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
+                            <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[9px] font-bold font-mono ${bet.is_free_pick ? 'text-slate-950 bg-amber-400 border border-amber-400' : 'text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700'} px-2 py-1 rounded-lg">${bet.is_free_pick ? '🎁 Free' : 'Free'}</button>
                             <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a Full" class="text-[9px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
                             <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[9px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
                             <button type="button" onclick="deleteBet('${bet.id}')" class="p-1 rounded-lg text-rose-400 hover:bg-rose-500/10 border border-rose-500/20">
@@ -3967,7 +3960,7 @@
 
                 let tgColumnHtml = `
                     <div class="flex items-center gap-1 justify-center">
-                        <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded-lg">Free</button>
+                        <button type="button" onclick="sendSingleBetToTelegram('${bet.id}', 'free')" class="text-[10px] font-bold font-mono ${bet.is_free_pick ? 'text-slate-950 bg-amber-400 border border-amber-400' : 'text-slate-300 bg-slate-800 hover:bg-slate-700 border border-slate-700'} px-2 py-1 rounded-lg">${bet.is_free_pick ? '🎁 Free' : 'Free'}</button>
                         <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'full')" title="Invia a All-Inclusive" class="text-[10px] font-bold font-mono text-white bg-blue-600 hover:bg-blue-500 px-2 py-1 rounded-lg">Full</button>
                         <button type="button" onclick="sendSingleBetToTelegramManual('${bet.id}', 'pure')" title="Invia a Pure" class="text-[10px] font-bold font-mono text-slate-950 bg-amber-500 hover:bg-amber-400 px-2 py-1 rounded-lg">Pure</button>
                     </div>
@@ -3998,9 +3991,6 @@
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">
                         <button type="button" onclick="togglePublish('${bet.id}')" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
                             ${bet.is_published ? '★ Vetrina' : 'Interno'}
-                        </button>
-                        <button type="button" onclick="toggleFreePick('${bet.id}')" title="Selezione gratuita del giorno" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${bet.is_free_pick ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-800 text-slate-400 border-slate-700'}">
-                            🎁 Free
                         </button>
                     </td>
                     <td class="py-2.5 px-3">${statusControlHtml}</td>
