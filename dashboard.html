@@ -524,6 +524,7 @@
                     prediction: b.prediction || '-',
                     original_tipster: b.is_pure === true ? 'AtmBet Selection' : 'AtmBet Signal',
                     is_pure: b.is_pure === true,
+                    is_free_pick: b.is_free_pick === true,
                     brand: (b.is_pure === true && !(currentUser && currentUser.plan === 'all_inclusive')) ? 'AtmBet Selection' : 'AtmBet Signal',
                     odds: parseFloat(b.odds) || 1.80,
                     stake: stake > 10 ? 1.0 : stake,
@@ -766,6 +767,7 @@
             container.innerHTML = '';
 
             const pendingBets = bets.filter(b => b.status === 'pending' && __inTodayWindow(b.event_date));
+            pendingBets.sort((a, b) => (b.is_free_pick === true) - (a.is_free_pick === true));   // la selezione gratuita sta in cima
 
             if (pendingBets.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 font-medium text-xs">${__t('dsh_no_pending', 'Nessuna giocata in corso al momento.')}</div>`;
@@ -774,10 +776,12 @@
 
             pendingBets.forEach(bet => {
                 const unlocked = (currentUser.unlocked_bets || []).map(String);
-                const canSee = isVipActive || unlocked.includes(String(bet.id));
+                const canSee = isVipActive || bet.is_free_pick === true || unlocked.includes(String(bet.id));
 
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-lg transition";
+                card.className = bet.is_free_pick === true
+                    ? "bg-slate-900 border-2 border-amber-400/70 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-lg shadow-amber-500/10 transition"
+                    : "bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 flex flex-col justify-between shadow-lg transition";
 
                 let submatchesHtml = '';
                 let toggleBtnHtml = '';
@@ -802,6 +806,7 @@
 
                 card.innerHTML = `
                     <div>
+                        ${bet.is_free_pick === true ? `<div class="text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/10 border border-amber-400/30 rounded-lg px-2 py-1 mb-2 inline-block">🎁 ${__t('dsh_free_pick', 'Selezione gratuita del giorno')}</div>` : ''}
                         <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
                             <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] sm:text-[11px] font-medium">${bet.league}</span>
                             <span class="text-[10px] text-slate-500 font-mono">${bet.event_date}</span>

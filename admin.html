@@ -2844,6 +2844,7 @@
                 status: st,
                 is_pure: isPure,
                 ...(window.__hasFull ? { is_full: isFull } : {}),
+                ...(window.__hasFree ? { is_free_pick: b.is_free_pick === true } : {}),
                 is_published: b.is_published !== false,
                 tg_sent: b.tg_sent === true,
                 tg_sent_pure: b.tg_sent_pure === true,
@@ -2860,6 +2861,7 @@
                 if (!data || data.length < 1000) break;
             }
             if (all.length) window.__hasFull = ('is_full' in all[0]);   // colonna creata da 11_full_flag.sql
+            if (all.length) window.__hasFree = ('is_free_pick' in all[0]);   // colonna creata da 13_free_pick.sql
             return all;
         }
 
@@ -2870,7 +2872,7 @@
                     id: String(r.id), event_date: String(r.event_date || ''), match_name: String(r.match_name || 'Evento'),
                     league: r.league || 'Generale', market: r.market || 'Mercato', prediction: r.prediction || '-',
                     original_tipster: r.original_tipster, odds: Math.round(Number(r.odds) * 100) / 100, stake: Math.round(Number(r.stake) * 100) / 100,
-                    status: r.status, is_pure: r.is_pure === true, ...(window.__hasFull ? { is_full: r.is_full === true } : {}), is_published: r.is_published !== false, tg_sent: r.tg_sent === true,
+                    status: r.status, is_pure: r.is_pure === true, ...(window.__hasFull ? { is_full: r.is_full === true } : {}), ...(window.__hasFree ? { is_free_pick: r.is_free_pick === true } : {}), is_published: r.is_published !== false, tg_sent: r.tg_sent === true,
                     tg_sent_pure: r.tg_sent_pure === true, tg_sent_full: r.tg_sent_full === true
                 });
             });
@@ -2879,6 +2881,7 @@
                 id: r.id, event_date: r.event_date, match_name: r.match_name, league: r.league, market: r.market,
                 prediction: r.prediction, original_tipster: r.original_tipster, odds: Number(r.odds), stake: Number(r.stake),
                 status: r.status, is_published: r.is_published, tg_sent: r.tg_sent,
+                is_free_pick: r.is_free_pick === true,
                 tg_sent_pure: r.tg_sent_pure === true, tg_sent_full: r.tg_sent_full === true
             }));
             localStorage.setItem(PRIMARY_KEY, JSON.stringify(local));
@@ -3021,6 +3024,7 @@
                     stake: cleanStake,
                     status: b.status || b.result || 'pending',
                     is_published: b.is_published !== undefined ? b.is_published : true,
+                    is_free_pick: b.is_free_pick === true,
                     tg_sent: b.tg_sent === true,
                     tg_sent_pure: b.tg_sent_pure === true,
                     tg_sent_full: b.tg_sent_full === true
@@ -3412,6 +3416,26 @@
                 b.is_published = !b.is_published;
                 persistBets(bets);
             }
+        }
+
+        // Selezione gratuita del giorno: una sola per giorno di gioco. La vede chi e' registrato senza piano; non tocca i piani Pure e Full.
+        function toggleFreePick(id) {
+            if (!window.__hasFree) {
+                alert("Prima esegui su Supabase lo script 13_free_pick.sql (SQL Editor), poi ricarica dal server.");
+                return;
+            }
+            const bets = loadAllBets();
+            const b = bets.find(x => String(x.id) === String(id));
+            if (!b) return;
+            if (b.is_free_pick === true) {
+                b.is_free_pick = false;
+            } else {
+                const day = getBettingDay(b.event_date);
+                bets.forEach(x => { if (x !== b && x.is_free_pick === true && getBettingDay(x.event_date) === day) x.is_free_pick = false; });
+                b.is_free_pick = true;
+                if (b.is_published === false) b.is_published = true;   // per essere vista deve essere pubblicata
+            }
+            persistBets(bets);
         }
 
         function deleteBet(id) {
@@ -3819,6 +3843,9 @@
                             <button type="button" onclick="togglePublish('${bet.id}')" class="px-2 py-0.5 rounded text-[9px] font-bold border transition ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
                                 ${bet.is_published ? '★ Vetrina' : 'Interno'}
                             </button>
+                            <button type="button" onclick="toggleFreePick('${bet.id}')" title="Selezione gratuita del giorno" class="px-2 py-0.5 rounded text-[9px] font-bold border transition ${bet.is_free_pick ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-800 text-slate-400 border-slate-700'}">
+                                🎁 Free
+                            </button>
                         </div>
                     </div>
 
@@ -3971,6 +3998,9 @@
                     <td class="py-2.5 px-3 text-center whitespace-nowrap">
                         <button type="button" onclick="togglePublish('${bet.id}')" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${bet.is_published ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-slate-800 text-slate-500 border-slate-700'}">
                             ${bet.is_published ? '★ Vetrina' : 'Interno'}
+                        </button>
+                        <button type="button" onclick="toggleFreePick('${bet.id}')" title="Selezione gratuita del giorno" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${bet.is_free_pick ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-800 text-slate-400 border-slate-700'}">
+                            🎁 Free
                         </button>
                     </td>
                     <td class="py-2.5 px-3">${statusControlHtml}</td>

@@ -2929,6 +2929,7 @@
                     original_tipster: tip,
                     is_pure: isPure,
                     is_full: b.is_full === true,
+                    is_free_pick: b.is_free_pick === true,
                     public_brand: isPure ? 'AtmBet Selection' : 'AtmBet Signal',
                     odds: parseFloat(b.odds) || 0,
                     stake: stake > 10 ? 1.0 : stake,
@@ -3331,6 +3332,14 @@
             }
             pendingBetsToday = pendingBetsToday.map(__maskBetForUser);
 
+            // Selezione gratuita del giorno: la vede chi e' registrato senza piano, in cima prima delle selezioni oscurate.
+            // Non tocca i piani: chi ha Pure o Full continua a vedere solo le giocate del suo piano.
+            let __freePick = null;
+            if (!isUserPure && !isUserAllInclusive) {
+                __freePick = pendingBetsToday.find(b => b.is_free_pick === true) || null;
+                if (__freePick) pendingBetsToday = pendingBetsToday.filter(b => b.id !== __freePick.id);
+            }
+
             const subtitleEl = document.querySelector('#selezioni p');
             if (subtitleEl) {
                 if (activeUser && activeUser.plan === 'trial_vip') {
@@ -3346,12 +3355,46 @@
                 }
             }
 
-            if (pendingBetsToday.length === 0) {
+            if (pendingBetsToday.length === 0 && !__freePick) {
                 const emptyMsg = isUserPure
                     ? __t('idx_picks_empty_pure', "Nessuna selezione PURE aperta al momento. I segnali filtrati verranno pubblicati prima del calcio d'inizio.")
                     : __t('idx_picks_empty', "Nessuna selezione aperta per la giornata odierna. Nuovi segnali in arrivo prima dei match.");
                 container.innerHTML = `<div class="w-full text-center py-8 text-slate-500 font-medium text-xs bg-slate-900/60 border border-slate-800 rounded-2xl col-span-full">${emptyMsg}</div>`;
                 return;
+            }
+
+            if (__freePick) {
+                const fc = document.createElement('div');
+                fc.className = "min-w-[280px] sm:min-w-[320px] max-w-[340px] bg-slate-900 border-2 border-amber-400/70 rounded-2xl p-4 flex flex-col justify-between shadow-lg shadow-amber-500/10 snap-start shrink-0";
+                const __locked = !(parseFloat(__freePick.odds) > 0) || __freePick.prediction === '-';
+                const __detail = __locked
+                    ? `<div class="bg-slate-950/80 rounded-xl p-3 border border-amber-400/30 my-2.5 text-center space-y-2">
+                           <div class="text-[11px] text-amber-300 font-bold">${__t('idx_free_login', 'Registrati gratis per vedere la selezione')}</div>
+                           <a href="auth.html" class="inline-block w-full bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black py-2 px-3 rounded-lg transition">${__t('idx_free_login_btn', 'Accedi o registrati')}</a>
+                       </div>`
+                    : `<div class="bg-slate-950/80 rounded-xl p-3 border border-amber-400/40 my-2.5">
+                           <div class="flex items-center justify-between mb-1">
+                               <span class="text-[9px] uppercase font-mono tracking-widest text-amber-300 font-bold">${__t('idx_free_active', 'Selezione gratuita')}</span>
+                               <span class="text-xs font-mono font-bold text-white bg-slate-900 px-2 py-0.5 rounded border border-slate-800">@ ${parseFloat(__freePick.odds).toFixed(2)}</span>
+                           </div>
+                           <div class="text-sm font-black text-amber-200 break-words">${__freePick.prediction}</div>
+                           <div class="text-[10px] text-slate-400 mt-1">${__freePick.market}</div>
+                       </div>`;
+                fc.innerHTML = `
+                    <div>
+                        <div class="text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/10 border border-amber-400/30 rounded-lg px-2 py-1 mb-2 inline-block">🎁 ${__t('idx_free_pick', 'Selezione gratuita del giorno')}</div>
+                        <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
+                            <span class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-[10px] font-medium truncate max-w-[140px]">${__freePick.league}</span>
+                            <span class="text-[10px] text-slate-500 font-mono">${__freePick.event_date.slice(11, 16) || __freePick.event_date}</span>
+                        </div>
+                        <h3 class="text-sm font-bold text-white mb-1 leading-snug break-words">${__freePick.match_name}</h3>
+                        ${__detail}
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs font-medium">
+                        <div><span class="text-slate-500 text-[10px]">${__t('table_stake', 'Stake')}:</span><span class="text-white font-mono font-bold ml-1">${(__freePick.stake || 1).toFixed(1)}u</span></div>
+                        <span class="text-amber-300 bg-amber-400/10 border-amber-400/30 font-bold uppercase text-[9px] px-1.5 py-0.5 rounded border">AtmBet Free</span>
+                    </div>`;
+                container.appendChild(fc);
             }
 
             pendingBetsToday.forEach(bet => {
