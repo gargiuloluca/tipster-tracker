@@ -475,5 +475,10 @@
   "idx_ref_hint_trial": "Want more trial days? Click here",
   "idx_ref_desc_trial": "For every friend who subscribes with your link you get <b class=\"text-white\">7 extra trial days</b>.",
   "idx_ref_stats_days": "Friends subscribed: {n} · Days earned: {d}",
-  "idx_ref_rules_trial": "The days are added to your trial when your friend completes their first paid purchase (the free trial does not count). Maximum 3 rewards per month."
+  "idx_ref_rules_trial": "The days are added to your trial when your friend completes their first paid purchase (the free trial does not count). Maximum 3 rewards per month.",
+  "dsh_free_pick": "Free selection of the day",
+  "idx_free_pick": "Free selection of the day",
+  "idx_free_login": "Sign up for free to see the selection",
+  "idx_free_login_btn": "Log in or sign up",
+  "idx_free_active": "Free selection"
 }

@@ -475,5 +475,10 @@
   "idx_ref_hint_trial": "¿Quieres más días de prueba? Haz clic aquí",
   "idx_ref_desc_trial": "Por cada amigo que se suscriba con tu enlace recibes <b class=\"text-white\">7 días de prueba extra</b>.",
   "idx_ref_stats_days": "Amigos suscritos: {n} · Días obtenidos: {d}",
-  "idx_ref_rules_trial": "Los días se añaden a tu prueba cuando tu amigo completa su primera compra de pago (la prueba gratuita no cuenta). Máximo 3 premios al mes."
+  "idx_ref_rules_trial": "Los días se añaden a tu prueba cuando tu amigo completa su primera compra de pago (la prueba gratuita no cuenta). Máximo 3 premios al mes.",
+  "dsh_free_pick": "Selección gratuita del día",
+  "idx_free_pick": "Selección gratuita del día",
+  "idx_free_login": "Regístrate gratis para ver la selección",
+  "idx_free_login_btn": "Inicia sesión o regístrate",
+  "idx_free_active": "Selección gratuita"
 }

@@ -475,5 +475,10 @@
   "idx_ref_hint_trial": "Möchtest du mehr Testtage? Hier klicken",
   "idx_ref_desc_trial": "Für jeden Freund, der mit deinem Link ein Abo abschließt, erhältst du <b class=\"text-white\">7 zusätzliche Testtage</b>.",
   "idx_ref_stats_days": "Geworbene Abonnenten: {n} · Gewonnene Tage: {d}",
-  "idx_ref_rules_trial": "Die Tage werden deinem Test gutgeschrieben, sobald dein Freund seinen ersten bezahlten Kauf abschließt (der kostenlose Test zählt nicht). Höchstens 3 Prämien pro Monat."
+  "idx_ref_rules_trial": "Die Tage werden deinem Test gutgeschrieben, sobald dein Freund seinen ersten bezahlten Kauf abschließt (der kostenlose Test zählt nicht). Höchstens 3 Prämien pro Monat.",
+  "dsh_free_pick": "Kostenlose Selektion des Tages",
+  "idx_free_pick": "Kostenlose Selektion des Tages",
+  "idx_free_login": "Registriere dich kostenlos, um die Selektion zu sehen",
+  "idx_free_login_btn": "Anmelden oder registrieren",
+  "idx_free_active": "Kostenlose Selektion"
 }

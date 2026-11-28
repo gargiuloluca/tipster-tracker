@@ -475,5 +475,10 @@
   "idx_ref_hint_trial": "Envie de jours d’essai en plus ? Cliquez ici",
   "idx_ref_desc_trial": "Pour chaque ami qui s’abonne avec votre lien, vous recevez <b class=\"text-white\">7 jours d’essai en plus</b>.",
   "idx_ref_stats_days": "Amis abonnés : {n} · Jours obtenus : {d}",
-  "idx_ref_rules_trial": "Les jours sont ajoutés à votre essai lorsque votre ami effectue son premier achat payant (l’essai gratuit ne compte pas). Maximum 3 récompenses par mois."
+  "idx_ref_rules_trial": "Les jours sont ajoutés à votre essai lorsque votre ami effectue son premier achat payant (l’essai gratuit ne compte pas). Maximum 3 récompenses par mois.",
+  "dsh_free_pick": "Sélection gratuite du jour",
+  "idx_free_pick": "Sélection gratuite du jour",
+  "idx_free_login": "Inscrivez-vous gratuitement pour voir la sélection",
+  "idx_free_login_btn": "Se connecter ou s'inscrire",
+  "idx_free_active": "Sélection gratuite"
 }
