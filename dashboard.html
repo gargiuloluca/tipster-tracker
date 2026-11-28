@@ -510,7 +510,9 @@
         function getStoredBets() {
             const bets = Array.isArray(window.__remoteBets) ? window.__remoteBets : [];
             const __plan = (typeof currentUser !== 'undefined' && currentUser) ? currentUser.plan : '';
-            return bets.filter(b => __plan !== 'pure' || b.is_pure === true).map((b, idx) => {
+            // Il piano Full vede solo i fornitori scelti per il canale All-Inclusive (flag is_full), come nella home. Senza flag nei dati resta tutto come prima.
+            const __flagFull = bets.some(b => b.is_full === true);
+            return bets.filter(b => (__plan !== 'pure' || b.is_pure === true) && (__plan !== 'all_inclusive' || !__flagFull || b.is_full === true)).map((b, idx) => {
                 const stake = parseFloat(b.stake || 1.0);
                 const st = ['won', 'lost', 'void'].includes(b.status) ? b.status : 'pending';
                 return {
